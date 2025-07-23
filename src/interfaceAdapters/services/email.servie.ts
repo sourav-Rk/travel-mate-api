@@ -30,7 +30,8 @@ export class EmailService implements IEmailService{
             subject,
             html 
         }
-        console.log('email triggered')
+        
         await this.transporter.sendMail(mailOptions)
+        console.log('email triggered')
     }
 }

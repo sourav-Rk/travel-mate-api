@@ -3,6 +3,8 @@ import { ITokenService } from "../../entities/serviceInterfaces/token-service.in
 import jwt, { Secret, JwtPayload } from "jsonwebtoken";
 import { config } from "../../shared/config";
 import ms from "ms";
+import { CustomError } from "../../shared/utils/error/customError";
+import { HTTP_STATUS } from "../../shared/constants";
 
 
 export interface JwtPayloadData {
@@ -12,24 +14,29 @@ export interface JwtPayloadData {
   status ?: "pending" | "verified" | "rejected";
 }
 
+export type ResetTokenPayload = Pick<JwtPayloadData, "id" | "email" | "role">;
+
+
 @injectable()
 export class TokenService implements ITokenService {
   private _accessSecretKey: Secret;
   private _accessExpiresIn: string;
-  private _refresshSecretKey: Secret;
+  private _refreshSecretKey: Secret;
   private _refreshExpiresIn: string;
-  private _resetExpiresIn : string;
+  private _resetSecretKey : string;
+  private _resetExpiresIn : string
 
   constructor() {
     this._accessSecretKey = config.jwt.ACCESS_SECRET_KEY;
     this._accessExpiresIn = config.jwt.ACCESS_EXPIRES_IN;
-    this._refresshSecretKey = config.jwt.REFRESH_SECRET;
+    this._refreshSecretKey = config.jwt.REFRESH_SECRET;
     this._refreshExpiresIn = config.jwt.REFRESH_EXPIRES_IN;
     this._resetExpiresIn = config.jwt.RESET_EXPIRES_IN;
+    this._resetSecretKey = config.jwt.RESET_SECRET;
   }
 
-  generateResetToken(payload: { id: string; email: string; role: string; }): string {
-      return jwt.sign(payload, this._accessSecretKey,{
+  generateResetToken(payload: ResetTokenPayload): string {
+      return jwt.sign(payload, this._resetSecretKey,{
         expiresIn : this._resetExpiresIn as ms.StringValue,
       })
   }
@@ -41,7 +48,7 @@ export class TokenService implements ITokenService {
   }
 
   generateRefreshToken(payload: JwtPayloadData): string {
-    return jwt.sign(payload, this._refresshSecretKey, {
+    return jwt.sign(payload, this._refreshSecretKey, {
       expiresIn: this._refreshExpiresIn as ms.StringValue,
     });
   }
@@ -57,16 +64,18 @@ export class TokenService implements ITokenService {
 
   verifyRefreshToken(token: string): JwtPayload | null {
     try {
-      return jwt.verify(token, this._refresshSecretKey) as JwtPayload;
+      return jwt.verify(token, this._refreshSecretKey) as JwtPayload;
     } catch (error) {
       console.log("Refresh token verification failed");
       return null;
     }
   }
 
-  verifyResetToken(token : string) : JwtPayload | null {
+   verifyResetToken(token : string) : JwtPayload | null {
     try{
-      return jwt.verify(token, this._accessSecretKey) as JwtPayload;
+      const decoded =  jwt.verify(token, this._resetSecretKey);
+      if(!decoded) throw new CustomError(HTTP_STATUS.BAD_REQUEST,"Invalid Token");
+      return decoded as JwtPayload;
     }catch(error){
       console.log("reset token verification failed");
       return null

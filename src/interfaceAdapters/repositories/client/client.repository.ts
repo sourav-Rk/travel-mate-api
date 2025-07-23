@@ -22,6 +22,10 @@ export class ClientRepository implements IClientRepository {
     return await clientDB.findOne({ phone });
   }
 
+  async findByIdAndUpdatePassword(id : any,password : string) : Promise<IClientEntity | null>{
+    return await clientDB.findByIdAndUpdate(id,{password});
+  }
+
   async findByIdAndUpdateStatus(id: string): Promise<boolean> {
     const client = await clientDB.findById(id);
     if (!client) throw new NotFoundError("user not found");
@@ -35,7 +39,14 @@ export class ClientRepository implements IClientRepository {
 
     if (!updated) throw new Error("Failed to update vendor block status");
 
-    return updated.isBlocked; 
+    return updated.isBlocked;
+  }
+
+  async updateClientProfileById(
+    id: string,
+    data: Partial<IClientEntity>
+  ): Promise<void> {
+    await clientDB.findByIdAndUpdate(id, { $set: data });
   }
 
   async find(

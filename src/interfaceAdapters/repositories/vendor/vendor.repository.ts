@@ -19,6 +19,10 @@ export class VendorRepository implements IVendorRepository {
     return await vendorDB.findById(vendorId);
   }
 
+  async findByIdAndUpdatePassword(id : any,password : string) : Promise<IVendorEntity | null>{
+    return await vendorDB.findByIdAndUpdate(id,{password});
+  }
+
 
   async getVendorWithAddressAndKyc(
     vendorId: string
@@ -72,9 +76,11 @@ export class VendorRepository implements IVendorRepository {
 
   async findByIdAndUpdateStatus(
     vendorId: string,
-    status: string
+    status: string,
+    reason ?: string
   ): Promise<void> {
-    await vendorDB.findByIdAndUpdate(vendorId, { $set: { status: status } });
+    console.log(reason)
+   await vendorDB.findByIdAndUpdate(vendorId, { $set: { status: status,rejectionReason : reason } });  
   }
 
   async findByIdAndUpdateBlock(vendorId: string): Promise<boolean> {

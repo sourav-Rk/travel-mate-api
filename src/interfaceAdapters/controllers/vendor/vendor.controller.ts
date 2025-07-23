@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
-import { IVendorController } from "../../../entities/controllerInterfaces/vendor.controller.interface";
-import { IGetVendorDetailsUsecase } from "../../../entities/useCaseInterfaces/vendor/get-vendor-details.usecase.interface";
+import { IVendorController } from "../../../entities/controllerInterfaces/vendor/vendor.controller.interface";
+import { IGetVendorDetailsForStatusUsecase } from "../../../entities/useCaseInterfaces/vendor/get-vendor-details.usecase.interface";
 import { Request, Response } from "express";
 import { CustomRequest } from "../../middlewares/auth.middleware";
 import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
@@ -15,12 +15,11 @@ import { IAddGuideUsecase } from "../../../entities/useCaseInterfaces/vendor/add
 @injectable()
 export class VendorController implements IVendorController {
   constructor(
-   
-    @inject('IAddGuideUsecase')
-    private _addGuideUsecase : IAddGuideUsecase,
+    @inject("IAddGuideUsecase")
+    private _addGuideUsecase: IAddGuideUsecase,
 
-    @inject("IGetVendorDetailsUsecase")
-    private getVendorDetailsUsecase: IGetVendorDetailsUsecase,
+    @inject("IGetVendorDetailsForStatusUsecase")
+    private getVendorDetailsForStatusUsecase: IGetVendorDetailsForStatusUsecase,
 
     @inject("IAddAddressUsecase")
     private addAddressUsecase: IAddAddressUsecase,
@@ -32,16 +31,18 @@ export class VendorController implements IVendorController {
     private updateVendorStatusUsecase: IUpdateVendorStatusUsecase
   ) {}
 
-  async addGuide(req : Request,res:Response) : Promise<void>{
-      const agencyId = (req as CustomRequest).user.id;
-      const guideData = (req.body) as UserDto;
-      await this._addGuideUsecase.execute(guideData,agencyId);
-      res.status(HTTP_STATUS.CREATED).json({success : true,message : SUCCESS_MESSAGE.ADD_GUIDE_SUCCESSFULLY})
+  async addGuide(req: Request, res: Response): Promise<void> {
+    const agencyId = (req as CustomRequest).user.id;
+    const guideData = req.body as UserDto;
+    await this._addGuideUsecase.execute(guideData, agencyId);
+    res
+      .status(HTTP_STATUS.CREATED)
+      .json({ success: true, message: SUCCESS_MESSAGE.ADD_GUIDE_SUCCESSFULLY });
   }
 
-  async getDetails(req: Request, res: Response): Promise<void> {
+  async getDetailsforStatus(req: Request, res: Response): Promise<void> {
     const vendorId = (req as CustomRequest).user.id;
-    const vendor = await this.getVendorDetailsUsecase.execute(vendorId);
+    const vendor = await this.getVendorDetailsForStatusUsecase.execute(vendorId);
     res.status(HTTP_STATUS.OK).json({ success: true, vendor });
   }
 
@@ -54,7 +55,9 @@ export class VendorController implements IVendorController {
       vendorId,
       status
     );
-    res.status(HTTP_STATUS.OK).json({success : true,message : "status updated to reviewing"});
+    res
+      .status(HTTP_STATUS.OK)
+      .json({ success: true, message: "status updated to reviewing" });
   }
 
   async addAddress(req: Request, res: Response): Promise<void> {
@@ -71,4 +74,3 @@ export class VendorController implements IVendorController {
     res.status(response.statusCode).json(response.content);
   }
 }
-
