@@ -23,6 +23,7 @@ export const config = {
     ACCESS_EXPIRES_IN: process.env.ACCESS_EXPIRES_IN || "your-secret-key",
     REFRESH_SECRET: process.env.REFRESH_SECRET_KEY || "",
     REFRESH_EXPIRES_IN: process.env.REFRESH_EXPIRES_IN || "",
+    RESET_SECRET : process.env.RESET_SECRET_KEY || "",
     RESET_EXPIRES_IN : process.env.RESET_EXPIRES_IN || ""
   },
   cloudinary :{
