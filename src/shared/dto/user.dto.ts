@@ -16,8 +16,8 @@ export interface ClientDto {
   firstName: string;
   lastName: string;
   email: string;
-  phone: string;
-  password: string;
+  phone?: string;
+  password?: string;
   gender?: string;
   profileImage?: string;
   googleId?: string;
