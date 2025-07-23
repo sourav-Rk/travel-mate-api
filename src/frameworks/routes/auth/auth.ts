@@ -16,9 +16,17 @@ export class AuthRoutes {
       asyncHandler(authController.signup.bind(authController))
     ),
       this._router.post(
-        "/send-otp",
-        asyncHandler(authController.sendEmail.bind(authController))
-      ),
+        "/login",
+        asyncHandler(authController.login.bind(authController))
+      );
+    this._router.post(
+      "/google-auth",
+      asyncHandler(authController.googleSignup.bind(authController))
+    );
+    this._router.post(
+      "/send-otp",
+      asyncHandler(authController.sendEmail.bind(authController))
+    ),
       this._router.post(
         "/resend-otp",
         asyncHandler(authController.resendOtp.bind(authController))
@@ -26,11 +34,15 @@ export class AuthRoutes {
     this._router.post(
       "/verify-otp",
       asyncHandler(authController.verifyOtp.bind(authController))
-    ),
-      this._router.post(
-        "/login",
-        asyncHandler(authController.login.bind(authController))
-      );
+    );
+    this._router.post(
+      "/forgot-password/mail",
+      asyncHandler(authController.forgotPasswordSendMail.bind(authController))
+    );
+    this._router.post(
+      "/forgot-password/reset",
+      asyncHandler(authController.forgotPasswordReset.bind(authController))
+    );
   }
 
   public getRouter(): Router {

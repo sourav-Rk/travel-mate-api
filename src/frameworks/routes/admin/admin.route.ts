@@ -6,6 +6,7 @@ import {
 import { asyncHandler } from "../../../shared/async-handler";
 import { adminController, authController } from "../../di/resolve";
 import { BaseRoute } from "../base.route";
+import { SignedUrlRoute } from "../common/signedUrl.route";
 
 export class AdminRoute extends BaseRoute {
   constructor() {
@@ -13,6 +14,8 @@ export class AdminRoute extends BaseRoute {
   }
 
   protected initializeRoutes(): void {
+
+    this.router.use("/", new SignedUrlRoute("admin").router)
    
     this.router.patch(
       "/admin/vendor-status",
