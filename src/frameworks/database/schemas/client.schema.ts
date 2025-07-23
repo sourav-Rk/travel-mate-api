@@ -19,17 +19,15 @@ export const clientSchema = new mongoose.Schema<IClientModel>(
     },
     phone : {
       type : String,
-      required : true,
       unique : true
     },
     password: {
       type: String,
-      required: true,
     },
     gender: {
       type: String,
       enum : Object.values(GENDER),
-      required : true
+      
     },
     role :{
       type : String,

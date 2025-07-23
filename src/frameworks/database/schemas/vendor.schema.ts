@@ -18,11 +18,9 @@ export const vendorSchema = new mongoose.Schema<IVendorModel>(
     },
     phone: {
       type: String,
-      required: true,
     },
     password: {
       type: String,
-      required: true,
     },
     role: {
       type: String,
@@ -35,7 +33,6 @@ export const vendorSchema = new mongoose.Schema<IVendorModel>(
     },
     agencyName: {
       type: String,
-      required: true,
     },
     description: {
       type: String,
@@ -50,6 +47,10 @@ export const vendorSchema = new mongoose.Schema<IVendorModel>(
       enum: STATUS,
       default: "pending",
     },
+    rejectionReason :{
+      type : String,
+      default : null
+    }
   },
   {
     timestamps: true,

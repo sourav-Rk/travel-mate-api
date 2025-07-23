@@ -24,7 +24,6 @@ export const guideSchema = new mongoose.Schema<IGuideModel>(
     },
     phone: {
       type: String,
-      required: true,
       unique: true,
     },
     alternatePhone: {
