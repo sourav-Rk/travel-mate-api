@@ -1,11 +1,8 @@
 import { JwtPayload } from "jsonwebtoken";
+import { ResetTokenPayload } from "../../interfaceAdapters/services/token.service";
 
 export interface ITokenService {
-  generateResetToken(payload: {
-    id: string;
-    email: string;
-    role: string;
-  }): string;
+  generateResetToken(payload: ResetTokenPayload): string;
 
   generateAccessToken(payload: {
     id: string;
@@ -25,7 +22,7 @@ export interface ITokenService {
 
   verifyRefreshToken(token: string): JwtPayload | null;
 
-  verifyResetToken(token : string) : JwtPayload | null;
+  verifyResetToken(token: string): JwtPayload | null;
 
   decodeAcessToken(token: string): JwtPayload | null;
 }
