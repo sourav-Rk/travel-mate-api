@@ -18,6 +18,7 @@ const storage = new CloudinaryStorage({
         folder : "secure-uploads",
         resource_type : "auto",
         allowedFormats : ["jpg","png","jpeg","gif","webp","avif"],
+        type : "authenticated",   
     }),
 });
 
