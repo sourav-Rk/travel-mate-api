@@ -21,17 +21,20 @@ export class ClientRegisterStrategy implements IRegisterStrategy {
         throw new CustomError(HTTP_STATUS.CONFLICT, ERROR_MESSAGE.EMAIL_EXISTS);
       }
 
-      const existingPhone = await this._ClientRepository.findByNumber(
-        user.phone
-      );
-
-      if (existingPhone) {
-        throw new CustomError(
-          HTTP_STATUS.CONFLICT,
-          ERROR_MESSAGE.PHONE_NUMBER_EXISTS
+      if (user.phone) {
+        const existingPhone = await this._ClientRepository.findByNumber(
+          user?.phone
         );
+
+        if (existingPhone) {
+          throw new CustomError(
+            HTTP_STATUS.CONFLICT,
+            ERROR_MESSAGE.PHONE_NUMBER_EXISTS
+          );
+        }
       }
-      const { firstName, lastName, email, password, phone, gender } =
+
+      const { firstName, lastName, email, password, phone, gender,googleId } =
         user as ClientDto;
 
       const hashedPassword = password ? await hashPassword(password) : "";
@@ -44,6 +47,7 @@ export class ClientRegisterStrategy implements IRegisterStrategy {
         password: hashedPassword,
         gender,
         role: "client",
+        googleId
       });
 
       return client;
