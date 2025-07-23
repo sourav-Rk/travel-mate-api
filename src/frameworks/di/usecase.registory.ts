@@ -27,8 +27,8 @@ import { IRefreshTokenUsecase } from "../../entities/useCaseInterfaces/auth/refr
 import { RefreshTokenUsecase } from "../../useCases/auth/refresh-token.usecase";
 import { VendorRegisteryStrategy } from "../../useCases/auth/register-strategies/vendor-register.strategy";
 import { VendorLoginStrategy } from "../../useCases/auth/login-strategies/vendor-login.strategy";
-import { IGetVendorDetailsUsecase } from "../../entities/useCaseInterfaces/vendor/get-vendor-details.usecase.interface";
-import { GetVendorDetailsUsecase } from "../../useCases/vendor/get-vendor-details.usecase";
+import { IGetVendorDetailsForStatusUsecase } from "../../entities/useCaseInterfaces/vendor/get-vendor-details.usecase.interface";
+import { GetVendorDetailsForStatusUsecase } from "../../useCases/vendor/get-vendor-detailsForStatus.usecase";
 import { IAddAddressUsecase } from "../../entities/useCaseInterfaces/auth/add-address-usecase.interface";
 import { AddAddressUsecase } from "../../useCases/auth/addAddress.usecase";
 import { IUploadImageUsecase } from "../../entities/useCaseInterfaces/common/upload-image.usecase";
@@ -48,132 +48,215 @@ import { AddGuideUsecase } from "../../useCases/vendor/add-guide.usecase";
 import { IResetPasswordUsecase } from "../../entities/useCaseInterfaces/guide/reset-password-usecase.interface";
 import { ResetPasswordUsecase } from "../../useCases/guide/reset-password.usecase";
 import { GuideLoginStrategy } from "../../useCases/auth/login-strategies/guide-login.strategy";
+import { IGenerateSignedUrlUsecase } from "../../entities/useCaseInterfaces/common/generate-signedurl-usecase.interface";
+import { GenerateSignedUrlUsecase } from "../../useCases/common/generateSignedUrl.usecase";
+import { IAdminUpdateVendorStatusUsecase } from "../../entities/useCaseInterfaces/admin/update-vendor-usecase.interface";
+import { AdminUpateVendorStatusUsecase } from "../../useCases/admin/update-vendor-status.usecase";
+import { ClientGoogleLoginStrategy } from "../../useCases/auth/login-strategies/client-google-login.strategy";
+import { IGoogleUsecase } from "../../entities/useCaseInterfaces/auth/google-usecase.interface";
+import { GoogleUsecase } from "../../useCases/auth/google.usecase";
+import { IGetClientDetailsUsecase } from "../../entities/useCaseInterfaces/client/getClientDetails-usecase.interface";
+import { GetClientDetailsUsecase } from "../../useCases/client/getClientDetails.usecase";
+import { IUpdateClientDetailsUsecase } from "../../entities/useCaseInterfaces/client/updateClientDetails-usecase.interface";
+import { UpdateClientDetailsUsecase } from "../../useCases/client/updateClientDetails.usecase";
+import { IForgotPasswordSendMailUsecase } from "../../entities/useCaseInterfaces/auth/forgotPassword-sendMail-usecase.interface";
+import { ForgotPasswordSendMailUsecase } from "../../useCases/auth/forgotPassword-sendMail.usecase";
+import { IForgotPasswordResetUsecase } from "../../entities/useCaseInterfaces/auth/forgotPassword-reset-usecase.interface";
+import { ForgotPasswordResetUsecase } from "../../useCases/auth/forgotPassword-reset.usecase";
+import { IUpdateClientPasswordUsecase } from "../../entities/useCaseInterfaces/client/update-client-password-usecase.interface";
+import { UpdateClientPasswordUsecase } from "../../useCases/client/update-client-password.usecase";
+import { IGetVendorDetailsUsecase } from "../../entities/useCaseInterfaces/vendor/get-vendor-details-usecase.interface";
+import { GetVendorDetailsUsecase } from "../../useCases/vendor/get-vendor-details.usecase";
+import { IUpdateVendorPasswordUsecase } from "../../entities/useCaseInterfaces/vendor/update-vendor-password-usecase.interface";
+import { UpdateVendorPasswordUsecase } from "../../useCases/vendor/update-vendor-password.usecase";
 
+export class UsecaseRegistory {
+  static registerUsecases(): void {
+    //auth usecases
+    container.register<IRegisterUserUsecase>("IRegisterUserUsecase", {
+      useClass: RegisterUserUsecase,
+    });
 
-export class UsecaseRegistory{
-    static registerUsecases() : void {
-        //auth usecases
-        container.register<IRegisterUserUsecase>('IRegisterUserUsecase',{
-            useClass : RegisterUserUsecase
-        })
+    container.register<IVerifyOtpUsecase>("IVerifyOtpUsecase", {
+      useClass: VerifyOtpUsecase,
+    });
 
-        container.register<IVerifyOtpUsecase>('IVerifyOtpUsecase',{
-            useClass : VerifyOtpUsecase
-        })
+    container.register<ILoginUsecase>("ILoginUsecase", {
+      useClass: LoginUsecase,
+    });
 
-        container.register<ILoginUsecase>('ILoginUsecase',{
-            useClass : LoginUsecase
-        })
+    container.register<ISendEmailUsecase>("ISendEmailUsecase", {
+      useClass: SendEmailUsecase,
+    });
 
-        container.register<ISendEmailUsecase>('ISendEmailUsecase',{
-            useClass : SendEmailUsecase
-        })
+    container.register<IVerifyExistingEmail>("IVerifyExistingEmail", {
+      useClass: VerifyExistingEmail,
+    });
 
-        container.register<IVerifyExistingEmail>('IVerifyExistingEmail',{
-            useClass : VerifyExistingEmail
-        })
+    container.register<IGenerateTokenUseCase>("IGenerateTokenUseCase", {
+      useClass: GenerateTokenUseCase,
+    });
 
-        container.register<IGenerateTokenUseCase>('IGenerateTokenUseCase',{
-            useClass : GenerateTokenUseCase
-        })
+    container.register<IResendOtpUsecase>("IResendOtpUsecase", {
+      useClass: ResendOTPUsecase,
+    });
 
-        container.register<IResendOtpUsecase>('IResendOtpUsecase',{
-            useClass : ResendOTPUsecase
-        })
+    container.register<IGoogleUsecase>("IGoogleUsecase", {
+      useClass: GoogleUsecase,
+    });
 
-        //register strategies
-        container.register<IRegisterStrategy>("ClientRegisterStrategy",{
-            useClass : ClientRegisterStrategy
-        })
+    container.register<IForgotPasswordSendMailUsecase>(
+      "IForgotPasswordSendMailUsecase",
+      {
+        useClass: ForgotPasswordSendMailUsecase,
+      }
+    );
 
-        container.register<IRegisterStrategy>("VendorRegisteryStrategy",{
-            useClass : VendorRegisteryStrategy
-        })
+    container.register<IForgotPasswordResetUsecase>(
+      "IForgotPasswordResetUsecase",
+      {
+        useClass: ForgotPasswordResetUsecase,
+      }
+    );
 
-        //login strategies
-        container.register<ILoginStrategy>("ClientLoginStrategy",{
-            useClass : ClientLoginStrategy
-        })
+    //register strategies
+    container.register<IRegisterStrategy>("ClientRegisterStrategy", {
+      useClass: ClientRegisterStrategy,
+    });
 
-        container.register<ILoginStrategy>("AdminLoginStrategy",{
-            useClass : AdminLoginStrategy
-        })
+    container.register<IRegisterStrategy>("VendorRegisteryStrategy", {
+      useClass: VendorRegisteryStrategy,
+    });
 
-        container.register<ILoginStrategy>("VendorLoginStrategy",{
-           useClass : VendorLoginStrategy
-        })
+    //login strategies
+    container.register<ILoginStrategy>("ClientLoginStrategy", {
+      useClass: ClientLoginStrategy,
+    });
 
-        container.register<ILoginStrategy>('GuideLoginStrategy',{
-            useClass : GuideLoginStrategy
-        })
+    container.register<ILoginStrategy>("AdminLoginStrategy", {
+      useClass: AdminLoginStrategy,
+    });
 
-        //vendor usecases
-        container.register<IGetVendorDetailsUsecase>('IGetVendorDetailsUsecase',{
-            useClass : GetVendorDetailsUsecase
-        })
+    container.register<ILoginStrategy>("VendorLoginStrategy", {
+      useClass: VendorLoginStrategy,
+    });
 
-        container.register<IAddAddressUsecase>('IAddAddressUsecase',{
-            useClass : AddAddressUsecase
-        })
+    container.register<ILoginStrategy>("GuideLoginStrategy", {
+      useClass: GuideLoginStrategy,
+    });
 
-        container.register<IAddKycUsecase>('IAddKycUsecase',{
-            useClass : AddKycUsecase
-        })
+    container.register<ILoginStrategy>("ClientGoogleLoginStrategy", {
+      useClass: ClientGoogleLoginStrategy,
+    });
 
-        container.register<IAddGuideUsecase>('IAddGuideUsecase',{
-            useClass : AddGuideUsecase
-        })
+    //client usecases
+    container.register<IGetClientDetailsUsecase>("IGetClientDetailsUsecase", {
+      useClass: GetClientDetailsUsecase,
+    });
 
-        //admin usecases
-        container.register<IUpdateVendorStatusUsecase>('IUpdateVendorStatusUsecase',{
-            useClass : UpdateVendorStatusUsecase
-        })
+    container.register<IUpdateClientDetailsUsecase>(
+      "IUpdateClientDetailsUsecase",
+      {
+        useClass: UpdateClientDetailsUsecase,
+      }
+    );
 
-        container.register<IGetAllUsersUsecase>('IGetAllUsersUsecase',{
-            useClass : GetAllUsersUsecase
-        })
+    container.register<IUpdateClientPasswordUsecase>(
+      "IUpdateClientPasswordUsecase",
+      {
+        useClass: UpdateClientPasswordUsecase,
+      }
+    );
 
-        container.register<IUpdateUserstatusUsecase>('IUpdateUserstatusUsecase',{
-            useClass : UpdateUserStatusUsecase
-        })
+    //vendor usecases
+    container.register<IGetVendorDetailsForStatusUsecase>("IGetVendorDetailsForStatusUsecase", {
+      useClass: GetVendorDetailsForStatusUsecase,
+    });
 
-        container.register<IGetUserByIdUsecase>('IGetUserByIdUsecase',{
-            useClass : GetUserByIdUsecase
-        })
+    container.register<IAddAddressUsecase>("IAddAddressUsecase", {
+      useClass: AddAddressUsecase,
+    });
 
-        container.register<IUpdateVendorStatusUsecase>('IUpdateVendorStatusUsecase',{
-            useClass : UpdateVendorStatusUsecase
-        })
+    container.register<IAddKycUsecase>("IAddKycUsecase", {
+      useClass: AddKycUsecase,
+    });
 
-        //guide usecases
-        container.register<IResetPasswordUsecase>('IResetPasswordUsecase',{
-            useClass : ResetPasswordUsecase
-        })
+    container.register<IAddGuideUsecase>("IAddGuideUsecase", {
+      useClass: AddGuideUsecase,
+    });
 
-        //token
-        container.register<IBlackListTokenUsecase>('IBlackListTokenUsecase',{
-            useClass : BlackListTokenUsecase
-        })
+    container.register<IUpdateVendorStatusUsecase>(
+      "IUpdateVendorStatusUsecase",
+      {
+        useClass: UpdateVendorStatusUsecase,
+      }
+    );
 
-        container.register<IRefreshTokenUsecase>('IRefreshTokenUsecase',{
-            useClass : RefreshTokenUsecase
-        })
+    container.register<IGetVendorDetailsUsecase>('IGetVendorDetailsUsecase',{
+      useClass : GetVendorDetailsUsecase
+    })
 
-        //image upload usecase
-        container.register<IUploadImageUsecase>('IUploadImageUsecase',{
-            useClass : UploadImageUsecase
-        })
+    container.register<IUpdateVendorPasswordUsecase>('IUpdateVendorPasswordUsecase',{
+      useClass : UpdateVendorPasswordUsecase
+    })
 
-        // ------logger--------
-        container.register<ILogger>("ILogger",{
-            useClass : WinstonLoggerAdapter
-        })
+    //admin usecases
+    container.register<IUpdateVendorStatusUsecase>(
+      "IUpdateVendorStatusUsecase",
+      {
+        useClass: UpdateVendorStatusUsecase,
+      }
+    );
 
-        container.register<LoggerMiddleware>("LoggerMiddleware",{
-            useClass : LoggerMiddleware
-        })
+    container.register<IGetAllUsersUsecase>("IGetAllUsersUsecase", {
+      useClass: GetAllUsersUsecase,
+    });
 
+    container.register<IUpdateUserstatusUsecase>("IUpdateUserstatusUsecase", {
+      useClass: UpdateUserStatusUsecase,
+    });
 
-    }
+    container.register<IGetUserByIdUsecase>("IGetUserByIdUsecase", {
+      useClass: GetUserByIdUsecase,
+    });
+
+    container.register<IAdminUpdateVendorStatusUsecase>(
+      "IAdminUpdateVendorStatusUsecase",
+      {
+        useClass: AdminUpateVendorStatusUsecase,
+      }
+    );
+
+    //guide usecases
+    container.register<IResetPasswordUsecase>("IResetPasswordUsecase", {
+      useClass: ResetPasswordUsecase,
+    });
+
+    //token
+    container.register<IBlackListTokenUsecase>("IBlackListTokenUsecase", {
+      useClass: BlackListTokenUsecase,
+    });
+
+    container.register<IRefreshTokenUsecase>("IRefreshTokenUsecase", {
+      useClass: RefreshTokenUsecase,
+    });
+
+    //image upload usecase
+    container.register<IUploadImageUsecase>("IUploadImageUsecase", {
+      useClass: UploadImageUsecase,
+    });
+
+    container.register<IGenerateSignedUrlUsecase>("IGenerateSignedUrlUsecase", {
+      useClass: GenerateSignedUrlUsecase,
+    });
+
+    // ------logger--------
+    container.register<ILogger>("ILogger", {
+      useClass: WinstonLoggerAdapter,
+    });
+
+    container.register<LoggerMiddleware>("LoggerMiddleware", {
+      useClass: LoggerMiddleware,
+    });
+  }
 }
-
