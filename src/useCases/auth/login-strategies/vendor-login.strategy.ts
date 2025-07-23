@@ -26,6 +26,10 @@ export class VendorLoginStrategy implements ILoginStrategy {
       throw new CustomError(HTTP_STATUS.FORBIDDEN, ERROR_MESSAGE.BLOCKED_ERROR);
     }
 
+    if(vendor.status === "rejected"){
+      throw new CustomError(HTTP_STATUS.FORBIDDEN,ERROR_MESSAGE.REQUEST_REJECTED_BY_ADMIN)
+    }
+
     if (user.password) {
       const isPasswordMatch = await comparePassword(
         user.password,
