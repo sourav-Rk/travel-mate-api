@@ -1,5 +1,5 @@
 import { ISuccessResponseHandler } from "../../../shared/utils/successResponseHandler";
 
-export interface IUpdateVendorStatusUsecase {
-    execute(vendorId : string) : Promise<ISuccessResponseHandler>;
+export interface IAdminUpdateVendorStatusUsecase {
+    execute(vendorId : string,status : string, reason ?: string) : Promise<void>;
 }

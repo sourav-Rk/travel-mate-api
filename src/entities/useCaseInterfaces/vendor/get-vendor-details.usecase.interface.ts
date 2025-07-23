@@ -1,5 +1,5 @@
 import { IVendorEntity } from "../../modelsEntity/vendor.entity";
 
-export interface IGetVendorDetailsUsecase{
+export interface IGetVendorDetailsForStatusUsecase{
     execute(vendorId : any) : Promise<Partial<IVendorEntity|null>>;
 }
