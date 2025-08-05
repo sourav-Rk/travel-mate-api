@@ -30,7 +30,7 @@ import { VendorLoginStrategy } from "../../useCases/auth/login-strategies/vendor
 import { IGetVendorDetailsForStatusUsecase } from "../../entities/useCaseInterfaces/vendor/get-vendor-details.usecase.interface";
 import { GetVendorDetailsForStatusUsecase } from "../../useCases/vendor/get-vendor-detailsForStatus.usecase";
 import { IAddAddressUsecase } from "../../entities/useCaseInterfaces/auth/add-address-usecase.interface";
-import { AddAddressUsecase } from "../../useCases/auth/addAddress.usecase";
+import { AddAddressUsecase } from "../../useCases/address/addAddress.usecase";
 import { IUploadImageUsecase } from "../../entities/useCaseInterfaces/common/upload-image.usecase";
 import { UploadImageUsecase } from "../../useCases/common/uploadImageUsecase";
 import { IAddKycUsecase } from "../../entities/useCaseInterfaces/auth/add-kyc-usecase.interface";
@@ -69,6 +69,12 @@ import { IGetVendorDetailsUsecase } from "../../entities/useCaseInterfaces/vendo
 import { GetVendorDetailsUsecase } from "../../useCases/vendor/get-vendor-details.usecase";
 import { IUpdateVendorPasswordUsecase } from "../../entities/useCaseInterfaces/vendor/update-vendor-password-usecase.interface";
 import { UpdateVendorPasswordUsecase } from "../../useCases/vendor/update-vendor-password.usecase";
+import { ISendEmailOtpUsecase } from "../../entities/useCaseInterfaces/auth/send-email-otp-usecase.interface";
+import { SendEmailOtpUsecase } from "../../useCases/auth/send-email-otp.usecase";
+import { IUpdateVendorProfileUsecase } from "../../entities/useCaseInterfaces/vendor/update-vendor-profile-usecase.interface";
+import { UpdateVendorProfileUsecase } from "../../useCases/vendor/update-vendor-profile.usecase";
+import { IUpdateAddressUsecase } from "../../entities/useCaseInterfaces/address/update-address-usecase.interface";
+import { UpdateAddressUsecase } from "../../useCases/address/update-address.usecase";
 
 export class UsecaseRegistory {
   static registerUsecases(): void {
@@ -118,6 +124,10 @@ export class UsecaseRegistory {
         useClass: ForgotPasswordResetUsecase,
       }
     );
+
+    container.register<ISendEmailOtpUsecase>('ISendEmailOtpUsecase',{
+      useClass : SendEmailOtpUsecase
+    })
 
     //register strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {
@@ -200,6 +210,10 @@ export class UsecaseRegistory {
       useClass : UpdateVendorPasswordUsecase
     })
 
+    container.register<IUpdateVendorProfileUsecase>('IUpdateVendorProfileUsecase',{
+      useClass : UpdateVendorProfileUsecase
+    })
+
     //admin usecases
     container.register<IUpdateVendorStatusUsecase>(
       "IUpdateVendorStatusUsecase",
@@ -231,6 +245,11 @@ export class UsecaseRegistory {
     container.register<IResetPasswordUsecase>("IResetPasswordUsecase", {
       useClass: ResetPasswordUsecase,
     });
+
+    //address usecases
+    container.register<IUpdateAddressUsecase>("IUpdateAddressUsecase",{
+      useClass : UpdateAddressUsecase
+    })
 
     //token
     container.register<IBlackListTokenUsecase>("IBlackListTokenUsecase", {

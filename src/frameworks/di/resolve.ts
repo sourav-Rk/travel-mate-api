@@ -22,6 +22,8 @@ import { IVendorProfileController } from "../../entities/controllerInterfaces/ve
 import { VendorProfileController } from "../../interfaceAdapters/controllers/vendor/vendor.profile.controller";
 import { BlockedMiddleware } from "../../interfaceAdapters/middlewares/block.middleware";
 import { IBlockedMiddleware } from "../../entities/middleWareInterfaces/blocked-middleware.interface";
+import { IAddressController } from "../../entities/controllerInterfaces/address/address-controller.interface";
+import { AddressController } from "../../interfaceAdapters/controllers/address/address.controller";
 
 DependencyInjection.registerAll();
 
@@ -46,6 +48,9 @@ export const guideController =
 //client related controller
 export const clientProfileController =
   container.resolve<IClientProfileController>(ClientProfileController);
+
+//address controller
+export const addressController = container.resolve<IAddressController>(AddressController)
 
 //common upload controller
 export const commonController =
