@@ -1,4 +1,4 @@
-import { AddressDto } from "../../../shared/dto/authDto";
+import { AddressDto } from "../../../shared/dto/addressDto";
 import { ISuccessResponseHandler } from "../../../shared/utils/successResponseHandler";
 
 export interface IAddAddressUsecase {
