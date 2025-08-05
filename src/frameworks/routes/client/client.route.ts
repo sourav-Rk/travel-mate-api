@@ -22,6 +22,7 @@ export class ClientRoute extends BaseRoute {
       .put(
         verifyAuth,
         authorizeRole(["client"]),
+        blockMiddleware.checkBlockedStatus,
         asyncHandler(
           clientProfileController.updateClientProfile.bind(
             clientProfileController
@@ -31,6 +32,7 @@ export class ClientRoute extends BaseRoute {
       .get(
         verifyAuth,
         authorizeRole(["client"]),
+        blockMiddleware.checkBlockedStatus,
         asyncHandler(
           clientProfileController.getClientDetails.bind(clientProfileController)
         )
@@ -40,6 +42,7 @@ export class ClientRoute extends BaseRoute {
       "/client/update-password",
       verifyAuth,
       authorizeRole(["client"]),
+      blockMiddleware.checkBlockedStatus,
       blockMiddleware.checkBlockedStatus as RequestHandler,
       clientProfileController.updatePassword.bind(clientProfileController)
     );
@@ -48,6 +51,7 @@ export class ClientRoute extends BaseRoute {
       "/client/logout",
       verifyAuth,
       authorizeRole(["client"]),
+      blockMiddleware.checkBlockedStatus,
       asyncHandler(authController.logout.bind(authController))
     );
 
