@@ -12,4 +12,8 @@ export class AddressRepository implements IAddressRepository{
     async findByUserId(userId: string): Promise<IAddressEntity | null> {
         return await addressDB.findOne({userId})
     }
+
+    async findByIdAndUpdate(id: string, data: Partial<IAddressEntity>): Promise<void> {
+        await addressDB.findByIdAndUpdate(id,data);
+    }
 }
