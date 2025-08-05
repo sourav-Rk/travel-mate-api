@@ -5,10 +5,18 @@ export interface IVendorRepository {
   findByEmail(email: string): Promise<IVendorEntity | null>;
   findByNumber(phone: string): Promise<IVendorEntity | null>;
   findById(vendorId: string): Promise<IVendorEntity | null>;
-  findByIdAndUpdatePassword(id : any,password : string) : Promise<IVendorEntity | null>
-  findByIdAndUpdateStatus(vendorId: string, status: string,reason?:string): Promise<void>;
+  findByIdAndUpdate(id: string, data: Partial<IVendorEntity>): Promise<void>;
+  findByIdAndUpdatePassword(
+    id: any,
+    password: string
+  ): Promise<IVendorEntity | null>;
+  findByIdAndUpdateStatus(
+    vendorId: string,
+    status: string,
+    reason?: string
+  ): Promise<void>;
   findByIdAndUpdateBlock(vendorId: string): Promise<boolean>;
-  getVendorWithAddressAndKyc(vendorId : string) : Promise<IVendorEntity | null>
+  getVendorWithAddressAndKyc(vendorId: string): Promise<IVendorEntity | null>;
   find(
     filter: any,
     skip: number,
