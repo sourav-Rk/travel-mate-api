@@ -1,6 +1,5 @@
 import { inject, injectable } from "tsyringe";
 import { IGetClientDetailsUsecase } from "../../entities/useCaseInterfaces/client/getClientDetails-usecase.interface";
-import { IUserEntity } from "../../entities/modelsEntity/user.entity";
 import { CustomError } from "../../shared/utils/error/customError";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../shared/constants";
 import { IClientEntity } from "../../entities/modelsEntity/client.entity";
