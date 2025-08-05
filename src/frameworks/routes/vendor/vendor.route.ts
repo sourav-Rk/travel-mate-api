@@ -7,6 +7,7 @@ import { asyncHandler } from "../../../shared/async-handler";
 import {
   addressController,
   authController,
+  blockMiddleware,
   vendorController,
   vendorProfileController,
 } from "../../di/resolve";
@@ -37,6 +38,7 @@ export class VendorRoute extends BaseRoute {
       .get(
         verifyAuth,
         authorizeRole(["vendor"]),
+        blockMiddleware.checkBlockedStatus,
         asyncHandler(
           vendorProfileController.getVendorDetails.bind(vendorProfileController)
         )
@@ -44,6 +46,7 @@ export class VendorRoute extends BaseRoute {
       .put(
         verifyAuth,
         authorizeRole(["vendor"]),
+        blockMiddleware.checkBlockedStatus,
         asyncHandler(
           vendorProfileController.updateVendorProfile.bind(
             vendorProfileController
@@ -54,18 +57,21 @@ export class VendorRoute extends BaseRoute {
     this.router.post("/vendor/change-email",
       verifyAuth,
       authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
       asyncHandler(authController.sendEmailOtp.bind(authController))
     );
 
     this.router.post("/vendor/resent-otp",
       verifyAuth,
       authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
       asyncHandler(authController.resendOtp.bind(authController))
     )
 
     this.router.post("/vendor/verify-otp",
       verifyAuth,
       authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
       asyncHandler(authController.verifyOtp.bind(authController))
     )
 
@@ -73,6 +79,7 @@ export class VendorRoute extends BaseRoute {
       "/vendor/update-password",
       verifyAuth,
       authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
       asyncHandler(
         vendorProfileController.updatePassword.bind(vendorProfileController)
       )
@@ -82,6 +89,7 @@ export class VendorRoute extends BaseRoute {
     "/vendor/address",
     verifyAuth,
     authorizeRole(["vendor"]),
+    blockMiddleware.checkBlockedStatus,
     asyncHandler(addressController.addAddress.bind(addressController))
     );
 
@@ -89,6 +97,7 @@ export class VendorRoute extends BaseRoute {
     this.router.put("/vendor/address",
       verifyAuth,
       authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
       asyncHandler(addressController.updateAddress.bind(addressController))
     )
 
@@ -96,6 +105,7 @@ export class VendorRoute extends BaseRoute {
       "/vendor/guide",
       verifyAuth,
       authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
       asyncHandler(vendorController.addGuide.bind(vendorController))
     );
 
@@ -103,6 +113,7 @@ export class VendorRoute extends BaseRoute {
       "/vendor/kyc",
       verifyAuth,
       authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
       asyncHandler(vendorController.addKyc.bind(vendorController))
     );
 
@@ -111,6 +122,7 @@ export class VendorRoute extends BaseRoute {
       "/vendor/status",
       verifyAuth,
       authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
       asyncHandler(vendorController.updateVendorStatus.bind(vendorController))
     );
 
@@ -118,6 +130,7 @@ export class VendorRoute extends BaseRoute {
       "/vendor/profile",
       verifyAuth,
       authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
       asyncHandler(vendorController.getDetailsforStatus.bind(vendorController))
     );
 
@@ -125,6 +138,7 @@ export class VendorRoute extends BaseRoute {
       "/vendor/logout",
       verifyAuth,
       authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
       asyncHandler(authController.logout.bind(authController))
     );
 
