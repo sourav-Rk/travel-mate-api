@@ -5,6 +5,7 @@ export interface IAuthController {
   googleSignup(req: Request, res: Response): Promise<void>;
   verifyOtp(req: Request, res: Response, next: NextFunction): Promise<void>;
   sendEmail(req: Request, res: Response, next: NextFunction): Promise<void>;
+  sendEmailOtp(req : Request, res : Response) : Promise<void>
   resendOtp(req: Request, res: Response): Promise<void>;
   login(req: Request, res: Response, next: NextFunction): Promise<void>;
   forgotPasswordSendMail(req: Request, res: Response): Promise<void>;
