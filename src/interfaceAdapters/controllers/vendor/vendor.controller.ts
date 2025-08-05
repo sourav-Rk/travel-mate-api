@@ -60,12 +60,6 @@ export class VendorController implements IVendorController {
       .json({ success: true, message: "status updated to reviewing" });
   }
 
-  async addAddress(req: Request, res: Response): Promise<void> {
-    const vendorId = (req as CustomRequest).user.id;
-    const data = { ...req.body, userId: vendorId } as AddressDto;
-    const response = await this.addAddressUsecase.execute(data);
-    res.status(response.statusCode).json(response.content);
-  }
 
   async addKyc(req: Request, res: Response): Promise<void> {
     const vendorId = (req as CustomRequest).user.id;

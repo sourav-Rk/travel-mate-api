@@ -11,9 +11,6 @@ import { mailContentProvider } from "../../shared/mailContentProvider";
 @injectable()
 export class VerifyExistingEmail implements IVerifyExistingEmail{
     constructor(
-        @inject('IEmailService')
-        private emailService : IEmailService,
-
         @inject('IOtpService')
         private otpService : IOtpService,
 

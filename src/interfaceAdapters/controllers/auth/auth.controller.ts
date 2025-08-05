@@ -15,7 +15,6 @@ import {
   ERROR_MESSAGE,
   HTTP_STATUS,
   SUCCESS_MESSAGE,
-  TRole,
 } from "../../../shared/constants";
 import { ISendEmailUsecase } from "../../../entities/useCaseInterfaces/auth/send-email-usecase.interface";
 import { IOtpService } from "../../../entities/serviceInterfaces/otp-service.interface";
@@ -27,6 +26,7 @@ import { IBlackListTokenUsecase } from "../../../entities/useCaseInterfaces/auth
 import { IGoogleUsecase } from "../../../entities/useCaseInterfaces/auth/google-usecase.interface";
 import { IForgotPasswordSendMailUsecase } from "../../../entities/useCaseInterfaces/auth/forgotPassword-sendMail-usecase.interface";
 import { IForgotPasswordResetUsecase } from "../../../entities/useCaseInterfaces/auth/forgotPassword-reset-usecase.interface";
+import { ISendEmailOtpUsecase } from "../../../entities/useCaseInterfaces/auth/send-email-otp-usecase.interface";
 
 @injectable()
 export class AuthController implements IAuthController {
@@ -48,6 +48,9 @@ export class AuthController implements IAuthController {
 
     @inject("IOtpService")
     private _OtpService: IOtpService,
+
+    @inject('ISendEmailOtpUsecase')
+    private _sendEmailOtpUsecase : ISendEmailOtpUsecase,
 
     @inject("IResendOtpUsecase")
     private _ResendOtpUsecase: IResendOtpUsecase,
@@ -134,12 +137,17 @@ export class AuthController implements IAuthController {
 
   async sendEmail(req: Request, res: Response): Promise<void> {
     const formData = req.body;
-    console.log(formData);
     const { email, phone } = req.body;
     await this._SendEmailUsecase.execute(email, phone, formData, "signup");
     res
       .status(HTTP_STATUS.OK)
       .json({ success: true, message: "Otp send successfully" });
+  }
+
+  async sendEmailOtp(req : Request, res : Response) : Promise<void> {
+     const {email} = req.body;
+     await this._sendEmailOtpUsecase.execute(email);
+     res.status(HTTP_STATUS.OK).json({status : true,message : "Otp send successfully"})
   }
 
   async verifyOtp(req: Request, res: Response): Promise<void> {
