@@ -19,6 +19,10 @@ export class VendorRepository implements IVendorRepository {
     return await vendorDB.findById(vendorId);
   }
 
+  async findByIdAndUpdate(id: string, data: Partial<IVendorEntity>): Promise<void> {
+       await vendorDB.findByIdAndUpdate(id,data);
+  }
+
   async findByIdAndUpdatePassword(id : any,password : string) : Promise<IVendorEntity | null>{
     return await vendorDB.findByIdAndUpdate(id,{password});
   }
