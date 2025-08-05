@@ -5,6 +5,7 @@ import {
 } from "../../../interfaceAdapters/middlewares/auth.middleware";
 import { asyncHandler } from "../../../shared/async-handler";
 import {
+  addressController,
   authController,
   vendorController,
   vendorProfileController,
@@ -31,14 +32,42 @@ export class VendorRoute extends BaseRoute {
     //   }
     // );
 
-    this.router.get(
-      "/vendor/details",
+    this.router
+      .route("/vendor/details")
+      .get(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        asyncHandler(
+          vendorProfileController.getVendorDetails.bind(vendorProfileController)
+        )
+      )
+      .put(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        asyncHandler(
+          vendorProfileController.updateVendorProfile.bind(
+            vendorProfileController
+          )
+        )
+      );
+  
+    this.router.post("/vendor/change-email",
       verifyAuth,
       authorizeRole(["vendor"]),
-      asyncHandler(
-        vendorProfileController.getVendorDetails.bind(vendorProfileController)
-      )
+      asyncHandler(authController.sendEmailOtp.bind(authController))
     );
+
+    this.router.post("/vendor/resent-otp",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      asyncHandler(authController.resendOtp.bind(authController))
+    )
+
+    this.router.post("/vendor/verify-otp",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      asyncHandler(authController.verifyOtp.bind(authController))
+    )
 
     this.router.put(
       "/vendor/update-password",
@@ -48,6 +77,20 @@ export class VendorRoute extends BaseRoute {
         vendorProfileController.updatePassword.bind(vendorProfileController)
       )
     );
+
+    this.router.post(
+    "/vendor/address",
+    verifyAuth,
+    authorizeRole(["vendor"]),
+    asyncHandler(addressController.addAddress.bind(addressController))
+    );
+
+
+    this.router.put("/vendor/address",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      asyncHandler(addressController.updateAddress.bind(addressController))
+    )
 
     this.router.post(
       "/vendor/guide",
@@ -63,12 +106,6 @@ export class VendorRoute extends BaseRoute {
       asyncHandler(vendorController.addKyc.bind(vendorController))
     );
 
-    this.router.post(
-      "/vendor/address",
-      verifyAuth,
-      authorizeRole(["vendor"]),
-      asyncHandler(vendorController.addAddress.bind(vendorController))
-    );
 
     this.router.patch(
       "/vendor/status",
