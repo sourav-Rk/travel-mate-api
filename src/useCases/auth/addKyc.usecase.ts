@@ -13,6 +13,7 @@ export class AddKycUsecase implements IAddKycUsecase{
     ){}
 
     async execute(data: KycDto): Promise<ISuccessResponseHandler> {
+       
         await this.kycRepository.save(data);
         return successResponseHandler(true,HTTP_STATUS.CREATED,"kyc added succesfully")
     }
