@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
-import { IClientModel } from "../models/client.model";
+
 import { GENDER, ROLES } from "../../../shared/constants";
+import { IClientModel } from "../models/client.model";
 
 export const clientSchema = new mongoose.Schema<IClientModel>(
   {

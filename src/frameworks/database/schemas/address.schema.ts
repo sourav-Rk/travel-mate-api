@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import { IAddressModel } from "../models/address.model";
 
 export const addressSchema = new mongoose.Schema<IAddressModel>(

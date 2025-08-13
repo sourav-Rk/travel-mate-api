@@ -1,13 +1,14 @@
 import { inject, injectable } from "tsyringe";
-import { IUpdateUserstatusUsecase } from "../../entities/useCaseInterfaces/admin/update-user-status-usecase.interface";
+
 import { IClientRepository } from "../../entities/repositoryInterfaces/client/client.repository.interface";
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
+import { IUpdateUserstatusUsecase } from "../../entities/useCaseInterfaces/admin/update-user-status-usecase.interface";
+import { HTTP_STATUS } from "../../shared/constants";
 import { NotFoundError } from "../../shared/utils/error/notFoundError";
 import {
   ISuccessResponseHandler,
   successResponseHandler,
 } from "../../shared/utils/successResponseHandler";
-import { HTTP_STATUS } from "../../shared/constants";
 
 @injectable()
 export class UpdateUserStatusUsecase implements IUpdateUserstatusUsecase {

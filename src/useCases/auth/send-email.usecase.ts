@@ -1,8 +1,9 @@
 import { inject, injectable } from "tsyringe";
-import { ISendEmailUsecase } from "../../entities/useCaseInterfaces/auth/send-email-usecase.interface";
+
 import { IOtpService } from "../../entities/serviceInterfaces/otp-service.interface";
+import { IPhoneExistenceService } from "../../entities/serviceInterfaces/phone-existence-service.interface";
 import { IUserExistenceService } from "../../entities/serviceInterfaces/user-existence-service.interface";
-import { CustomError } from "../../shared/utils/error/customError";
+import { ISendEmailUsecase } from "../../entities/useCaseInterfaces/auth/send-email-usecase.interface";
 import {
   EmailOtpPurpose,
   ERROR_MESSAGE,
@@ -12,7 +13,7 @@ import {
 } from "../../shared/constants";
 import { eventBus } from "../../shared/eventBus";
 import { mailContentProvider } from "../../shared/mailContentProvider";
-import { IPhoneExistenceService } from "../../entities/serviceInterfaces/phone-existence-service.interface";
+import { CustomError } from "../../shared/utils/error/customError";
 
 @injectable()
 export class SendEmailUsecase implements ISendEmailUsecase {

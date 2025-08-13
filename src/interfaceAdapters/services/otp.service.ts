@@ -1,7 +1,8 @@
 import { inject, injectable } from "tsyringe";
-import { IOtpService } from "../../entities/serviceInterfaces/otp-service.interface";
-import { IOTPRepository } from "../../entities/repositoryInterfaces/auth/otp-repository.interface";
+
 import { IUserEntity } from "../../entities/modelsEntity/user.entity";
+import { IOTPRepository } from "../../entities/repositoryInterfaces/auth/otp-repository.interface";
+import { IOtpService } from "../../entities/serviceInterfaces/otp-service.interface";
 
 @injectable()
 export class OtpService implements IOtpService {

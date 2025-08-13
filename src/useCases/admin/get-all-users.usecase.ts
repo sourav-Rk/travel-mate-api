@@ -1,10 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import { IGetAllUsersUsecase } from "../../entities/useCaseInterfaces/admin/get-all-users-usecase.interface";
+
+import { PaginatedUsers } from "../../entities/modelsEntity/paginated-users.entity";
 import { IClientRepository } from "../../entities/repositoryInterfaces/client/client.repository.interface";
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
-import { PaginatedUsers } from "../../entities/modelsEntity/paginated-users.entity";
-import { CustomError } from "../../shared/utils/error/customError";
+import { IGetAllUsersUsecase } from "../../entities/useCaseInterfaces/admin/get-all-users-usecase.interface";
 import { HTTP_STATUS } from "../../shared/constants";
+import { CustomError } from "../../shared/utils/error/customError";
 
 @injectable()
 export class GetAllUsersUsecase implements IGetAllUsersUsecase {
@@ -23,7 +24,7 @@ export class GetAllUsersUsecase implements IGetAllUsersUsecase {
     searchTerm: string,
     status?: string
   ): Promise<PaginatedUsers> {
-    let filter: any = {};
+    const filter: any = {};
 
     if (searchTerm) {
       filter.$or = [

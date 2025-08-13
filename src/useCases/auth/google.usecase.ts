@@ -1,13 +1,14 @@
-import { inject, injectable } from "tsyringe";
-import { IGoogleUsecase } from "../../entities/useCaseInterfaces/auth/google-usecase.interface";
-import { IRegisterStrategy } from "./register-strategies/register-strategy.interface";
-import { ILoginStrategy } from "./login-strategies/login-strategy.interface";
 import {OAuth2Client} from "google-auth-library"
+import { inject, injectable } from "tsyringe";
+
 import { IUserEntity } from "../../entities/modelsEntity/user.entity";
-import { CustomError } from "../../shared/utils/error/customError";
-import { ERROR_MESSAGE, HTTP_STATUS } from "../../shared/constants";
 import { IUserExistenceService } from "../../entities/serviceInterfaces/user-existence-service.interface";
-import { UserExistenceServive } from "../../interfaceAdapters/services/user-existence.service";
+import { IGoogleUsecase } from "../../entities/useCaseInterfaces/auth/google-usecase.interface";
+import { HTTP_STATUS } from "../../shared/constants";
+import { CustomError } from "../../shared/utils/error/customError";
+
+import { ILoginStrategy } from "./login-strategies/login-strategy.interface";
+import { IRegisterStrategy } from "./register-strategies/register-strategy.interface";
 
 @injectable()
 export class GoogleUsecase implements IGoogleUsecase{

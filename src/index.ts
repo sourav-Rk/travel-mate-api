@@ -1,6 +1,6 @@
 import "reflect-metadata";
-import { App } from "./frameworks/http/server";
 import { MongoConnect } from "./frameworks/database/mongoDB/mongoConnect";
+import { App } from "./frameworks/http/server";
 import { config } from "./shared/config";
 
 try{

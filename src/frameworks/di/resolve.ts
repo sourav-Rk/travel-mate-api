@@ -1,29 +1,35 @@
-import { AuthController } from "../../interfaceAdapters/controllers/auth/auth.controller";
 import { container } from "tsyringe";
-import { DependencyInjection } from ".";
-import { IAuthController } from "../../entities/controllerInterfaces/auth/auth.controller.interfaces";
-import { ErrorMiddleware } from "../../interfaceAdapters/middlewares/error.middleware";
-import { IErrorMiddleware } from "../../entities/middleWareInterfaces/error-middleware.interface";
-import { LoggerMiddleware } from "../../interfaceAdapters/middlewares/logger.middleware";
-import { ILogger } from "../../interfaceAdapters/services/logger/logger.interface";
-import { IVendorController } from "../../entities/controllerInterfaces/vendor/vendor.controller.interface";
-import { VendorController } from "../../interfaceAdapters/controllers/vendor/vendor.controller";
-import { ICommonController } from "../../entities/controllerInterfaces/common.controller.interface";
-import { CommonController } from "../../interfaceAdapters/controllers/common/common.controller";
+
+import { IAddressController } from "../../entities/controllerInterfaces/address/address-controller.interface";
 import { IAdminController } from "../../entities/controllerInterfaces/admin/admin.controller.interface";
-import { AdminController } from "../../interfaceAdapters/controllers/admin/admin.controller";
-import { IGuideController } from "../../entities/controllerInterfaces/guide/guide.controller.interface";
-import { GuideController } from "../../interfaceAdapters/controllers/guide/guide.controller";
-import { ISignedUrlController } from "../../entities/controllerInterfaces/signedUrl.controller.interface";
-import { SignedUrlController } from "../../interfaceAdapters/controllers/media/signedUrl.controller";
+import { IAuthController } from "../../entities/controllerInterfaces/auth/auth.controller.interfaces";
 import { IClientProfileController } from "../../entities/controllerInterfaces/client/clientProfile-controller.interface";
-import { ClientProfileController } from "../../interfaceAdapters/controllers/client/clientProfile.controller";
+import { ICommonController } from "../../entities/controllerInterfaces/common.controller.interface";
+import { IGuideProfileController } from "../../entities/controllerInterfaces/guide/guide-profile-controller.interface";
+import { IGuideController } from "../../entities/controllerInterfaces/guide/guide.controller.interface";
+import { IKycController } from "../../entities/controllerInterfaces/kyc/kycController.interface";
+import { ISignedUrlController } from "../../entities/controllerInterfaces/signedUrl.controller.interface";
 import { IVendorProfileController } from "../../entities/controllerInterfaces/vendor/vendor-profile.controller.interface";
+import { IVendorController } from "../../entities/controllerInterfaces/vendor/vendor.controller.interface";
+import { IBlockedMiddleware } from "../../entities/middleWareInterfaces/blocked-middleware.interface";
+import { IErrorMiddleware } from "../../entities/middleWareInterfaces/error-middleware.interface";
+import { AddressController } from "../../interfaceAdapters/controllers/address/address.controller";
+import { AdminController } from "../../interfaceAdapters/controllers/admin/admin.controller";
+import { AuthController } from "../../interfaceAdapters/controllers/auth/auth.controller";
+import { ClientProfileController } from "../../interfaceAdapters/controllers/client/clientProfile.controller";
+import { CommonController } from "../../interfaceAdapters/controllers/common/common.controller";
+import { GuideController } from "../../interfaceAdapters/controllers/guide/guide.controller";
+import { GuideProfileController } from "../../interfaceAdapters/controllers/guide/guideProfileController";
+import { KycController } from "../../interfaceAdapters/controllers/kyc/kycController";
+import { SignedUrlController } from "../../interfaceAdapters/controllers/media/signedUrl.controller";
+import { VendorController } from "../../interfaceAdapters/controllers/vendor/vendor.controller";
 import { VendorProfileController } from "../../interfaceAdapters/controllers/vendor/vendor.profile.controller";
 import { BlockedMiddleware } from "../../interfaceAdapters/middlewares/block.middleware";
-import { IBlockedMiddleware } from "../../entities/middleWareInterfaces/blocked-middleware.interface";
-import { IAddressController } from "../../entities/controllerInterfaces/address/address-controller.interface";
-import { AddressController } from "../../interfaceAdapters/controllers/address/address.controller";
+import { ErrorMiddleware } from "../../interfaceAdapters/middlewares/error.middleware";
+import { LoggerMiddleware } from "../../interfaceAdapters/middlewares/logger.middleware";
+import { ILogger } from "../../interfaceAdapters/services/logger/logger.interface";
+
+import { DependencyInjection } from ".";
 
 DependencyInjection.registerAll();
 
@@ -45,12 +51,18 @@ export const adminController =
 export const guideController =
   container.resolve<IGuideController>(GuideController);
 
+//guide profile controller
+export const guideProfileController = container.resolve<IGuideProfileController>(GuideProfileController)
+
 //client related controller
 export const clientProfileController =
   container.resolve<IClientProfileController>(ClientProfileController);
 
 //address controller
 export const addressController = container.resolve<IAddressController>(AddressController)
+
+//kyc controller
+export const kycController = container.resolve<IKycController>(KycController)
 
 //common upload controller
 export const commonController =

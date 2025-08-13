@@ -1,11 +1,13 @@
 import { inject, injectable } from "tsyringe";
-import { IRegisterStrategy } from "./register-strategy.interface";
+
 import { IUserEntity } from "../../../entities/modelsEntity/user.entity";
-import { UserDto, VendorDto } from "../../../shared/dto/user.dto";
 import { IVendorRepository } from "../../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
-import { CustomError } from "../../../shared/utils/error/customError";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../shared/constants";
+import { UserDto, VendorDto } from "../../../shared/dto/user.dto";
 import { hashPassword } from "../../../shared/utils/bcryptHelper";
+import { CustomError } from "../../../shared/utils/error/customError";
+
+import { IRegisterStrategy } from "./register-strategy.interface";
 
 @injectable()
 export class VendorRegisteryStrategy implements IRegisterStrategy {

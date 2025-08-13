@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { authController } from "../../di/resolve";
+
 import { asyncHandler } from "../../../shared/async-handler";
+import { authController } from "../../di/resolve";
 
 export class AuthRoutes {
   private _router: Router;
@@ -14,7 +15,7 @@ export class AuthRoutes {
     this._router.post(
       "/signup",
       asyncHandler(authController.signup.bind(authController))
-    ),
+    );
       this._router.post(
         "/login",
         asyncHandler(authController.login.bind(authController))
@@ -26,7 +27,7 @@ export class AuthRoutes {
     this._router.post(
       "/send-otp",
       asyncHandler(authController.sendEmail.bind(authController))
-    ),
+    );
       this._router.post(
         "/resend-otp",
         asyncHandler(authController.resendOtp.bind(authController))

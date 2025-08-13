@@ -1,7 +1,8 @@
 import { inject, injectable } from "tsyringe";
+
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
-import { NotFoundError } from "../../shared/utils/error/notFoundError";
 import { IUpdateVendorStatusUsecase } from "../../entities/useCaseInterfaces/vendor/update-vendor-status.usecase.interface";
+import { NotFoundError } from "../../shared/utils/error/notFoundError";
 
 @injectable()
 export class UpdateVendorStatusUsecase implements IUpdateVendorStatusUsecase{

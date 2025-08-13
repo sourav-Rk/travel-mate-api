@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import { IKycModel } from "../models/kyc.model";
 
 export const kycSchema = new mongoose.Schema<IKycModel>(

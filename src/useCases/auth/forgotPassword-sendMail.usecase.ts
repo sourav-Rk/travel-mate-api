@@ -1,11 +1,12 @@
 import { inject, injectable } from "tsyringe";
-import { IForgotPasswordSendMailUsecase } from "../../entities/useCaseInterfaces/auth/forgotPassword-sendMail-usecase.interface";
-import { IUserExistenceService } from "../../entities/serviceInterfaces/user-existence-service.interface";
-import { NotFoundError } from "../../shared/utils/error/notFoundError";
-import { ERROR_MESSAGE, EVENT_EMMITER_TYPE, MAIL_CONTENT_PURPOSE } from "../../shared/constants";
+
 import { ITokenService } from "../../entities/serviceInterfaces/token-service.interface";
-import { mailContentProvider } from "../../shared/mailContentProvider";
+import { IUserExistenceService } from "../../entities/serviceInterfaces/user-existence-service.interface";
+import { IForgotPasswordSendMailUsecase } from "../../entities/useCaseInterfaces/auth/forgotPassword-sendMail-usecase.interface";
+import { ERROR_MESSAGE, EVENT_EMMITER_TYPE, MAIL_CONTENT_PURPOSE } from "../../shared/constants";
 import { eventBus } from "../../shared/eventBus";
+import { mailContentProvider } from "../../shared/mailContentProvider";
+import { NotFoundError } from "../../shared/utils/error/notFoundError";
 
 @injectable()
 export class ForgotPasswordSendMailUsecase implements IForgotPasswordSendMailUsecase

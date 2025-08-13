@@ -1,6 +1,7 @@
 import { injectable } from "tsyringe";
-import { IClientRepository } from "../../../entities/repositoryInterfaces/client/client.repository.interface";
+
 import { IClientEntity } from "../../../entities/modelsEntity/client.entity";
+import { IClientRepository } from "../../../entities/repositoryInterfaces/client/client.repository.interface";
 import { clientDB } from "../../../frameworks/database/models/client.model";
 import { NotFoundError } from "../../../shared/utils/error/notFoundError";
 

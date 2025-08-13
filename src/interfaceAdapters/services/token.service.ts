@@ -1,10 +1,11 @@
-import { injectable } from "tsyringe";
-import { ITokenService } from "../../entities/serviceInterfaces/token-service.interface";
 import jwt, { Secret, JwtPayload } from "jsonwebtoken";
-import { config } from "../../shared/config";
 import ms from "ms";
-import { CustomError } from "../../shared/utils/error/customError";
+import { injectable } from "tsyringe";
+
+import { ITokenService } from "../../entities/serviceInterfaces/token-service.interface";
+import { config } from "../../shared/config";
 import { HTTP_STATUS } from "../../shared/constants";
+import { CustomError } from "../../shared/utils/error/customError";
 
 
 export interface JwtPayloadData {
@@ -58,6 +59,7 @@ export class TokenService implements ITokenService {
       return jwt.verify(token, this._accessSecretKey) as JwtPayload;
     } catch (error) {
       console.log("Access token verification failed");
+      console.log(error);
       return null;
     }
   }
@@ -67,6 +69,7 @@ export class TokenService implements ITokenService {
       return jwt.verify(token, this._refreshSecretKey) as JwtPayload;
     } catch (error) {
       console.log("Refresh token verification failed");
+      console.log(error);
       return null;
     }
   }
@@ -78,6 +81,7 @@ export class TokenService implements ITokenService {
       return decoded as JwtPayload;
     }catch(error){
       console.log("reset token verification failed");
+      console.log(error);
       return null
     }
   }
@@ -87,6 +91,7 @@ export class TokenService implements ITokenService {
       return jwt.decode(token) as JwtPayload;
     } catch (error) {
       console.log("decode failed");
+      console.log(error);
       return null;
     }
   }
@@ -96,6 +101,7 @@ export class TokenService implements ITokenService {
       return jwt.decode(token) as JwtPayload;
     }catch(error) {
       console.log("decode failed");
+      console.log(error);
       return null;
     }
   }

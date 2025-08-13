@@ -1,8 +1,9 @@
+import { JwtPayload } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
+
 import { IRedisTokenRepository } from "../../entities/repositoryInterfaces/redis/redis-token-repository.interface";
 import { ITokenService } from "../../entities/serviceInterfaces/token-service.interface";
 import { IBlackListTokenUsecase } from "../../entities/useCaseInterfaces/auth/blacklist-token-usecase.interface";
-import { JwtPayload } from "jsonwebtoken";
 
 @injectable()
 export class BlackListTokenUsecase implements IBlackListTokenUsecase{

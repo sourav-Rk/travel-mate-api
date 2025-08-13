@@ -1,11 +1,12 @@
-import { inject, injectable } from "tsyringe";
-import { IVendorProfileController } from "../../../entities/controllerInterfaces/vendor/vendor-profile.controller.interface";
-import { CustomRequest } from "../../middlewares/auth.middleware";
 import { Request, Response } from "express";
+import { inject, injectable } from "tsyringe";
+
+import { IVendorProfileController } from "../../../entities/controllerInterfaces/vendor/vendor-profile.controller.interface";
 import { IGetVendorDetailsUsecase } from "../../../entities/useCaseInterfaces/vendor/get-vendor-details-usecase.interface";
-import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
 import { IUpdateVendorPasswordUsecase } from "../../../entities/useCaseInterfaces/vendor/update-vendor-password-usecase.interface";
 import { IUpdateVendorProfileUsecase } from "../../../entities/useCaseInterfaces/vendor/update-vendor-profile-usecase.interface";
+import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
+import { CustomRequest } from "../../middlewares/auth.middleware";
 
 @injectable()
 export class VendorProfileController implements IVendorProfileController {

@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
+
 import { ICommonController } from "../../../entities/controllerInterfaces/common.controller.interface";
 import { IUploadImageUsecase } from "../../../entities/useCaseInterfaces/common/upload-image.usecase";
-import { ImageMulterResponseDto } from "../../../shared/dto/imageMulterDto";
 import { HTTP_STATUS } from "../../../shared/constants";
+import { ImageMulterResponseDto } from "../../../shared/dto/imageMulterDto";
 
 export interface MulterRequest extends Request{
     files : Express.Multer.File[];

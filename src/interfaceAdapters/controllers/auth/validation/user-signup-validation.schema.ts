@@ -1,9 +1,10 @@
 import {z} from 'zod';
+
 import { emailRegex } from '../../../../shared/validations/email.validation';
-import { firstNameSchema, lastNameSchema } from '../../../../shared/validations/name.validation';
-import { phoneNumberSchema } from '../../../../shared/validations/phone.validation';
-import { passwordSchema } from '../../../../shared/validations/password.validation';
 import { genderSchema } from '../../../../shared/validations/gender.validation';
+import { firstNameSchema, lastNameSchema } from '../../../../shared/validations/name.validation';
+import { passwordSchema } from '../../../../shared/validations/password.validation';
+import { phoneNumberSchema } from '../../../../shared/validations/phone.validation';
 
 const clientSchema = z.object({
     firstName : firstNameSchema,

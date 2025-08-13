@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { TokenService } from "../services/token.service";
 import { JwtPayload } from "jsonwebtoken";
-import { ERROR_MESSAGE, HTTP_STATUS } from "../../shared/constants";
+
 import redisClient from "../../frameworks/redis/redisClient";
+import { ERROR_MESSAGE, HTTP_STATUS } from "../../shared/constants";
 import { CustomError } from "../../shared/utils/error/customError";
+import { TokenService } from "../services/token.service";
 
 const tokenService = new TokenService();
 
@@ -127,7 +128,9 @@ export const decodeToken = async (
       refresh_token: token.refresh_token,
     };
     next();
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const authorizeRole = (allowedRoles: string[]) => {
@@ -166,6 +169,6 @@ export const verifyResetToken = async (
     req.body.id = user?.id;
     next();
   } catch (error) {
-    
+     console.log(error);
   }
 };

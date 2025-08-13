@@ -1,9 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import { CustomError } from "../../shared/utils/error/customError";
+
+import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
+import { IUpdateVendorPasswordUsecase } from "../../entities/useCaseInterfaces/vendor/update-vendor-password-usecase.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../shared/constants";
 import { comparePassword, hashPassword } from "../../shared/utils/bcryptHelper";
-import { IUpdateVendorPasswordUsecase } from "../../entities/useCaseInterfaces/vendor/update-vendor-password-usecase.interface";
-import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
+import { CustomError } from "../../shared/utils/error/customError";
 
 @injectable()
 export class UpdateVendorPasswordUsecase implements IUpdateVendorPasswordUsecase {

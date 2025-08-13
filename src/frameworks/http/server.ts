@@ -1,10 +1,11 @@
 import "reflect-metadata";
-import express, { Application } from "express";
-import cors from "cors";
 import cookieParser from "cookie-parser";
+import cors from "cors";
+import express, { Application } from "express";
+
 import { config } from "../../shared/config";
-import { AuthRoutes } from "../routes/auth/auth";
 import { errorMiddleware, injectedLoggerMiddleware } from "../di/resolve";
+import { AuthRoutes } from "../routes/auth/auth";
 import { PrivateRoute } from "../routes/common/private.route";
 
 export class App {

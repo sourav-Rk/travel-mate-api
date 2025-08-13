@@ -1,10 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import { IResendOtpUsecase } from "../../entities/useCaseInterfaces/auth/resendtOtp.interface";
+
 import { IOtpService } from "../../entities/serviceInterfaces/otp-service.interface";
-import { ValidationError } from "../../shared/utils/error/validationError";
-import { eventBus } from "../../shared/eventBus";
+import { IResendOtpUsecase } from "../../entities/useCaseInterfaces/auth/resendtOtp.interface";
 import { EVENT_EMMITER_TYPE, MAIL_CONTENT_PURPOSE } from "../../shared/constants";
+import { eventBus } from "../../shared/eventBus";
 import { mailContentProvider } from "../../shared/mailContentProvider";
+import { ValidationError } from "../../shared/utils/error/validationError";
 
 @injectable()
 export class ResendOTPUsecase implements IResendOtpUsecase {

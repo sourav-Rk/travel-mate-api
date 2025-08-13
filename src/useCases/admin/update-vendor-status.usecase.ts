@@ -1,11 +1,12 @@
 import { inject, injectable } from "tsyringe";
+
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
-import { CustomError } from "../../shared/utils/error/customError";
-import { EVENT_EMMITER_TYPE, HTTP_STATUS, MAIL_CONTENT_PURPOSE, STATUS } from "../../shared/constants";
-import { NotFoundError } from "../../shared/utils/error/notFoundError";
+import { IAdminUpdateVendorStatusUsecase } from "../../entities/useCaseInterfaces/admin/update-vendor-usecase.interface";
+import { EVENT_EMMITER_TYPE, HTTP_STATUS, MAIL_CONTENT_PURPOSE } from "../../shared/constants";
 import { eventBus } from "../../shared/eventBus";
 import { mailContentProvider } from "../../shared/mailContentProvider";
-import { IAdminUpdateVendorStatusUsecase } from "../../entities/useCaseInterfaces/admin/update-vendor-usecase.interface";
+import { CustomError } from "../../shared/utils/error/customError";
+import { NotFoundError } from "../../shared/utils/error/notFoundError";
 
 
 @injectable()

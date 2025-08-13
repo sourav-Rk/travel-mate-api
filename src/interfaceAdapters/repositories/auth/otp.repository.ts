@@ -1,7 +1,8 @@
 import { injectable } from "tsyringe";
+
+import { IUserEntity } from "../../../entities/modelsEntity/user.entity";
 import { IOTPRepository } from "../../../entities/repositoryInterfaces/auth/otp-repository.interface";
 import redisClient from "../../../frameworks/redis/redisClient";
-import { IUserEntity } from "../../../entities/modelsEntity/user.entity";
 
 @injectable()
 export class OTPRepository implements IOTPRepository{

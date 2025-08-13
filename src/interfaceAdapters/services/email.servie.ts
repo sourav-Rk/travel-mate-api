@@ -1,9 +1,10 @@
 import nodemailer from 'nodemailer';
-import { config } from '../../shared/config';
 import { injectable } from 'tsyringe';
+
+import { IEmailService } from '../../entities/serviceInterfaces/email-service.interface';
+import { config } from '../../shared/config';
 import { EVENT_EMMITER_TYPE } from '../../shared/constants';
 import { eventBus } from '../../shared/eventBus';
-import { IEmailService } from '../../entities/serviceInterfaces/email-service.interface';
 
 @injectable()
 export class EmailService implements IEmailService{

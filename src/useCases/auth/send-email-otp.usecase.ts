@@ -1,11 +1,12 @@
 import { inject, injectable } from "tsyringe";
-import { ISendEmailOtpUsecase } from "../../entities/useCaseInterfaces/auth/send-email-otp-usecase.interface";
-import { IUserExistenceService } from "../../entities/serviceInterfaces/user-existence-service.interface";
-import { CustomError } from "../../shared/utils/error/customError";
-import { ERROR_MESSAGE, EVENT_EMMITER_TYPE, HTTP_STATUS, MAIL_CONTENT_PURPOSE } from "../../shared/constants";
+
 import { IOtpService } from "../../entities/serviceInterfaces/otp-service.interface";
+import { IUserExistenceService } from "../../entities/serviceInterfaces/user-existence-service.interface";
+import { ISendEmailOtpUsecase } from "../../entities/useCaseInterfaces/auth/send-email-otp-usecase.interface";
+import { ERROR_MESSAGE, EVENT_EMMITER_TYPE, HTTP_STATUS, MAIL_CONTENT_PURPOSE } from "../../shared/constants";
 import { eventBus } from "../../shared/eventBus";
 import { mailContentProvider } from "../../shared/mailContentProvider";
+import { CustomError } from "../../shared/utils/error/customError";
 
 @injectable()
 export class SendEmailOtpUsecase implements ISendEmailOtpUsecase{

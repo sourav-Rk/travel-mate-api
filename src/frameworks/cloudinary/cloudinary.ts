@@ -1,8 +1,9 @@
 import {v2 as cloudinary} from 'cloudinary';
+import dotenv from 'dotenv';
 import multer from 'multer';
 import {CloudinaryStorage} from 'multer-storage-cloudinary';
+
 import { config } from '../../shared/config';
-import dotenv from 'dotenv';
 dotenv.config();
 
 
@@ -14,7 +15,7 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
     cloudinary,
-    params : async(req,file) =>({
+    params : async() =>({
         folder : "secure-uploads",
         resource_type : "auto",
         allowedFormats : ["jpg","png","jpeg","gif","webp","avif"],

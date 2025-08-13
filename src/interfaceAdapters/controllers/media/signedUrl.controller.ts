@@ -1,8 +1,9 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
+
+import { ISignedUrlController } from "../../../entities/controllerInterfaces/signedUrl.controller.interface";
 import { IGenerateSignedUrlUsecase } from "../../../entities/useCaseInterfaces/common/generate-signedurl-usecase.interface";
 import { HTTP_STATUS } from "../../../shared/constants";
-import { ISignedUrlController } from "../../../entities/controllerInterfaces/signedUrl.controller.interface";
 
 @injectable()
 export class SignedUrlController implements  ISignedUrlController {

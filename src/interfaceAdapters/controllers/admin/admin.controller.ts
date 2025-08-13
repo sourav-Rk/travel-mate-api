@@ -1,12 +1,12 @@
-import { inject, injectable } from "tsyringe";
-import { IAdminController } from "../../../entities/controllerInterfaces/admin/admin.controller.interface";
 import { Request, Response } from "express";
+import { inject, injectable } from "tsyringe";
+
+import { IAdminController } from "../../../entities/controllerInterfaces/admin/admin.controller.interface";
 import { IGetAllUsersUsecase } from "../../../entities/useCaseInterfaces/admin/get-all-users-usecase.interface";
-import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
-import { IUpdateUserstatusUsecase } from "../../../entities/useCaseInterfaces/admin/update-user-status-usecase.interface";
 import { IGetUserByIdUsecase } from "../../../entities/useCaseInterfaces/admin/getUserById-usecase.interface";
-import { IUpdateVendorStatusUsecase } from "../../../entities/useCaseInterfaces/vendor/update-vendor-status.usecase.interface";
+import { IUpdateUserstatusUsecase } from "../../../entities/useCaseInterfaces/admin/update-user-status-usecase.interface";
 import { IAdminUpdateVendorStatusUsecase } from "../../../entities/useCaseInterfaces/admin/update-vendor-usecase.interface";
+import { HTTP_STATUS } from "../../../shared/constants";
 
 @injectable()
 export class AdminController implements IAdminController {
@@ -26,7 +26,6 @@ export class AdminController implements IAdminController {
 
   async getAllUsers(req: Request, res: Response): Promise<void> {
     const { page = 1, limit = 10, userType, searchTerm, status } = req.query;
-    console.log("status in controller", status);
     const pageNumber = Number(page);
     const pageSize = Number(limit);
     const userTypeString = typeof userType === "string" ? userType : "client";

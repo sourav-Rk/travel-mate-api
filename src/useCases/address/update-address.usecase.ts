@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import { IUpdateAddressUsecase } from "../../entities/useCaseInterfaces/address/update-address-usecase.interface";
+
 import { IAddressRepository } from "../../entities/repositoryInterfaces/auth/address-repository.interface";
-import { IAddressEntity } from "../../entities/modelsEntity/address.entity";
-import { ValidationError } from "../../shared/utils/error/validationError";
-import { NotFoundError } from "../../shared/utils/error/notFoundError";
+import { IUpdateAddressUsecase } from "../../entities/useCaseInterfaces/address/update-address-usecase.interface";
 import { AddressDto } from "../../shared/dto/authDto";
+import { NotFoundError } from "../../shared/utils/error/notFoundError";
+import { ValidationError } from "../../shared/utils/error/validationError";
 
 @injectable()
 export class UpdateAddressUsecase implements IUpdateAddressUsecase {

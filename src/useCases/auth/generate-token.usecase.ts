@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
-import { IGenerateTokenUseCase } from "../../entities/useCaseInterfaces/auth/generate-token-usecase.interface";
+
 import { ITokenService } from "../../entities/serviceInterfaces/token-service.interface";
-import { JwtPayloadData } from "../../interfaceAdapters/services/token.service";
+import { IGenerateTokenUseCase } from "../../entities/useCaseInterfaces/auth/generate-token-usecase.interface";
 
 @injectable()
 export class GenerateTokenUseCase implements IGenerateTokenUseCase {

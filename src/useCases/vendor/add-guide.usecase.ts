@@ -1,14 +1,15 @@
 import { inject, injectable } from "tsyringe";
-import { IAddGuideUsecase } from "../../entities/useCaseInterfaces/vendor/add-guide-usecase.interface";
+
 import { IGuideRepository } from "../../entities/repositoryInterfaces/guide/guide-repository.interface";
-import { GuideDto, UserDto } from "../../shared/dto/user.dto";
-import { IUserExistenceService } from "../../entities/serviceInterfaces/user-existence-service.interface";
 import { IPhoneExistenceService } from "../../entities/serviceInterfaces/phone-existence-service.interface";
-import { CustomError } from "../../shared/utils/error/customError";
-import { EVENT_EMMITER_TYPE, HTTP_STATUS, MAIL_CONTENT_PURPOSE } from "../../shared/constants";
-import { mailContentProvider } from "../../shared/mailContentProvider";
-import { eventBus } from "../../shared/eventBus";
 import { ITokenService } from "../../entities/serviceInterfaces/token-service.interface";
+import { IUserExistenceService } from "../../entities/serviceInterfaces/user-existence-service.interface";
+import { IAddGuideUsecase } from "../../entities/useCaseInterfaces/vendor/add-guide-usecase.interface";
+import { EVENT_EMMITER_TYPE, HTTP_STATUS, MAIL_CONTENT_PURPOSE } from "../../shared/constants";
+import { GuideDto, UserDto } from "../../shared/dto/user.dto";
+import { eventBus } from "../../shared/eventBus";
+import { mailContentProvider } from "../../shared/mailContentProvider";
+import { CustomError } from "../../shared/utils/error/customError";
 
 @injectable()
 export class AddGuideUsecase implements IAddGuideUsecase {

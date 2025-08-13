@@ -1,12 +1,13 @@
 import { inject, injectable } from "tsyringe";
-import { IGetUserByIdUsecase } from "../../entities/useCaseInterfaces/admin/getUserById-usecase.interface";
-import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
-import { IClientRepository } from "../../entities/repositoryInterfaces/client/client.repository.interface";
-import { IVendorEntity } from "../../entities/modelsEntity/vendor.entity";
-import { NotFoundError } from "../../shared/utils/error/notFoundError";
+
 import { IClientEntity } from "../../entities/modelsEntity/client.entity";
-import { CustomError } from "../../shared/utils/error/customError";
+import { IVendorEntity } from "../../entities/modelsEntity/vendor.entity";
+import { IClientRepository } from "../../entities/repositoryInterfaces/client/client.repository.interface";
+import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
+import { IGetUserByIdUsecase } from "../../entities/useCaseInterfaces/admin/getUserById-usecase.interface";
 import { HTTP_STATUS } from "../../shared/constants";
+import { CustomError } from "../../shared/utils/error/customError";
+import { NotFoundError } from "../../shared/utils/error/notFoundError";
 
 @injectable()
 export class GetUserByIdUsecase implements IGetUserByIdUsecase {

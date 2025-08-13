@@ -1,9 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import { IUserExistenceService } from "../../entities/serviceInterfaces/user-existence-service.interface";
-import { IClientRepository } from "../../entities/repositoryInterfaces/client/client.repository.interface";
-import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
+
 import { IAdminRepository } from "../../entities/repositoryInterfaces/admin/admin-repository.interface";
+import { IClientRepository } from "../../entities/repositoryInterfaces/client/client.repository.interface";
 import { IGuideRepository } from "../../entities/repositoryInterfaces/guide/guide-repository.interface";
+import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
+import { IUserExistenceService } from "../../entities/serviceInterfaces/user-existence-service.interface";
 
 @injectable()
 export class UserExistenceServive implements IUserExistenceService {

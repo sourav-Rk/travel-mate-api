@@ -1,13 +1,13 @@
+import {Request,Response } from "express";
+
 import { IErrorMiddleware } from "../../entities/middleWareInterfaces/error-middleware.interface";
-import { NextFunction,Request,Response } from "express";
 import { HTTP_STATUS, ERROR_MESSAGE } from "../../shared/constants";
 import { CustomError } from "../../shared/utils/error/customError";
 import { NotFoundError } from "../../shared/utils/error/notFoundError";
 import { ValidationError } from "../../shared/utils/error/validationError";
-import { logger } from "../../frameworks/logger/winston.logger";
 
 export class ErrorMiddleware implements IErrorMiddleware {
-    public handleError(err: any, req: Request, res: Response, next: NextFunction): void {
+    public handleError(err: any, req: Request, res: Response): void {
     
         let statusCode = HTTP_STATUS.INTERNAL_SERVER_ERROR;
         let message =  ERROR_MESSAGE.SERVER_ERROR;

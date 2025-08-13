@@ -1,10 +1,12 @@
 import { inject, injectable } from "tsyringe";
-import { ILoginStrategy } from "./login-strategy.interface";
-import { IClientRepository } from "../../../entities/repositoryInterfaces/client/client.repository.interface";
+
 import { IUserEntity } from "../../../entities/modelsEntity/user.entity";
+import { IClientRepository } from "../../../entities/repositoryInterfaces/client/client.repository.interface";
+import { ERROR_MESSAGE, HTTP_STATUS } from "../../../shared/constants";
 import { LoginUserDTO } from "../../../shared/dto/user.dto";
 import { CustomError } from "../../../shared/utils/error/customError";
-import { ERROR_MESSAGE, HTTP_STATUS } from "../../../shared/constants";
+
+import { ILoginStrategy } from "./login-strategy.interface";
 
 @injectable()
 export class ClientGoogleLoginStrategy implements ILoginStrategy{

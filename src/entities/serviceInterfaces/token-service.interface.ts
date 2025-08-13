@@ -1,4 +1,5 @@
 import { JwtPayload } from "jsonwebtoken";
+
 import { ResetTokenPayload } from "../../interfaceAdapters/services/token.service";
 
 export interface ITokenService {

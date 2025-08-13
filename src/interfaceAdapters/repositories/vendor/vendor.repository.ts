@@ -1,9 +1,10 @@
+import mongoose from "mongoose";
 import { injectable } from "tsyringe";
-import { IVendorRepository } from "../../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
+
 import { IVendorEntity } from "../../../entities/modelsEntity/vendor.entity";
+import { IVendorRepository } from "../../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { vendorDB } from "../../../frameworks/database/models/vendor.model";
 import { NotFoundError } from "../../../shared/utils/error/notFoundError";
-import mongoose from "mongoose";
 
 @injectable()
 export class VendorRepository implements IVendorRepository {

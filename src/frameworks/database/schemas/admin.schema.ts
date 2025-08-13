@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import { ROLES } from "../../../shared/constants";
 import { IAdminModel } from "../models/admin.model";
 

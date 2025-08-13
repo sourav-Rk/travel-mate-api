@@ -1,5 +1,6 @@
-import { CustomError } from "./customError";
 import { HTTP_STATUS } from "../../constants";
+
+import { CustomError } from "./customError";
 
 export class ValidationError extends CustomError{
     constructor(message : string){

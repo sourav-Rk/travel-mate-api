@@ -1,12 +1,14 @@
 import { Response, NextFunction } from "express";
-import { CustomRequest } from "./auth.middleware";
-import { clearCookie } from "../../shared/utils/cookieHelper";
+import { inject, injectable } from "tsyringe";
+
+import { IBlockedMiddleware } from "../../entities/middleWareInterfaces/blocked-middleware.interface";
 import { IClientRepository } from "../../entities/repositoryInterfaces/client/client.repository.interface";
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { IBlackListTokenUsecase } from "../../entities/useCaseInterfaces/auth/blacklist-token-usecase.interface";
-import { inject, injectable } from "tsyringe";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../shared/constants";
-import { IBlockedMiddleware } from "../../entities/middleWareInterfaces/blocked-middleware.interface";
+import { clearCookie } from "../../shared/utils/cookieHelper";
+
+import { CustomRequest } from "./auth.middleware";
 
 @injectable()
 export class BlockedMiddleware implements IBlockedMiddleware {

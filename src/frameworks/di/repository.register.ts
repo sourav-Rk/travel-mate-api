@@ -1,20 +1,21 @@
 import { container } from "tsyringe";
-import { IClientRepository } from "../../entities/repositoryInterfaces/client/client.repository.interface";
-import { ClientRepository } from "../../interfaceAdapters/repositories/client/client.repository";
-import { IOTPRepository } from "../../entities/repositoryInterfaces/auth/otp-repository.interface";
-import { OTPRepository } from "../../interfaceAdapters/repositories/auth/otp.repository";
+
 import { IAdminRepository } from "../../entities/repositoryInterfaces/admin/admin-repository.interface";
-import { AdminRepository } from "../../interfaceAdapters/repositories/admin/admin.repository";
-import { IRedisTokenRepository } from "../../entities/repositoryInterfaces/redis/redis-token-repository.interface";
-import { RedisTokenRepository } from "../../interfaceAdapters/repositories/redis/redis-token.repository";
-import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
-import { VendorRepository } from "../../interfaceAdapters/repositories/vendor/vendor.repository";
-import { IKYCRepository } from "../../entities/repositoryInterfaces/auth/kyc-repository.interface";
-import { KYCRepository } from "../../interfaceAdapters/repositories/auth/kyc.repository";
 import { IAddressRepository } from "../../entities/repositoryInterfaces/auth/address-repository.interface";
-import { AddressRepository } from "../../interfaceAdapters/repositories/auth/address.repository";
+import { IKYCRepository } from "../../entities/repositoryInterfaces/auth/kyc-repository.interface";
+import { IOTPRepository } from "../../entities/repositoryInterfaces/auth/otp-repository.interface";
+import { IClientRepository } from "../../entities/repositoryInterfaces/client/client.repository.interface";
 import { IGuideRepository } from "../../entities/repositoryInterfaces/guide/guide-repository.interface";
+import { IRedisTokenRepository } from "../../entities/repositoryInterfaces/redis/redis-token-repository.interface";
+import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
+import { AdminRepository } from "../../interfaceAdapters/repositories/admin/admin.repository";
+import { AddressRepository } from "../../interfaceAdapters/repositories/auth/address.repository";
+import { KYCRepository } from "../../interfaceAdapters/repositories/auth/kyc.repository";
+import { OTPRepository } from "../../interfaceAdapters/repositories/auth/otp.repository";
+import { ClientRepository } from "../../interfaceAdapters/repositories/client/client.repository";
 import { GuideRepository } from "../../interfaceAdapters/repositories/guide/guide.repository";
+import { RedisTokenRepository } from "../../interfaceAdapters/repositories/redis/redis-token.repository";
+import { VendorRepository } from "../../interfaceAdapters/repositories/vendor/vendor.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {

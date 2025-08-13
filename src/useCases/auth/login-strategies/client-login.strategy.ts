@@ -1,12 +1,14 @@
 import { inject, injectable } from "tsyringe";
-import { ILoginStrategy } from "./login-strategy.interface";
-import { IClientRepository } from "../../../entities/repositoryInterfaces/client/client.repository.interface";
+
 import { IUserEntity } from "../../../entities/modelsEntity/user.entity";
-import { LoginUserDTO } from "../../../shared/dto/user.dto";
-import { NotFoundError } from "../../../shared/utils/error/notFoundError";
+import { IClientRepository } from "../../../entities/repositoryInterfaces/client/client.repository.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../shared/constants";
+import { LoginUserDTO } from "../../../shared/dto/user.dto";
+import { comparePassword } from "../../../shared/utils/bcryptHelper";
 import { CustomError } from "../../../shared/utils/error/customError";
-import { comparePassword, hashPassword } from "../../../shared/utils/bcryptHelper";
+import { NotFoundError } from "../../../shared/utils/error/notFoundError";
+
+import { ILoginStrategy } from "./login-strategy.interface";
 
 @injectable()
 export class ClientLoginStrategy implements ILoginStrategy{

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
-import { IVendorModel } from "../models/vendor.model";
+
 import { ROLES, STATUS } from "../../../shared/constants";
+import { IVendorModel } from "../models/vendor.model";
 
 export const vendorSchema = new mongoose.Schema<IVendorModel>(
   {

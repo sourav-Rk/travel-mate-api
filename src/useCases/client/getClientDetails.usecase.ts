@@ -1,9 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import { IGetClientDetailsUsecase } from "../../entities/useCaseInterfaces/client/getClientDetails-usecase.interface";
-import { CustomError } from "../../shared/utils/error/customError";
-import { ERROR_MESSAGE, HTTP_STATUS } from "../../shared/constants";
+
 import { IClientEntity } from "../../entities/modelsEntity/client.entity";
 import { IClientRepository } from "../../entities/repositoryInterfaces/client/client.repository.interface";
+import { IGetClientDetailsUsecase } from "../../entities/useCaseInterfaces/client/getClientDetails-usecase.interface";
+import { ERROR_MESSAGE, HTTP_STATUS } from "../../shared/constants";
+import { CustomError } from "../../shared/utils/error/customError";
 
 @injectable()
 export class GetClientDetailsUsecase implements IGetClientDetailsUsecase {

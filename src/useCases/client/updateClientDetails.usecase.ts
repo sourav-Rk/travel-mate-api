@@ -1,13 +1,13 @@
 import { inject, injectable } from "tsyringe";
-import { IUpdateClientDetailsUsecase } from "../../entities/useCaseInterfaces/client/updateClientDetails-usecase.interface";
-import { ClientDto } from "../../shared/dto/user.dto";
-import { CustomError } from "../../shared/utils/error/customError";
-import { ERROR_MESSAGE, HTTP_STATUS } from "../../shared/constants";
-import { IClientRepository } from "../../entities/repositoryInterfaces/client/client.repository.interface";
-import { NotFoundError } from "../../shared/utils/error/notFoundError";
+
 import { IClientEntity } from "../../entities/modelsEntity/client.entity";
-import { IUserExistenceService } from "../../entities/serviceInterfaces/user-existence-service.interface";
+import { IClientRepository } from "../../entities/repositoryInterfaces/client/client.repository.interface";
 import { IPhoneExistenceService } from "../../entities/serviceInterfaces/phone-existence-service.interface";
+import { IUserExistenceService } from "../../entities/serviceInterfaces/user-existence-service.interface";
+import { IUpdateClientDetailsUsecase } from "../../entities/useCaseInterfaces/client/updateClientDetails-usecase.interface";
+import { ERROR_MESSAGE, HTTP_STATUS } from "../../shared/constants";
+import { CustomError } from "../../shared/utils/error/customError";
+import { NotFoundError } from "../../shared/utils/error/notFoundError";
 
 @injectable()
 export class UpdateClientDetailsUsecase implements IUpdateClientDetailsUsecase {

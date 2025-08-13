@@ -1,4 +1,5 @@
 import { injectable } from "tsyringe";
+
 import { IRedisTokenRepository } from "../../../entities/repositoryInterfaces/redis/redis-token-repository.interface";
 import redisClient from "../../../frameworks/redis/redisClient";
 

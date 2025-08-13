@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import { IVendorEntity } from "../../../entities/modelsEntity/vendor.entity";
 import { vendorSchema } from "../schemas/vendor.schema";
 

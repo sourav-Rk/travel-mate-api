@@ -1,80 +1,89 @@
 import { container } from "tsyringe";
-import { IRegisterUserUsecase } from "../../entities/useCaseInterfaces/auth/registerUsecase.interface";
-import { RegisterUserUsecase } from "../../useCases/auth/registerUser.useCase";
-import { IVerifyOtpUsecase } from "../../entities/useCaseInterfaces/auth/verifyOtpUsecase";
-import { VerifyOtpUsecase } from "../../useCases/auth/verifyOtp.usecase";
-import { ILoginUsecase } from "../../entities/useCaseInterfaces/auth/loginUsecase.interface";
-import { LoginUsecase } from "../../useCases/auth/login.usecase";
-import { IRegisterStrategy } from "../../useCases/auth/register-strategies/register-strategy.interface";
-import { ClientRegisterStrategy } from "../../useCases/auth/register-strategies/client-register.strategy";
-import { ISendEmailUsecase } from "../../entities/useCaseInterfaces/auth/send-email-usecase.interface";
-import { SendEmailUsecase } from "../../useCases/auth/send-email.usecase";
-import { IVerifyExistingEmail } from "../../entities/useCaseInterfaces/auth/verify-existing-email-usecase.interface";
-import { VerifyExistingEmail } from "../../useCases/auth/verify-existing-email.usecase";
-import { ILoginStrategy } from "../../useCases/auth/login-strategies/login-strategy.interface";
-import { ClientLoginStrategy } from "../../useCases/auth/login-strategies/client-login.strategy";
+
+import { IUpdateAddressUsecase } from "../../entities/useCaseInterfaces/address/update-address-usecase.interface";
+import { IGetAllUsersUsecase } from "../../entities/useCaseInterfaces/admin/get-all-users-usecase.interface";
+import { IGetUserByIdUsecase } from "../../entities/useCaseInterfaces/admin/getUserById-usecase.interface";
+import { IUpdateUserstatusUsecase } from "../../entities/useCaseInterfaces/admin/update-user-status-usecase.interface";
+import { IAdminUpdateVendorStatusUsecase } from "../../entities/useCaseInterfaces/admin/update-vendor-usecase.interface";
+import { IAddAddressUsecase } from "../../entities/useCaseInterfaces/auth/add-address-usecase.interface";
+import { IAddKycUsecase } from "../../entities/useCaseInterfaces/auth/add-kyc-usecase.interface";
+import { IBlackListTokenUsecase } from "../../entities/useCaseInterfaces/auth/blacklist-token-usecase.interface";
+import { IForgotPasswordResetUsecase } from "../../entities/useCaseInterfaces/auth/forgotPassword-reset-usecase.interface";
+import { IForgotPasswordSendMailUsecase } from "../../entities/useCaseInterfaces/auth/forgotPassword-sendMail-usecase.interface";
 import { IGenerateTokenUseCase } from "../../entities/useCaseInterfaces/auth/generate-token-usecase.interface";
-import { GenerateTokenUseCase } from "../../useCases/auth/generate-token.usecase";
+import { IGoogleUsecase } from "../../entities/useCaseInterfaces/auth/google-usecase.interface";
+import { ILoginUsecase } from "../../entities/useCaseInterfaces/auth/loginUsecase.interface";
+import { IRefreshTokenUsecase } from "../../entities/useCaseInterfaces/auth/refresh-token-usecase.interface";
+import { IRegisterUserUsecase } from "../../entities/useCaseInterfaces/auth/registerUsecase.interface";
 import { IResendOtpUsecase } from "../../entities/useCaseInterfaces/auth/resendtOtp.interface";
-import { ResendOTPUsecase } from "../../useCases/auth/resendOtp.usecase";
+import { ISendEmailOtpUsecase } from "../../entities/useCaseInterfaces/auth/send-email-otp-usecase.interface";
+import { ISendEmailUsecase } from "../../entities/useCaseInterfaces/auth/send-email-usecase.interface";
+import { IVerifyExistingEmail } from "../../entities/useCaseInterfaces/auth/verify-existing-email-usecase.interface";
+import { IVerifyOtpUsecase } from "../../entities/useCaseInterfaces/auth/verifyOtpUsecase";
+import { IGetClientDetailsUsecase } from "../../entities/useCaseInterfaces/client/getClientDetails-usecase.interface";
+import { IUpdateClientPasswordUsecase } from "../../entities/useCaseInterfaces/client/update-client-password-usecase.interface";
+import { IUpdateClientDetailsUsecase } from "../../entities/useCaseInterfaces/client/updateClientDetails-usecase.interface";
+import { IGenerateSignedUrlUsecase } from "../../entities/useCaseInterfaces/common/generate-signedurl-usecase.interface";
+import { IUploadImageUsecase } from "../../entities/useCaseInterfaces/common/upload-image.usecase";
+import { IGetGuideProfileUsecase } from "../../entities/useCaseInterfaces/guide/getGuideProfile-usecase.interface";
+import { IResetPasswordUsecase } from "../../entities/useCaseInterfaces/guide/reset-password-usecase.interface";
+import { IUpdateGuidePasswordUsecase } from "../../entities/useCaseInterfaces/guide/updateGuidePassword-usecase.interface";
+import { IAddGuideUsecase } from "../../entities/useCaseInterfaces/vendor/add-guide-usecase.interface";
+import { IGetGuideDetailsUsecase } from "../../entities/useCaseInterfaces/vendor/get-guide-details-usecase.interface";
+import { IGetVendorDetailsUsecase } from "../../entities/useCaseInterfaces/vendor/get-vendor-details-usecase.interface";
+import { IGetVendorDetailsForStatusUsecase } from "../../entities/useCaseInterfaces/vendor/get-vendor-details.usecase.interface";
+import { IGetAllGuidesUsecase } from "../../entities/useCaseInterfaces/vendor/getAllGuides-usecase.interface";
+import { IUpdateVendorPasswordUsecase } from "../../entities/useCaseInterfaces/vendor/update-vendor-password-usecase.interface";
+import { IUpdateVendorProfileUsecase } from "../../entities/useCaseInterfaces/vendor/update-vendor-profile-usecase.interface";
+import { IUpdateVendorStatusUsecase } from "../../entities/useCaseInterfaces/vendor/update-vendor-status.usecase.interface";
+import { LoggerMiddleware } from "../../interfaceAdapters/middlewares/logger.middleware";
 import { ILogger } from "../../interfaceAdapters/services/logger/logger.interface";
 import { WinstonLoggerAdapter } from "../../interfaceAdapters/services/logger/winston-logger.adapter";
-import { LoggerMiddleware } from "../../interfaceAdapters/middlewares/logger.middleware";
-import { AdminLoginStrategy } from "../../useCases/auth/login-strategies/admin-login.strategy";
-import { IBlackListTokenUsecase } from "../../entities/useCaseInterfaces/auth/blacklist-token-usecase.interface";
-import { BlackListTokenUsecase } from "../../useCases/auth/blacklist-token.usecase";
-import { IRefreshTokenUsecase } from "../../entities/useCaseInterfaces/auth/refresh-token-usecase.interface";
-import { RefreshTokenUsecase } from "../../useCases/auth/refresh-token.usecase";
-import { VendorRegisteryStrategy } from "../../useCases/auth/register-strategies/vendor-register.strategy";
-import { VendorLoginStrategy } from "../../useCases/auth/login-strategies/vendor-login.strategy";
-import { IGetVendorDetailsForStatusUsecase } from "../../entities/useCaseInterfaces/vendor/get-vendor-details.usecase.interface";
-import { GetVendorDetailsForStatusUsecase } from "../../useCases/vendor/get-vendor-detailsForStatus.usecase";
-import { IAddAddressUsecase } from "../../entities/useCaseInterfaces/auth/add-address-usecase.interface";
 import { AddAddressUsecase } from "../../useCases/address/addAddress.usecase";
-import { IUploadImageUsecase } from "../../entities/useCaseInterfaces/common/upload-image.usecase";
-import { UploadImageUsecase } from "../../useCases/common/uploadImageUsecase";
-import { IAddKycUsecase } from "../../entities/useCaseInterfaces/auth/add-kyc-usecase.interface";
-import { AddKycUsecase } from "../../useCases/auth/addKyc.usecase";
-import { IGetAllUsersUsecase } from "../../entities/useCaseInterfaces/admin/get-all-users-usecase.interface";
-import { GetAllUsersUsecase } from "../../useCases/admin/get-all-users.usecase";
-import { IUpdateUserstatusUsecase } from "../../entities/useCaseInterfaces/admin/update-user-status-usecase.interface";
-import { UpdateUserStatusUsecase } from "../../useCases/admin/update-user-status.usecase";
-import { IUpdateVendorStatusUsecase } from "../../entities/useCaseInterfaces/vendor/update-vendor-status.usecase.interface";
-import { UpdateVendorStatusUsecase } from "../../useCases/vendor/update-vendor-status.usecase";
-import { IGetUserByIdUsecase } from "../../entities/useCaseInterfaces/admin/getUserById-usecase.interface";
-import { GetUserByIdUsecase } from "../../useCases/admin/getUserById.usecase";
-import { IAddGuideUsecase } from "../../entities/useCaseInterfaces/vendor/add-guide-usecase.interface";
-import { AddGuideUsecase } from "../../useCases/vendor/add-guide.usecase";
-import { IResetPasswordUsecase } from "../../entities/useCaseInterfaces/guide/reset-password-usecase.interface";
-import { ResetPasswordUsecase } from "../../useCases/guide/reset-password.usecase";
-import { GuideLoginStrategy } from "../../useCases/auth/login-strategies/guide-login.strategy";
-import { IGenerateSignedUrlUsecase } from "../../entities/useCaseInterfaces/common/generate-signedurl-usecase.interface";
-import { GenerateSignedUrlUsecase } from "../../useCases/common/generateSignedUrl.usecase";
-import { IAdminUpdateVendorStatusUsecase } from "../../entities/useCaseInterfaces/admin/update-vendor-usecase.interface";
-import { AdminUpateVendorStatusUsecase } from "../../useCases/admin/update-vendor-status.usecase";
-import { ClientGoogleLoginStrategy } from "../../useCases/auth/login-strategies/client-google-login.strategy";
-import { IGoogleUsecase } from "../../entities/useCaseInterfaces/auth/google-usecase.interface";
-import { GoogleUsecase } from "../../useCases/auth/google.usecase";
-import { IGetClientDetailsUsecase } from "../../entities/useCaseInterfaces/client/getClientDetails-usecase.interface";
-import { GetClientDetailsUsecase } from "../../useCases/client/getClientDetails.usecase";
-import { IUpdateClientDetailsUsecase } from "../../entities/useCaseInterfaces/client/updateClientDetails-usecase.interface";
-import { UpdateClientDetailsUsecase } from "../../useCases/client/updateClientDetails.usecase";
-import { IForgotPasswordSendMailUsecase } from "../../entities/useCaseInterfaces/auth/forgotPassword-sendMail-usecase.interface";
-import { ForgotPasswordSendMailUsecase } from "../../useCases/auth/forgotPassword-sendMail.usecase";
-import { IForgotPasswordResetUsecase } from "../../entities/useCaseInterfaces/auth/forgotPassword-reset-usecase.interface";
-import { ForgotPasswordResetUsecase } from "../../useCases/auth/forgotPassword-reset.usecase";
-import { IUpdateClientPasswordUsecase } from "../../entities/useCaseInterfaces/client/update-client-password-usecase.interface";
-import { UpdateClientPasswordUsecase } from "../../useCases/client/update-client-password.usecase";
-import { IGetVendorDetailsUsecase } from "../../entities/useCaseInterfaces/vendor/get-vendor-details-usecase.interface";
-import { GetVendorDetailsUsecase } from "../../useCases/vendor/get-vendor-details.usecase";
-import { IUpdateVendorPasswordUsecase } from "../../entities/useCaseInterfaces/vendor/update-vendor-password-usecase.interface";
-import { UpdateVendorPasswordUsecase } from "../../useCases/vendor/update-vendor-password.usecase";
-import { ISendEmailOtpUsecase } from "../../entities/useCaseInterfaces/auth/send-email-otp-usecase.interface";
-import { SendEmailOtpUsecase } from "../../useCases/auth/send-email-otp.usecase";
-import { IUpdateVendorProfileUsecase } from "../../entities/useCaseInterfaces/vendor/update-vendor-profile-usecase.interface";
-import { UpdateVendorProfileUsecase } from "../../useCases/vendor/update-vendor-profile.usecase";
-import { IUpdateAddressUsecase } from "../../entities/useCaseInterfaces/address/update-address-usecase.interface";
 import { UpdateAddressUsecase } from "../../useCases/address/update-address.usecase";
+import { GetAllUsersUsecase } from "../../useCases/admin/get-all-users.usecase";
+import { GetUserByIdUsecase } from "../../useCases/admin/getUserById.usecase";
+import { UpdateUserStatusUsecase } from "../../useCases/admin/update-user-status.usecase";
+import { AdminUpateVendorStatusUsecase } from "../../useCases/admin/update-vendor-status.usecase";
+import { AddKycUsecase } from "../../useCases/auth/addKyc.usecase";
+import { BlackListTokenUsecase } from "../../useCases/auth/blacklist-token.usecase";
+import { ForgotPasswordResetUsecase } from "../../useCases/auth/forgotPassword-reset.usecase";
+import { ForgotPasswordSendMailUsecase } from "../../useCases/auth/forgotPassword-sendMail.usecase";
+import { GenerateTokenUseCase } from "../../useCases/auth/generate-token.usecase";
+import { GoogleUsecase } from "../../useCases/auth/google.usecase";
+import { AdminLoginStrategy } from "../../useCases/auth/login-strategies/admin-login.strategy";
+import { ClientGoogleLoginStrategy } from "../../useCases/auth/login-strategies/client-google-login.strategy";
+import { ClientLoginStrategy } from "../../useCases/auth/login-strategies/client-login.strategy";
+import { GuideLoginStrategy } from "../../useCases/auth/login-strategies/guide-login.strategy";
+import { ILoginStrategy } from "../../useCases/auth/login-strategies/login-strategy.interface";
+import { VendorLoginStrategy } from "../../useCases/auth/login-strategies/vendor-login.strategy";
+import { LoginUsecase } from "../../useCases/auth/login.usecase";
+import { RefreshTokenUsecase } from "../../useCases/auth/refresh-token.usecase";
+import { ClientRegisterStrategy } from "../../useCases/auth/register-strategies/client-register.strategy";
+import { IRegisterStrategy } from "../../useCases/auth/register-strategies/register-strategy.interface";
+import { VendorRegisteryStrategy } from "../../useCases/auth/register-strategies/vendor-register.strategy";
+import { RegisterUserUsecase } from "../../useCases/auth/registerUser.useCase";
+import { ResendOTPUsecase } from "../../useCases/auth/resendOtp.usecase";
+import { SendEmailOtpUsecase } from "../../useCases/auth/send-email-otp.usecase";
+import { SendEmailUsecase } from "../../useCases/auth/send-email.usecase";
+import { VerifyExistingEmail } from "../../useCases/auth/verify-existing-email.usecase";
+import { VerifyOtpUsecase } from "../../useCases/auth/verifyOtp.usecase";
+import { GetClientDetailsUsecase } from "../../useCases/client/getClientDetails.usecase";
+import { UpdateClientPasswordUsecase } from "../../useCases/client/update-client-password.usecase";
+import { UpdateClientDetailsUsecase } from "../../useCases/client/updateClientDetails.usecase";
+import { GenerateSignedUrlUsecase } from "../../useCases/common/generateSignedUrl.usecase";
+import { UploadImageUsecase } from "../../useCases/common/uploadImageUsecase";
+import { GetGuideProfileUsecase } from "../../useCases/guide/getGuideProfileUsecase";
+import { ResetPasswordUsecase } from "../../useCases/guide/reset-password.usecase";
+import { UpdateGuidePasswordUsecase } from "../../useCases/guide/updateGuidePasswordUsecase";
+import { AddGuideUsecase } from "../../useCases/vendor/add-guide.usecase";
+import { GetGuideDetailsUsecase } from "../../useCases/vendor/get-guide-details.usecase";
+import { GetVendorDetailsUsecase } from "../../useCases/vendor/get-vendor-details.usecase";
+import { GetVendorDetailsForStatusUsecase } from "../../useCases/vendor/get-vendor-detailsForStatus.usecase";
+import { GetAllGuideUsecase } from "../../useCases/vendor/getAllGuides.usecase";
+import { UpdateVendorPasswordUsecase } from "../../useCases/vendor/update-vendor-password.usecase";
+import { UpdateVendorProfileUsecase } from "../../useCases/vendor/update-vendor-profile.usecase";
+import { UpdateVendorStatusUsecase } from "../../useCases/vendor/update-vendor-status.usecase";
 
 export class UsecaseRegistory {
   static registerUsecases(): void {
@@ -125,9 +134,9 @@ export class UsecaseRegistory {
       }
     );
 
-    container.register<ISendEmailOtpUsecase>('ISendEmailOtpUsecase',{
-      useClass : SendEmailOtpUsecase
-    })
+    container.register<ISendEmailOtpUsecase>("ISendEmailOtpUsecase", {
+      useClass: SendEmailOtpUsecase,
+    });
 
     //register strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {
@@ -179,9 +188,12 @@ export class UsecaseRegistory {
     );
 
     //vendor usecases
-    container.register<IGetVendorDetailsForStatusUsecase>("IGetVendorDetailsForStatusUsecase", {
-      useClass: GetVendorDetailsForStatusUsecase,
-    });
+    container.register<IGetVendorDetailsForStatusUsecase>(
+      "IGetVendorDetailsForStatusUsecase",
+      {
+        useClass: GetVendorDetailsForStatusUsecase,
+      }
+    );
 
     container.register<IAddAddressUsecase>("IAddAddressUsecase", {
       useClass: AddAddressUsecase,
@@ -202,17 +214,23 @@ export class UsecaseRegistory {
       }
     );
 
-    container.register<IGetVendorDetailsUsecase>('IGetVendorDetailsUsecase',{
-      useClass : GetVendorDetailsUsecase
-    })
+    container.register<IGetVendorDetailsUsecase>("IGetVendorDetailsUsecase", {
+      useClass: GetVendorDetailsUsecase,
+    });
 
-    container.register<IUpdateVendorPasswordUsecase>('IUpdateVendorPasswordUsecase',{
-      useClass : UpdateVendorPasswordUsecase
-    })
+    container.register<IUpdateVendorPasswordUsecase>(
+      "IUpdateVendorPasswordUsecase",
+      {
+        useClass: UpdateVendorPasswordUsecase,
+      }
+    );
 
-    container.register<IUpdateVendorProfileUsecase>('IUpdateVendorProfileUsecase',{
-      useClass : UpdateVendorProfileUsecase
-    })
+    container.register<IUpdateVendorProfileUsecase>(
+      "IUpdateVendorProfileUsecase",
+      {
+        useClass: UpdateVendorProfileUsecase,
+      }
+    );
 
     //admin usecases
     container.register<IUpdateVendorStatusUsecase>(
@@ -246,10 +264,26 @@ export class UsecaseRegistory {
       useClass: ResetPasswordUsecase,
     });
 
-    //address usecases
-    container.register<IUpdateAddressUsecase>("IUpdateAddressUsecase",{
-      useClass : UpdateAddressUsecase
+    container.register<IGetAllGuidesUsecase>("IGetAllGuidesUsecase", {
+      useClass: GetAllGuideUsecase,
+    });
+
+    container.register<IGetGuideDetailsUsecase>("IGetGuideDetailsUsecase", {
+      useClass: GetGuideDetailsUsecase,
+    });
+
+    container.register<IGetGuideProfileUsecase>('IGetGuideProfileUsecase',{
+      useClass : GetGuideProfileUsecase
     })
+
+    container.register<IUpdateGuidePasswordUsecase>('IUpdateGuidePasswordUsecase',{
+      useClass : UpdateGuidePasswordUsecase
+    })
+
+    //address usecases
+    container.register<IUpdateAddressUsecase>("IUpdateAddressUsecase", {
+      useClass: UpdateAddressUsecase,
+    });
 
     //token
     container.register<IBlackListTokenUsecase>("IBlackListTokenUsecase", {

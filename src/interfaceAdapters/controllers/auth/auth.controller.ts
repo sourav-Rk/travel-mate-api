@@ -1,32 +1,35 @@
-import { Request, Response, NextFunction } from "express";
-import { IAuthController } from "../../../entities/controllerInterfaces/auth/auth.controller.interfaces";
+import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
-import { IRegisterUserUsecase } from "../../../entities/useCaseInterfaces/auth/registerUsecase.interface";
-import { IVerifyOtpUsecase } from "../../../entities/useCaseInterfaces/auth/verifyOtpUsecase";
+
+import { IAuthController } from "../../../entities/controllerInterfaces/auth/auth.controller.interfaces";
+import { IOtpService } from "../../../entities/serviceInterfaces/otp-service.interface";
+import { IBlackListTokenUsecase } from "../../../entities/useCaseInterfaces/auth/blacklist-token-usecase.interface";
+import { IForgotPasswordResetUsecase } from "../../../entities/useCaseInterfaces/auth/forgotPassword-reset-usecase.interface";
+import { IForgotPasswordSendMailUsecase } from "../../../entities/useCaseInterfaces/auth/forgotPassword-sendMail-usecase.interface";
+import { IGenerateTokenUseCase } from "../../../entities/useCaseInterfaces/auth/generate-token-usecase.interface";
+import { IGoogleUsecase } from "../../../entities/useCaseInterfaces/auth/google-usecase.interface";
 import { ILoginUsecase } from "../../../entities/useCaseInterfaces/auth/loginUsecase.interface";
-import {
-  clearCookie,
-  setAuthCookies,
-  updateCookieWithAccessToken,
-} from "../../../shared/utils/cookieHelper";
-import { LoginUserDTO, UserDto } from "../../../shared/dto/user.dto";
-import { userSchemas } from "./validation/user-signup-validation.schema";
+import { IRefreshTokenUsecase } from "../../../entities/useCaseInterfaces/auth/refresh-token-usecase.interface";
+import { IRegisterUserUsecase } from "../../../entities/useCaseInterfaces/auth/registerUsecase.interface";
+import { IResendOtpUsecase } from "../../../entities/useCaseInterfaces/auth/resendtOtp.interface";
+import { ISendEmailOtpUsecase } from "../../../entities/useCaseInterfaces/auth/send-email-otp-usecase.interface";
+import { ISendEmailUsecase } from "../../../entities/useCaseInterfaces/auth/send-email-usecase.interface";
+import { IVerifyOtpUsecase } from "../../../entities/useCaseInterfaces/auth/verifyOtpUsecase";
 import {
   ERROR_MESSAGE,
   HTTP_STATUS,
   SUCCESS_MESSAGE,
 } from "../../../shared/constants";
-import { ISendEmailUsecase } from "../../../entities/useCaseInterfaces/auth/send-email-usecase.interface";
-import { IOtpService } from "../../../entities/serviceInterfaces/otp-service.interface";
-import { IGenerateTokenUseCase } from "../../../entities/useCaseInterfaces/auth/generate-token-usecase.interface";
+import { LoginUserDTO, UserDto } from "../../../shared/dto/user.dto";
+import {
+  clearCookie,
+  setAuthCookies,
+  updateCookieWithAccessToken,
+} from "../../../shared/utils/cookieHelper";
 import { CustomRequest } from "../../middlewares/auth.middleware";
-import { IResendOtpUsecase } from "../../../entities/useCaseInterfaces/auth/resendtOtp.interface";
-import { IRefreshTokenUsecase } from "../../../entities/useCaseInterfaces/auth/refresh-token-usecase.interface";
-import { IBlackListTokenUsecase } from "../../../entities/useCaseInterfaces/auth/blacklist-token-usecase.interface";
-import { IGoogleUsecase } from "../../../entities/useCaseInterfaces/auth/google-usecase.interface";
-import { IForgotPasswordSendMailUsecase } from "../../../entities/useCaseInterfaces/auth/forgotPassword-sendMail-usecase.interface";
-import { IForgotPasswordResetUsecase } from "../../../entities/useCaseInterfaces/auth/forgotPassword-reset-usecase.interface";
-import { ISendEmailOtpUsecase } from "../../../entities/useCaseInterfaces/auth/send-email-otp-usecase.interface";
+
+import { userSchemas } from "./validation/user-signup-validation.schema";
+
 
 @injectable()
 export class AuthController implements IAuthController {
@@ -248,6 +251,7 @@ export class AuthController implements IAuthController {
         token: newToken.accessToken,
       });
     } catch (error) {
+      console.log(error);
       clearCookie(
         res,
         `${(req as CustomRequest).user.role}_access_token`,

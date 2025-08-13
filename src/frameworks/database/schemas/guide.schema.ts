@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+
+import { GENDER, ROLES } from "../../../shared/constants";
 import { IGuideModel } from "../models/guide.model";
-import { GENDER, ROLES, STATUS } from "../../../shared/constants";
 
 export const guideSchema = new mongoose.Schema<IGuideModel>(
   {

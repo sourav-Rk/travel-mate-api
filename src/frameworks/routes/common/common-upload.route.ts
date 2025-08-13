@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response, Router } from "express";
+
 import { upload } from "../../cloudinary/cloudinary";
 import { commonController } from "../../di/resolve";
 
@@ -18,7 +19,7 @@ export class CommonUploadRoutes {
       `/${this.role}/images/upload`,
       upload.array("image", 5),
       (req: Request, res: Response, next: NextFunction) => {
-        commonController.uploadImages(req as MulterRequest, res, next);
+        void commonController.uploadImages(req as MulterRequest, res, next);
       }
     );
   }

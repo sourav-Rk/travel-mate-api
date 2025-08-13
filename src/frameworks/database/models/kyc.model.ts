@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import { IKycEntity } from "../../../entities/modelsEntity/kyc.entity";
 import { kycSchema } from "../schemas/kyc.schema";
 

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import { IClientEntity } from "../../../entities/modelsEntity/client.entity";
 import { clientSchema } from "../schemas/client.schema";
 

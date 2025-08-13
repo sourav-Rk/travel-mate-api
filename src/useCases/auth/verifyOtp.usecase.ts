@@ -1,9 +1,10 @@
 import {inject,injectable} from 'tsyringe';
-import { ValidationError } from '../../shared/utils/error/validationError';
-import { ISuccessResponseHandler, successResponseHandler } from '../../shared/utils/successResponseHandler';
+
+import { IOtpService } from '../../entities/serviceInterfaces/otp-service.interface';
 import { IVerifyOtpUsecase } from '../../entities/useCaseInterfaces/auth/verifyOtpUsecase';
 import { HTTP_STATUS } from '../../shared/constants';
-import { IOtpService } from '../../entities/serviceInterfaces/otp-service.interface';
+import { ValidationError } from '../../shared/utils/error/validationError';
+import { ISuccessResponseHandler, successResponseHandler } from '../../shared/utils/successResponseHandler';
 
 
 @injectable()

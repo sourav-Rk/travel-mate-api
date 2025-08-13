@@ -1,8 +1,8 @@
 import { IClientEntity } from "./client.entity";
-import { IUserEntity } from "./user.entity";
+import { IGuideEntity } from "./guide.entity";
 import { IVendorEntity } from "./vendor.entity";
 
 export interface PaginatedUsers {
-    user : IClientEntity[] | IVendorEntity[] | [];
+    user : IClientEntity[] | IVendorEntity[] | IGuideEntity[] | [];
     total : number;
 }

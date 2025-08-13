@@ -1,11 +1,12 @@
-import { inject, injectable } from "tsyringe";
-import { IAddressController } from "../../../entities/controllerInterfaces/address/address-controller.interface";
 import { Request, Response } from "express";
-import { CustomRequest } from "../../middlewares/auth.middleware";
-import { AddressDto } from "../../../shared/dto/addressDto";
+import { inject, injectable } from "tsyringe";
+
+import { IAddressController } from "../../../entities/controllerInterfaces/address/address-controller.interface";
 import { IUpdateAddressUsecase } from "../../../entities/useCaseInterfaces/address/update-address-usecase.interface";
-import { HTTP_STATUS } from "../../../shared/constants";
 import { IAddAddressUsecase } from "../../../entities/useCaseInterfaces/auth/add-address-usecase.interface";
+import { HTTP_STATUS } from "../../../shared/constants";
+import { AddressDto } from "../../../shared/dto/addressDto";
+import { CustomRequest } from "../../middlewares/auth.middleware";
 
 @injectable()
 export class AddressController implements IAddressController{

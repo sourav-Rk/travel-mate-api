@@ -1,6 +1,7 @@
 import { injectable } from "tsyringe";
-import { IKYCRepository } from "../../../entities/repositoryInterfaces/auth/kyc-repository.interface";
+
 import { IKycEntity } from "../../../entities/modelsEntity/kyc.entity";
+import { IKYCRepository } from "../../../entities/repositoryInterfaces/auth/kyc-repository.interface";
 import { kycDB } from "../../../frameworks/database/models/kyc.model";
 
 @injectable()

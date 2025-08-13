@@ -1,6 +1,8 @@
 import { injectable } from "tsyringe";
-import { ILogger } from "./logger.interface";
+
 import { logger } from "../../../frameworks/logger/winston.logger";
+
+import { ILogger } from "./logger.interface";
 
 @injectable()
 export class WinstonLoggerAdapter implements ILogger{

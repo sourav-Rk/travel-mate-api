@@ -1,10 +1,13 @@
 import { inject, injectable } from "tsyringe";
-import { ILoginUsecase } from "../../entities/useCaseInterfaces/auth/loginUsecase.interface";
-import { HTTP_STATUS, ROLES, TRole } from "../../shared/constants";
-import { CustomError } from "../../shared/utils/error/customError";
+
 import { IUserEntity } from "../../entities/modelsEntity/user.entity";
-import { ILoginStrategy } from "./login-strategies/login-strategy.interface";
+import { ILoginUsecase } from "../../entities/useCaseInterfaces/auth/loginUsecase.interface";
+import { HTTP_STATUS } from "../../shared/constants";
 import { LoginUserDTO } from "../../shared/dto/user.dto";
+import { CustomError } from "../../shared/utils/error/customError";
+
+import { ILoginStrategy } from "./login-strategies/login-strategy.interface";
+
 
 @injectable()
 export class LoginUsecase implements ILoginUsecase {
