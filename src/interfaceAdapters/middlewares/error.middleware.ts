@@ -1,4 +1,4 @@
-import {Request,Response } from "express";
+import {NextFunction, Request,Response } from "express";
 
 import { IErrorMiddleware } from "../../entities/middleWareInterfaces/error-middleware.interface";
 import { HTTP_STATUS, ERROR_MESSAGE } from "../../shared/constants";
@@ -7,7 +7,8 @@ import { NotFoundError } from "../../shared/utils/error/notFoundError";
 import { ValidationError } from "../../shared/utils/error/validationError";
 
 export class ErrorMiddleware implements IErrorMiddleware {
-    public handleError(err: any, req: Request, res: Response): void {
+    public handleError(err: any, req: Request, res: Response,next : NextFunction): void {
+        
     
         let statusCode = HTTP_STATUS.INTERNAL_SERVER_ERROR;
         let message =  ERROR_MESSAGE.SERVER_ERROR;
