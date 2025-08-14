@@ -1,7 +1,8 @@
+import { ObjectId } from "mongoose";
 import { IUserEntity } from "./user.entity";
 
 export interface IGuideEntity extends IUserEntity{
-    agencyId : string
+    agencyId : ObjectId
     alternatePhone : string;
     dob ?: Date | string;
     languageSpoken : string[];
