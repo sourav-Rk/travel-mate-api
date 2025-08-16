@@ -7,16 +7,14 @@ import { config } from "../../shared/config";
 import { HTTP_STATUS } from "../../shared/constants";
 import { CustomError } from "../../shared/utils/error/customError";
 
-
 export interface JwtPayloadData {
   id: string;
   email: string;
   role: string;
-  status ?: "pending" | "verified" | "rejected";
+  status?: "pending" | "verified" | "rejected";
 }
 
 export type ResetTokenPayload = Pick<JwtPayloadData, "id" | "email" | "role">;
-
 
 @injectable()
 export class TokenService implements ITokenService {
@@ -24,8 +22,8 @@ export class TokenService implements ITokenService {
   private _accessExpiresIn: string;
   private _refreshSecretKey: Secret;
   private _refreshExpiresIn: string;
-  private _resetSecretKey : string;
-  private _resetExpiresIn : string
+  private _resetSecretKey: string;
+  private _resetExpiresIn: string;
 
   constructor() {
     this._accessSecretKey = config.jwt.ACCESS_SECRET_KEY;
@@ -37,9 +35,9 @@ export class TokenService implements ITokenService {
   }
 
   generateResetToken(payload: ResetTokenPayload): string {
-      return jwt.sign(payload, this._resetSecretKey,{
-        expiresIn : this._resetExpiresIn as ms.StringValue,
-      })
+    return jwt.sign(payload, this._resetSecretKey, {
+      expiresIn: this._resetExpiresIn as ms.StringValue,
+    });
   }
 
   generateAccessToken(payload: JwtPayloadData): string {
@@ -74,15 +72,16 @@ export class TokenService implements ITokenService {
     }
   }
 
-   verifyResetToken(token : string) : JwtPayload | null {
-    try{
-      const decoded =  jwt.verify(token, this._resetSecretKey);
-      if(!decoded) throw new CustomError(HTTP_STATUS.BAD_REQUEST,"Invalid Token");
+  verifyResetToken(token: string): JwtPayload | null {
+    try {
+      const decoded = jwt.verify(token, this._resetSecretKey);
+      if (!decoded)
+        throw new CustomError(HTTP_STATUS.BAD_REQUEST, "Invalid Token");
       return decoded as JwtPayload;
-    }catch(error){
+    } catch (error) {
       console.log("reset token verification failed");
       console.log(error);
-      return null
+      return null;
     }
   }
 
@@ -96,10 +95,10 @@ export class TokenService implements ITokenService {
     }
   }
 
-  decodeResetToken(token : string) : JwtPayload | null{
-    try{
+  decodeResetToken(token: string): JwtPayload | null {
+    try {
       return jwt.decode(token) as JwtPayload;
-    }catch(error) {
+    } catch (error) {
       console.log("decode failed");
       console.log(error);
       return null;
