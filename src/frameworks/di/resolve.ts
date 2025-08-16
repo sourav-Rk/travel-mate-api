@@ -28,8 +28,11 @@ import { BlockedMiddleware } from "../../interfaceAdapters/middlewares/block.mid
 import { ErrorMiddleware } from "../../interfaceAdapters/middlewares/error.middleware";
 import { LoggerMiddleware } from "../../interfaceAdapters/middlewares/logger.middleware";
 import { ILogger } from "../../interfaceAdapters/services/logger/logger.interface";
+import { IPackageController } from "../../entities/controllerInterfaces/package/package.controller.interface";
+import { PackageController } from "../../interfaceAdapters/controllers/package/package.controller";
 
 import { DependencyInjection } from ".";
+
 
 DependencyInjection.registerAll();
 
@@ -63,6 +66,9 @@ export const addressController = container.resolve<IAddressController>(AddressCo
 
 //kyc controller
 export const kycController = container.resolve<IKycController>(KycController)
+
+//package controller
+export const packageConroller = container.resolve<IPackageController>(PackageController);
 
 //common upload controller
 export const commonController =
