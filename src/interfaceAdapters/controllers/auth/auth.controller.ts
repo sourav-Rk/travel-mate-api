@@ -94,10 +94,7 @@ export class AuthController implements IAuthController {
       return;
     }
     const validateData = schema.parse(formData);
-    console.log("triggerd validation");
-
     const response = await this._RegisterUserUsecase.execute(validateData);
-    console.log("triggered register");
     res.status(response.statusCode).json(response.content);
   }
 
