@@ -84,6 +84,8 @@ import { GetAllGuideUsecase } from "../../useCases/vendor/getAllGuides.usecase";
 import { UpdateVendorPasswordUsecase } from "../../useCases/vendor/update-vendor-password.usecase";
 import { UpdateVendorProfileUsecase } from "../../useCases/vendor/update-vendor-profile.usecase";
 import { UpdateVendorStatusUsecase } from "../../useCases/vendor/update-vendor-status.usecase";
+import { IAddPackageUsecase } from "../../entities/useCaseInterfaces/package/addPackage-usecase.interface";
+import { AddPackageUsecase } from "../../useCases/package/addPackage.usecase";
 
 export class UsecaseRegistory {
   static registerUsecases(): void {
@@ -285,6 +287,11 @@ export class UsecaseRegistory {
       useClass: UpdateAddressUsecase,
     });
 
+    //package usecases
+    container.register<IAddPackageUsecase>("IAddPackageUsecase",{
+      useClass : AddPackageUsecase
+    })
+    
     //token
     container.register<IBlackListTokenUsecase>("IBlackListTokenUsecase", {
       useClass: BlackListTokenUsecase,
