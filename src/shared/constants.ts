@@ -18,7 +18,8 @@ export enum HTTP_STATUS {
 }
 
 export const ERROR_MESSAGE = {
-  REQUEST_REJECTED_BY_ADMIN : "Your request has been rejected by the admin ! Please contact admin !",
+  REQUEST_REJECTED_BY_ADMIN:
+    "Your request has been rejected by the admin ! Please contact admin !",
   USER_NOT_FOUND: "User not found",
   FORBIDDEN:
     "Access denied. You do not have permission to access this resource.",
@@ -37,15 +38,16 @@ export const ERROR_MESSAGE = {
   SERVER_ERROR: "An error occurred, please try again later.",
   BLOCKED_ERROR: "You are blocked by Admin. please contact admin",
   NOT_ALLOWED: "You are not allowed",
-  CURRENT_PASSWORD_WRONG : "Current password is incorrect",
-  CURRENT_AND_NEW_SAME : "Current and new password is same",
+  CURRENT_PASSWORD_WRONG: "Current password is incorrect",
+  CURRENT_AND_NEW_SAME: "Current and new password is same",
   UNAUTH_NO_USER_FOUND: "Unauthorized: No user found in request",
-  INVALID_ROLE : "Invalid role",
+  INVALID_ROLE: "Invalid role",
   BLOCKED: "Your account has been blocked.",
+  VALIDATION_FAILED : "Validations failed"
 };
 
 export const SUCCESS_MESSAGE = {
-  LOGIN_SUCCESS : "Logged in successfully",
+  LOGIN_SUCCESS: "Logged in successfully",
   LOGOUT_SUCCESS: "Logout successfully!",
   OTP_RESENT_SUCCESS: "OTP resend successfully",
   OPERATION_SUCCESS: "Operation completed successfully.",
@@ -53,9 +55,10 @@ export const SUCCESS_MESSAGE = {
     "Added guide successfully  ! Link for password reset has been sent to the guide email id",
   PASSWORD_UPDATE_GUIDE:
     "Password set successfully!you can login to your account",
-  PROFILE_UPDATED_SUCCESS : "Profile updated successfully",
-  RESET_LINK_SEND : "A password reset link has been sent to your email account",
-  PASSWORD_CHANGED : "Password changed successfully"
+  PROFILE_UPDATED_SUCCESS: "Profile updated successfully",
+  RESET_LINK_SEND: "A password reset link has been sent to your email account",
+  PASSWORD_CHANGED: "Password changed successfully",
+  PACKAGE_ADDED: "Package added successfully",
 };
 
 export const ROLES = {
@@ -84,7 +87,7 @@ export enum MAIL_CONTENT_PURPOSE {
   EMAIL_CHANGE = "email change",
   GUIDE_LOGIN = "guide login",
   REQUEST_REJECTED = "request rejected",
-  RESET_PASSWORD = "reset password"
+  RESET_PASSWORD = "reset password",
 }
 
 //email purpose
