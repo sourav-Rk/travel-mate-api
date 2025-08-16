@@ -10,6 +10,7 @@ import {
   blockMiddleware,
   guideController,
   kycController,
+  packageConroller,
   vendorController,
   vendorProfileController,
 } from "../../di/resolve";
@@ -34,6 +35,15 @@ export class VendorRoute extends BaseRoute {
     //     commonController.uploadImages(req as MulterRequest, res, next);
     //   }
     // );
+
+    this.router
+      .route("/vendor/package")
+      .post(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        blockMiddleware.checkBlockedStatus,
+        asyncHandler(packageConroller.addPackage.bind(packageConroller))
+      );
 
     this.router
       .route("/vendor/details")
