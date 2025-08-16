@@ -7,6 +7,6 @@ export interface IOtpService{
     deleteOtp(email : string) : Promise<void>;
     storeOtp(email : string, otp : string) : Promise<void>;
     verifyOtp({email,otp} : {email : string, otp : string}) : Promise<boolean>;
-    storeFormData(data : SignupRequestDto) : Promise<void>;
+    storeFormData(data : IUserEntity) : Promise<void>;
     getFormData(email : string) : Promise<IUserEntity|null>;
 }
