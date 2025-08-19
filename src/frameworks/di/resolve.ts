@@ -32,6 +32,10 @@ import { IPackageController } from "../../entities/controllerInterfaces/package/
 import { PackageController } from "../../interfaceAdapters/controllers/package/package.controller";
 
 import { DependencyInjection } from ".";
+import { IItineraryController } from "../../entities/controllerInterfaces/itinerary/itinerary-controller.interface";
+import { ItineraryController } from "../../interfaceAdapters/controllers/itinerary/itinerary.controller";
+import { IActivityController } from "../../entities/controllerInterfaces/activity/activity-controller.interface";
+import { ActivityController } from "../../interfaceAdapters/controllers/activity/activity.controller";
 
 
 DependencyInjection.registerAll();
@@ -69,6 +73,12 @@ export const kycController = container.resolve<IKycController>(KycController)
 
 //package controller
 export const packageConroller = container.resolve<IPackageController>(PackageController);
+
+//itinerary controller
+export const itineraryController = container.resolve<IItineraryController>(ItineraryController);
+
+//activity controller
+export const activityController = container.resolve<IActivityController>(ActivityController);
 
 //common upload controller
 export const commonController =
