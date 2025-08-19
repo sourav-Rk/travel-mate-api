@@ -86,6 +86,20 @@ import { UpdateVendorProfileUsecase } from "../../useCases/vendor/update-vendor-
 import { UpdateVendorStatusUsecase } from "../../useCases/vendor/update-vendor-status.usecase";
 import { IAddPackageUsecase } from "../../entities/useCaseInterfaces/package/addPackage-usecase.interface";
 import { AddPackageUsecase } from "../../useCases/package/addPackage.usecase";
+import { IGetPackagesUsecase } from "../../entities/useCaseInterfaces/package/getPackages-usecase.interface";
+import { GetPackageUsecase } from "../../useCases/package/getPackages.usecase";
+import { IGetPackageDetailsUsecase } from "../../entities/useCaseInterfaces/package/getPackageDetails-usecase.interface";
+import { GetPackageDetailsUsecase } from "../../useCases/package/getPackageDetails.usecase";
+import { IUpdatePackageBasicDetailsUsecase } from "../../entities/useCaseInterfaces/package/updatePackageBasicdetails-usecase.interface";
+import { UpdatePackageBasicDetailsUsecase } from "../../useCases/package/updatePackageBasicDetails.usecase";
+import { IUpdateItineraryUsecase } from "../../entities/useCaseInterfaces/itinerary/updateItinerary-usecase.interface";
+import { UpdateItineraryUsecase } from "../../useCases/itinerary/updateItinerary.usecase";
+import { ICreateActivityUsecase } from "../../entities/useCaseInterfaces/activity/createActivity-usecase.interface";
+import { CreateActivityUsecase } from "../../useCases/activity/createActivityUsecase";
+import { IUpdateActivityUsecase } from "../../entities/useCaseInterfaces/activity/updateActivity-usecase.interface";
+import { UpdateActivityUsecase } from "../../useCases/activity/updateActivity.usecase";
+import { IDeleteActivityUsecase } from "../../entities/useCaseInterfaces/activity/deleteActivity-usecase.interface";
+import { DeleteActivityUsecase } from "../../useCases/activity/deleteActivity.usecase";
 
 export class UsecaseRegistory {
   static registerUsecases(): void {
@@ -290,7 +304,37 @@ export class UsecaseRegistory {
     //package usecases
     container.register<IAddPackageUsecase>("IAddPackageUsecase",{
       useClass : AddPackageUsecase
-    })
+    });
+
+    container.register<IGetPackagesUsecase>('IGetPackagesUsecase',{
+      useClass : GetPackageUsecase
+    });
+
+    container.register<IGetPackageDetailsUsecase>('IGetPackageDetailsUsecase',{
+      useClass : GetPackageDetailsUsecase
+    });
+
+    container.register<IUpdatePackageBasicDetailsUsecase>('IUpdatePackageBasicDetailsUsecase',{
+      useClass : UpdatePackageBasicDetailsUsecase
+    });
+
+    //itinerary usecase
+    container.register<IUpdateItineraryUsecase>('IUpdateItineraryUsecase',{
+      useClass : UpdateItineraryUsecase
+    });
+
+    //activity usecase
+    container.register<ICreateActivityUsecase>('ICreateActivityUsecase',{
+      useClass : CreateActivityUsecase
+    });
+
+    container.register<IUpdateActivityUsecase>('IUpdateActivityUsecase',{
+      useClass : UpdateActivityUsecase
+    });
+    
+    container.register<IDeleteActivityUsecase>('IDeleteActivityUsecase',{
+      useClass : DeleteActivityUsecase
+    });
     
     //token
     container.register<IBlackListTokenUsecase>("IBlackListTokenUsecase", {
