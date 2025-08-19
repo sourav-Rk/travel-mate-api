@@ -5,10 +5,12 @@ import {
 } from "../../../interfaceAdapters/middlewares/auth.middleware";
 import { asyncHandler } from "../../../shared/async-handler";
 import {
+  activityController,
   addressController,
   authController,
   blockMiddleware,
   guideController,
+  itineraryController,
   kycController,
   packageConroller,
   vendorController,
@@ -28,13 +30,30 @@ export class VendorRoute extends BaseRoute {
 
     this.router.use("/", new SignedUrlRoute("vendor").router);
 
-    // this.router.post(
-    // "/vendor/images/upload",
-    //   upload.array("image", 5),
-    //   (req: Request, res: Response, next: NextFunction) => {
-    //     commonController.uploadImages(req as MulterRequest, res, next);
-    //   }
-    // );
+    this.router
+      .route("/vendor/package/:id")
+      .get(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        blockMiddleware.checkBlockedStatus,
+        asyncHandler(packageConroller.getPackageDetails.bind(packageConroller))
+      )
+      .put(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        blockMiddleware.checkBlockedStatus,
+        asyncHandler(packageConroller.updatePackage.bind(packageConroller))
+      );
+
+    this.router.put(
+      "/vendor/itinerary/:id",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(
+        itineraryController.updateItinerary.bind(itineraryController)
+      )
+    );
 
     this.router
       .route("/vendor/package")
@@ -43,7 +62,37 @@ export class VendorRoute extends BaseRoute {
         authorizeRole(["vendor"]),
         blockMiddleware.checkBlockedStatus,
         asyncHandler(packageConroller.addPackage.bind(packageConroller))
+      )
+      .get(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        blockMiddleware.checkBlockedStatus,
+        asyncHandler(packageConroller.getPackages.bind(packageConroller))
       );
+
+    this.router.put(
+      "/vendor/activity/:activityId",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(activityController.updateActivity.bind(activityController))
+    );
+
+    this.router.post(
+      "/vendor/activity",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(activityController.createActivity.bind(activityController))
+    );
+
+    this.router.delete(
+      "/vendor/activity",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(activityController.deleteActivity.bind(activityController))
+    );
 
     this.router
       .route("/vendor/details")
