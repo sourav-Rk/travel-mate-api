@@ -43,7 +43,14 @@ export const ERROR_MESSAGE = {
   UNAUTH_NO_USER_FOUND: "Unauthorized: No user found in request",
   INVALID_ROLE: "Invalid role",
   BLOCKED: "Your account has been blocked.",
-  VALIDATION_FAILED : "Validations failed"
+  VALIDATION_FAILED : "Validations failed",
+  AGENCY_ID_AND_PACKAGE_ID_IS_REQUIRED : "Agency Id and package Id is required",
+  AGENCY_NOT_FOUND : "Agency Not found",
+  USER_ID_REQUIRED : "User id is required",
+  PACKAGE_NOT_FOUND : "Package Not found",
+  ITINERARY_NOT_FOUND : "Itinerary not found",
+  ID_REQUIRED : "Id is required",
+  ACTIVITY_NOT_EXIST : "Activity not exist "
 };
 
 export const SUCCESS_MESSAGE = {
@@ -59,6 +66,11 @@ export const SUCCESS_MESSAGE = {
   RESET_LINK_SEND: "A password reset link has been sent to your email account",
   PASSWORD_CHANGED: "Password changed successfully",
   PACKAGE_ADDED: "Package added successfully",
+  PACKAGE_UPDATED : "Package updated successfully",
+  ITINERARY_UPDATED_SUCCESS : "Itinerary updated successfully",
+  ACTIVITY_ADDED : "Activity added successfully",
+  ACTIVITY_UPDATED : "Activity update successfully",
+  ACTIVITY_DELETED : "Activity deleted successfully"
 };
 
 export const ROLES = {
