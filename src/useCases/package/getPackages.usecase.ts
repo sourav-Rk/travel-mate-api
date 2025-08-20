@@ -4,8 +4,9 @@ import { IPackageRepository } from "../../entities/repositoryInterfaces/package/
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { ValidationError } from "../../shared/utils/error/validationError";
 import { CustomError } from "../../shared/utils/error/customError";
-import { ERROR_MESSAGE, HTTP_STATUS } from "../../shared/constants";
+import { ERROR_MESSAGE, HTTP_STATUS, TRole } from "../../shared/constants";
 import { PaginatedPackages } from "../../entities/modelsEntity/paginated-packages.entity";
+import { IAdminRepository } from "../../entities/repositoryInterfaces/admin/admin-repository.interface";
 
 @injectable()
 export class GetPackageUsecase implements IGetPackagesUsecase {
@@ -14,28 +15,43 @@ export class GetPackageUsecase implements IGetPackagesUsecase {
     private _packageRepository: IPackageRepository,
 
     @inject("IVendorRepository")
-    private _vendorRepository: IVendorRepository
+    private _vendorRepository: IVendorRepository,
+
+    @inject("IAdminRepository")
+    private _adminRepository : IAdminRepository
   ) {}
 
   async execute(
-    agencyId: any,
+    userId: any,
     searchTerm: string,
     status: string,
     category: string,
     pageNumber: number,
-    pageSize: number
+    pageSize: number,
+    userType : TRole
   ): Promise<PaginatedPackages> {
-    if (!agencyId) {
+    if (!userId) {
       throw new ValidationError("Agency id is required");
     }
 
-    const agencyExist = await this._vendorRepository.findById(agencyId);
-
-    if (!agencyExist) {
+    if(userType === "vendor"){
+       const agencyExist = await this._vendorRepository.findById(userId);
+       if (!agencyExist) {
       throw new CustomError(
         HTTP_STATUS.BAD_REQUEST,
         ERROR_MESSAGE.USER_NOT_FOUND
       );
+    }
+    }
+
+    if(userType === "admin"){
+      const adminExist = await this._adminRepository.findById(userId);
+      if(!adminExist){
+        throw new CustomError(
+        HTTP_STATUS.BAD_REQUEST,
+        ERROR_MESSAGE.USER_NOT_FOUND
+      );
+      }
     }
 
     const filter: any = {};
