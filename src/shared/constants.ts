@@ -50,7 +50,8 @@ export const ERROR_MESSAGE = {
   PACKAGE_NOT_FOUND : "Package Not found",
   ITINERARY_NOT_FOUND : "Itinerary not found",
   ID_REQUIRED : "Id is required",
-  ACTIVITY_NOT_EXIST : "Activity not exist "
+  ACTIVITY_NOT_EXIST : "Activity not exist ",
+  PACKAGE_ID_IS_REQUIRED : "Package id is required"
 };
 
 export const SUCCESS_MESSAGE = {
