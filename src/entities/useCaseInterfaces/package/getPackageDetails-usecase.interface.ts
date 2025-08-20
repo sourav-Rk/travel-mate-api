@@ -1,5 +1,6 @@
+import { TRole } from "../../../shared/constants";
 import { IPackage } from "../../../shared/dto/packageDto";
 
 export interface IGetPackageDetailsUsecase {
-    execute(agencyId : string, packageId : string) : Promise<IPackage>;
+    execute(userType : TRole,userId : string, packageId : string) : Promise<IPackage>;
 }
