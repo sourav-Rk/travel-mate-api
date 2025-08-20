@@ -7,12 +7,13 @@ import {
   ERROR_MESSAGE,
   HTTP_STATUS,
   SUCCESS_MESSAGE,
+  TRole,
 } from "../../../shared/constants";
 import {
   ItineraryDto,
   PackageBasicDetailsDto,
 } from "../../../shared/dto/packageDto";
-import { basicDetailsSchema, packageFormSchema } from "../../../shared/validations/package.validation";
+import { packageFormSchema } from "../../../shared/validations/package.validation";
 import { IGetPackagesUsecase } from "../../../entities/useCaseInterfaces/package/getPackages-usecase.interface";
 import { IGetPackageDetailsUsecase } from "../../../entities/useCaseInterfaces/package/getPackageDetails-usecase.interface";
 import { IUpdatePackageBasicDetailsUsecase } from "../../../entities/useCaseInterfaces/package/updatePackageBasicdetails-usecase.interface";
@@ -27,11 +28,11 @@ export class PackageController implements IPackageController {
     @inject("IGetPackagesUsecase")
     private _getPackagesUsecase: IGetPackagesUsecase,
 
-    @inject('IGetPackageDetailsUsecase')
-    private _getPackageDetailsUsecase : IGetPackageDetailsUsecase,
+    @inject("IGetPackageDetailsUsecase")
+    private _getPackageDetailsUsecase: IGetPackageDetailsUsecase,
 
-    @inject('IUpdatePackageBasicDetailsUsecase')
-    private _updatePackageBasicDetailsUsecase : IUpdatePackageBasicDetailsUsecase
+    @inject("IUpdatePackageBasicDetailsUsecase")
+    private _updatePackageBasicDetailsUsecase: IUpdatePackageBasicDetailsUsecase
   ) {}
 
   async addPackage(req: Request, res: Response): Promise<void> {
@@ -57,46 +58,73 @@ export class PackageController implements IPackageController {
   }
 
   async getPackages(req: Request, res: Response): Promise<void> {
-    const agencyId = (req as CustomRequest).user.id;
-    const { page = 1, limit = 5, searchTerm, status, category } = req.query;
+    const userId = (req as CustomRequest).user.id;
+    const {
+      page = 1,
+      limit = 5,
+      searchTerm,
+      status,
+      category,
+      userType,
+    } = req.query;
     const pageNumber = Number(page);
     const pageSize = Number(limit);
+
+    const role: TRole =
+      typeof userType === "string" ? (userType as TRole) : "vendor";
+
     const { packages, total } = await this._getPackagesUsecase.execute(
-      agencyId,
+      userId,
       searchTerm as string,
       status as string,
       category as string,
       pageNumber,
-      pageSize
+      pageSize,
+      role
     );
-    res
-      .status(HTTP_STATUS.OK)
-      .json({ success: true, packages, totalPages : total, currentPage: pageNumber });
+    res.status(HTTP_STATUS.OK).json({
+      success: true,
+      packages,
+      totalPages: total,
+      currentPage: pageNumber,
+    });
   }
 
   async getPackageDetails(req: Request, res: Response): Promise<void> {
-      const agencyId = (req as CustomRequest).user.id;
-      const {id} = req.params;
-      const response = await this._getPackageDetailsUsecase.execute(agencyId,id as string);
-      res.status(HTTP_STATUS.OK).json({success : true,packages : response})
+    const userId = (req as CustomRequest).user.id;
+    const { userType } = req.query;
+    const { id } = req.params;
+    const role: TRole =
+      typeof userType === "string" ? (userType as TRole) : "vendor";
+
+    const response = await this._getPackageDetailsUsecase.execute(
+      role,
+      userId,
+      id as string
+    );
+
+    res.status(HTTP_STATUS.OK).json({ success: true, packages: response });
   }
 
   async updatePackage(req: Request, res: Response): Promise<void> {
-      const agencyId = (req as CustomRequest).user.id;
-      console.log(req.body,"-->edit")
-      const parsedResult = basicDetailsSchemaEdit.safeParse(req.body);
-       if (!parsedResult.success) {
+    const agencyId = (req as CustomRequest).user.id;
+    const parsedResult = basicDetailsSchemaEdit.safeParse(req.body);
+    if (!parsedResult.success) {
       console.log(parsedResult.error.format());
       res
         .status(HTTP_STATUS.BAD_REQUEST)
         .json({ success: false, message: ERROR_MESSAGE.VALIDATION_FAILED });
       return;
     }
-      const {id} = req.params;
-      const basicDetails = req.body;
-      await this._updatePackageBasicDetailsUsecase.execute(agencyId,id,basicDetails);
-      res.status(HTTP_STATUS.OK).json({success : true,message : SUCCESS_MESSAGE.PACKAGE_UPDATED});
-      
+    const { id } = req.params;
+    const basicDetails = req.body;
+    await this._updatePackageBasicDetailsUsecase.execute(
+      agencyId,
+      id,
+      basicDetails
+    );
+    res
+      .status(HTTP_STATUS.OK)
+      .json({ success: true, message: SUCCESS_MESSAGE.PACKAGE_UPDATED });
   }
-
 }
