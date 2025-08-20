@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { IPackage } from "../../../shared/dto/packageDto";
 
 export interface IPackageController {
   addPackage(req: Request, res: Response): Promise<void>;
