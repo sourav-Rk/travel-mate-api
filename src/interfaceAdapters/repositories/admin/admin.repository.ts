@@ -13,4 +13,8 @@ export class AdminRepository implements IAdminRepository{
     async findByNumber(phone: string): Promise<IAdminEntity | null> {
         return await adminDB.findOne({phone})
     }
+
+    async findById(id: any): Promise<IAdminEntity | null> {
+        return await adminDB.findById(id);
+    }
 }
