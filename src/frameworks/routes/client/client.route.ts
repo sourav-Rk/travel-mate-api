@@ -6,7 +6,12 @@ import {
   verifyAuth,
 } from "../../../interfaceAdapters/middlewares/auth.middleware";
 import { asyncHandler } from "../../../shared/async-handler";
-import { authController, blockMiddleware, clientProfileController } from "../../di/resolve";
+import {
+  authController,
+  blockMiddleware,
+  clientPackageController,
+  clientProfileController,
+} from "../../di/resolve";
 import { BaseRoute } from "../base.route";
 import { CommonUploadRoutes } from "../common/common-upload.route";
 
@@ -17,6 +22,29 @@ export class ClientRoute extends BaseRoute {
 
   protected initializeRoutes(): void {
     this.router.use("/", new CommonUploadRoutes("client").router);
+
+    this.router.get(
+      "/client/packages/:packageId",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(
+        clientPackageController.getPackageDetails.bind(clientPackageController)
+      )
+    );
+
+
+    this.router.get(
+      "/client/packages",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(
+        clientPackageController.getAvailablePackages.bind(
+          clientPackageController
+        )
+      )
+    );
 
     this.router
       .route("/client/details")
