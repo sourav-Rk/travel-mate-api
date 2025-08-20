@@ -92,4 +92,27 @@ export class PackageRepository implements IPackageRepository {
 
     return packageData[0];
   }
+
+  async getActivePackages(
+    skip: number,
+    limit: number,
+    filter: any,
+    sort: any
+  ): Promise<PaginatedPackages> {
+    const [packages, total] = await Promise.all([
+      await packageDB.find(filter).skip(skip).limit(limit).sort(sort),
+      await packageDB.countDocuments(filter),
+    ]);
+
+    return { packages, total };
+  }
+
+  async getFeaturedPackages(category: string): Promise<IPackageEntity[]> {
+    return await packageDB.find({
+      category: {
+        $regex: `^${category}$`,
+        $options: "i",
+      },
+    }).limit(3);
+  }
 }
