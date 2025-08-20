@@ -108,7 +108,7 @@ export class AddPackageUsecase implements IAddPackageUsecase {
               dinner: day.meals.dinner || false,
             },
             activities: savedActivities
-              .filter((activity) => activity._id) // remove undefined/null
+              .filter((activity) => activity._id) 
               .map((activity) => activity._id.toString()),
           });
         }
