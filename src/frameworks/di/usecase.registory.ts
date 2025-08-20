@@ -100,6 +100,12 @@ import { IUpdateActivityUsecase } from "../../entities/useCaseInterfaces/activit
 import { UpdateActivityUsecase } from "../../useCases/activity/updateActivity.usecase";
 import { IDeleteActivityUsecase } from "../../entities/useCaseInterfaces/activity/deleteActivity-usecase.interface";
 import { DeleteActivityUsecase } from "../../useCases/activity/deleteActivity.usecase";
+import { IGetAvailablePackagesUsecase } from "../../entities/useCaseInterfaces/package/client-package/getAvailable-package-usecase.interface";
+import { GetAvailbalePackagesUsecase } from "../../useCases/package/client-package/getAvailable-packages.usecase";
+import { IGetPackageDetailsClientUsecase } from "../../entities/useCaseInterfaces/package/client-package/getPackageDetailsClient-usecase.interface";
+import { GetPackageDetailsClientUsecase } from "../../useCases/package/client-package/getPackageDetailsClient.usecase";
+import { IGetFeaturedPackagesUsecase } from "../../entities/useCaseInterfaces/package/client-package/getFeaturedPackages-usecase.interface";
+import { GetFeaturedPackagesUsecase } from "../../useCases/package/client-package/getFeaturedPackages.usecase";
 
 export class UsecaseRegistory {
   static registerUsecases(): void {
@@ -317,6 +323,19 @@ export class UsecaseRegistory {
     container.register<IUpdatePackageBasicDetailsUsecase>('IUpdatePackageBasicDetailsUsecase',{
       useClass : UpdatePackageBasicDetailsUsecase
     });
+
+    //client package usecase
+    container.register<IGetAvailablePackagesUsecase>('IGetAvailablePackagesUsecase',{
+      useClass : GetAvailbalePackagesUsecase
+    });
+
+    container.register<IGetPackageDetailsClientUsecase>('IGetPackageDetailsClientUsecase',{
+      useClass : GetPackageDetailsClientUsecase
+    });
+
+    container.register<IGetFeaturedPackagesUsecase>('IGetFeaturedPackagesUsecase',{
+      useClass : GetFeaturedPackagesUsecase
+    })
 
     //itinerary usecase
     container.register<IUpdateItineraryUsecase>('IUpdateItineraryUsecase',{
