@@ -36,7 +36,8 @@ import { IItineraryController } from "../../entities/controllerInterfaces/itiner
 import { ItineraryController } from "../../interfaceAdapters/controllers/itinerary/itinerary.controller";
 import { IActivityController } from "../../entities/controllerInterfaces/activity/activity-controller.interface";
 import { ActivityController } from "../../interfaceAdapters/controllers/activity/activity.controller";
-
+import { IClientPackageController } from "../../entities/controllerInterfaces/package/client-package.controller";
+import { ClientPackageController } from "../../interfaceAdapters/controllers/package/client-package-controller.interface";
 
 DependencyInjection.registerAll();
 
@@ -48,7 +49,8 @@ export const authController =
 export const vendorController =
   container.resolve<IVendorController>(VendorController);
 
-export const vendorProfileController = container.resolve<IVendorProfileController>(VendorProfileController);  
+export const vendorProfileController =
+  container.resolve<IVendorProfileController>(VendorProfileController);
 
 //admin controller
 export const adminController =
@@ -59,26 +61,35 @@ export const guideController =
   container.resolve<IGuideController>(GuideController);
 
 //guide profile controller
-export const guideProfileController = container.resolve<IGuideProfileController>(GuideProfileController)
+export const guideProfileController =
+  container.resolve<IGuideProfileController>(GuideProfileController);
 
 //client related controller
 export const clientProfileController =
   container.resolve<IClientProfileController>(ClientProfileController);
 
 //address controller
-export const addressController = container.resolve<IAddressController>(AddressController)
+export const addressController =
+  container.resolve<IAddressController>(AddressController);
 
 //kyc controller
-export const kycController = container.resolve<IKycController>(KycController)
+export const kycController = container.resolve<IKycController>(KycController);
 
 //package controller
-export const packageConroller = container.resolve<IPackageController>(PackageController);
+export const packageConroller =
+  container.resolve<IPackageController>(PackageController);
 
 //itinerary controller
-export const itineraryController = container.resolve<IItineraryController>(ItineraryController);
+export const itineraryController =
+  container.resolve<IItineraryController>(ItineraryController);
 
 //activity controller
-export const activityController = container.resolve<IActivityController>(ActivityController);
+export const activityController =
+  container.resolve<IActivityController>(ActivityController);
+
+//clien-package controller
+export const clientPackageController =
+  container.resolve<IClientPackageController>(ClientPackageController);
 
 //common upload controller
 export const commonController =
@@ -93,7 +104,8 @@ export const errorMiddleware =
   container.resolve<IErrorMiddleware>(ErrorMiddleware);
 
 //Block middleware
-export const blockMiddleware = container.resolve<IBlockedMiddleware>(BlockedMiddleware)  
+export const blockMiddleware =
+  container.resolve<IBlockedMiddleware>(BlockedMiddleware);
 
 //logger servie middleware
 export const injectedLoggerMiddleware =
