@@ -1,11 +1,17 @@
-import { inject, injectable } from "tsyringe";
-import { IPackageController } from "../../../entities/controllerInterfaces/package/package.controller.interface";
 import { Request, Response } from "express";
-import { CustomRequest } from "../../middlewares/auth.middleware";
+import { inject, injectable } from "tsyringe";
+
+import { IPackageController } from "../../../entities/controllerInterfaces/package/package.controller.interface";
 import { IAddPackageUsecase } from "../../../entities/useCaseInterfaces/package/addPackage-usecase.interface";
+import { IGetPackageDetailsUsecase } from "../../../entities/useCaseInterfaces/package/getPackageDetails-usecase.interface";
+import { IGetPackagesUsecase } from "../../../entities/useCaseInterfaces/package/getPackages-usecase.interface";
+import { IUpdateBlockStatusUsecase } from "../../../entities/useCaseInterfaces/package/update-block-status-usecase.interface";
+import { IUpdatePackageBasicDetailsUsecase } from "../../../entities/useCaseInterfaces/package/updatePackageBasicdetails-usecase.interface";
+import { IUpdatePackageStatusUsecase } from "../../../entities/useCaseInterfaces/package/updatePackageStatus-usecase-interface";
 import {
   ERROR_MESSAGE,
   HTTP_STATUS,
+  PackageStatus,
   SUCCESS_MESSAGE,
   TRole,
 } from "../../../shared/constants";
@@ -13,11 +19,9 @@ import {
   ItineraryDto,
   PackageBasicDetailsDto,
 } from "../../../shared/dto/packageDto";
-import { packageFormSchema } from "../../../shared/validations/package.validation";
-import { IGetPackagesUsecase } from "../../../entities/useCaseInterfaces/package/getPackages-usecase.interface";
-import { IGetPackageDetailsUsecase } from "../../../entities/useCaseInterfaces/package/getPackageDetails-usecase.interface";
-import { IUpdatePackageBasicDetailsUsecase } from "../../../entities/useCaseInterfaces/package/updatePackageBasicdetails-usecase.interface";
 import { basicDetailsSchemaEdit } from "../../../shared/validations/editPackageValidation";
+import { packageFormSchema } from "../../../shared/validations/package.validation";
+import { CustomRequest } from "../../middlewares/auth.middleware";
 
 @injectable()
 export class PackageController implements IPackageController {
@@ -32,7 +36,13 @@ export class PackageController implements IPackageController {
     private _getPackageDetailsUsecase: IGetPackageDetailsUsecase,
 
     @inject("IUpdatePackageBasicDetailsUsecase")
-    private _updatePackageBasicDetailsUsecase: IUpdatePackageBasicDetailsUsecase
+    private _updatePackageBasicDetailsUsecase: IUpdatePackageBasicDetailsUsecase,
+
+    @inject("IUpdatePackageStatusUsecase")
+    private _updatePackageStatusUsecase: IUpdatePackageStatusUsecase,
+
+    @inject("IUpdateBlockStatusUsecase")
+    private _updateBlockStatus: IUpdateBlockStatusUsecase
   ) {}
 
   async addPackage(req: Request, res: Response): Promise<void> {
@@ -126,5 +136,24 @@ export class PackageController implements IPackageController {
     res
       .status(HTTP_STATUS.OK)
       .json({ success: true, message: SUCCESS_MESSAGE.PACKAGE_UPDATED });
+  }
+
+  async updatePackageStatus(req: Request, res: Response): Promise<void> {
+    const { packageId, status } = req.body;
+    await this._updatePackageStatusUsecase.execute(
+      packageId,
+      status as PackageStatus
+    );
+    res
+      .status(HTTP_STATUS.OK)
+      .json({ success: true, message: SUCCESS_MESSAGE.STATUS_UPDATED_SUCCESS });
+  }
+
+  async updateBlockStatus(req: Request, res: Response): Promise<void> {
+    const { packageId } = req.body;
+    await this._updateBlockStatus.execute(packageId);
+    res
+      .status(HTTP_STATUS.OK)
+      .json({ success: true, message: "Status updated successfully" });
   }
 }
