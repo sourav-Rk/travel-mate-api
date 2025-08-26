@@ -1,5 +1,6 @@
 import { container } from "tsyringe";
 
+import { IActivityController } from "../../entities/controllerInterfaces/activity/activity-controller.interface";
 import { IAddressController } from "../../entities/controllerInterfaces/address/address-controller.interface";
 import { IAdminController } from "../../entities/controllerInterfaces/admin/admin.controller.interface";
 import { IAuthController } from "../../entities/controllerInterfaces/auth/auth.controller.interfaces";
@@ -7,12 +8,16 @@ import { IClientProfileController } from "../../entities/controllerInterfaces/cl
 import { ICommonController } from "../../entities/controllerInterfaces/common.controller.interface";
 import { IGuideProfileController } from "../../entities/controllerInterfaces/guide/guide-profile-controller.interface";
 import { IGuideController } from "../../entities/controllerInterfaces/guide/guide.controller.interface";
+import { IItineraryController } from "../../entities/controllerInterfaces/itinerary/itinerary-controller.interface";
 import { IKycController } from "../../entities/controllerInterfaces/kyc/kycController.interface";
+import { IClientPackageController } from "../../entities/controllerInterfaces/package/client-package.controller";
+import { IPackageController } from "../../entities/controllerInterfaces/package/package.controller.interface";
 import { ISignedUrlController } from "../../entities/controllerInterfaces/signedUrl.controller.interface";
 import { IVendorProfileController } from "../../entities/controllerInterfaces/vendor/vendor-profile.controller.interface";
 import { IVendorController } from "../../entities/controllerInterfaces/vendor/vendor.controller.interface";
 import { IBlockedMiddleware } from "../../entities/middleWareInterfaces/blocked-middleware.interface";
 import { IErrorMiddleware } from "../../entities/middleWareInterfaces/error-middleware.interface";
+import { ActivityController } from "../../interfaceAdapters/controllers/activity/activity.controller";
 import { AddressController } from "../../interfaceAdapters/controllers/address/address.controller";
 import { AdminController } from "../../interfaceAdapters/controllers/admin/admin.controller";
 import { AuthController } from "../../interfaceAdapters/controllers/auth/auth.controller";
@@ -20,24 +25,20 @@ import { ClientProfileController } from "../../interfaceAdapters/controllers/cli
 import { CommonController } from "../../interfaceAdapters/controllers/common/common.controller";
 import { GuideController } from "../../interfaceAdapters/controllers/guide/guide.controller";
 import { GuideProfileController } from "../../interfaceAdapters/controllers/guide/guideProfileController";
+import { ItineraryController } from "../../interfaceAdapters/controllers/itinerary/itinerary.controller";
 import { KycController } from "../../interfaceAdapters/controllers/kyc/kycController";
 import { SignedUrlController } from "../../interfaceAdapters/controllers/media/signedUrl.controller";
+import { ClientPackageController } from "../../interfaceAdapters/controllers/package/client-package-controller.interface";
+import { PackageController } from "../../interfaceAdapters/controllers/package/package.controller";
 import { VendorController } from "../../interfaceAdapters/controllers/vendor/vendor.controller";
 import { VendorProfileController } from "../../interfaceAdapters/controllers/vendor/vendor.profile.controller";
 import { BlockedMiddleware } from "../../interfaceAdapters/middlewares/block.middleware";
 import { ErrorMiddleware } from "../../interfaceAdapters/middlewares/error.middleware";
 import { LoggerMiddleware } from "../../interfaceAdapters/middlewares/logger.middleware";
 import { ILogger } from "../../interfaceAdapters/services/logger/logger.interface";
-import { IPackageController } from "../../entities/controllerInterfaces/package/package.controller.interface";
-import { PackageController } from "../../interfaceAdapters/controllers/package/package.controller";
 
 import { DependencyInjection } from ".";
-import { IItineraryController } from "../../entities/controllerInterfaces/itinerary/itinerary-controller.interface";
-import { ItineraryController } from "../../interfaceAdapters/controllers/itinerary/itinerary.controller";
-import { IActivityController } from "../../entities/controllerInterfaces/activity/activity-controller.interface";
-import { ActivityController } from "../../interfaceAdapters/controllers/activity/activity.controller";
-import { IClientPackageController } from "../../entities/controllerInterfaces/package/client-package.controller";
-import { ClientPackageController } from "../../interfaceAdapters/controllers/package/client-package-controller.interface";
+
 
 DependencyInjection.registerAll();
 
