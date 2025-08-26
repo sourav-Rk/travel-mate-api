@@ -1,5 +1,5 @@
-import { IVendorEntity } from "../../modelsEntity/vendor.entity";
+import { VendorProfileDto } from "../../../shared/dto/vendor.dto";
 
 export interface IGetVendorDetailsUsecase{
-    execute(id : any) : Promise<IVendorEntity | null>;
+    execute(id : any) : Promise<VendorProfileDto | null>;
 }
