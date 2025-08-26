@@ -1,10 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import { IGetFeaturedPackagesUsecase } from "../../../entities/useCaseInterfaces/package/client-package/getFeaturedPackages-usecase.interface";
+
+import { IPackageEntity } from "../../../entities/modelsEntity/package.entity";
 import { IPackageRepository } from "../../../entities/repositoryInterfaces/package/package-repository.interface";
-import { ValidationError } from "../../../shared/utils/error/validationError";
+import { IGetFeaturedPackagesUsecase } from "../../../entities/useCaseInterfaces/package/client-package/getFeaturedPackages-usecase.interface";
 import { ERROR_MESSAGE } from "../../../shared/constants";
 import { NotFoundError } from "../../../shared/utils/error/notFoundError";
-import { IPackageEntity } from "../../../entities/modelsEntity/package.entity";
+import { ValidationError } from "../../../shared/utils/error/validationError";
 
 @injectable()
 export class GetFeaturedPackagesUsecase implements IGetFeaturedPackagesUsecase {
