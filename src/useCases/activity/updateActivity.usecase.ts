@@ -1,10 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import { IUpdateActivityUsecase } from "../../entities/useCaseInterfaces/activity/updateActivity-usecase.interface";
-import { IActivitiesRepository } from "../../entities/repositoryInterfaces/package/activities-repository.interface";
+
 import { IActivitiesEntity } from "../../entities/modelsEntity/activites.entity";
-import { ValidationError } from "../../shared/utils/error/validationError";
+import { IActivitiesRepository } from "../../entities/repositoryInterfaces/package/activities-repository.interface";
+import { IUpdateActivityUsecase } from "../../entities/useCaseInterfaces/activity/updateActivity-usecase.interface";
 import { ERROR_MESSAGE } from "../../shared/constants";
 import { NotFoundError } from "../../shared/utils/error/notFoundError";
+import { ValidationError } from "../../shared/utils/error/validationError";
 
 @injectable()
 export class UpdateActivityUsecase implements IUpdateActivityUsecase{
@@ -17,6 +18,9 @@ export class UpdateActivityUsecase implements IUpdateActivityUsecase{
         if(!id){
             throw new ValidationError(ERROR_MESSAGE.ID_REQUIRED);
         }
+
+
+        
 
         const activityExist = await this._activitiesRepository.findById(id);
 
