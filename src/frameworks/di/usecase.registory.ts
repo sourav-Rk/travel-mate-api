@@ -1,5 +1,8 @@
 import { container } from "tsyringe";
 
+import { ICreateActivityUsecase } from "../../entities/useCaseInterfaces/activity/createActivity-usecase.interface";
+import { IDeleteActivityUsecase } from "../../entities/useCaseInterfaces/activity/deleteActivity-usecase.interface";
+import { IUpdateActivityUsecase } from "../../entities/useCaseInterfaces/activity/updateActivity-usecase.interface";
 import { IUpdateAddressUsecase } from "../../entities/useCaseInterfaces/address/update-address-usecase.interface";
 import { IGetAllUsersUsecase } from "../../entities/useCaseInterfaces/admin/get-all-users-usecase.interface";
 import { IGetUserByIdUsecase } from "../../entities/useCaseInterfaces/admin/getUserById-usecase.interface";
@@ -28,6 +31,17 @@ import { IUploadImageUsecase } from "../../entities/useCaseInterfaces/common/upl
 import { IGetGuideProfileUsecase } from "../../entities/useCaseInterfaces/guide/getGuideProfile-usecase.interface";
 import { IResetPasswordUsecase } from "../../entities/useCaseInterfaces/guide/reset-password-usecase.interface";
 import { IUpdateGuidePasswordUsecase } from "../../entities/useCaseInterfaces/guide/updateGuidePassword-usecase.interface";
+import { IUpdateItineraryUsecase } from "../../entities/useCaseInterfaces/itinerary/updateItinerary-usecase.interface";
+import { IAddPackageUsecase } from "../../entities/useCaseInterfaces/package/addPackage-usecase.interface";
+import { IGetTrendingPackagesUsecase } from "../../entities/useCaseInterfaces/package/client-package/get-trending-packages.usecase";
+import { IGetAvailablePackagesUsecase } from "../../entities/useCaseInterfaces/package/client-package/getAvailable-package-usecase.interface";
+import { IGetFeaturedPackagesUsecase } from "../../entities/useCaseInterfaces/package/client-package/getFeaturedPackages-usecase.interface";
+import { IGetPackageDetailsClientUsecase } from "../../entities/useCaseInterfaces/package/client-package/getPackageDetailsClient-usecase.interface";
+import { IGetPackageDetailsUsecase } from "../../entities/useCaseInterfaces/package/getPackageDetails-usecase.interface";
+import { IGetPackagesUsecase } from "../../entities/useCaseInterfaces/package/getPackages-usecase.interface";
+import { IUpdateBlockStatusUsecase } from "../../entities/useCaseInterfaces/package/update-block-status-usecase.interface";
+import { IUpdatePackageBasicDetailsUsecase } from "../../entities/useCaseInterfaces/package/updatePackageBasicdetails-usecase.interface";
+import { IUpdatePackageStatusUsecase } from "../../entities/useCaseInterfaces/package/updatePackageStatus-usecase-interface";
 import { IAddGuideUsecase } from "../../entities/useCaseInterfaces/vendor/add-guide-usecase.interface";
 import { IGetGuideDetailsUsecase } from "../../entities/useCaseInterfaces/vendor/get-guide-details-usecase.interface";
 import { IGetVendorDetailsUsecase } from "../../entities/useCaseInterfaces/vendor/get-vendor-details-usecase.interface";
@@ -39,6 +53,9 @@ import { IUpdateVendorStatusUsecase } from "../../entities/useCaseInterfaces/ven
 import { LoggerMiddleware } from "../../interfaceAdapters/middlewares/logger.middleware";
 import { ILogger } from "../../interfaceAdapters/services/logger/logger.interface";
 import { WinstonLoggerAdapter } from "../../interfaceAdapters/services/logger/winston-logger.adapter";
+import { CreateActivityUsecase } from "../../useCases/activity/createActivityUsecase";
+import { DeleteActivityUsecase } from "../../useCases/activity/deleteActivity.usecase";
+import { UpdateActivityUsecase } from "../../useCases/activity/updateActivity.usecase";
 import { AddAddressUsecase } from "../../useCases/address/addAddress.usecase";
 import { UpdateAddressUsecase } from "../../useCases/address/update-address.usecase";
 import { GetAllUsersUsecase } from "../../useCases/admin/get-all-users.usecase";
@@ -76,6 +93,17 @@ import { UploadImageUsecase } from "../../useCases/common/uploadImageUsecase";
 import { GetGuideProfileUsecase } from "../../useCases/guide/getGuideProfileUsecase";
 import { ResetPasswordUsecase } from "../../useCases/guide/reset-password.usecase";
 import { UpdateGuidePasswordUsecase } from "../../useCases/guide/updateGuidePasswordUsecase";
+import { UpdateItineraryUsecase } from "../../useCases/itinerary/updateItinerary.usecase";
+import { AddPackageUsecase } from "../../useCases/package/addPackage.usecase";
+import { GetAvailbalePackagesUsecase } from "../../useCases/package/client-package/getAvailable-packages.usecase";
+import { GetFeaturedPackagesUsecase } from "../../useCases/package/client-package/getFeaturedPackages.usecase";
+import { GetPackageDetailsClientUsecase } from "../../useCases/package/client-package/getPackageDetailsClient.usecase";
+import { GetTrendingPackages } from "../../useCases/package/client-package/getTrending-packages.usecase";
+import { GetPackageDetailsUsecase } from "../../useCases/package/getPackageDetails.usecase";
+import { GetPackageUsecase } from "../../useCases/package/getPackages.usecase";
+import { UpdateBlockStatusUsecase } from "../../useCases/package/updateBlockStatusUsecase";
+import { UpdatePackageBasicDetailsUsecase } from "../../useCases/package/updatePackageBasicDetails.usecase";
+import { UpdatePackageStatusUsecase } from "../../useCases/package/updatePackageStatus.usecase";
 import { AddGuideUsecase } from "../../useCases/vendor/add-guide.usecase";
 import { GetGuideDetailsUsecase } from "../../useCases/vendor/get-guide-details.usecase";
 import { GetVendorDetailsUsecase } from "../../useCases/vendor/get-vendor-details.usecase";
@@ -84,28 +112,6 @@ import { GetAllGuideUsecase } from "../../useCases/vendor/getAllGuides.usecase";
 import { UpdateVendorPasswordUsecase } from "../../useCases/vendor/update-vendor-password.usecase";
 import { UpdateVendorProfileUsecase } from "../../useCases/vendor/update-vendor-profile.usecase";
 import { UpdateVendorStatusUsecase } from "../../useCases/vendor/update-vendor-status.usecase";
-import { IAddPackageUsecase } from "../../entities/useCaseInterfaces/package/addPackage-usecase.interface";
-import { AddPackageUsecase } from "../../useCases/package/addPackage.usecase";
-import { IGetPackagesUsecase } from "../../entities/useCaseInterfaces/package/getPackages-usecase.interface";
-import { GetPackageUsecase } from "../../useCases/package/getPackages.usecase";
-import { IGetPackageDetailsUsecase } from "../../entities/useCaseInterfaces/package/getPackageDetails-usecase.interface";
-import { GetPackageDetailsUsecase } from "../../useCases/package/getPackageDetails.usecase";
-import { IUpdatePackageBasicDetailsUsecase } from "../../entities/useCaseInterfaces/package/updatePackageBasicdetails-usecase.interface";
-import { UpdatePackageBasicDetailsUsecase } from "../../useCases/package/updatePackageBasicDetails.usecase";
-import { IUpdateItineraryUsecase } from "../../entities/useCaseInterfaces/itinerary/updateItinerary-usecase.interface";
-import { UpdateItineraryUsecase } from "../../useCases/itinerary/updateItinerary.usecase";
-import { ICreateActivityUsecase } from "../../entities/useCaseInterfaces/activity/createActivity-usecase.interface";
-import { CreateActivityUsecase } from "../../useCases/activity/createActivityUsecase";
-import { IUpdateActivityUsecase } from "../../entities/useCaseInterfaces/activity/updateActivity-usecase.interface";
-import { UpdateActivityUsecase } from "../../useCases/activity/updateActivity.usecase";
-import { IDeleteActivityUsecase } from "../../entities/useCaseInterfaces/activity/deleteActivity-usecase.interface";
-import { DeleteActivityUsecase } from "../../useCases/activity/deleteActivity.usecase";
-import { IGetAvailablePackagesUsecase } from "../../entities/useCaseInterfaces/package/client-package/getAvailable-package-usecase.interface";
-import { GetAvailbalePackagesUsecase } from "../../useCases/package/client-package/getAvailable-packages.usecase";
-import { IGetPackageDetailsClientUsecase } from "../../entities/useCaseInterfaces/package/client-package/getPackageDetailsClient-usecase.interface";
-import { GetPackageDetailsClientUsecase } from "../../useCases/package/client-package/getPackageDetailsClient.usecase";
-import { IGetFeaturedPackagesUsecase } from "../../entities/useCaseInterfaces/package/client-package/getFeaturedPackages-usecase.interface";
-import { GetFeaturedPackagesUsecase } from "../../useCases/package/client-package/getFeaturedPackages.usecase";
 
 export class UsecaseRegistory {
   static registerUsecases(): void {
@@ -324,6 +330,10 @@ export class UsecaseRegistory {
       useClass : UpdatePackageBasicDetailsUsecase
     });
 
+    container.register<IUpdatePackageStatusUsecase>('IUpdatePackageStatusUsecase',{
+      useClass : UpdatePackageStatusUsecase
+    });
+
     //client package usecase
     container.register<IGetAvailablePackagesUsecase>('IGetAvailablePackagesUsecase',{
       useClass : GetAvailbalePackagesUsecase
@@ -335,7 +345,16 @@ export class UsecaseRegistory {
 
     container.register<IGetFeaturedPackagesUsecase>('IGetFeaturedPackagesUsecase',{
       useClass : GetFeaturedPackagesUsecase
-    })
+    });
+
+    container.register<IGetTrendingPackagesUsecase>('IGetTrendingPackagesUsecase',{
+      useClass : GetTrendingPackages
+    });
+
+    //admin packages usecase
+    container.register<IUpdateBlockStatusUsecase>('IUpdateBlockStatusUsecase',{
+      useClass : UpdateBlockStatusUsecase
+    });
 
     //itinerary usecase
     container.register<IUpdateItineraryUsecase>('IUpdateItineraryUsecase',{
