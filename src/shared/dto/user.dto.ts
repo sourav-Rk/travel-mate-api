@@ -13,6 +13,7 @@ export interface BaseUserDto {
 
 //Client DTO
 export interface ClientDto {
+  _id ?: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -26,19 +27,23 @@ export interface ClientDto {
 
 //Vendor DTO
 export interface VendorDto {
+  _id ?: string;
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
-  password: string;
+  password?: string;
   role: "vendor";
   agencyName: string;
   description?: string;
   profileImage?: string;
+  isBlocked ?: boolean;
+  status ?: string;
 }
 
 //Guide DTO
 export interface GuideDto {
+  _id ?:string;
   firstName: string;
   lastName: string;
   email: string;
@@ -48,7 +53,7 @@ export interface GuideDto {
   yearOfExperience: string;
   languageSpoken: string[];
   alternatePhone?: string;
-  password: string;
+  password?: string;
   role: "guide";
   documents: string[];
   bio?: string;
