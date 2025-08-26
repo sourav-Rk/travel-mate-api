@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import { IActivitiesModel } from "../models/acitivities.model";
 
 export const activitiesSchema = new mongoose.Schema<IActivitiesModel>(
