@@ -1,8 +1,8 @@
-import { ObjectId } from "mongoose";
+
 
 export interface IItineraryEntity {
-    _id ?: ObjectId,
-    packageId : ObjectId,
+    _id ?: string,
+    packageId : string,
     days : IDay[],
     createdAt ?: Date,
     updatedAt ?: Date,
