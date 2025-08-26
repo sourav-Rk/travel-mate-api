@@ -7,10 +7,29 @@ import { guideDB } from "../../../frameworks/database/models/guide.model";
 @injectable()
 export class GuideRepository implements IGuideRepository {
   async find(
-    filter: any,
-    skip: number,
-    limit: number
+    agencyId: string,
+    searchTerm: string,
+    status: string,
+    validPageNumber: number,
+    validPageSize: number
   ): Promise<{ user: IGuideEntity[] | []; total: number }> {
+    const filter: any = { agencyId };
+
+    if (searchTerm) {
+      filter.$or = [
+        { firstName: { $regex: searchTerm, $options: "i" } },
+        { lastName: { $regex: searchTerm, $options: "i" } },
+        { email: { $regex: searchTerm, $options: "i" } },
+      ];
+    }
+
+    if (status && status !== "all") {
+      filter.status = status;
+    }
+
+    const skip = (validPageNumber - 1) * validPageSize;
+    const limit = validPageSize;
+
     const [user, total] = await Promise.all([
       guideDB
         .find(filter)
@@ -18,9 +37,16 @@ export class GuideRepository implements IGuideRepository {
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit),
+
       guideDB.countDocuments(filter),
     ]);
-    return { user, total };
+
+    const users: IGuideEntity[] = user.map((doc) => ({
+      ...doc.toObject(),
+      agencyId: doc.agencyId.toString(),
+    }));
+
+    return { user: users, total };
   }
 
   async findById(id: any): Promise<IGuideEntity | null> {
@@ -36,7 +62,11 @@ export class GuideRepository implements IGuideRepository {
   }
 
   async save(data: Partial<IGuideEntity>): Promise<IGuideEntity> {
-    return await guideDB.create(data);
+    const doc = await guideDB.create(data);
+    return {
+      ...doc.toObject(),
+      agencyId: doc.agencyId.toString(),
+    };
   }
 
   async findByIdAndUpdatePassword(
