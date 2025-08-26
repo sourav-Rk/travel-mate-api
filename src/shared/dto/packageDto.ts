@@ -1,8 +1,8 @@
-import { ObjectId } from "mongoose";
+
 
 //package basic details dto
 export interface PackageBasicDetailsDto {
-  agencyId: ObjectId;
+  agencyId: string;
   packageName: string;
   title: string;
   slug: string;
@@ -12,6 +12,7 @@ export interface PackageBasicDetailsDto {
   meetingPoint: string;
   images: string[];
   maxGroupSize: number;
+  minGroupSize : number;
   price: number;
   cancellationPolicy: string;
   termsAndConditions: string;
@@ -63,8 +64,10 @@ export interface MealsDto {
 
 import { Types } from "mongoose";
 
+import { IPackageEntity } from "../../entities/modelsEntity/package.entity";
+
 export interface IDuration {
-  _id: Types.ObjectId;
+  _id?: Types.ObjectId;
   days: number;
   nights: number;
 }
@@ -111,4 +114,48 @@ export interface IPackage {
   updatedAt: Date;
   itineraryId: Types.ObjectId;
   itineraryDetails?: IItinerary;  
+}
+
+
+
+
+//dto mappings
+export interface PackageListingTableDto{
+  _id ?: string;
+  packageName : string;
+  title : string;
+  images : string[];
+  meetingPoint : string;
+  category : string;
+  duration : IDuration;
+  maxGroupSize : number;
+  price : number;
+}
+
+export interface PackageListingUserSideDto{
+  _id : string;
+  packageName : string;
+  title : string;
+  meetingPoint : string;
+  category : string;
+  description : string;
+  tags : string[];
+  maxGroupSize : number;
+  duration : {
+    days : number;
+    nights : number;
+  };
+  price : number;
+  images : string[];
+}
+
+//repository dtos
+export interface PaginatedPackagesRepo{
+  packages : IPackageEntity[] | [];
+  total : number;
+}
+
+export interface PaginatedPackagesUserSideListing{
+  packages : PackageListingUserSideDto[] | [];
+  total : number;
 }
