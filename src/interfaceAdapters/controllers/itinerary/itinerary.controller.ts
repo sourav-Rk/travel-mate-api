@@ -1,7 +1,8 @@
+import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
+
 import { IItineraryController } from "../../../entities/controllerInterfaces/itinerary/itinerary-controller.interface";
 import { IUpdateItineraryUsecase } from "../../../entities/useCaseInterfaces/itinerary/updateItinerary-usecase.interface";
-import { Request, Response } from "express";
 import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
 
 @injectable()
