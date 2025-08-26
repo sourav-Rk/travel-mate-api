@@ -1,10 +1,12 @@
-import { inject, injectable } from "tsyringe";
-import { IClientPackageController } from "../../../entities/controllerInterfaces/package/client-package.controller";
 import { Request, Response } from "express";
+import { inject, injectable } from "tsyringe";
+
+import { IClientPackageController } from "../../../entities/controllerInterfaces/package/client-package.controller";
+import { IGetTrendingPackagesUsecase } from "../../../entities/useCaseInterfaces/package/client-package/get-trending-packages.usecase";
 import { IGetAvailablePackagesUsecase } from "../../../entities/useCaseInterfaces/package/client-package/getAvailable-package-usecase.interface";
-import { HTTP_STATUS } from "../../../shared/constants";
-import { IGetPackageDetailsClientUsecase } from "../../../entities/useCaseInterfaces/package/client-package/getPackageDetailsClient-usecase.interface";
 import { IGetFeaturedPackagesUsecase } from "../../../entities/useCaseInterfaces/package/client-package/getFeaturedPackages-usecase.interface";
+import { IGetPackageDetailsClientUsecase } from "../../../entities/useCaseInterfaces/package/client-package/getPackageDetailsClient-usecase.interface";
+import { HTTP_STATUS } from "../../../shared/constants";
 
 @injectable()
 export class ClientPackageController implements IClientPackageController {
@@ -16,7 +18,10 @@ export class ClientPackageController implements IClientPackageController {
     private _getPackageDetailsClientUsecase: IGetPackageDetailsClientUsecase,
 
     @inject("IGetFeaturedPackagesUsecase")
-    private _getFeaturedPackagesUsecase : IGetFeaturedPackagesUsecase
+    private _getFeaturedPackagesUsecase: IGetFeaturedPackagesUsecase,
+
+    @inject("IGetTrendingPackagesUsecase")
+    private _getTrendingPackages: IGetTrendingPackagesUsecase
   ) {}
 
   async getAvailablePackages(req: Request, res: Response): Promise<void> {
@@ -71,18 +76,17 @@ export class ClientPackageController implements IClientPackageController {
   }
 
   async getFeaturedPackages(req: Request, res: Response): Promise<void> {
-        const packageId = req.params.packageId;
-    
-    // Validate that packageId is a string
-    if (typeof packageId !== 'string') {
-       res.status(400).json({
+    const packageId = req.params.packageId;
+
+    if (typeof packageId !== "string") {
+      res.status(400).json({
         success: false,
-        message: 'Invalid package ID'
+        message: "Invalid package ID",
       });
-      return 
+      return;
     }
     const response = await this._getFeaturedPackagesUsecase.execute(packageId);
-     res.status(HTTP_STATUS.OK).json({success : true,packages : response});
+    res.status(HTTP_STATUS.OK).json({ success: true, packages: response });
   }
 
   async getPackageDetails(req: Request, res: Response): Promise<void> {
@@ -91,5 +95,10 @@ export class ClientPackageController implements IClientPackageController {
       packageId
     );
     res.status(HTTP_STATUS.OK).json({ success: true, packages: response });
+  }
+
+  async getTrendingPackages(req: Request, res: Response): Promise<void> {
+    const packages = await this._getTrendingPackages.execute();
+    res.status(200).json({ success: true, packages });
   }
 }
