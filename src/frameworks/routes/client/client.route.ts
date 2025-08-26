@@ -23,22 +23,27 @@ export class ClientRoute extends BaseRoute {
   protected initializeRoutes(): void {
     this.router.use("/", new CommonUploadRoutes("client").router);
 
+
+
     this.router.get(
-      "/client/packages/:packageId",
-      verifyAuth,
-      authorizeRole(["client"]),
-      blockMiddleware.checkBlockedStatus,
+      "/client/packages/trending",
       asyncHandler(
-        clientPackageController.getPackageDetails.bind(clientPackageController)
+        clientPackageController.getTrendingPackages.bind(
+          clientPackageController
+        )
       )
     );
 
 
     this.router.get(
+      "/client/packages/:packageId",
+      asyncHandler(
+        clientPackageController.getPackageDetails.bind(clientPackageController)
+      )
+    );
+
+    this.router.get(
       "/client/packages",
-      verifyAuth,
-      authorizeRole(["client"]),
-      blockMiddleware.checkBlockedStatus,
       asyncHandler(
         clientPackageController.getAvailablePackages.bind(
           clientPackageController
@@ -46,6 +51,7 @@ export class ClientRoute extends BaseRoute {
       )
     );
 
+    
     this.router
       .route("/client/details")
       .put(
