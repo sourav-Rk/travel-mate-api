@@ -20,6 +20,13 @@ export class AdminRoute extends BaseRoute {
   protected initializeRoutes(): void {
     this.router.use("/", new SignedUrlRoute("admin").router);
 
+    this.router.put(
+      "/admin/package/block",
+      verifyAuth,
+      authorizeRole(["admin"]),
+      asyncHandler(packageConroller.updateBlockStatus.bind(packageConroller))
+    );
+
     this.router.get(
       "/admin/package/:id",
       verifyAuth,
