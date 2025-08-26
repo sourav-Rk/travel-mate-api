@@ -1,6 +1,6 @@
-import { IPackageEntity } from "./package.entity";
+import { PackageListingTableDto } from "../../shared/dto/packageDto";
 
 export interface PaginatedPackages{
-    packages : IPackageEntity[] | [];
+    packages : PackageListingTableDto[] | [];
     total : number;
 }
