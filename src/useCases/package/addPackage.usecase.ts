@@ -1,15 +1,16 @@
 import { inject, injectable } from "tsyringe";
-import { IAddPackageUsecase } from "../../entities/useCaseInterfaces/package/addPackage-usecase.interface";
-import { IPackageRepository } from "../../entities/repositoryInterfaces/package/package-repository.interface";
-import { IItineraryRepository } from "../../entities/repositoryInterfaces/package/itinerary-repository.interface";
-import { IActivitiesRepository } from "../../entities/repositoryInterfaces/package/activities-repository.interface";
+
 import { IDBSession } from "../../entities/dbSessionInterfaces/session.interface";
+import { IActivitiesEntity } from "../../entities/modelsEntity/activites.entity";
+import { IActivitiesRepository } from "../../entities/repositoryInterfaces/package/activities-repository.interface";
+import { IItineraryRepository } from "../../entities/repositoryInterfaces/package/itinerary-repository.interface";
+import { IPackageRepository } from "../../entities/repositoryInterfaces/package/package-repository.interface";
+import { IAddPackageUsecase } from "../../entities/useCaseInterfaces/package/addPackage-usecase.interface";
 import {
   PackageBasicDetailsDto,
   ItineraryDto,
   ActivityDto,
 } from "../../shared/dto/packageDto";
-import { IActivitiesEntity } from "../../entities/modelsEntity/activites.entity";
 
 @injectable()
 export class AddPackageUsecase implements IAddPackageUsecase {
@@ -48,6 +49,7 @@ export class AddPackageUsecase implements IAddPackageUsecase {
           meetingPoint: basicDetails.meetingPoint,
           images: basicDetails.images,
           maxGroupSize: basicDetails.maxGroupSize,
+          minGroupSize : basicDetails.minGroupSize,
           price: basicDetails.price,
           cancellationPolicy: basicDetails.cancellationPolicy,
           termsAndConditions: basicDetails.termsAndConditions,
@@ -56,7 +58,6 @@ export class AddPackageUsecase implements IAddPackageUsecase {
           duration: basicDetails.duration,
           inclusions: basicDetails.inclusions,
           exclusions: basicDetails.exclusions,
-          status: "active",
         };
 
         const savedPackage = await this._packageRepository.save(
@@ -68,7 +69,7 @@ export class AddPackageUsecase implements IAddPackageUsecase {
           throw new Error("Package id is missing after save");
         }
 
-        let processedDays = [];
+        const processedDays = [];
 
         for (const day of itinerary) {
           const activitiesData =
