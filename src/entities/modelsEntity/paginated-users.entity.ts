@@ -1,8 +1,7 @@
-import { IClientEntity } from "./client.entity";
-import { IGuideEntity } from "./guide.entity";
-import { IVendorEntity } from "./vendor.entity";
+import { GuideListDto } from "../../shared/dto/guideDto";
+import { ClientDto, VendorDto } from "../../shared/dto/user.dto";
 
 export interface PaginatedUsers {
-    user : IClientEntity[] | IVendorEntity[] | IGuideEntity[] | [];
+    user : ClientDto[] | VendorDto[] | GuideListDto[] | [];
     total : number;
 }
