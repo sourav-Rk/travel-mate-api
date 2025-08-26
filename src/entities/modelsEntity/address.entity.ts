@@ -1,7 +1,6 @@
-import { ObjectId } from "mongoose";
 
 export interface IAddressEntity{
-    userId : ObjectId;
+    userId : string;
     address : string;
     street : string;
     city : string;
