@@ -1,8 +1,9 @@
 import { inject, injectable } from "tsyringe";
 
-import { IGuideEntity } from "../../entities/modelsEntity/guide.entity";
 import { IGuideRepository } from "../../entities/repositoryInterfaces/guide/guide-repository.interface";
 import { IGetGuideProfileUsecase } from "../../entities/useCaseInterfaces/guide/getGuideProfile-usecase.interface";
+import { GuideMapper } from "../../interfaceAdapters/mappers/guide.mapper";
+import { GuideProfileDto } from "../../shared/dto/guideDto";
 import { NotFoundError } from "../../shared/utils/error/notFoundError";
 import { ValidationError } from "../../shared/utils/error/validationError";
 
@@ -13,7 +14,7 @@ export class GetGuideProfileUsecase implements IGetGuideProfileUsecase {
     private _guideRepository: IGuideRepository
   ) {}
 
-  async execute(id: any): Promise<IGuideEntity> {
+  async execute(id: any): Promise<GuideProfileDto> {
     if (!id) {
       throw new ValidationError("guide is required");
     }
@@ -24,6 +25,8 @@ export class GetGuideProfileUsecase implements IGetGuideProfileUsecase {
       throw new NotFoundError("Guide not found");
     }
 
-    return guide;
+    const guideProfiledata = GuideMapper.mapToGuideProfile(guide);
+
+    return guideProfiledata;
   }
 }
