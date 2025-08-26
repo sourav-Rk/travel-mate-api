@@ -3,6 +3,7 @@ import { inject, injectable } from "tsyringe";
 import { PaginatedUsers } from "../../entities/modelsEntity/paginated-users.entity";
 import { IGuideRepository } from "../../entities/repositoryInterfaces/guide/guide-repository.interface";
 import { IGetAllGuidesUsecase } from "../../entities/useCaseInterfaces/vendor/getAllGuides-usecase.interface";
+import { GuideMapper } from "../../interfaceAdapters/mappers/guide.mapper";
 
 @injectable()
 export class GetAllGuideUsecase implements IGetAllGuidesUsecase {
@@ -18,30 +19,19 @@ export class GetAllGuideUsecase implements IGetAllGuidesUsecase {
     status: string,
     agencyId: any
   ): Promise<PaginatedUsers> {
-    const filter: any = { agencyId };
-
-    if (searchTerm) {
-      filter.$or = [
-        { firstName: { $regex: searchTerm, $options: "i" } },
-        { lastName: { $regex: searchTerm, $options: "i" } },
-        { email: { $regex: searchTerm, $options: "i" } },
-      ];
-    }
-
-    if (status && status !== "all") {
-      filter.status = status;
-    }
-
     const validPageNumber = Math.max(1, pageNumber || 0);
     const validPageSize = Math.max(1, pageSize || 10);
-    const skip = (validPageNumber - 1) * validPageSize;
-    const limit = validPageSize;
 
     const { user, total } = await this._guideRepository.find(
-      filter,
-      skip,
-      limit
+      agencyId,
+      searchTerm,
+      status,
+      validPageNumber,
+      validPageSize
     );
-    return { user, total };
+
+
+    const users = user.map((doc) => GuideMapper.mapGuideToVendorTableDto(doc));
+    return { user: users, total };
   }
 }
