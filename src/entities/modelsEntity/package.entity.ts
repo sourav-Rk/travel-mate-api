@@ -1,15 +1,15 @@
-import { ObjectId } from "mongoose";
+import { PackageStatus } from "../../shared/constants";
 
 export interface IPackageEntity {
-  _id?: ObjectId;
-  agencyId: ObjectId;
+  _id?: string;
+  agencyId: string;
   packageName: string;
   title: string;
   slug: string;
   description: string;
   category: string;
   tags: string[];
-  status: string;
+  status?: PackageStatus;
   meetingPoint: string;
   images: string[];
   maxGroupSize: number;
@@ -24,7 +24,12 @@ export interface IPackageEntity {
     nights: number;
     days: number;
   };
-  itineraryId?: ObjectId;
+  isBlocked ?: boolean;
+  itineraryId?: string;
+  minGroupSize ?: number;
+  applicationDeadline ?: Date;
+  advancePaymentDeadlineDays ?: number;
+  fullPaymentDeadlineDays ?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
