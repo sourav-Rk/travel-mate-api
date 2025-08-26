@@ -37,7 +37,7 @@ export class GuideController implements IGuideController {
   async addGuide(req: Request, res: Response): Promise<void> {
     const agencyId = (req as CustomRequest).user.id;
     const guideData = req.body as UserDto;
-    await this._addGuideUsecase.execute(guideData, agencyId);
+    await this._addGuideUsecase.execute(guideData, String(agencyId));
     res
       .status(HTTP_STATUS.CREATED)
       .json({ success: true, message: SUCCESS_MESSAGE.ADD_GUIDE_SUCCESSFULLY });
