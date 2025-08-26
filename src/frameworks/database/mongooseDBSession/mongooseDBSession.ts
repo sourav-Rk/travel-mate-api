@@ -1,6 +1,7 @@
 import mongoose, { ClientSession } from "mongoose";
-import { IDBSession } from "../../../entities/dbSessionInterfaces/session.interface";
 import { injectable } from "tsyringe";
+
+import { IDBSession } from "../../../entities/dbSessionInterfaces/session.interface";
 
 @injectable()
 export class MongooseDBSession implements IDBSession {
