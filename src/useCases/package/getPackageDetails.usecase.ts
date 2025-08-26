@@ -1,12 +1,13 @@
 import { inject, injectable } from "tsyringe";
-import { IGetPackageDetailsUsecase } from "../../entities/useCaseInterfaces/package/getPackageDetails-usecase.interface";
-import { IPackageRepository } from "../../entities/repositoryInterfaces/package/package-repository.interface";
-import { ValidationError } from "../../shared/utils/error/validationError";
-import { ERROR_MESSAGE } from "../../shared/constants";
-import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
-import { NotFoundError } from "../../shared/utils/error/notFoundError";
-import { IPackage } from "../../shared/dto/packageDto";
+
 import { IAdminRepository } from "../../entities/repositoryInterfaces/admin/admin-repository.interface";
+import { IPackageRepository } from "../../entities/repositoryInterfaces/package/package-repository.interface";
+import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
+import { IGetPackageDetailsUsecase } from "../../entities/useCaseInterfaces/package/getPackageDetails-usecase.interface";
+import { ERROR_MESSAGE } from "../../shared/constants";
+import { IPackage } from "../../shared/dto/packageDto";
+import { NotFoundError } from "../../shared/utils/error/notFoundError";
+import { ValidationError } from "../../shared/utils/error/validationError";
 
 @injectable()
 export class GetPackageDetailsUsecase implements IGetPackageDetailsUsecase {
