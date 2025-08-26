@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
-import { IItineraryModel } from "../models/itinerary.model";
+
 import { IDay, IMeals } from "../../../entities/modelsEntity/itinerary.entity";
+import { IItineraryModel } from "../models/itinerary.model";
 
 const mealsSchema = new mongoose.Schema<IMeals>({
   breakfast: {
