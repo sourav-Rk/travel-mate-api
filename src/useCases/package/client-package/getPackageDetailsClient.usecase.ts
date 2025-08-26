@@ -1,9 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import { IGetPackageDetailsClientUsecase } from "../../../entities/useCaseInterfaces/package/client-package/getPackageDetailsClient-usecase.interface";
+
 import { IPackageRepository } from "../../../entities/repositoryInterfaces/package/package-repository.interface";
-import { NotFoundError } from "../../../shared/utils/error/notFoundError";
+import { IGetPackageDetailsClientUsecase } from "../../../entities/useCaseInterfaces/package/client-package/getPackageDetailsClient-usecase.interface";
 import { ERROR_MESSAGE } from "../../../shared/constants";
 import { IPackage } from "../../../shared/dto/packageDto";
+import { NotFoundError } from "../../../shared/utils/error/notFoundError";
 
 @injectable()
 export class GetPackageDetailsClientUsecase implements IGetPackageDetailsClientUsecase{
