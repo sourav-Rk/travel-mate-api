@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import { IPackageModel } from "../models/package.model";
 
 const durationSchema = new mongoose.Schema({
@@ -42,7 +43,7 @@ export const packageSchema = new mongoose.Schema<IPackageModel>(
     },
     status: {
       type: String,
-      required: true,
+      default: "draft",
     },
     meetingPoint: {
       type: String,
@@ -53,6 +54,10 @@ export const packageSchema = new mongoose.Schema<IPackageModel>(
       required: true,
     },
     maxGroupSize: {
+      type: Number,
+      required: true,
+    },
+    minGroupSize: {
       type: Number,
       required: true,
     },
@@ -89,8 +94,32 @@ export const packageSchema = new mongoose.Schema<IPackageModel>(
     inclusions: {
       type: [String],
     },
+    isBlocked: {
+      type: Boolean,
+      default: false,
+    },
+    applicationDeadline: {
+      type: Date,
+    },
+    advancePaymentDeadlineDays: {
+      type: Number,
+      default: 5,
+    },
+    fullPaymentDeadlineDays: {
+      type: Number,
+      default: 7,
+    },
   },
   {
     timestamps: true,
   }
 );
+
+packageSchema.pre("save", function (next) {
+  if (this.startDate && !this.applicationDeadline) {
+    const deadline = new Date(this.startDate);
+    deadline.setDate(deadline.getDate() - 15);
+    this.applicationDeadline = deadline;
+  }
+  next();
+});
