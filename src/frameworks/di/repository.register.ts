@@ -1,11 +1,15 @@
 import { container } from "tsyringe";
 
+import { IDBSession } from "../../entities/dbSessionInterfaces/session.interface";
 import { IAdminRepository } from "../../entities/repositoryInterfaces/admin/admin-repository.interface";
 import { IAddressRepository } from "../../entities/repositoryInterfaces/auth/address-repository.interface";
 import { IKYCRepository } from "../../entities/repositoryInterfaces/auth/kyc-repository.interface";
 import { IOTPRepository } from "../../entities/repositoryInterfaces/auth/otp-repository.interface";
 import { IClientRepository } from "../../entities/repositoryInterfaces/client/client.repository.interface";
 import { IGuideRepository } from "../../entities/repositoryInterfaces/guide/guide-repository.interface";
+import { IActivitiesRepository } from "../../entities/repositoryInterfaces/package/activities-repository.interface";
+import { IItineraryRepository } from "../../entities/repositoryInterfaces/package/itinerary-repository.interface";
+import { IPackageRepository } from "../../entities/repositoryInterfaces/package/package-repository.interface";
 import { IRedisTokenRepository } from "../../entities/repositoryInterfaces/redis/redis-token-repository.interface";
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { AdminRepository } from "../../interfaceAdapters/repositories/admin/admin.repository";
@@ -14,15 +18,11 @@ import { KYCRepository } from "../../interfaceAdapters/repositories/auth/kyc.rep
 import { OTPRepository } from "../../interfaceAdapters/repositories/auth/otp.repository";
 import { ClientRepository } from "../../interfaceAdapters/repositories/client/client.repository";
 import { GuideRepository } from "../../interfaceAdapters/repositories/guide/guide.repository";
+import { ActivitiesRepository } from "../../interfaceAdapters/repositories/package/activities.repository";
+import { ItineraryRepository } from "../../interfaceAdapters/repositories/package/itinerary.repository";
+import { PackageRepository } from "../../interfaceAdapters/repositories/package/package.repository";
 import { RedisTokenRepository } from "../../interfaceAdapters/repositories/redis/redis-token.repository";
 import { VendorRepository } from "../../interfaceAdapters/repositories/vendor/vendor.repository";
-import { IPackageRepository } from "../../entities/repositoryInterfaces/package/package-repository.interface";
-import { PackageRepository } from "../../interfaceAdapters/repositories/package/package.repository";
-import { IItineraryRepository } from "../../entities/repositoryInterfaces/package/itinerary-repository.interface";
-import { ItineraryRepository } from "../../interfaceAdapters/repositories/package/itinerary.repository";
-import { IActivitiesRepository } from "../../entities/repositoryInterfaces/package/activities-repository.interface";
-import { ActivitiesRepository } from "../../interfaceAdapters/repositories/package/activities.repository";
-import { IDBSession } from "../../entities/dbSessionInterfaces/session.interface";
 import { MongooseDBSession } from "../database/mongooseDBSession/mongooseDBSession";
 
 export class RepositoryRegistry {
