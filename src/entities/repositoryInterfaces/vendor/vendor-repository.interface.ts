@@ -1,3 +1,4 @@
+import { TRole } from "../../../shared/constants";
 import { IVendorEntity } from "../../modelsEntity/vendor.entity";
 
 export interface IVendorRepository {
@@ -18,8 +19,10 @@ export interface IVendorRepository {
   findByIdAndUpdateBlock(vendorId: string): Promise<boolean>;
   getVendorWithAddressAndKyc(vendorId: string): Promise<IVendorEntity | null>;
   find(
-    filter: any,
-    skip: number,
-    limit: number
+    searchTerm: string,
+    status: string,
+    userType: TRole,
+    validPageNumber: number,
+    validPageSize: number
   ): Promise<{ user: IVendorEntity[] | []; total: number }>;
 }
