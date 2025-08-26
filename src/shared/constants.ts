@@ -4,6 +4,16 @@ export enum GENDER {
   OTHER = "other",
 }
 
+export enum BOOKINGSTATUS {
+  APPLIED = "applied",
+  PENDING = "pending",
+  CONFIRMED = "confirmed",
+  COMPLETED = "completed",
+  WAITLISTED = "waitlisted",
+  CANCELLED = "cancelled",
+  EXPIRED = "expired",
+}
+
 export enum HTTP_STATUS {
   OK = 200,
   CREATED = 201,
@@ -43,15 +53,18 @@ export const ERROR_MESSAGE = {
   UNAUTH_NO_USER_FOUND: "Unauthorized: No user found in request",
   INVALID_ROLE: "Invalid role",
   BLOCKED: "Your account has been blocked.",
-  VALIDATION_FAILED : "Validations failed",
-  AGENCY_ID_AND_PACKAGE_ID_IS_REQUIRED : "Agency Id and package Id is required",
-  AGENCY_NOT_FOUND : "Agency Not found",
-  USER_ID_REQUIRED : "User id is required",
-  PACKAGE_NOT_FOUND : "Package Not found",
-  ITINERARY_NOT_FOUND : "Itinerary not found",
-  ID_REQUIRED : "Id is required",
-  ACTIVITY_NOT_EXIST : "Activity not exist ",
-  PACKAGE_ID_IS_REQUIRED : "Package id is required"
+  VALIDATION_FAILED: "Validations failed",
+  AGENCY_ID_AND_PACKAGE_ID_IS_REQUIRED: "Agency Id and package Id is required",
+  AGENCY_NOT_FOUND: "Agency Not found",
+  USER_ID_REQUIRED: "User id is required",
+  PACKAGE_NOT_FOUND: "Package Not found",
+  ITINERARY_NOT_FOUND: "Itinerary not found",
+  ID_REQUIRED: "Id is required",
+  ACTIVITY_NOT_EXIST: "Activity not exist ",
+  PACKAGE_ID_IS_REQUIRED: "Package id is required",
+  CANNOT_EDIT_PACKAGE: "Package cannot be edited because it is already",
+  INSUFFICIENT_DATA: "Insufficient data to do the operation",
+  STATUS_CANNOT_BE_UPDATED: "Status cant be updated at this stage",
 };
 
 export const SUCCESS_MESSAGE = {
@@ -67,11 +80,12 @@ export const SUCCESS_MESSAGE = {
   RESET_LINK_SEND: "A password reset link has been sent to your email account",
   PASSWORD_CHANGED: "Password changed successfully",
   PACKAGE_ADDED: "Package added successfully",
-  PACKAGE_UPDATED : "Package updated successfully",
-  ITINERARY_UPDATED_SUCCESS : "Itinerary updated successfully",
-  ACTIVITY_ADDED : "Activity added successfully",
-  ACTIVITY_UPDATED : "Activity update successfully",
-  ACTIVITY_DELETED : "Activity deleted successfully"
+  PACKAGE_UPDATED: "Package updated successfully",
+  ITINERARY_UPDATED_SUCCESS: "Itinerary updated successfully",
+  ACTIVITY_ADDED: "Activity added successfully",
+  ACTIVITY_UPDATED: "Activity update successfully",
+  ACTIVITY_DELETED: "Activity deleted successfully",
+  STATUS_UPDATED_SUCCESS: "Status Updated successfully",
 };
 
 export const ROLES = {
@@ -90,6 +104,16 @@ export const STATUS = {
 
 export type TRole = "admin" | "vendor" | "client" | "guide";
 export type TStatus = "pending" | "verified" | "rejected";
+
+export type PackageStatus = "draft" | "active" | "ongoing" | "completed";
+export type BookingStatus =
+  | "applied"
+  | "pending"
+  | "confirmed"
+  | "completed"
+  | "waitlisted"
+  | "cancelled"
+  | "expired";
 
 export enum EVENT_EMMITER_TYPE {
   SENDMAIL = "sendmail",
