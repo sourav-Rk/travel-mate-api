@@ -1,10 +1,11 @@
+import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
+
 import { IActivityController } from "../../../entities/controllerInterfaces/activity/activity-controller.interface";
 import { ICreateActivityUsecase } from "../../../entities/useCaseInterfaces/activity/createActivity-usecase.interface";
-import { Request, Response } from "express";
-import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
-import { IUpdateActivityUsecase } from "../../../entities/useCaseInterfaces/activity/updateActivity-usecase.interface";
 import { IDeleteActivityUsecase } from "../../../entities/useCaseInterfaces/activity/deleteActivity-usecase.interface";
+import { IUpdateActivityUsecase } from "../../../entities/useCaseInterfaces/activity/updateActivity-usecase.interface";
+import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
 
 @injectable()
 export class ActivityController implements IActivityController{
