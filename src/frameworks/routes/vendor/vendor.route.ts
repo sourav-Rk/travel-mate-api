@@ -1,4 +1,4 @@
-import {
+  import {
   authorizeRole,
   decodeToken,
   verifyAuth,
@@ -29,6 +29,14 @@ export class VendorRoute extends BaseRoute {
     this.router.use("/", new CommonUploadRoutes("vendor").router);
 
     this.router.use("/", new SignedUrlRoute("vendor").router);
+
+    this.router.put(
+      "/vendor/package/status",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(packageConroller.updatePackageStatus.bind(packageConroller))
+    );
 
     this.router
       .route("/vendor/package/:id")
