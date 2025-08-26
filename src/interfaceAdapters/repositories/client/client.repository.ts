@@ -3,12 +3,15 @@ import { injectable } from "tsyringe";
 import { IClientEntity } from "../../../entities/modelsEntity/client.entity";
 import { IClientRepository } from "../../../entities/repositoryInterfaces/client/client.repository.interface";
 import { clientDB } from "../../../frameworks/database/models/client.model";
+import { TRole } from "../../../shared/constants";
 import { NotFoundError } from "../../../shared/utils/error/notFoundError";
+import { UserMapper } from "../../mappers/user.mapper";
 
 @injectable()
 export class ClientRepository implements IClientRepository {
   async save(data: Partial<IClientEntity>): Promise<IClientEntity> {
-    return await clientDB.create(data);
+    const modelData = await clientDB.create(data);
+    return UserMapper.toEntity(modelData);
   }
 
   async findById(id: string): Promise<IClientEntity | null> {
@@ -23,8 +26,11 @@ export class ClientRepository implements IClientRepository {
     return await clientDB.findOne({ phone });
   }
 
-  async findByIdAndUpdatePassword(id : any,password : string) : Promise<IClientEntity | null>{
-    return await clientDB.findByIdAndUpdate(id,{password});
+  async findByIdAndUpdatePassword(
+    id: any,
+    password: string
+  ): Promise<IClientEntity | null> {
+    return await clientDB.findByIdAndUpdate(id, { password });
   }
 
   async findByIdAndUpdateStatus(id: string): Promise<boolean> {
@@ -51,14 +57,44 @@ export class ClientRepository implements IClientRepository {
   }
 
   async find(
-    filter: any,
-    skip: number,
-    limit: number
+    searchTerm: string,
+    status: string,
+    userType: TRole,
+    validPageNumber: number,
+    validPageSize: number
   ): Promise<{ user: IClientEntity[] | []; total: number }> {
-    const [user, total] = await Promise.all([
-      clientDB.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+    const filter: any = {};
+
+    if (searchTerm) {
+      filter.$or = [
+        { firstName: { $regex: searchTerm, $options: "i" } },
+        { lastName: { $regex: searchTerm, $options: "i" } },
+        { email: { $regex: searchTerm, $options: "i" } },
+      ];
+    }
+
+    if (userType) {
+      filter.role = userType;
+    }
+
+    if (status && status !== "all") {
+      if (status === "active") {
+        filter.isBlocked = false;
+      } else if (status === "blocked") {
+        filter.isBlocked = true;
+      }
+    }
+
+    const skip = (validPageNumber - 1) * validPageSize;
+    const limit = validPageSize;
+
+    const [docs, total] = await Promise.all([
+      clientDB.find(filter).skip(skip).limit(limit).sort({ createdAt: -1 }),
       clientDB.countDocuments(filter),
     ]);
-    return { user, total };
+
+    const users = docs.map((doc) => UserMapper.toEntity(doc));
+
+    return { user: users, total };
   }
 }
