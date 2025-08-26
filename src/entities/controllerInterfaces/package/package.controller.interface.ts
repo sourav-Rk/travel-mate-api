@@ -5,4 +5,6 @@ export interface IPackageController {
   getPackages(req: Request, res: Response): Promise<void>;
   getPackageDetails(req: Request, res: Response): Promise<void>;
   updatePackage(req: Request, res: Response): Promise<void>;
+  updatePackageStatus(req : Request,res : Response) : Promise<void>;
+  updateBlockStatus(req : Request,res : Response) : Promise<void>;
 }
