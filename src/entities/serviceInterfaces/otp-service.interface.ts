@@ -1,4 +1,3 @@
-import { SignupRequestDto } from "../../shared/dto/authDto";
 import { IUserEntity } from "../modelsEntity/user.entity";
 
 export interface IOtpService{
