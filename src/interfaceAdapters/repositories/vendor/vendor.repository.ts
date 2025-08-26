@@ -4,6 +4,7 @@ import { injectable } from "tsyringe";
 import { IVendorEntity } from "../../../entities/modelsEntity/vendor.entity";
 import { IVendorRepository } from "../../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { vendorDB } from "../../../frameworks/database/models/vendor.model";
+import { TRole } from "../../../shared/constants";
 import { NotFoundError } from "../../../shared/utils/error/notFoundError";
 
 @injectable()
@@ -20,14 +21,19 @@ export class VendorRepository implements IVendorRepository {
     return await vendorDB.findById(vendorId);
   }
 
-  async findByIdAndUpdate(id: string, data: Partial<IVendorEntity>): Promise<void> {
-       await vendorDB.findByIdAndUpdate(id,data);
+  async findByIdAndUpdate(
+    id: string,
+    data: Partial<IVendorEntity>
+  ): Promise<void> {
+    await vendorDB.findByIdAndUpdate(id, data);
   }
 
-  async findByIdAndUpdatePassword(id : any,password : string) : Promise<IVendorEntity | null>{
-    return await vendorDB.findByIdAndUpdate(id,{password});
+  async findByIdAndUpdatePassword(
+    id: any,
+    password: string
+  ): Promise<IVendorEntity | null> {
+    return await vendorDB.findByIdAndUpdate(id, { password });
   }
-
 
   async getVendorWithAddressAndKyc(
     vendorId: string
@@ -74,7 +80,6 @@ export class VendorRepository implements IVendorRepository {
     return vendorDetails[0];
   }
 
-
   async save(data: Partial<IVendorEntity>): Promise<IVendorEntity> {
     return await vendorDB.create(data);
   }
@@ -82,10 +87,12 @@ export class VendorRepository implements IVendorRepository {
   async findByIdAndUpdateStatus(
     vendorId: string,
     status: string,
-    reason ?: string
+    reason?: string
   ): Promise<void> {
-    console.log(reason)
-   await vendorDB.findByIdAndUpdate(vendorId, { $set: { status: status,rejectionReason : reason } });  
+    console.log(reason);
+    await vendorDB.findByIdAndUpdate(vendorId, {
+      $set: { status: status, rejectionReason: reason },
+    });
   }
 
   async findByIdAndUpdateBlock(vendorId: string): Promise<boolean> {
@@ -102,12 +109,35 @@ export class VendorRepository implements IVendorRepository {
   }
 
   async find(
-    filter: any,
-    skip: number,
-    limit: number
+    searchTerm: string,
+    status: string,
+    userType: TRole,
+    validPageNumber: number,
+    validPageSize: number
   ): Promise<{ user: IVendorEntity[] | []; total: number }> {
+    const filter: any = {};
+    if (searchTerm) {
+      filter.$or = [
+        { firstName: { $regex: searchTerm, $options: "i" } },
+        { lastName: { $regex: searchTerm, $options: "i" } },
+        { email: { $regex: searchTerm, $options: "i" } },
+        { agencyName: { $regex: searchTerm, $options: "i" } },
+      ];
+    }
+
+    if (userType) {
+      filter.role = userType;
+    }
+
+    if (userType === "vendor" && status && status !== "all") {
+      filter.status = status;
+    }
+
+    const skip = (validPageNumber - 1) * validPageSize;
+    const limit = validPageSize;
+
     const [user, total] = await Promise.all([
-      vendorDB.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+      vendorDB.find(filter).skip(skip).limit(limit).sort({ createdAt: -1 }),
       vendorDB.countDocuments(filter),
     ]);
 
