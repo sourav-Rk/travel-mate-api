@@ -130,6 +130,7 @@ export interface PackageListingTableDto{
   duration : IDuration;
   maxGroupSize : number;
   price : number;
+  status : string;
 }
 
 export interface PackageListingUserSideDto{
