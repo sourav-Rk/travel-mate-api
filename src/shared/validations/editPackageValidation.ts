@@ -42,6 +42,8 @@ export const basicDetailsSchemaEdit = z.object({
 
   maxGroupSize: z.number().int().min(10).max(50),
 
+  minGroupSize: z.number().int().min(10).max(50),
+
   price: z.number().min(500).max(1000000),
 
   cancellationPolicy: z.string().min(20).max(1000),
