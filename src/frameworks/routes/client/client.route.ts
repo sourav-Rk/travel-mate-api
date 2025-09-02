@@ -9,11 +9,14 @@ import { asyncHandler } from "../../../shared/async-handler";
 import {
   authController,
   blockMiddleware,
+  clientBookingController,
   clientPackageController,
   clientProfileController,
+  notificationController,
 } from "../../di/resolve";
 import { BaseRoute } from "../base.route";
 import { CommonUploadRoutes } from "../common/common-upload.route";
+import { FcmTokenRoutes } from "../fcmToken/fcmToken.route";
 
 export class ClientRoute extends BaseRoute {
   constructor() {
@@ -22,8 +25,36 @@ export class ClientRoute extends BaseRoute {
 
   protected initializeRoutes(): void {
     this.router.use("/", new CommonUploadRoutes("client").router);
+    this.router.use("/", new FcmTokenRoutes("client").router);
 
+    this.router.get(
+      "/client/booking/package/:packageId",
+      verifyAuth,
+      authorizeRole(["client"]),
+      asyncHandler(
+        clientBookingController.getBookingDetailOfPackage.bind(
+          clientBookingController
+        )
+      )
+    );
 
+    this.router.get(
+      "/client/bookings",
+      verifyAuth,
+      authorizeRole(["client"]),
+      asyncHandler(
+        clientBookingController.getBookings.bind(clientBookingController)
+      )
+    );
+
+    this.router.post(
+      "/client/booking/apply",
+      verifyAuth,
+      authorizeRole(["client"]),
+      asyncHandler(
+        clientBookingController.applyPackage.bind(clientBookingController)
+      )
+    );
 
     this.router.get(
       "/client/packages/trending",
@@ -33,7 +64,6 @@ export class ClientRoute extends BaseRoute {
         )
       )
     );
-
 
     this.router.get(
       "/client/packages/:packageId",
@@ -51,7 +81,6 @@ export class ClientRoute extends BaseRoute {
       )
     );
 
-    
     this.router
       .route("/client/details")
       .put(
@@ -81,6 +110,37 @@ export class ClientRoute extends BaseRoute {
       blockMiddleware.checkBlockedStatus as RequestHandler,
       clientProfileController.updatePassword.bind(clientProfileController)
     );
+
+    this.router.patch(
+      "/client/notifications/:notificationId",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(
+        notificationController.markReadNotification.bind(notificationController)
+      )
+    );
+
+    this.router
+      .route("/client/notifications")
+      .get(
+        verifyAuth,
+        authorizeRole(["client"]),
+        blockMiddleware.checkBlockedStatus,
+        asyncHandler(
+          notificationController.getNotifications.bind(notificationController)
+        )
+      )
+      .patch(
+        verifyAuth,
+        authorizeRole(["client"]),
+        blockMiddleware.checkBlockedStatus,
+        asyncHandler(
+          notificationController.markAsReadAllNotification.bind(
+            notificationController
+          )
+        )
+      );
 
     this.router.post(
       "/client/logout",
