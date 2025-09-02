@@ -2,6 +2,7 @@ import "reflect-metadata";
 import { MongoConnect } from "./frameworks/database/mongoDB/mongoConnect";
 import { App } from "./frameworks/http/server";
 import { config } from "./shared/config";
+import { cronScheduler } from "./frameworks/di/resolve";
 
 try {
   const app = new App();
@@ -11,6 +12,8 @@ try {
     .connectDB()
     .then(() => console.log("mongodb connected"))
     .catch((error) => console.log(error));
+
+  cronScheduler.startAll();
 
   app
     .getApp()
