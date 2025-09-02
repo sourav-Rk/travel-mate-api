@@ -38,7 +38,16 @@ import { LoggerMiddleware } from "../../interfaceAdapters/middlewares/logger.mid
 import { ILogger } from "../../interfaceAdapters/services/logger/logger.interface";
 
 import { DependencyInjection } from ".";
-
+import { IClientBookingController } from "../../entities/controllerInterfaces/booking/client-booking-controller.interface";
+import { ClientBookingController } from "../../interfaceAdapters/controllers/booking/client-booking-controller";
+import { IVendorBookingController } from "../../entities/controllerInterfaces/booking/vendor-booking-controller.interface";
+import { VendorBookingController } from "../../interfaceAdapters/controllers/booking/vendor-booking-controller";
+import { IFcmController } from "../../entities/controllerInterfaces/fcmToken.controller";
+import { FcmTokencontroller } from "../../interfaceAdapters/controllers/common/fcmToken.controller";
+import { INotificationController } from "../../entities/controllerInterfaces/notification/notification-controller.interface";
+import { NotificationController } from "../../interfaceAdapters/controllers/notification/notification.controller";
+import { CronScheduler } from "../cron/cronScheduler";
+import { ICronScheduler } from "../../entities/cronInterfaces/cronScheduler.interface";
 
 DependencyInjection.registerAll();
 
@@ -92,13 +101,32 @@ export const activityController =
 export const clientPackageController =
   container.resolve<IClientPackageController>(ClientPackageController);
 
+//client-booking controler
+export const clientBookingController =
+  container.resolve<IClientBookingController>(ClientBookingController);
+
+//vendor-booking controller
+export const vendorBookingController =
+  container.resolve<IVendorBookingController>(VendorBookingController);
+
 //common upload controller
 export const commonController =
   container.resolve<ICommonController>(CommonController);
 
+//fcm token controller
+export const fcmTokenController =
+  container.resolve<IFcmController>(FcmTokencontroller);
+
+//notification controller
+export const notificationController =
+  container.resolve<INotificationController>(NotificationController);
+
 //signed url controller
 export const signedUrlController =
   container.resolve<ISignedUrlController>(SignedUrlController);
+
+//cron scheduler
+export const cronScheduler = container.resolve<ICronScheduler>(CronScheduler);
 
 //Middlewares
 export const errorMiddleware =
