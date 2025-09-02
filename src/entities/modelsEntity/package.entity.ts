@@ -1,7 +1,7 @@
 import { PackageStatus } from "../../shared/constants";
 
 export interface IPackageEntity {
-  _id?: string;
+  _id : string;
   agencyId: string;
   packageName: string;
   title: string;
@@ -26,7 +26,7 @@ export interface IPackageEntity {
   };
   isBlocked ?: boolean;
   itineraryId?: string;
-  minGroupSize ?: number;
+  minGroupSize : number;
   applicationDeadline ?: Date;
   advancePaymentDeadlineDays ?: number;
   fullPaymentDeadlineDays ?: number;
