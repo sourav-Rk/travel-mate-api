@@ -20,7 +20,6 @@ export const clientSchema = new mongoose.Schema<IClientModel>(
     },
     phone : {
       type : String,
-      unique : true
     },
     password: {
       type: String,
