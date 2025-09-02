@@ -24,60 +24,77 @@ import { PackageRepository } from "../../interfaceAdapters/repositories/package/
 import { RedisTokenRepository } from "../../interfaceAdapters/repositories/redis/redis-token.repository";
 import { VendorRepository } from "../../interfaceAdapters/repositories/vendor/vendor.repository";
 import { MongooseDBSession } from "../database/mongooseDBSession/mongooseDBSession";
+import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
+import { BookingRepository } from "../../interfaceAdapters/repositories/booking/booking.repository";
+import { IFCMTokenRepository } from "../../entities/repositoryInterfaces/fcmToken/fcmTokenRepository.interface";
+import { FCMTokenRepository } from "../../interfaceAdapters/repositories/fcmToken/fcmToken.repository";
+import { INotificationRepository } from "../../entities/repositoryInterfaces/notification/notification-repository.interface";
+import { NotificationRepository } from "../../interfaceAdapters/repositories/notification/notification.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
- 
-    container.register<IClientRepository>('IClientRepository',{
-      useClass : ClientRepository
-    })
+    container.register<IClientRepository>("IClientRepository", {
+      useClass: ClientRepository,
+    });
 
-    container.register<IVendorRepository>('IVendorRepository',{
-      useClass : VendorRepository
-    })
+    container.register<IVendorRepository>("IVendorRepository", {
+      useClass: VendorRepository,
+    });
 
-    container.register<IGuideRepository>('IGuideRepository',{
-      useClass : GuideRepository
-    })
+    container.register<IGuideRepository>("IGuideRepository", {
+      useClass: GuideRepository,
+    });
 
-    container.register<IAdminRepository>('IAdminRepository',{
-      useClass : AdminRepository
-    })
+    container.register<IAdminRepository>("IAdminRepository", {
+      useClass: AdminRepository,
+    });
 
-    container.register<IOTPRepository>('IOTPRepository',{
-      useClass : OTPRepository
-    })
+    container.register<IOTPRepository>("IOTPRepository", {
+      useClass: OTPRepository,
+    });
 
-    container.register<IKYCRepository>('IKYCRepository',{
-      useClass : KYCRepository
-    })
+    container.register<IKYCRepository>("IKYCRepository", {
+      useClass: KYCRepository,
+    });
 
-    container.register<IAddressRepository>('IAddressRepository',{
-      useClass : AddressRepository
-    })
+    container.register<IAddressRepository>("IAddressRepository", {
+      useClass: AddressRepository,
+    });
 
-    container.register<IPackageRepository>('IPackageRepository',{
-      useClass : PackageRepository
-    })
+    container.register<IPackageRepository>("IPackageRepository", {
+      useClass: PackageRepository,
+    });
 
-    container.register<IItineraryRepository>('IItineraryRepository',{
-      useClass : ItineraryRepository
-    })
+    container.register<IItineraryRepository>("IItineraryRepository", {
+      useClass: ItineraryRepository,
+    });
 
-    container.register<IActivitiesRepository>('IActivitiesRepository',{
-      useClass : ActivitiesRepository
-    })
+    container.register<IActivitiesRepository>("IActivitiesRepository", {
+      useClass: ActivitiesRepository,
+    });
+
+    container.register<IBookingRepository>("IBookingRepository", {
+      useClass: BookingRepository,
+    });
+
+    //fcm token repository
+    container.register<IFCMTokenRepository>("IFCMTokenRepository", {
+      useClass: FCMTokenRepository,
+    });
+
+    //notification repository
+    container.register<INotificationRepository>("INotificationRepository", {
+      useClass: NotificationRepository,
+    });
 
     //redis token repository
-    container.register<IRedisTokenRepository>('IRedisTokenRepository',{
-      useClass : RedisTokenRepository
-    })
+    container.register<IRedisTokenRepository>("IRedisTokenRepository", {
+      useClass: RedisTokenRepository,
+    });
 
     //database session
-    container.register<IDBSession>('IDBSession',{
-      useClass : MongooseDBSession
-    })
-
-    
+    container.register<IDBSession>("IDBSession", {
+      useClass: MongooseDBSession,
+    });
   }
 }
