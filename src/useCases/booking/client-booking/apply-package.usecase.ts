@@ -1,0 +1,181 @@
+import { inject, injectable } from "tsyringe";
+import { IApplyPackageUsecase } from "../../../entities/useCaseInterfaces/booking/client-booking/apply-package-usecase.interface";
+import { IPackageRepository } from "../../../entities/repositoryInterfaces/package/package-repository.interface";
+import {
+  ISuccessResponseHandler,
+  successResponseHandler,
+} from "../../../shared/utils/successResponseHandler";
+import { ValidationError } from "../../../shared/utils/error/validationError";
+import {
+  BOOKINGSTATUS,
+  ERROR_MESSAGE,
+  HTTP_STATUS,
+  SUCCESS_MESSAGE,
+} from "../../../shared/constants";
+import { IBookingRepository } from "../../../entities/repositoryInterfaces/booking/booking-repository.interface";
+import { IClientRepository } from "../../../entities/repositoryInterfaces/client/client.repository.interface";
+import { NotFoundError } from "../../../shared/utils/error/notFoundError";
+import { CustomError } from "../../../shared/utils/error/customError";
+import { INotificationRepository } from "../../../entities/repositoryInterfaces/notification/notification-repository.interface";
+import { IPushNotificationService } from "../../../entities/serviceInterfaces/push-notifications.interface";
+
+@injectable()
+export class ApplyPackageUsecase implements IApplyPackageUsecase {
+  constructor(
+    @inject("IPackageRepository")
+    private _packageRepository: IPackageRepository,
+
+    @inject("IBookingRepository")
+    private _bookingRepository: IBookingRepository,
+
+    @inject("IClientRepository")
+    private _clientRepository: IClientRepository,
+
+    @inject("INotificationRepository")
+    private _notificationRepository: INotificationRepository,
+
+    @inject("IPushNotificationService")
+    private _pushNotificationService: IPushNotificationService
+  ) {}
+
+  async execute(
+    userId: string,
+    packageId: string
+  ): Promise<ISuccessResponseHandler> {
+    //validation
+    if (!userId || !packageId) {
+      throw new ValidationError(ERROR_MESSAGE.ID_REQUIRED);
+    }
+
+    //user existence
+    const existingUser = await this._clientRepository.findById(userId);
+    if (!existingUser) {
+      throw new NotFoundError(ERROR_MESSAGE.USER_NOT_FOUND);
+    }
+
+    //package existence
+    const existingPackage = await this._packageRepository.findById(packageId);
+    if (!existingPackage) {
+      throw new NotFoundError(ERROR_MESSAGE.PACKAGE_NOT_FOUND);
+    }
+
+    //checking status of the package
+    if (existingPackage.status !== "active") {
+      throw new ValidationError(
+        `${ERROR_MESSAGE.TRIP_STATUS} ${existingPackage.status}`
+      );
+    }
+
+    //blocked or not
+    if (existingPackage.isBlocked) {
+      throw new CustomError(
+        HTTP_STATUS.FORBIDDEN,
+        ERROR_MESSAGE.PACKAGE_BLOCKED
+      );
+    }
+
+    //checking deadline
+    if (existingPackage.applicationDeadline) {
+      const todayDate = new Date();
+      if (todayDate > existingPackage.applicationDeadline) {
+        throw new ValidationError(ERROR_MESSAGE.DATE_FOR_THE_BOOKING_ENDED);
+      }
+    }
+
+    //duplicate application check
+    const existingForThisPackage =
+      await this._bookingRepository.findByPackageIdAndUserId(userId, packageId);
+    if (existingForThisPackage) {
+      throw new ValidationError(ERROR_MESSAGE.ALREADY_APPLIED_PACKAGE);
+    }
+
+    //checking conflicting trips
+    const userActiveBookings =
+      await this._bookingRepository.getAllConfirmedBookingsByUserIdWithPackageDetails(
+        userId,
+        "applied"
+      );
+    if (userActiveBookings?.length > 0) {
+      for (const booking of userActiveBookings) {
+        const pkg: any = booking.packageId;
+        if (!pkg?.startDate || !pkg.endDate) continue;
+
+        const overlap =
+          existingPackage.startDate <= pkg.endDate &&
+          existingPackage.endDate >= pkg.startDate;
+
+        if (overlap) {
+          throw new CustomError(
+            HTTP_STATUS.CONFLICT,
+            ERROR_MESSAGE.CONFLICTING_TRIP
+          );
+        }
+      }
+    }
+
+    //checks if package is full
+    const seatOccupyingStatuses: BOOKINGSTATUS[] = [
+      BOOKINGSTATUS.APPLIED,
+      BOOKINGSTATUS.ADVANCE_PENDING,
+      BOOKINGSTATUS.ADVANCE_PAID,
+      BOOKINGSTATUS.CONFIRMED,
+    ];
+    const activeCount = await this._bookingRepository.countByPackageIdAndStatus(
+      packageId,
+      seatOccupyingStatuses
+    );
+
+    let statusToCreate = BOOKINGSTATUS.APPLIED;
+    let isWaitlisted = false;
+
+    if (activeCount >= existingPackage.maxGroupSize) {
+      statusToCreate = BOOKINGSTATUS.WAITLISTED;
+      isWaitlisted = true;
+    }
+
+    //create the booking
+    await this._bookingRepository.createBooking({
+      userId,
+      packageId,
+      status: statusToCreate,
+      isWaitlisted,
+    });
+
+    //notification
+    const appliedCount =
+      await this._bookingRepository.countByPackageIdAndStatus(packageId, [
+        BOOKINGSTATUS.APPLIED,
+        BOOKINGSTATUS.ADVANCE_PAID,
+        BOOKINGSTATUS.CONFIRMED,
+      ]);
+    if (appliedCount === existingPackage.minGroupSize) {
+      console.log("minimum reached");
+      const vendor = existingPackage.agencyId;
+      const message = `Minimum number of people (${existingPackage.minGroupSize}) have applied for ${existingPackage.packageName}.`;
+
+      const data = {
+        userId: vendor,
+        title: "Minimum no of people reached",
+        message,
+        type: "Booking",
+        isRead: false,
+      };
+      await this._notificationRepository.createNotification(data);
+      await this._pushNotificationService.sendNotification(vendor, data.title, data.message);
+    }
+
+    if (isWaitlisted) {
+      return successResponseHandler(
+        true,
+        HTTP_STATUS.CREATED,
+        SUCCESS_MESSAGE.BOOKING_WAITLISTED
+      );
+    }
+
+    return successResponseHandler(
+      true,
+      HTTP_STATUS.CREATED,
+      SUCCESS_MESSAGE.BOOKING_APPLIED
+    );
+  }
+}
