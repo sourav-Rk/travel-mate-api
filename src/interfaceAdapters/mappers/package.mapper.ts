@@ -46,6 +46,7 @@ export class PackageMapper {
       packageName: doc.packageName,
       price: doc.price,
       title: doc.title,
+      status : doc.status ?? ""
     };
   }
 
