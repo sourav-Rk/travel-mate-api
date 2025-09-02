@@ -1,4 +1,4 @@
-  import {
+import {
   authorizeRole,
   decodeToken,
   verifyAuth,
@@ -12,13 +12,16 @@ import {
   guideController,
   itineraryController,
   kycController,
+  notificationController,
   packageConroller,
+  vendorBookingController,
   vendorController,
   vendorProfileController,
 } from "../../di/resolve";
 import { BaseRoute } from "../base.route";
 import { CommonUploadRoutes } from "../common/common-upload.route";
 import { SignedUrlRoute } from "../common/signedUrl.route";
+import { FcmTokenRoutes } from "../fcmToken/fcmToken.route";
 
 export class VendorRoute extends BaseRoute {
   constructor() {
@@ -29,6 +32,37 @@ export class VendorRoute extends BaseRoute {
     this.router.use("/", new CommonUploadRoutes("vendor").router);
 
     this.router.use("/", new SignedUrlRoute("vendor").router);
+
+    this.router.use("/", new FcmTokenRoutes("vendor").router);
+
+    this.router.put(
+      "/vendor/bookings/:packageId/payment-alert",
+      verifyAuth,
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(
+        vendorBookingController.sendPaymentAlert.bind(vendorBookingController)
+      )
+    );
+
+    this.router.get(
+      "/vendor/bookings/users/:bookingId",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(
+        vendorBookingController.getBookingDetails.bind(vendorBookingController)
+      )
+    );
+
+    this.router.get(
+      "/vendor/bookings/:packageId",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(
+        vendorBookingController.getBookings.bind(vendorBookingController)
+      )
+    );
 
     this.router.put(
       "/vendor/package/status",
@@ -219,6 +253,37 @@ export class VendorRoute extends BaseRoute {
       blockMiddleware.checkBlockedStatus,
       asyncHandler(vendorController.getDetailsforStatus.bind(vendorController))
     );
+
+    this.router.patch(
+      "/vendor/notifications/:notificationId",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(
+        notificationController.markReadNotification.bind(notificationController)
+      )
+    );
+
+    this.router
+      .route("/vendor/notifications")
+      .get(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        blockMiddleware.checkBlockedStatus,
+        asyncHandler(
+          notificationController.getNotifications.bind(notificationController)
+        )
+      )
+      .patch(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        blockMiddleware.checkBlockedStatus,
+        asyncHandler(
+          notificationController.markAsReadAllNotification.bind(
+            notificationController
+          )
+        )
+      );
 
     this.router.post(
       "/vendor/logout",
