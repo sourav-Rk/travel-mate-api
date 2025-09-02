@@ -10,6 +10,8 @@ import { OtpService } from "../../interfaceAdapters/services/otp.service";
 import { PhoneExistenceService } from "../../interfaceAdapters/services/phone-existence.service";
 import { TokenService } from "../../interfaceAdapters/services/token.service";
 import { UserExistenceServive } from "../../interfaceAdapters/services/user-existence.service";
+import { IPushNotificationService } from "../../entities/serviceInterfaces/push-notifications.interface";
+import { PushNotificationService } from "../../interfaceAdapters/services/push-notification.service";
 
 export class ServiceRegistory{
     static registerService() : void {
@@ -32,6 +34,10 @@ export class ServiceRegistory{
 
       container.register<IPhoneExistenceService>('IPhoneExistenceService',{
         useClass : PhoneExistenceService
+      })
+
+      container.register<IPushNotificationService>('IPushNotificationService',{
+        useClass : PushNotificationService
       })
 
        container.resolve(EmailService);
