@@ -112,6 +112,30 @@ import { GetAllGuideUsecase } from "../../useCases/vendor/getAllGuides.usecase";
 import { UpdateVendorPasswordUsecase } from "../../useCases/vendor/update-vendor-password.usecase";
 import { UpdateVendorProfileUsecase } from "../../useCases/vendor/update-vendor-profile.usecase";
 import { UpdateVendorStatusUsecase } from "../../useCases/vendor/update-vendor-status.usecase";
+import { IApplyPackageUsecase } from "../../entities/useCaseInterfaces/booking/client-booking/apply-package-usecase.interface";
+import { ApplyPackageUsecase } from "../../useCases/booking/client-booking/apply-package.usecase";
+import { IGetBookingDetailsVendorUsecase } from "../../entities/useCaseInterfaces/booking/vendor-bookings/get-booking-details-usecase.interface";
+import { GetBookingDetailsUsecase } from "../../useCases/booking/client-booking/getBooking-details.usecase";
+import { IGetBookingsUsecase } from "../../entities/useCaseInterfaces/booking/client-booking/getBookings-usecase.interface";
+import { GetBookingsUsecase } from "../../useCases/booking/client-booking/getBookings.usecase";
+import { IGetBookingsVendorUsecase } from "../../entities/useCaseInterfaces/booking/vendor-bookings/get-bookings-usecase.interface";
+import { GetBookingsUsecaseVendor } from "../../useCases/booking/vendor-booking/get-bookings.usecase";
+import { ISaveFcmTokenUsecase } from "../../entities/useCaseInterfaces/fcmToken/saveFcmToken-usecase.interface";
+import { SaveFcmTokenUsecase } from "../../useCases/fcmToken/saveFcmToken.usecase";
+import { INotificationUsecase } from "../../entities/useCaseInterfaces/notification/notification-usecase.interface";
+import { NotificationUsecase } from "../../useCases/notification/notification.usecase";
+import { ISendPaymentAlertUsecase } from "../../entities/useCaseInterfaces/booking/vendor-bookings/send-payment-alert-usecase.interface";
+import { SendPaymentAlertUsecase } from "../../useCases/booking/vendor-booking/send-payment-alert.usecase";
+import { IGetNotificationsUsecase } from "../../entities/useCaseInterfaces/notification/get-notifications-usecase.interface";
+import { GetNotificationsUsecase } from "../../useCases/notification/getNotifications.usecase";
+import { IMarkReadNotificationUsecase } from "../../entities/useCaseInterfaces/notification/mark-read-notification-usecase.interface";
+import { MarkReadNotification } from "../../useCases/notification/mark-read-notification.usecase";
+import { IMarkAsAllReadUsecase } from "../../entities/useCaseInterfaces/notification/mark-as-read-all-usecase.interface";
+import { MarkAsReadAllUsecase } from "../../useCases/notification/mark-as-read-all.usecase";
+import { IUpdatePackageStatusToOngoingUsecase } from "../../entities/useCaseInterfaces/package/updatePackageStausToOngoing-usecase";
+import { UpdatePackageStatusToOngoing } from "../../useCases/package/updatePackageStatusToOngoing-usecase";
+import { GetBookingDetailsVendorUsecase } from "../../useCases/booking/vendor-booking/get-booking-details.usecase";
+import { IGetBookingDetailsClientUsecase } from "../../entities/useCaseInterfaces/booking/client-booking/get-booking-details-user-usecase.interface";
 
 export class UsecaseRegistory {
   static registerUsecases(): void {
@@ -300,13 +324,16 @@ export class UsecaseRegistory {
       useClass: GetGuideDetailsUsecase,
     });
 
-    container.register<IGetGuideProfileUsecase>('IGetGuideProfileUsecase',{
-      useClass : GetGuideProfileUsecase
-    })
+    container.register<IGetGuideProfileUsecase>("IGetGuideProfileUsecase", {
+      useClass: GetGuideProfileUsecase,
+    });
 
-    container.register<IUpdateGuidePasswordUsecase>('IUpdateGuidePasswordUsecase',{
-      useClass : UpdateGuidePasswordUsecase
-    })
+    container.register<IUpdateGuidePasswordUsecase>(
+      "IUpdateGuidePasswordUsecase",
+      {
+        useClass: UpdateGuidePasswordUsecase,
+      }
+    );
 
     //address usecases
     container.register<IUpdateAddressUsecase>("IUpdateAddressUsecase", {
@@ -314,66 +341,141 @@ export class UsecaseRegistory {
     });
 
     //package usecases
-    container.register<IAddPackageUsecase>("IAddPackageUsecase",{
-      useClass : AddPackageUsecase
+    container.register<IAddPackageUsecase>("IAddPackageUsecase", {
+      useClass: AddPackageUsecase,
     });
 
-    container.register<IGetPackagesUsecase>('IGetPackagesUsecase',{
-      useClass : GetPackageUsecase
+    container.register<IGetPackagesUsecase>("IGetPackagesUsecase", {
+      useClass: GetPackageUsecase,
     });
 
-    container.register<IGetPackageDetailsUsecase>('IGetPackageDetailsUsecase',{
-      useClass : GetPackageDetailsUsecase
+    container.register<IGetPackageDetailsUsecase>("IGetPackageDetailsUsecase", {
+      useClass: GetPackageDetailsUsecase,
     });
 
-    container.register<IUpdatePackageBasicDetailsUsecase>('IUpdatePackageBasicDetailsUsecase',{
-      useClass : UpdatePackageBasicDetailsUsecase
-    });
+    container.register<IUpdatePackageBasicDetailsUsecase>(
+      "IUpdatePackageBasicDetailsUsecase",
+      {
+        useClass: UpdatePackageBasicDetailsUsecase,
+      }
+    );
 
-    container.register<IUpdatePackageStatusUsecase>('IUpdatePackageStatusUsecase',{
-      useClass : UpdatePackageStatusUsecase
-    });
+    container.register<IUpdatePackageStatusUsecase>(
+      "IUpdatePackageStatusUsecase",
+      {
+        useClass: UpdatePackageStatusUsecase,
+      }
+    );
+
+    container.register<IUpdatePackageStatusToOngoingUsecase>(
+      "IUpdatePackageStatusToOngoingUsecase",
+      {
+        useClass: UpdatePackageStatusToOngoing,
+      }
+    );
 
     //client package usecase
-    container.register<IGetAvailablePackagesUsecase>('IGetAvailablePackagesUsecase',{
-      useClass : GetAvailbalePackagesUsecase
-    });
+    container.register<IGetAvailablePackagesUsecase>(
+      "IGetAvailablePackagesUsecase",
+      {
+        useClass: GetAvailbalePackagesUsecase,
+      }
+    );
 
-    container.register<IGetPackageDetailsClientUsecase>('IGetPackageDetailsClientUsecase',{
-      useClass : GetPackageDetailsClientUsecase
-    });
+    container.register<IGetPackageDetailsClientUsecase>(
+      "IGetPackageDetailsClientUsecase",
+      {
+        useClass: GetPackageDetailsClientUsecase,
+      }
+    );
 
-    container.register<IGetFeaturedPackagesUsecase>('IGetFeaturedPackagesUsecase',{
-      useClass : GetFeaturedPackagesUsecase
-    });
+    container.register<IGetFeaturedPackagesUsecase>(
+      "IGetFeaturedPackagesUsecase",
+      {
+        useClass: GetFeaturedPackagesUsecase,
+      }
+    );
 
-    container.register<IGetTrendingPackagesUsecase>('IGetTrendingPackagesUsecase',{
-      useClass : GetTrendingPackages
-    });
+    container.register<IGetTrendingPackagesUsecase>(
+      "IGetTrendingPackagesUsecase",
+      {
+        useClass: GetTrendingPackages,
+      }
+    );
 
     //admin packages usecase
-    container.register<IUpdateBlockStatusUsecase>('IUpdateBlockStatusUsecase',{
-      useClass : UpdateBlockStatusUsecase
+    container.register<IUpdateBlockStatusUsecase>("IUpdateBlockStatusUsecase", {
+      useClass: UpdateBlockStatusUsecase,
     });
 
     //itinerary usecase
-    container.register<IUpdateItineraryUsecase>('IUpdateItineraryUsecase',{
-      useClass : UpdateItineraryUsecase
+    container.register<IUpdateItineraryUsecase>("IUpdateItineraryUsecase", {
+      useClass: UpdateItineraryUsecase,
     });
 
     //activity usecase
-    container.register<ICreateActivityUsecase>('ICreateActivityUsecase',{
-      useClass : CreateActivityUsecase
+    container.register<ICreateActivityUsecase>("ICreateActivityUsecase", {
+      useClass: CreateActivityUsecase,
     });
 
-    container.register<IUpdateActivityUsecase>('IUpdateActivityUsecase',{
-      useClass : UpdateActivityUsecase
+    container.register<IUpdateActivityUsecase>("IUpdateActivityUsecase", {
+      useClass: UpdateActivityUsecase,
     });
-    
-    container.register<IDeleteActivityUsecase>('IDeleteActivityUsecase',{
-      useClass : DeleteActivityUsecase
+
+    container.register<IDeleteActivityUsecase>("IDeleteActivityUsecase", {
+      useClass: DeleteActivityUsecase,
     });
-    
+
+    //client booking usecase
+    container.register<IApplyPackageUsecase>("IApplyPackageUsecase", {
+      useClass: ApplyPackageUsecase,
+    });
+
+    container.register<IGetBookingDetailsClientUsecase>("IGetBookingDetailsUsecase", {
+      useClass: GetBookingDetailsUsecase,
+    });
+
+    container.register<IGetBookingsUsecase>("IGetBookingsUsecase", {
+      useClass: GetBookingsUsecase,
+    });
+
+    //vendor booking usecase
+    container.register<IGetBookingsVendorUsecase>("IGetBookingsVendorUsecase", {
+      useClass: GetBookingsUsecaseVendor,
+    });
+
+    container.register<IGetBookingDetailsVendorUsecase>(
+      "IGetBookingDetailsVendorUsecase",
+      {
+        useClass: GetBookingDetailsVendorUsecase,
+      }
+    );
+
+    //notification usecase
+    container.register<INotificationUsecase>("INotificationUsecase", {
+      useClass: NotificationUsecase,
+    });
+
+    container.register<IGetNotificationsUsecase>("IGetNotificationsUsecase", {
+      useClass: GetNotificationsUsecase,
+    });
+
+    container.register<IMarkReadNotificationUsecase>(
+      "IMarkReadNotificationUsecase",
+      {
+        useClass: MarkReadNotification,
+      }
+    );
+
+    container.register<IMarkAsAllReadUsecase>("IMarkAsAllReadUsecase", {
+      useClass: MarkAsReadAllUsecase,
+    });
+
+    //payment alert
+    container.register<ISendPaymentAlertUsecase>("ISendPaymentAlertUsecase", {
+      useClass: SendPaymentAlertUsecase,
+    });
+
     //token
     container.register<IBlackListTokenUsecase>("IBlackListTokenUsecase", {
       useClass: BlackListTokenUsecase,
@@ -381,6 +483,11 @@ export class UsecaseRegistory {
 
     container.register<IRefreshTokenUsecase>("IRefreshTokenUsecase", {
       useClass: RefreshTokenUsecase,
+    });
+
+    //fcm token usecase
+    container.register<ISaveFcmTokenUsecase>("ISaveFcmTokenUsecase", {
+      useClass: SaveFcmTokenUsecase,
     });
 
     //image upload usecase
