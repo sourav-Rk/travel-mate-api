@@ -12,6 +12,8 @@ export enum BOOKINGSTATUS {
   WAITLISTED = "waitlisted",
   CANCELLED = "cancelled",
   EXPIRED = "expired",
+  ADVANCE_PENDING = "advance_pending",
+  ADVANCE_PAID = "advance_paid",
 }
 
 export enum HTTP_STATUS {
@@ -65,6 +67,13 @@ export const ERROR_MESSAGE = {
   CANNOT_EDIT_PACKAGE: "Package cannot be edited because it is already",
   INSUFFICIENT_DATA: "Insufficient data to do the operation",
   STATUS_CANNOT_BE_UPDATED: "Status cant be updated at this stage",
+  ALREADY_APPLIED_PACKAGE: "You already applied for this package",
+  TRIP_STATUS: "Booking not allowed! Trip is",
+  DATE_FOR_THE_BOOKING_ENDED: "Date for the booking closed",
+  CONFLICTING_TRIP: "You already have a trip during this period",
+  PACKAGE_BLOCKED: "Package has been blocked by the admin",
+  BOOKING_NOT_FOUND : "Booking not found",
+  NOTIFICATION_NOT_FOUND : "Notification not found"
 };
 
 export const SUCCESS_MESSAGE = {
@@ -86,6 +95,12 @@ export const SUCCESS_MESSAGE = {
   ACTIVITY_UPDATED: "Activity update successfully",
   ACTIVITY_DELETED: "Activity deleted successfully",
   STATUS_UPDATED_SUCCESS: "Status Updated successfully",
+  BOOKING_WAITLISTED:
+    "Your request is in waiting list! we will notify you if seats are available",
+  BOOKING_APPLIED : "You have successfully applied to the package! Wait for the agency to verify",
+  PAYMENT_ALERT : "Payment alert have been send successfully to the travelers",
+  MARK_AS_READ : "Notification marked as read",
+  ALL_MARK_READ : "Marked all as read"
 };
 
 export const ROLES = {
