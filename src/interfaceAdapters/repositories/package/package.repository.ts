@@ -21,6 +21,10 @@ export class PackageRepository implements IPackageRepository {
     return await packageDB.findOne({ itineraryId: id });
   }
 
+  async findByPackagesByTodayDate(startDate: Date): Promise<IPackageEntity[]> {
+      return await packageDB.find({startDate});
+  }
+
   async save(data: IPackageEntity, session?: any): Promise<IPackageEntity> {
     const options = session ? { session } : {};
     const modelData = await packageDB
