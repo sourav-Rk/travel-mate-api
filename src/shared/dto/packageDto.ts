@@ -1,5 +1,3 @@
-
-
 //package basic details dto
 export interface PackageBasicDetailsDto {
   agencyId: string;
@@ -12,7 +10,7 @@ export interface PackageBasicDetailsDto {
   meetingPoint: string;
   images: string[];
   maxGroupSize: number;
-  minGroupSize : number;
+  minGroupSize: number;
   price: number;
   cancellationPolicy: string;
   termsAndConditions: string;
@@ -25,7 +23,7 @@ export interface PackageBasicDetailsDto {
   inclusions: string[];
   exclusions: string[];
   status?: string;
-  itineraryId ?: string;
+  itineraryId?: string;
 }
 
 //package itinerary dto
@@ -33,7 +31,7 @@ export type ItineraryDto = DayDto[];
 
 //package activity dto
 export interface ActivityDto {
-  _id ?: string;
+  _id?: string;
   name: string;
   dayNumber: number;
   description: string;
@@ -60,8 +58,6 @@ export interface MealsDto {
   dinner: boolean;
 }
 
-
-
 import { Types } from "mongoose";
 
 import { IPackageEntity } from "../../entities/modelsEntity/package.entity";
@@ -74,13 +70,13 @@ export interface IDuration {
 
 export interface IActivity {
   _id: Types.ObjectId;
-  name: string;       
+  name: string;
   description?: string;
-  [key: string]: any;  
+  [key: string]: any;
 }
 
-export interface IDay extends DayDto {       
-  activityDetails?: IActivity[];       
+export interface IDay extends DayDto {
+  activityDetails?: IActivity[];
 }
 
 export interface IItinerary {
@@ -113,50 +109,48 @@ export interface IPackage {
   createdAt: Date;
   updatedAt: Date;
   itineraryId: Types.ObjectId;
-  itineraryDetails?: IItinerary;  
+  itineraryDetails?: IItinerary;
 }
-
-
-
 
 //dto mappings
-export interface PackageListingTableDto{
-  _id ?: string;
-  packageName : string;
-  title : string;
-  images : string[];
-  meetingPoint : string;
-  category : string;
-  duration : IDuration;
-  maxGroupSize : number;
-  price : number;
-  status : string;
+export interface PackageListingTableDto {
+  _id?: string;
+  packageName: string;
+  title: string;
+  images: string[];
+  meetingPoint: string;
+  category: string;
+  duration: IDuration;
+  maxGroupSize: number;
+  price: number;
+  status: string;
+  isBlocked: boolean;
 }
 
-export interface PackageListingUserSideDto{
-  _id : string;
-  packageName : string;
-  title : string;
-  meetingPoint : string;
-  category : string;
-  description : string;
-  tags : string[];
-  maxGroupSize : number;
-  duration : {
-    days : number;
-    nights : number;
+export interface PackageListingUserSideDto {
+  _id: string;
+  packageName: string;
+  title: string;
+  meetingPoint: string;
+  category: string;
+  description: string;
+  tags: string[];
+  maxGroupSize: number;
+  duration: {
+    days: number;
+    nights: number;
   };
-  price : number;
-  images : string[];
+  price: number;
+  images: string[];
 }
 
 //repository dtos
-export interface PaginatedPackagesRepo{
-  packages : IPackageEntity[] | [];
-  total : number;
+export interface PaginatedPackagesRepo {
+  packages: IPackageEntity[] | [];
+  total: number;
 }
 
-export interface PaginatedPackagesUserSideListing{
-  packages : PackageListingUserSideDto[] | [];
-  total : number;
+export interface PaginatedPackagesUserSideListing {
+  packages: PackageListingUserSideDto[] | [];
+  total: number;
 }
