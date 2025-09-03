@@ -1,6 +1,9 @@
 import { IPackageEntity } from "../../entities/modelsEntity/package.entity";
 import { IPackageModel } from "../../frameworks/database/models/package.model";
-import { PackageListingTableDto, PackageListingUserSideDto } from "../../shared/dto/packageDto";
+import {
+  PackageListingTableDto,
+  PackageListingUserSideDto,
+} from "../../shared/dto/packageDto";
 
 export class PackageMapper {
   static toEntity(doc: IPackageModel): IPackageEntity {
@@ -17,7 +20,7 @@ export class PackageMapper {
       meetingPoint: doc.meetingPoint,
       images: doc.images,
       maxGroupSize: doc.maxGroupSize,
-      minGroupSize : doc.minGroupSize,
+      minGroupSize: doc.minGroupSize,
       price: doc.price,
       cancellationPolicy: doc.cancellationPolicy,
       termsAndConditions: doc.termsAndConditions,
@@ -46,23 +49,26 @@ export class PackageMapper {
       packageName: doc.packageName,
       price: doc.price,
       title: doc.title,
-      status : doc.status ?? ""
+      status: doc.status ?? "",
+      isBlocked: doc.isBlocked ?? false,
     };
   }
 
-  static mapPackageToUserListingDto(doc : IPackageEntity) : PackageListingUserSideDto{
+  static mapPackageToUserListingDto(
+    doc: IPackageEntity
+  ): PackageListingUserSideDto {
     return {
-      _id : doc._id ?? "",
-      category : doc.category,
-      description : doc.description,
-      duration : doc.duration,
-      packageName : doc.packageName,
-      images : doc.images,
-      maxGroupSize : doc.maxGroupSize,
-      meetingPoint : doc.meetingPoint,
-      price : doc.price,
-      tags : doc.tags,
-      title : doc.title
-    }
+      _id: doc._id ?? "",
+      category: doc.category,
+      description: doc.description,
+      duration: doc.duration,
+      packageName: doc.packageName,
+      images: doc.images,
+      maxGroupSize: doc.maxGroupSize,
+      meetingPoint: doc.meetingPoint,
+      price: doc.price,
+      tags: doc.tags,
+      title: doc.title,
+    };
   }
 }
