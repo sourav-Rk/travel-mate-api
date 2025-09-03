@@ -136,6 +136,8 @@ import { IUpdatePackageStatusToOngoingUsecase } from "../../entities/useCaseInte
 import { UpdatePackageStatusToOngoing } from "../../useCases/package/updatePackageStatusToOngoing-usecase";
 import { GetBookingDetailsVendorUsecase } from "../../useCases/booking/vendor-booking/get-booking-details.usecase";
 import { IGetBookingDetailsClientUsecase } from "../../entities/useCaseInterfaces/booking/client-booking/get-booking-details-user-usecase.interface";
+import { IGetClientBookingDetailsUsecase } from "../../entities/useCaseInterfaces/booking/client-booking/get-booking-details-client-usecase.interface";
+import { GetClientBookingDetailsUsecase } from "../../useCases/booking/client-booking/get-booking-details-client.usecase";
 
 export class UsecaseRegistory {
   static registerUsecases(): void {
@@ -431,13 +433,20 @@ export class UsecaseRegistory {
       useClass: ApplyPackageUsecase,
     });
 
-    container.register<IGetBookingDetailsClientUsecase>("IGetBookingDetailsUsecase", {
-      useClass: GetBookingDetailsUsecase,
-    });
+    container.register<IGetBookingDetailsClientUsecase>(
+      "IGetBookingDetailsUsecase",
+      {
+        useClass: GetBookingDetailsUsecase,
+      }
+    );
 
     container.register<IGetBookingsUsecase>("IGetBookingsUsecase", {
       useClass: GetBookingsUsecase,
     });
+
+    container.register<IGetClientBookingDetailsUsecase>('IGetClientBookingDetailsUsecase',{
+      useClass : GetClientBookingDetailsUsecase
+    })
 
     //vendor booking usecase
     container.register<IGetBookingsVendorUsecase>("IGetBookingsVendorUsecase", {
