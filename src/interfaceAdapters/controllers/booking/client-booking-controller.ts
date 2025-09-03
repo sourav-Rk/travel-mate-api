@@ -6,6 +6,7 @@ import { CustomRequest } from "../../middlewares/auth.middleware";
 import { BOOKINGSTATUS, HTTP_STATUS } from "../../../shared/constants";
 import { IGetBookingsUsecase } from "../../../entities/useCaseInterfaces/booking/client-booking/getBookings-usecase.interface";
 import { IGetBookingDetailsClientUsecase } from "../../../entities/useCaseInterfaces/booking/client-booking/get-booking-details-user-usecase.interface";
+import { IGetClientBookingDetailsUsecase } from "../../../entities/useCaseInterfaces/booking/client-booking/get-booking-details-client-usecase.interface";
 
 @injectable()
 export class ClientBookingController implements IClientBookingController {
@@ -17,7 +18,10 @@ export class ClientBookingController implements IClientBookingController {
     private _getBookingDetailsUsecase: IGetBookingDetailsClientUsecase,
 
     @inject("IGetBookingsUsecase")
-    private _getBookingsUsecase: IGetBookingsUsecase
+    private _getBookingsUsecase: IGetBookingsUsecase,
+
+    @inject("IGetClientBookingDetailsUsecase")
+    private _getClientBookingDetailsUsecase: IGetClientBookingDetailsUsecase
   ) {}
 
   async applyPackage(req: Request, res: Response): Promise<void> {
@@ -49,5 +53,15 @@ export class ClientBookingController implements IClientBookingController {
       statuses as BOOKINGSTATUS[]
     );
     res.status(HTTP_STATUS.OK).json({ success: true, bookings: response });
+  }
+
+  async getBookingDetails(req: Request, res: Response): Promise<void> {
+    const userId = (req as CustomRequest).user.id;
+    const { bookingId } = req.params;
+    const bookingDetails = await this._getClientBookingDetailsUsecase.execute(
+      userId,
+      bookingId
+    );
+    res.status(HTTP_STATUS.OK).json({ success: true, bookingDetails });
   }
 }
