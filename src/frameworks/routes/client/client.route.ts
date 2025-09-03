@@ -28,6 +28,15 @@ export class ClientRoute extends BaseRoute {
     this.router.use("/", new FcmTokenRoutes("client").router);
 
     this.router.get(
+      "/client/booking/:bookingId",
+      verifyAuth,
+      authorizeRole(["client"]),
+      asyncHandler(
+        clientBookingController.getBookingDetails.bind(clientBookingController)
+      )
+    );
+
+    this.router.get(
       "/client/booking/package/:packageId",
       verifyAuth,
       authorizeRole(["client"]),
