@@ -48,7 +48,7 @@ export class SendPaymentAlertUsecase implements ISendPaymentAlertUsecase {
     }
 
     //calculating advance amount
-    const advanceAmount = packageExist.price * 0.3;
+    const advanceAmount = Math.floor(packageExist.price * 0.3);
     const dueDate = new Date();
     const deadlineDays = packageExist.advancePaymentDeadlineDays ?? 5;
     dueDate.setDate(dueDate.getDate() + deadlineDays);
