@@ -18,6 +18,7 @@ import { NotFoundError } from "../../../shared/utils/error/notFoundError";
 import { CustomError } from "../../../shared/utils/error/customError";
 import { INotificationRepository } from "../../../entities/repositoryInterfaces/notification/notification-repository.interface";
 import { IPushNotificationService } from "../../../entities/serviceInterfaces/push-notifications.interface";
+import { IWishListRepository } from "../../../entities/repositoryInterfaces/wishlist/wishlist-repository.interface";
 
 @injectable()
 export class ApplyPackageUsecase implements IApplyPackageUsecase {
@@ -30,6 +31,9 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
 
     @inject("IClientRepository")
     private _clientRepository: IClientRepository,
+
+    @inject("IWishListRepository")
+    private _wishlistRepository: IWishListRepository,
 
     @inject("INotificationRepository")
     private _notificationRepository: INotificationRepository,
@@ -54,7 +58,7 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
     }
 
     //package existence
-    const existingPackage = await this._packageRepository.findById(packageId);
+    const existingPackage = await this._packageRepository.findByPackageId(packageId);
     if (!existingPackage) {
       throw new NotFoundError(ERROR_MESSAGE.PACKAGE_NOT_FOUND);
     }
@@ -117,7 +121,6 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
     const seatOccupyingStatuses: BOOKINGSTATUS[] = [
       BOOKINGSTATUS.APPLIED,
       BOOKINGSTATUS.ADVANCE_PENDING,
-      BOOKINGSTATUS.ADVANCE_PAID,
       BOOKINGSTATUS.CONFIRMED,
     ];
     const activeCount = await this._bookingRepository.countByPackageIdAndStatus(
@@ -131,6 +134,8 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
     if (activeCount >= existingPackage.maxGroupSize) {
       statusToCreate = BOOKINGSTATUS.WAITLISTED;
       isWaitlisted = true;
+    } else if (existingPackage.paymentAlertSentAt) {
+      statusToCreate = BOOKINGSTATUS.ADVANCE_PENDING;
     }
 
     //create the booking
@@ -141,14 +146,29 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
       isWaitlisted,
     });
 
+    //remove from wishlist if it is already present
+    const wishlist = await this._wishlistRepository.findByUserId(userId);
+
+    if (wishlist) {
+      console.log(wishlist,"-->wishlist")
+      const packageExistingInWishlist = wishlist.packages.find(id => id.toString() === packageId);
+      console.log(packageExistingInWishlist)
+      if (packageExistingInWishlist) {
+        await this._wishlistRepository.removeFromWishlist(userId,packageId);
+      }
+    }
+
     //notification
     const appliedCount =
       await this._bookingRepository.countByPackageIdAndStatus(packageId, [
         BOOKINGSTATUS.APPLIED,
-        BOOKINGSTATUS.ADVANCE_PAID,
+        BOOKINGSTATUS.ADVANCE_PENDING,
         BOOKINGSTATUS.CONFIRMED,
       ]);
-    if (appliedCount === existingPackage.minGroupSize) {
+    if (
+      appliedCount >= existingPackage.minGroupSize &&
+      !existingPackage.paymentAlertSentAt
+    ) {
       console.log("minimum reached");
       const vendor = existingPackage.agencyId;
       const message = `Minimum number of people (${existingPackage.minGroupSize}) have applied for ${existingPackage.packageName}.`;
@@ -161,21 +181,20 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
         isRead: false,
       };
       await this._notificationRepository.createNotification(data);
-      await this._pushNotificationService.sendNotification(vendor, data.title, data.message);
-    }
-
-    if (isWaitlisted) {
-      return successResponseHandler(
-        true,
-        HTTP_STATUS.CREATED,
-        SUCCESS_MESSAGE.BOOKING_WAITLISTED
+      await this._pushNotificationService.sendNotification(
+        vendor,
+        data.title,
+        data.message
       );
     }
 
-    return successResponseHandler(
-      true,
-      HTTP_STATUS.CREATED,
-      SUCCESS_MESSAGE.BOOKING_APPLIED
-    );
+    let successMessage = SUCCESS_MESSAGE.BOOKING_APPLIED;
+    if (statusToCreate === BOOKINGSTATUS.ADVANCE_PENDING) {
+      successMessage = SUCCESS_MESSAGE.BOOKING_ADVANCE_PENDING;
+    } else if (statusToCreate === BOOKINGSTATUS.WAITLISTED) {
+      successMessage = SUCCESS_MESSAGE.BOOKING_WAITLISTED;
+    }
+
+    return successResponseHandler(true, HTTP_STATUS.CREATED, successMessage);
   }
 }
