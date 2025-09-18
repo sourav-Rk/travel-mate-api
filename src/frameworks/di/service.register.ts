@@ -12,34 +12,45 @@ import { TokenService } from "../../interfaceAdapters/services/token.service";
 import { UserExistenceServive } from "../../interfaceAdapters/services/user-existence.service";
 import { IPushNotificationService } from "../../entities/serviceInterfaces/push-notifications.interface";
 import { PushNotificationService } from "../../interfaceAdapters/services/push-notification.service";
+import { IPaymentService } from "../../entities/serviceInterfaces/payment-service.interface";
+import { StripePaymentService } from "../../interfaceAdapters/services/payment.service";
+import { stripe } from "../stripe/stripe";
+import Stripe from "stripe";
 
-export class ServiceRegistory{
-    static registerService() : void {
-      container.register<IOtpService>('IOtpService',{
-        useClass : OtpService
-      })
+export class ServiceRegistory {
+  static registerService(): void {
+    container.register<IOtpService>("IOtpService", {
+      useClass: OtpService,
+    });
 
-      container.register<IEmailService>('IEmailService',{
-        useClass : EmailService
-      })
+    container.register<IEmailService>("IEmailService", {
+      useClass: EmailService,
+    });
 
-      container.register<ITokenService>('ITokenService',{
-        useClass : TokenService
-      })
+    container.register<ITokenService>("ITokenService", {
+      useClass: TokenService,
+    });
 
-       
-      container.register<IUserExistenceService>('IUserExistenceService',{
-        useClass : UserExistenceServive
-      })
+    container.register<IUserExistenceService>("IUserExistenceService", {
+      useClass: UserExistenceServive,
+    });
 
-      container.register<IPhoneExistenceService>('IPhoneExistenceService',{
-        useClass : PhoneExistenceService
-      })
+    container.register<IPhoneExistenceService>("IPhoneExistenceService", {
+      useClass: PhoneExistenceService,
+    });
 
-      container.register<IPushNotificationService>('IPushNotificationService',{
-        useClass : PushNotificationService
-      })
+    container.register<IPushNotificationService>("IPushNotificationService", {
+      useClass: PushNotificationService,
+    });
 
-       container.resolve(EmailService);
-    }   
+    container.register<IPaymentService>('IPaymentService',{
+      useClass : StripePaymentService
+    });
+
+    container.register<Stripe>('Stripe',{
+      useValue : stripe
+    })
+
+    container.resolve(EmailService);
+  }
 }
