@@ -9,6 +9,7 @@ export class PackageMapper {
   static toEntity(doc: IPackageModel): IPackageEntity {
     return {
       _id: String(doc._id),
+      packageId : doc.packageId,
       agencyId: String(doc.agencyId),
       packageName: doc.packageName,
       title: doc.title,
@@ -41,6 +42,7 @@ export class PackageMapper {
   ): PackageListingTableDto {
     return {
       _id: doc._id,
+      packageId : doc.packageId!,
       category: doc.category,
       duration: doc.duration,
       images: doc.images,
@@ -59,6 +61,7 @@ export class PackageMapper {
   ): PackageListingUserSideDto {
     return {
       _id: doc._id ?? "",
+      packageId : doc.packageId!,
       category: doc.category,
       description: doc.description,
       duration: doc.duration,
