@@ -4,8 +4,10 @@ import { IPackageEntity } from "../../modelsEntity/package.entity";
 
 export interface IPackageRepository {
   findById(id: string): Promise<IPackageEntity | null>;
+  findByPackageId(packageId : string) : Promise<IPackageEntity | null>;
   findByItineraryId(id : string) : Promise<IPackageEntity | null>;
   findByPackagesByTodayDate(startDate : Date) : Promise<IPackageEntity[]>;
+  findByPackagesApplicationDeadline(deadline : Date) : Promise<IPackageEntity[]>;
   save(data: IPackageEntity, session?: any): Promise<IPackageEntity>;
   update(
     id: any,
