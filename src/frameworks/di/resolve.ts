@@ -48,6 +48,12 @@ import { INotificationController } from "../../entities/controllerInterfaces/not
 import { NotificationController } from "../../interfaceAdapters/controllers/notification/notification.controller";
 import { CronScheduler } from "../cron/cronScheduler";
 import { ICronScheduler } from "../../entities/cronInterfaces/cronScheduler.interface";
+import { IPaymentController } from "../../entities/controllerInterfaces/payment/payment-controller.interface";
+import { PaymentController } from "../../interfaceAdapters/controllers/payment/payment.controller";
+import { IWishlistController } from "../../entities/controllerInterfaces/wishlist/wishlist-controller.interface";
+import { WishlistController } from "../../interfaceAdapters/controllers/wishlist/wishlist.controller";
+import { IReviewController } from "../../entities/controllerInterfaces/review/review-controller.interface";
+import { ReviewController } from "../../interfaceAdapters/controllers/review/review.controller";
 
 DependencyInjection.registerAll();
 
@@ -109,6 +115,10 @@ export const clientBookingController =
 export const vendorBookingController =
   container.resolve<IVendorBookingController>(VendorBookingController);
 
+//payment controller
+export const paymentController =
+  container.resolve<IPaymentController>(PaymentController);
+
 //common upload controller
 export const commonController =
   container.resolve<ICommonController>(CommonController);
@@ -120,6 +130,14 @@ export const fcmTokenController =
 //notification controller
 export const notificationController =
   container.resolve<INotificationController>(NotificationController);
+
+//wishlist controller
+export const wishlistController =
+  container.resolve<IWishlistController>(WishlistController);
+
+//review controller
+export const reviewController =
+  container.resolve<IReviewController>(ReviewController);
 
 //signed url controller
 export const signedUrlController =
