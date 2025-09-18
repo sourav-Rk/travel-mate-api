@@ -21,7 +21,7 @@ export class GetFeaturedPackagesUsecase implements IGetFeaturedPackagesUsecase {
             throw new ValidationError(ERROR_MESSAGE.PACKAGE_ID_IS_REQUIRED);
          }
          
-         const existingPackage = await this._packageRepository.findById(packageId);
+         const existingPackage = await this._packageRepository.findByPackageId(packageId);
 
          if(!existingPackage){
             throw new NotFoundError(ERROR_MESSAGE.PACKAGE_NOT_FOUND);
