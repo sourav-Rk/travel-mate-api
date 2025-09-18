@@ -3,9 +3,9 @@ import { IGetBookingDetailsVendorUsecase } from "../../../entities/useCaseInterf
 import { ValidationError } from "../../../shared/utils/error/validationError";
 import { ERROR_MESSAGE } from "../../../shared/constants";
 import { IBookingRepository } from "../../../entities/repositoryInterfaces/booking/booking-repository.interface";
-import { BookingDetailsDto } from "../../../shared/dto/bookingDto";
 import { BookingMapper } from "../../../interfaceAdapters/mappers/booking.mapper";
 import { NotFoundError } from "../../../shared/utils/error/notFoundError";
+import { BookingDetailsWithUserDetailsDto, BookingListWithUserDetailsDto } from "../../../shared/dto/bookingDto";
 
 @injectable()
 export class GetBookingDetailsVendorUsecase
@@ -16,12 +16,12 @@ export class GetBookingDetailsVendorUsecase
     private _bookingRepository: IBookingRepository
   ) {}
 
-  async execute(bookingId: string): Promise<BookingDetailsDto | null> {
+  async execute(bookingId: string): Promise<BookingDetailsWithUserDetailsDto| null> {
     if (!bookingId) {
       throw new ValidationError(ERROR_MESSAGE.ID_REQUIRED);
     }
 
-    const bookingDetails = await this._bookingRepository.findByBookingId(
+    const bookingDetails = await this._bookingRepository.findByBookingIdWithUserDetails(
       bookingId
     );
 
@@ -29,6 +29,6 @@ export class GetBookingDetailsVendorUsecase
       throw new NotFoundError(ERROR_MESSAGE.BOOKING_NOT_FOUND);
     }
 
-    return BookingMapper.mapToBookingDetailsDto(bookingDetails);
+    return BookingMapper.mapToBookingDetailsWithUserDetailsDto(bookingDetails as BookingListWithUserDetailsDto);
   }
 }
