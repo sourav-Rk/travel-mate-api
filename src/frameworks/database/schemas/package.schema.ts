@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import { v4 as uuidv4 } from "uuid";
 import { IPackageModel } from "../models/package.model";
 
 const durationSchema = new mongoose.Schema({
@@ -13,6 +13,11 @@ const durationSchema = new mongoose.Schema({
 
 export const packageSchema = new mongoose.Schema<IPackageModel>(
   {
+    packageId: {
+      type: String,
+      unique: true,
+      index: true,
+    },
     agencyId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "vendors",
@@ -109,6 +114,9 @@ export const packageSchema = new mongoose.Schema<IPackageModel>(
       type: Number,
       default: 7,
     },
+    paymentAlertSentAt: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
@@ -116,6 +124,16 @@ export const packageSchema = new mongoose.Schema<IPackageModel>(
 );
 
 packageSchema.pre("save", function (next) {
+  if (!this.packageId) {
+    const date = new Date(this.createdAt || new Date());
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    const uniqueId = uuidv4().replace(/-/g, "").substring(0, 6).toUpperCase();
+    this.packageId = `PKG-${year}${month}${day}-${uniqueId}`;
+  }
+
   if (this.startDate && !this.applicationDeadline) {
     const deadline = new Date(this.startDate);
     deadline.setDate(deadline.getDate() - 15);
