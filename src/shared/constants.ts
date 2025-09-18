@@ -6,15 +6,16 @@ export enum GENDER {
 
 export enum BOOKINGSTATUS {
   APPLIED = "applied",
-  PENDING = "pending",
   CONFIRMED = "confirmed",
+  FULLY_PAID = "fully_paid",
   COMPLETED = "completed",
   WAITLISTED = "waitlisted",
   CANCELLED = "cancelled",
   EXPIRED = "expired",
   ADVANCE_PENDING = "advance_pending",
-  ADVANCE_PAID = "advance_paid",
 }
+
+export type REVIEWTARGET = "guide" | "package";
 
 export enum HTTP_STATUS {
   OK = 200,
@@ -72,8 +73,20 @@ export const ERROR_MESSAGE = {
   DATE_FOR_THE_BOOKING_ENDED: "Date for the booking closed",
   CONFLICTING_TRIP: "You already have a trip during this period",
   PACKAGE_BLOCKED: "Package has been blocked by the admin",
-  BOOKING_NOT_FOUND : "Booking not found",
-  NOTIFICATION_NOT_FOUND : "Notification not found"
+  BOOKING_NOT_FOUND: "Booking not found",
+  NOTIFICATION_NOT_FOUND: "Notification not found",
+  STRIPE_PAYMENT_ERROR:
+    "We couldn’t generate a payment link at the moment. Please try again in a few minutes.",
+  CONFLICT_IN_AMOUNT: "conflict in amount",
+  DUE_DATE_FOR_ADVANCE_PAYMENT_END:
+    "The due date for the advance payment has ended",
+  DUE_DATE_FOR_FULL_PAYMENT_END: "The due date for the full payment has ended",
+  ALREADY_PAID_ADVANCE: "You already paid the advance amount",
+  ALREADY_PAID_FULL_AMOUNT: "You already paid the full amount",
+  PACKAGE_CANNOT_BE_BLOCKED : "Package cannot be blocked after payment alert is sent.",
+  WISHLIST_NOT_FOUND : "Wishlist not found",
+  REQUIRED_FIELDS_MISSING : "Required fields are missing",
+  ALREADY_REVIEWED  : "You already added the review"
 };
 
 export const SUCCESS_MESSAGE = {
@@ -97,10 +110,17 @@ export const SUCCESS_MESSAGE = {
   STATUS_UPDATED_SUCCESS: "Status Updated successfully",
   BOOKING_WAITLISTED:
     "Your request is in waiting list! we will notify you if seats are available",
-  BOOKING_APPLIED : "You have successfully applied to the package! Wait for the agency to verify",
-  PAYMENT_ALERT : "Payment alert have been send successfully to the travelers",
-  MARK_AS_READ : "Notification marked as read",
-  ALL_MARK_READ : "Marked all as read"
+  BOOKING_APPLIED:
+    "You have successfully applied to the package! Wait for the agency to verify",
+  BOOKING_ADVANCE_PENDING : "You have successfully applied to the package! Pay the advance to confirm the slot",
+  PAYMENT_ALERT: "Payment alert have been send successfully to the travelers",
+  MARK_AS_READ: "Notification marked as read",
+  ALL_MARK_READ: "Marked all as read",
+  CHECKOUT_SESSION_CREATED: "checkout session created",
+  WEBHOOK_PROCESSED: "Webhook processes",
+  ADDED_TO_WISHLIST : "Added to wishlist",
+  REMOVED_FROM_WISHLIST : "Removed from wishlist",
+  ADDED_REVIEW : "Review added successfully"
 };
 
 export const ROLES = {
@@ -120,7 +140,14 @@ export const STATUS = {
 export type TRole = "admin" | "vendor" | "client" | "guide";
 export type TStatus = "pending" | "verified" | "rejected";
 
-export type PackageStatus = "draft" | "active" | "ongoing" | "completed";
+export type PackageStatus =
+  | "draft"
+  | "active" //visible , bookabale
+  | "applications_closed" //not bookable anymore
+  | "ongoing" //trip started
+  | "completed" //trip finished
+  | "cancelled"; //trip cancelled
+
 export type BookingStatus =
   | "applied"
   | "pending"
