@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { IBookingModel } from "../models/booking.model";
 import { BOOKINGSTATUS } from "../../../shared/constants";
+import { v4 as uuidv4 } from "uuid";
 
 const paymentFields = {
   amount: {
@@ -25,36 +26,57 @@ const advancePaymentSchema = new mongoose.Schema(paymentFields, { _id: false });
 
 const fullPaymentSchema = new mongoose.Schema(paymentFields, { _id: false });
 
-export const bookingSchema = new mongoose.Schema<IBookingModel>({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "clients",
-    required: true,
-    index: true,
+export const bookingSchema = new mongoose.Schema<IBookingModel>(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "clients",
+      required: true,
+      index: true,
+    },
+    bookingId: {
+      type: String,
+      unique: true,
+      default: function () {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+
+        // Take only first 6 chars of UUID for brevity
+        const uniqueId = uuidv4()
+          .replace(/-/g, "")
+          .substring(0, 6)
+          .toUpperCase();
+
+        return `TRAVELMATE-${year}${month}${day}-${uniqueId}`;
+      },
+    },
+    packageId: {
+      type: String,
+      ref: "packages",
+      required: true,
+      index: true,
+    },
+    status: {
+      type: String,
+      enum: Object.values(BOOKINGSTATUS),
+      index: true,
+    },
+    advancePayment: advancePaymentSchema,
+    fullPayment: fullPaymentSchema,
+    isWaitlisted: {
+      type: Boolean,
+      default: false,
+    },
+    cancelledAt: {
+      type: Date,
+    },
   },
-  packageId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "packages",
-    required: true,
-    index: true,
-  },
-  status: {
-    type: String,
-    enum: Object.values(BOOKINGSTATUS),
-    index: true,
-  },
-  advancePayment: advancePaymentSchema,
-  fullPayment: fullPaymentSchema,
-  isWaitlisted: {
-    type: Boolean,
-    default: false,
-  },
-  cancelledAt: {
-    type: Date,
-  },
-},{
-  timestamps : true
-});
+  {
+    timestamps: true,
+  }
+);
 
 bookingSchema.index({ userId: 1, packageId: 1 }, { unique: true });
 
