@@ -17,12 +17,20 @@ export class PackageRepository implements IPackageRepository {
     return await packageDB.findById(id);
   }
 
+  async findByPackageId(packageId: string): Promise<IPackageEntity | null> {
+      return await packageDB.findOne({packageId})
+  }
+
   async findByItineraryId(id: string): Promise<IPackageEntity | null> {
     return await packageDB.findOne({ itineraryId: id });
   }
 
   async findByPackagesByTodayDate(startDate: Date): Promise<IPackageEntity[]> {
-      return await packageDB.find({startDate});
+    return await packageDB.find({ startDate });
+  }
+
+  async findByPackagesApplicationDeadline(deadline: Date): Promise<IPackageEntity[]> {
+      return await packageDB.find({applicationDeadline : deadline});
   }
 
   async save(data: IPackageEntity, session?: any): Promise<IPackageEntity> {
@@ -41,7 +49,7 @@ export class PackageRepository implements IPackageRepository {
     const options = session
       ? { session, new: true, runValidators: true }
       : { new: true, runValidators: true };
-    const result = await packageDB.findByIdAndUpdate(id, data, options);
+    const result = await packageDB.findOneAndUpdate({packageId : id}, data, options);
 
     if (!result) {
       throw new Error(`Package with id ${id} not found`);
@@ -134,7 +142,7 @@ export class PackageRepository implements IPackageRepository {
 
   async getPackageDetails(id: any): Promise<IPackage> {
     const packageData = await packageDB.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      { $match: { packageId : id} },
 
       {
         $lookup: {
@@ -183,7 +191,11 @@ export class PackageRepository implements IPackageRepository {
     pageSize: number,
     sortBy: string
   ): Promise<PaginatedPackagesRepo> {
-    const filter: any = { status: "active", isBlocked: false };
+    const filter: any = {
+      status: "active",
+      isBlocked: false,
+      applicationDeadline: { $gte: new Date() },
+    };
 
     if (search) {
       filter.$or = [
@@ -223,10 +235,10 @@ export class PackageRepository implements IPackageRepository {
       await packageDB.find(filter).skip(skip).limit(limit).sort(sortField),
       await packageDB.countDocuments(filter),
     ]);
-    
+
     const packageDetails = packages.map((doc) => PackageMapper.toEntity(doc));
 
-    return { packages : packageDetails, total };
+    return { packages: packageDetails, total };
   }
 
   async getFeaturedPackages(category: string): Promise<IPackageEntity[]> {
@@ -243,11 +255,11 @@ export class PackageRepository implements IPackageRepository {
   }
 
   async getTrendingPackages(): Promise<IPackageEntity[]> {
-    const packages =  await packageDB
+    const packages = await packageDB
       .find({ status: "active" })
       .sort({ createdAt: -1 })
       .limit(6);
 
-      return packages.map((doc) => PackageMapper.toEntity(doc));
+    return packages.map((doc) => PackageMapper.toEntity(doc));
   }
 }
