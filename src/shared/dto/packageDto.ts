@@ -115,6 +115,7 @@ export interface IPackage {
 //dto mappings
 export interface PackageListingTableDto {
   _id?: string;
+  packageId : string;
   packageName: string;
   title: string;
   images: string[];
@@ -129,6 +130,7 @@ export interface PackageListingTableDto {
 
 export interface PackageListingUserSideDto {
   _id: string;
+  packageId ?: string;
   packageName: string;
   title: string;
   meetingPoint: string;
