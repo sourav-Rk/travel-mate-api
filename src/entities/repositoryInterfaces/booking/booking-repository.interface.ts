@@ -1,13 +1,21 @@
 import { IBookingModel } from "../../../frameworks/database/models/booking.model";
 import { BOOKINGSTATUS, BookingStatus } from "../../../shared/constants";
-import { BookingListWithPackageDetailsDto, BookingListWithUserDetailsDto, PaginatedBookingListWithUserDetails } from "../../../shared/dto/bookingDto";
+import {
+  BookingDetailsWithUserDetailsDto,
+  BookingListWithPackageDetailsDto,
+  BookingListWithUserDetailsDto,
+  PaginatedBookingListWithUserDetails,
+} from "../../../shared/dto/bookingDto";
 import { IBookingEntity } from "../../modelsEntity/booking.entity";
 
 export interface IBookingRepository {
   createBooking(data: Partial<IBookingEntity>): Promise<IBookingEntity>;
   findByBookingId(id: string): Promise<IBookingModel | null>;
   findByUserId(userId: string): Promise<IBookingEntity | null>;
-  updateBooking(userId  :string,data : Partial<IBookingEntity>) : Promise<void>;
+  updateBooking(
+    bookingId: string,
+    data: Partial<IBookingEntity>
+  ): Promise<void>;
   findByPackageIdAndUserId(
     userId: string,
     packageId: string
@@ -19,10 +27,10 @@ export interface IBookingRepository {
   findByPackageId(packageId: string): Promise<IBookingEntity[] | []>;
   findByPackageIdWithUserDetails(
     packageId: string,
-    searchTerm : string,
-    status : BOOKINGSTATUS,
-    pageNumber : number,
-    pageSize : number
+    searchTerm: string,
+    status: BOOKINGSTATUS,
+    pageNumber: number,
+    pageSize: number
   ): Promise<PaginatedBookingListWithUserDetails>;
   getAllBookingsByUserId(userId: string): Promise<IBookingEntity[] | []>;
   countByPackageIdAndStatus(
@@ -33,4 +41,8 @@ export interface IBookingRepository {
     userId: string,
     status: BookingStatus
   ): Promise<IBookingEntity[] | []>;
+
+  findByBookingIdWithUserDetails(
+    bookingId: string
+  ): Promise<BookingDetailsWithUserDetailsDto | null>;
 }
