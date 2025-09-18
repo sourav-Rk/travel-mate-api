@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import express from "express";
 
 import {
   authorizeRole,
@@ -13,6 +14,9 @@ import {
   clientPackageController,
   clientProfileController,
   notificationController,
+  paymentController,
+  reviewController,
+  wishlistController,
 } from "../../di/resolve";
 import { BaseRoute } from "../base.route";
 import { CommonUploadRoutes } from "../common/common-upload.route";
@@ -24,9 +28,15 @@ export class ClientRoute extends BaseRoute {
   }
 
   protected initializeRoutes(): void {
+    // Common file upload routes (for clients)
     this.router.use("/", new CommonUploadRoutes("client").router);
+
+    // Routes to manage client FCM tokens (push notifications)
     this.router.use("/", new FcmTokenRoutes("client").router);
 
+    // ----------------- Booking Routes -----------------
+
+    // Get details of a specific booking by bookingId
     this.router.get(
       "/client/booking/:bookingId",
       verifyAuth,
@@ -36,6 +46,7 @@ export class ClientRoute extends BaseRoute {
       )
     );
 
+    // Get booking details of a specific package
     this.router.get(
       "/client/booking/package/:packageId",
       verifyAuth,
@@ -47,6 +58,7 @@ export class ClientRoute extends BaseRoute {
       )
     );
 
+    // Get all bookings
     this.router.get(
       "/client/bookings",
       verifyAuth,
@@ -56,6 +68,7 @@ export class ClientRoute extends BaseRoute {
       )
     );
 
+    // Apply for a package
     this.router.post(
       "/client/booking/apply",
       verifyAuth,
@@ -65,6 +78,9 @@ export class ClientRoute extends BaseRoute {
       )
     );
 
+    // ----------------- Package Routes -----------------
+
+    // Get trending packages (public route)
     this.router.get(
       "/client/packages/trending",
       asyncHandler(
@@ -74,6 +90,7 @@ export class ClientRoute extends BaseRoute {
       )
     );
 
+    // Get details of a specific package
     this.router.get(
       "/client/packages/:packageId",
       asyncHandler(
@@ -81,6 +98,7 @@ export class ClientRoute extends BaseRoute {
       )
     );
 
+    // Get list of all available packages
     this.router.get(
       "/client/packages",
       asyncHandler(
@@ -90,6 +108,9 @@ export class ClientRoute extends BaseRoute {
       )
     );
 
+    // ----------------- Profile Routes -----------------
+
+    // Update or fetch client profile details
     this.router
       .route("/client/details")
       .put(
@@ -111,6 +132,7 @@ export class ClientRoute extends BaseRoute {
         )
       );
 
+    // Update client password
     this.router.put(
       "/client/update-password",
       verifyAuth,
@@ -120,6 +142,9 @@ export class ClientRoute extends BaseRoute {
       clientProfileController.updatePassword.bind(clientProfileController)
     );
 
+    // ----------------- Notification Routes -----------------
+
+    // Mark a single notification as read
     this.router.patch(
       "/client/notifications/:notificationId",
       verifyAuth,
@@ -130,6 +155,7 @@ export class ClientRoute extends BaseRoute {
       )
     );
 
+    // Get all notifications or mark all as readdx
     this.router
       .route("/client/notifications")
       .get(
@@ -151,6 +177,83 @@ export class ClientRoute extends BaseRoute {
         )
       );
 
+    // ----------------- Payment Routes -----------------
+
+    // Pay advance amount for a booking
+    this.router.post(
+      "/client/payment/advance",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(paymentController.payAdvanceAmount.bind(paymentController))
+    );
+
+    // Pay full amount for a booking
+    this.router.post(
+      "/client/payment/full",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(paymentController.payFullAmount.bind(paymentController))
+    );
+
+    // Handle Stripe webhook events (raw body required)
+    this.router.post(
+      "/client/payment/webhook",
+      express.raw({ type: "application/json" }),
+      asyncHandler(paymentController.handleWebhook.bind(paymentController))
+    );
+
+    // ----------------- Wishlist Routes -----------------
+
+    //get and add routes
+    this.router
+      .route("/client/wishlist")
+      .get(
+        verifyAuth,
+        authorizeRole(["client"]),
+        blockMiddleware.checkBlockedStatus,
+        asyncHandler(wishlistController.getWishlist.bind(wishlistController))
+      )
+      .put(
+        verifyAuth,
+        authorizeRole(["client"]),
+        blockMiddleware.checkBlockedStatus,
+        asyncHandler(wishlistController.addToWishlist.bind(wishlistController))
+      );
+
+    //to remove from the wishlist
+    this.router.patch(
+      "/client/wishlist/remove",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(
+        wishlistController.removeFromWishlist.bind(wishlistController)
+      )
+    );
+
+    // ----------------- Review Routes ----------------
+
+    this.router.get(
+      "/client/reviews/packages/:packageId",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(reviewController.getReviews.bind(reviewController))
+    );
+
+    this.router.post(
+      "/client/review",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(reviewController.addReview.bind(reviewController))
+    );
+
+    // ----------------- Auth Routes -----------------
+
+    // Logout client
     this.router.post(
       "/client/logout",
       verifyAuth,
@@ -159,6 +262,7 @@ export class ClientRoute extends BaseRoute {
       asyncHandler(authController.logout.bind(authController))
     );
 
+    // Refresh access token using refresh token
     this.router.post(
       "/client/refresh-token",
       decodeToken,
