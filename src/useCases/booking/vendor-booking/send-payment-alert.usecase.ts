@@ -87,7 +87,7 @@ export class SendPaymentAlertUsecase implements ISendPaymentAlertUsecase {
         );
       }
     }
-    await this._packageRepository.update(packageId, {
+    await this._packageRepository.update(packageExist._id, {
       paymentAlertSentAt: new Date(),
     });
   }

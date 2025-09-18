@@ -65,6 +65,8 @@ export class AddPackageUsecase implements IAddPackageUsecase {
           session
         );
 
+        console.log(savedPackage,"saved pacakge")
+
         if (!savedPackage._id) {
           throw new Error("Package id is missing after save");
         }

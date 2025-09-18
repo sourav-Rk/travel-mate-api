@@ -61,7 +61,7 @@ export class PayAdvanceAmountUsecase implements IPayAdvanceAmountUsecase {
 
     const currency = config.stripe.currency;
     const cancel_url = config.stripe.cancel_url;
-    let success_url = `${config.client.uri}/bookings/${bookingId}/${packageDetails?.packageId}`;
+    let success_url = `${config.client.uri}/pvt/bookings/${bookingId}/${packageDetails?.packageId}`;
 
     //create the session
     const session = await this._paymentService.createCheckoutSession(

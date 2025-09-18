@@ -61,6 +61,8 @@ export class PackageController implements IPackageController {
     } as PackageBasicDetailsDto;
     const itinerary = req.body.data.itinerary as ItineraryDto;
 
+    console.log(req.body)
+
     await this._addPackageUsecase.execute(basicDetails, itinerary);
     res
       .status(HTTP_STATUS.CREATED)

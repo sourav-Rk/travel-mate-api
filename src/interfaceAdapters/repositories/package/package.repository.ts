@@ -49,7 +49,7 @@ export class PackageRepository implements IPackageRepository {
     const options = session
       ? { session, new: true, runValidators: true }
       : { new: true, runValidators: true };
-    const result = await packageDB.findOneAndUpdate({packageId : id}, data, options);
+    const result = await packageDB.findOneAndUpdate({_id : id}, data, options);
 
     if (!result) {
       throw new Error(`Package with id ${id} not found`);
@@ -131,7 +131,7 @@ export class PackageRepository implements IPackageRepository {
         .find(filter)
         .skip(skip)
         .limit(limit)
-        .sort({ createdAt: 1 }),
+        .sort({ createdAt: -1 }),
       await packageDB.countDocuments(filter),
     ]);
 

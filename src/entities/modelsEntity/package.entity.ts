@@ -1,7 +1,7 @@
 import { PackageStatus } from "../../shared/constants";
 
 export interface IPackageEntity {
-  _id : string;
+  _id ?: string;
   packageId ?: string;
   agencyId: string;
   packageName: string;

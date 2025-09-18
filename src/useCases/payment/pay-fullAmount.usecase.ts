@@ -62,7 +62,7 @@ export class PayFullAmountUsecase implements IPayFullAmountUsecase {
 
     const currency = config.stripe.currency;
     const cancel_url = config.stripe.cancel_url;
-    let success_url = `${config.client.uri}/bookings/${bookingId}`;
+    let success_url = `${config.client.uri}/pvt/bookings/${bookingId}`;
 
     //create the session
     const session = await this._paymentService.createCheckoutSession(
