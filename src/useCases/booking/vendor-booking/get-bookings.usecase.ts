@@ -39,7 +39,7 @@ export class GetBookingsUsecaseVendor implements IGetBookingsVendorUsecase {
       throw new NotFoundError(ERROR_MESSAGE.USER_NOT_FOUND);
     }
 
-    const packageExists = await this._packageRepository.findById(packageId);
+    const packageExists = await this._packageRepository.findByPackageId(packageId);
     if (!packageExists) {
       throw new NotFoundError(ERROR_MESSAGE.PACKAGE_NOT_FOUND);
     }
