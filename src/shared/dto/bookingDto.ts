@@ -6,6 +6,7 @@ import { BOOKINGSTATUS } from "../constants";
 //client package details dto
 export interface ClientPackageBookingDto {
   _id: string;
+  bookingId : string;
   packageId: string;
   status: BOOKINGSTATUS;
   isWaitlisted: boolean;
@@ -46,6 +47,7 @@ export interface BookingListDTO {
 //client booking list
 export interface BookingListWithPackageDetailsDto {
   _id: string;
+  bookingId : string;
   userId: string;
   status: string;
   isWaitlisted: boolean;
@@ -68,6 +70,7 @@ export interface BookingListWithPackageDetailsDto {
 //booking list vendor dto
 export interface BookingListVendorDto {
   _id: string;
+  bookingId ?: string;
   status: BOOKINGSTATUS;
   isWaitlisted: boolean;
   cancelledAt?: Date;
@@ -83,6 +86,7 @@ export interface BookingListVendorDto {
 //vendor booking list dto
 export interface BookingListWithUserDetailsDto {
   _id: string;
+  bookingId ?: string;
   userId: IClientEntity;
   status: string;
   isWaitlisted: boolean;
@@ -107,6 +111,36 @@ export interface BookingListWithUserDetailsDto {
 export interface BookingDetailsDto {
   _id: string;
   userId: string;
+  bookingId : string;
+  packageId: string;
+  status: BOOKINGSTATUS;
+  isWaitlisted: boolean;
+  advancePayment?: {
+    amount: number;
+    paid: boolean;
+    dueDate: Date;
+    paidAt: Date | null;
+  } | null;
+  fullPayment?: {
+    amount: number;
+    paid: boolean;
+    dueDate: Date | null;
+    paidAt: Date | null;
+  } | null;
+}
+
+//booking details dto for booking details view
+export interface BookingDetailsWithUserDetailsDto {
+  _id: string;
+  userId: {
+    _id : string;
+    firstName : string;
+    lastName : string;
+    phone : string;
+    gender : string;
+    email : string;
+  };
+  bookingId : string;
   packageId: string;
   status: BOOKINGSTATUS;
   isWaitlisted: boolean;
