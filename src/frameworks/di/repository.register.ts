@@ -30,6 +30,10 @@ import { IFCMTokenRepository } from "../../entities/repositoryInterfaces/fcmToke
 import { FCMTokenRepository } from "../../interfaceAdapters/repositories/fcmToken/fcmToken.repository";
 import { INotificationRepository } from "../../entities/repositoryInterfaces/notification/notification-repository.interface";
 import { NotificationRepository } from "../../interfaceAdapters/repositories/notification/notification.repository";
+import { IWishListRepository } from "../../entities/repositoryInterfaces/wishlist/wishlist-repository.interface";
+import { WishlistRepository } from "../../interfaceAdapters/repositories/wishlist/wishlist.repository";
+import { IReviewRepository } from "../../entities/repositoryInterfaces/review/review-repository.interface";
+import { ReviewRepository } from "../../interfaceAdapters/repositories/review/review.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -75,6 +79,16 @@ export class RepositoryRegistry {
 
     container.register<IBookingRepository>("IBookingRepository", {
       useClass: BookingRepository,
+    });
+
+    //wishlist repository
+    container.register<IWishListRepository>("IWishListRepository", {
+      useClass: WishlistRepository,
+    });
+
+    //review repository
+    container.register<IReviewRepository>('IReviewRepository',{
+      useClass : ReviewRepository
     });
 
     //fcm token repository
