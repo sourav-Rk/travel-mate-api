@@ -42,6 +42,7 @@ export class GetAvailbalePackagesUsecase
       PackageMapper.mapPackageToUserListingDto(doc)
     );
 
+
     const response = {
       packages: packageDetails,
       total: Math.ceil(total / validPageSize),
