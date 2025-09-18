@@ -31,13 +31,13 @@ export class ProcessExpiredPackagesUsecase
       await this._packageRepository.findByPackagesApplicationDeadline(todayUTC);
 
     for (const pkg of packageExpiringToday) {
-      const bookings = await this._bookingRepository.findByPackageId(pkg._id);
+      const bookings = await this._bookingRepository.findByPackageId(pkg.packageId!);
 
       if (bookings.length >= pkg.minGroupSize) {
         if (pkg.status === "active") {
           pkg.status = "applications_closed";
           await this._packageRepository.updatePackageStatus(
-            pkg._id,
+            pkg._id!,
             "applications_closed"
           );
         }
@@ -61,7 +61,7 @@ export class ProcessExpiredPackagesUsecase
             await this._notificationRepository.createNotification(data);
           }
         }
-        await this._packageRepository.updatePackageStatus(pkg._id, "cancelled");
+        await this._packageRepository.updatePackageStatus(pkg._id!, "cancelled");
       }
     }
   }
