@@ -18,7 +18,7 @@ export class GetPackageDetailsClientUsecase implements IGetPackageDetailsClientU
             throw new NotFoundError(ERROR_MESSAGE.PACKAGE_ID_IS_REQUIRED);
         }
 
-        const packageExist = await this._packageRepository.findById(packageId);
+        const packageExist = await this._packageRepository.findByPackageId(packageId);
 
         if(!packageExist) {
             throw new NotFoundError(ERROR_MESSAGE.PACKAGE_NOT_FOUND);
