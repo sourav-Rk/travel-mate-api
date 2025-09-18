@@ -2,6 +2,7 @@ import { BOOKINGSTATUS } from "../../shared/constants";
 
 export interface IBookingEntity {
   _id?: string;
+  bookingId : string;
   userId: string;
   packageId: string;
   status: BOOKINGSTATUS;
