@@ -35,6 +35,8 @@ export class UpdatePackageStatusUsecase implements IUpdatePackageStatusUsecase {
       draft: [""],
       ongoing: ["active"],
       completed: ["ongoing"],
+      applications_closed : [""],
+      cancelled : [""]
     };
 
     if (
