@@ -42,13 +42,13 @@ export class SendPaymentAlertUsecase implements ISendPaymentAlertUsecase {
     }
 
     //package existence
-    const packageExist = await this._packageRepository.findById(packageId);
+    const packageExist = await this._packageRepository.findByPackageId(packageId);
     if (!packageExist) {
       throw new NotFoundError(ERROR_MESSAGE.PACKAGE_NOT_FOUND);
     }
 
     //calculating advance amount
-    const advanceAmount = packageExist.price * 0.3;
+    const advanceAmount = Math.floor(packageExist.price * 0.3);
     const dueDate = new Date();
     const deadlineDays = packageExist.advancePaymentDeadlineDays ?? 5;
     dueDate.setDate(dueDate.getDate() + deadlineDays);
@@ -66,7 +66,7 @@ export class SendPaymentAlertUsecase implements ISendPaymentAlertUsecase {
           dueDate,
           paidAt: null,
         };
-        await this._bookingRepository.updateBooking(booking.userId, booking);
+        await this._bookingRepository.updateBooking(String(booking._id), booking);
 
         const notification: INotificationEntity = {
           userId: booking.userId,
@@ -87,5 +87,8 @@ export class SendPaymentAlertUsecase implements ISendPaymentAlertUsecase {
         );
       }
     }
+    await this._packageRepository.update(packageId, {
+      paymentAlertSentAt: new Date(),
+    });
   }
 }
