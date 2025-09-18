@@ -1,17 +1,20 @@
 import { injectable } from "tsyringe";
 import { IBookingRepository } from "../../../entities/repositoryInterfaces/booking/booking-repository.interface";
 import { IBookingEntity } from "../../../entities/modelsEntity/booking.entity";
-import { bookingDB, IBookingModel } from "../../../frameworks/database/models/booking.model";
+import {
+  bookingDB,
+  IBookingModel,
+} from "../../../frameworks/database/models/booking.model";
 import { BookingMapper } from "../../mappers/booking.mapper";
 import { BOOKINGSTATUS, BookingStatus } from "../../../shared/constants";
 import { IPackageEntity } from "../../../entities/modelsEntity/package.entity";
 import {
+  BookingDetailsWithUserDetailsDto,
   BookingListWithPackageDetailsDto,
   BookingListWithUserDetailsDto,
   PaginatedBookingListWithUserDetails,
 } from "../../../shared/dto/bookingDto";
 import { IClientEntity } from "../../../entities/modelsEntity/client.entity";
-import { unknown } from "zod";
 
 @injectable()
 export class BookingRepository implements IBookingRepository {
@@ -29,10 +32,10 @@ export class BookingRepository implements IBookingRepository {
   }
 
   async updateBooking(
-    userId: string,
+    bookingId: string,
     data: Partial<IBookingEntity>
   ): Promise<void> {
-    await bookingDB.updateOne({ userId }, { $set: data });
+    await bookingDB.updateOne({ _id: bookingId }, { $set: data });
   }
 
   async findByPackageIdAndUserId(
@@ -75,7 +78,13 @@ export class BookingRepository implements IBookingRepository {
   ): Promise<BookingListWithPackageDetailsDto[] | []> {
     const modelData = await bookingDB
       .find({ userId, status: { $in: statuses } })
-      .populate<{ packageId: IPackageEntity }>("packageId")
+      .populate<{ packageId: IPackageEntity }>({
+        path: "packageId",
+        model: "packages",
+        localField: "packageId", // in booking
+        foreignField: "packageId", // in package
+        justOne: true,
+      })
       .lean<IBookingEntity[]>();
 
     return modelData as unknown as BookingListWithPackageDetailsDto[];
@@ -116,5 +125,14 @@ export class BookingRepository implements IBookingRepository {
       bookings: bookings as unknown as BookingListWithUserDetailsDto[],
       total,
     };
+  }
+
+  async findByBookingIdWithUserDetails(
+    bookingId: string
+  ): Promise<BookingDetailsWithUserDetailsDto | null> {
+    return bookingDB
+      .findById(bookingId)
+      .populate("userId")
+      .lean<BookingDetailsWithUserDetailsDto | null>();
   }
 }
