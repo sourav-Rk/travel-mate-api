@@ -138,6 +138,24 @@ import { GetBookingDetailsVendorUsecase } from "../../useCases/booking/vendor-bo
 import { IGetBookingDetailsClientUsecase } from "../../entities/useCaseInterfaces/booking/client-booking/get-booking-details-user-usecase.interface";
 import { IGetClientBookingDetailsUsecase } from "../../entities/useCaseInterfaces/booking/client-booking/get-booking-details-client-usecase.interface";
 import { GetClientBookingDetailsUsecase } from "../../useCases/booking/client-booking/get-booking-details-client.usecase";
+import { IPayAdvanceAmountUsecase } from "../../entities/useCaseInterfaces/payment/pay-advance-amount-usecase.interface";
+import { PayAdvanceAmountUsecase } from "../../useCases/payment/pay-advance-amount.usecase";
+import { IHandleStripeWebHookUsecase } from "../../entities/useCaseInterfaces/payment/handleStripeWebhook-usecase.interface";
+import { HandleStripeWebHookUsecase } from "../../useCases/payment/handleStripeWebhook.usecase";
+import { IPayFullAmountUsecase } from "../../entities/useCaseInterfaces/payment/pay-fullAmount-usecase.interface";
+import { PayFullAmountUsecase } from "../../useCases/payment/pay-fullAmount.usecase";
+import { IProcessExpiredpackagesUsecase } from "../../entities/useCaseInterfaces/package/processExpiredPackages-usecase.interface";
+import { ProcessExpiredPackagesUsecase } from "../../useCases/package/processExpiredPackages.usecase";
+import { IGetWishlistUsecase } from "../../entities/useCaseInterfaces/wishlist/getWishlist-usecase.interface";
+import { GetWishlistUsecase } from "../../useCases/wishlist/getWishlist.usecase";
+import { IAddToWishListUsecase } from "../../entities/useCaseInterfaces/wishlist/add-to-wishlist-usecase.interface";
+import { AddToWishListUsecase } from "../../useCases/wishlist/add-to-wishlist.usecase";
+import { IRemoveFromWishlistUsecase } from "../../entities/useCaseInterfaces/wishlist/remove-from-wishlist-usecase.interface";
+import { RemoveFromWishListUsecase } from "../../useCases/wishlist/remove-from-wishlist.usecase";
+import { IAddReviewUsecase } from "../../entities/useCaseInterfaces/review/add-review-usecase.interface";
+import { AddReviewUsecase } from "../../useCases/review/add-review.usecase";
+import { IGetPackageReviewsUsecase } from "../../entities/useCaseInterfaces/review/getPackageReviews-usecase.interface";
+import { GetPackageReviewsUsecase } from "../../useCases/review/getPackageReviews.usecase";
 
 export class UsecaseRegistory {
   static registerUsecases(): void {
@@ -376,6 +394,13 @@ export class UsecaseRegistory {
       }
     );
 
+    container.register<IProcessExpiredpackagesUsecase>(
+      "IProcessExpiredpackagesUsecase",
+      {
+        useClass: ProcessExpiredPackagesUsecase,
+      }
+    );
+
     //client package usecase
     container.register<IGetAvailablePackagesUsecase>(
       "IGetAvailablePackagesUsecase",
@@ -444,9 +469,12 @@ export class UsecaseRegistory {
       useClass: GetBookingsUsecase,
     });
 
-    container.register<IGetClientBookingDetailsUsecase>('IGetClientBookingDetailsUsecase',{
-      useClass : GetClientBookingDetailsUsecase
-    })
+    container.register<IGetClientBookingDetailsUsecase>(
+      "IGetClientBookingDetailsUsecase",
+      {
+        useClass: GetClientBookingDetailsUsecase,
+      }
+    );
 
     //vendor booking usecase
     container.register<IGetBookingsVendorUsecase>("IGetBookingsVendorUsecase", {
@@ -459,6 +487,31 @@ export class UsecaseRegistory {
         useClass: GetBookingDetailsVendorUsecase,
       }
     );
+
+    //payment usecases
+    container.register<IPayAdvanceAmountUsecase>("IPayAdvanceAmountUsecase", {
+      useClass: PayAdvanceAmountUsecase,
+    });
+
+    container.register<IHandleStripeWebHookUsecase>(
+      "IHandleStripeWebHookUsecase",
+      {
+        useClass: HandleStripeWebHookUsecase,
+      }
+    );
+
+    container.register<IPayFullAmountUsecase>("IPayFullAmountUsecase", {
+      useClass: PayFullAmountUsecase,
+    });
+
+    //review usecase
+    container.register<IAddReviewUsecase>("IAddReviewUsecase", {
+      useClass: AddReviewUsecase,
+    });
+
+    container.register<IGetPackageReviewsUsecase>("IGetPackageReviewsUsecase", {
+      useClass: GetPackageReviewsUsecase,
+    });
 
     //notification usecase
     container.register<INotificationUsecase>("INotificationUsecase", {
@@ -484,6 +537,22 @@ export class UsecaseRegistory {
     container.register<ISendPaymentAlertUsecase>("ISendPaymentAlertUsecase", {
       useClass: SendPaymentAlertUsecase,
     });
+
+    //wishlist usecases
+    container.register<IGetWishlistUsecase>("IGetWishlistUsecase", {
+      useClass: GetWishlistUsecase,
+    });
+
+    container.register<IAddToWishListUsecase>("IAddToWishListUsecase", {
+      useClass: AddToWishListUsecase,
+    });
+
+    container.register<IRemoveFromWishlistUsecase>(
+      "IRemoveFromWishlistUsecase",
+      {
+        useClass: RemoveFromWishListUsecase,
+      }
+    );
 
     //token
     container.register<IBlackListTokenUsecase>("IBlackListTokenUsecase", {
