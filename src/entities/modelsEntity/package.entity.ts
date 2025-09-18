@@ -2,6 +2,7 @@ import { PackageStatus } from "../../shared/constants";
 
 export interface IPackageEntity {
   _id : string;
+  packageId ?: string;
   agencyId: string;
   packageName: string;
   title: string;
@@ -30,6 +31,7 @@ export interface IPackageEntity {
   applicationDeadline ?: Date;
   advancePaymentDeadlineDays ?: number;
   fullPaymentDeadlineDays ?: number;
+  paymentAlertSentAt ?: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }
