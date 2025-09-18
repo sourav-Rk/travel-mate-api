@@ -30,7 +30,14 @@ export class App {
         credentials: true,
       })
     );
-    this._app.use(express.json());
+    this._app.use((req,res,next) => {
+      if(req.originalUrl === "/api/pvt/_cl/client/payment/webhook"){
+        next();
+      }else{
+        express.json()(req,res,next)
+      }
+    });
+    
     this._app.use(express.urlencoded({ extended: true }));
 
     this._app.use(
