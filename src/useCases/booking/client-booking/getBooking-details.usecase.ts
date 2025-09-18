@@ -38,7 +38,7 @@ export class GetBookingDetailsUsecase implements IGetBookingDetailsClientUsecase
     }
 
     //check package exist
-    const packageExist = await this._packageRepository.findById(packageId);
+    const packageExist = await this._packageRepository.findByPackageId(packageId);
     if (!packageExist) {
       throw new NotFoundError(ERROR_MESSAGE.PACKAGE_NOT_FOUND);
     }
