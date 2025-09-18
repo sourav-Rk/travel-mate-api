@@ -33,5 +33,12 @@ export const config = {
   },
   firebase : {
     service_account_key_json : process.env.FIREBASE_SERVICE_ACCOUNT_KEY_JSON || ""
+  },
+  stripe : {
+    secret_key : process.env.STRIPE_SECRET_KEY,
+    currency : "inr",
+    cancel_url : `${process.env.CLIENT_URI}/cancel`,
+    endpoint_secret : process.env.STRIPE_ENDPOINT_SECRET || "",
+    webhook_secret : process.env.STRIPE_WEBHOOK_SECRET || ""
   }
 };
