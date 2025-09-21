@@ -1,14 +1,25 @@
 import mongoose from "mongoose";
 import { injectable } from "tsyringe";
-
 import { IVendorEntity } from "../../../entities/modelsEntity/vendor.entity";
 import { IVendorRepository } from "../../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
-import { vendorDB } from "../../../frameworks/database/models/vendor.model";
+import {
+  IVendorModel,
+  vendorDB,
+} from "../../../frameworks/database/models/vendor.model";
 import { TRole } from "../../../shared/constants";
 import { NotFoundError } from "../../../shared/utils/error/notFoundError";
+import { BaseRepository } from "../baseRepository";
+import { VendorMapper } from "../../mappers/vendor.mapper";
 
 @injectable()
-export class VendorRepository implements IVendorRepository {
+export class VendorRepository
+  extends BaseRepository<IVendorModel, IVendorEntity>
+  implements IVendorRepository
+{
+  constructor() {
+    super(vendorDB);
+  }
+
   async findByEmail(email: string): Promise<IVendorEntity | null> {
     return await vendorDB.findOne({ email });
   }
@@ -16,11 +27,6 @@ export class VendorRepository implements IVendorRepository {
   async findByNumber(phone: string): Promise<IVendorEntity | null> {
     return await vendorDB.findOne({ phone });
   }
-
-  async findById(vendorId: string): Promise<IVendorEntity | null> {
-    return await vendorDB.findById(vendorId);
-  }
-
   async findByIdAndUpdate(
     id: string,
     data: Partial<IVendorEntity>
@@ -80,10 +86,6 @@ export class VendorRepository implements IVendorRepository {
     return vendorDetails[0];
   }
 
-  async save(data: Partial<IVendorEntity>): Promise<IVendorEntity> {
-    return await vendorDB.create(data);
-  }
-
   async findByIdAndUpdateStatus(
     vendorId: string,
     status: string,
@@ -141,6 +143,8 @@ export class VendorRepository implements IVendorRepository {
       vendorDB.countDocuments(filter),
     ]);
 
-    return { user, total };
+    const users = user.map((doc) => VendorMapper.toEntity(doc));
+
+    return { user: users, total };
   }
 }

@@ -12,7 +12,9 @@ export class UpdateVendorStatusUsecase implements IUpdateVendorStatusUsecase{
     ){}
 
     async execute(vendorId: string, status: string): Promise<void> {
+        console.log(vendorId,"--->lid")
         const vendor = await this.vendorRepository.findById(vendorId);
+        console.log(vendor,"--<vendkr")
 
         if(!vendor) throw new NotFoundError("user not found");
 

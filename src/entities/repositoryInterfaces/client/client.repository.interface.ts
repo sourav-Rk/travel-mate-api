@@ -1,9 +1,8 @@
 import { TRole } from "../../../shared/constants";
 import { IClientEntity } from "../../modelsEntity/client.entity";
+import { IBaseRepository } from "../baseRepository.interface";
 
-export interface IClientRepository {
-  save(data: Partial<IClientEntity>): Promise<IClientEntity>;
-  findById(id: string): Promise<IClientEntity | null>;
+export interface IClientRepository extends IBaseRepository<IClientEntity> {
   findByEmail(email: string): Promise<IClientEntity | null>;
   findByNumber(phone: string): Promise<IClientEntity | null>;
   findByIdAndUpdatePassword(
@@ -11,10 +10,10 @@ export interface IClientRepository {
     password: string
   ): Promise<IClientEntity | null>;
   findByIdAndUpdateStatus(id: string): Promise<boolean>;
-  updateClientProfileById(
-    id: string,
-    data: Partial<IClientEntity>
-  ): Promise<void>;
+  // updateClientProfileById(
+  //   id: string,
+  //   data: Partial<IClientEntity>
+  // ): Promise<void>;
   find(
     searchTerm: string,
     status: string,

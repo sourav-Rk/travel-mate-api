@@ -63,6 +63,8 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
       throw new NotFoundError(ERROR_MESSAGE.PACKAGE_NOT_FOUND);
     }
 
+    console.log(existingPackage,"1 --existingpackage")
+
     //checking status of the package
     if (existingPackage.status !== "active") {
       throw new ValidationError(
@@ -93,12 +95,16 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
       throw new ValidationError(ERROR_MESSAGE.ALREADY_APPLIED_PACKAGE);
     }
 
+    console.log(existingForThisPackage,"2 -> existing for this package")
+
     //checking conflicting trips
     const userActiveBookings =
       await this._bookingRepository.getAllConfirmedBookingsByUserIdWithPackageDetails(
         userId,
         "applied"
       );
+
+      console.log(userActiveBookings,"3-->acitive bookings")
     if (userActiveBookings?.length > 0) {
       for (const booking of userActiveBookings) {
         const pkg: any = booking.packageId;
@@ -128,6 +134,8 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
       seatOccupyingStatuses
     );
 
+    console.log(activeCount,"4 --> active count")
+
     let statusToCreate = BOOKINGSTATUS.APPLIED;
     let isWaitlisted = false;
 
@@ -145,14 +153,14 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
       status: statusToCreate,
       isWaitlisted,
     });
-
+   
     //remove from wishlist if it is already present
     const wishlist = await this._wishlistRepository.findByUserId(userId);
 
     if (wishlist) {
       console.log(wishlist,"-->wishlist")
       const packageExistingInWishlist = wishlist.packages.find(id => id.toString() === packageId);
-      console.log(packageExistingInWishlist)
+      console.log(packageExistingInWishlist,"5-->wisling")
       if (packageExistingInWishlist) {
         await this._wishlistRepository.removeFromWishlist(userId,packageId);
       }

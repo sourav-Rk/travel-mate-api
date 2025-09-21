@@ -19,6 +19,7 @@ export class WishListMapper {
     userId: String(doc.userId),
     packages: doc.packagesDetails.map((pkg: any) => ({
       _id: String(pkg._id),
+      packageId : pkg.packageId,
       packageName: pkg.packageName,
       title: pkg.title,
       category: pkg.category,

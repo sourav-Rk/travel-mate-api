@@ -1,6 +1,7 @@
 import { IGuideEntity } from "../../modelsEntity/guide.entity";
+import { IBaseRepository } from "../baseRepository.interface";
 
-export interface IGuideRepository {
+export interface IGuideRepository extends IBaseRepository<IGuideEntity> {
   find(
     agencyId : string,
     searchTerm: string,
@@ -8,10 +9,8 @@ export interface IGuideRepository {
     validPageNumber: number,
     validPageSize: number
   ): Promise<{ user: IGuideEntity[] | []; total: number }>;
-  findById(id: any): Promise<IGuideEntity | null>;
   findByEmail(email: string): Promise<IGuideEntity | null>;
   findByNumber(phone: string): Promise<IGuideEntity | null>;
-  save(data: Partial<IGuideEntity>): Promise<IGuideEntity>;
   findByIdAndUpdatePassword(
     id: any,
     password: string

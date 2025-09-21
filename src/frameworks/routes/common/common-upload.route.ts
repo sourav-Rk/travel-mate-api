@@ -16,7 +16,7 @@ export class CommonUploadRoutes {
 
   private configureRoutes(): void {
     this.router.post(
-      `/${this.role}/images/upload`,
+      `/images/upload`,
       upload.array("image", 5),
       (req: Request, res: Response, next: NextFunction) => {
         void commonController.uploadImages(req as MulterRequest, res, next);

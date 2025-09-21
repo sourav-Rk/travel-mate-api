@@ -1,3 +1,4 @@
+import { injectable } from "tsyringe";
 import {
   authorizeRole,
   decodeToken,
@@ -12,6 +13,7 @@ import {
 import { BaseRoute } from "../base.route";
 import { SignedUrlRoute } from "../common/signedUrl.route";
 
+@injectable()
 export class AdminRoute extends BaseRoute {
   constructor() {
     super();
@@ -21,65 +23,52 @@ export class AdminRoute extends BaseRoute {
     this.router.use("/", new SignedUrlRoute("admin").router);
 
     this.router.put(
-      "/admin/package/block",
+      "/package/block",
       verifyAuth,
       authorizeRole(["admin"]),
       asyncHandler(packageConroller.updateBlockStatus.bind(packageConroller))
     );
 
     this.router.get(
-      "/admin/package/:id",
+      "/package/:id",
       verifyAuth,
       authorizeRole(["admin"]),
       asyncHandler(packageConroller.getPackageDetails.bind(packageConroller))
     );
 
     this.router.get(
-      "/admin/package",
+      "/package",
       verifyAuth,
       authorizeRole(["admin"]),
       asyncHandler(packageConroller.getPackages.bind(packageConroller))
     );
 
     this.router.patch(
-      "/admin/vendor-status",
+      "/vendor-status",
       verifyAuth,
       authorizeRole(["admin"]),
       asyncHandler(adminController.updateVendorStatus.bind(adminController))
     );
 
     this.router.get(
-      "/admin/users",
+      "/users",
       verifyAuth,
       authorizeRole(["admin"]),
       asyncHandler(adminController.getAllUsers.bind(adminController))
     );
 
     this.router.get(
-      "/admin/user-details",
+      "/user-details",
       verifyAuth,
       authorizeRole(["admin"]),
       asyncHandler(adminController.getUserDetails.bind(adminController))
     );
 
     this.router.patch(
-      "/admin/user-status",
+      "/user-status",
       verifyAuth,
       authorizeRole(["admin"]),
       asyncHandler(adminController.updateUserStatus.bind(adminController))
-    );
-
-    this.router.post(
-      "/admin/logout",
-      verifyAuth,
-      authorizeRole(["admin"]),
-      asyncHandler(authController.logout.bind(authController))
-    );
-
-    this.router.post(
-      "/admin/refresh-token",
-      decodeToken,
-      asyncHandler(authController.refreshToken.bind(authController))
     );
   }
 }

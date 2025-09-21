@@ -1,8 +1,32 @@
 import { IVendorEntity } from "../../entities/modelsEntity/vendor.entity";
+import { IVendorModel } from "../../frameworks/database/models/vendor.model";
 import { VendorDto } from "../../shared/dto/user.dto";
 import { VendorProfileDto } from "../../shared/dto/vendor.dto";
 
 export class VendorMapper {
+
+  static toEntity(doc : IVendorModel) : IVendorEntity{
+    return {
+      _id : String(doc._id),
+      agencyName : doc.agencyName,
+      firstName : doc.firstName,
+      lastName : doc.lastName,
+      email : doc.email,
+      role : doc.role,
+      status : doc.status,
+      description : doc.description,
+      gender : doc.gender,
+      phone : doc.phone,
+      profileImage : doc.profileImage,
+      isBlocked : doc.isBlocked,
+      createdAt : doc.createdAt,
+      password : doc.password,
+      updatedAt : doc.updatedAt,
+      googleId: doc.googleId,
+      rejectionReason : doc.rejectionReason 
+    }
+  }
+
   static mapVendorToAdminTableDto(doc: IVendorEntity): VendorDto {
     return {
       _id: doc._id,

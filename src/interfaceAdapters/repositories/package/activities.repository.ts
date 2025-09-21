@@ -2,12 +2,24 @@ import { injectable } from "tsyringe";
 
 import { IActivitiesEntity } from "../../../entities/modelsEntity/activites.entity";
 import { IActivitiesRepository } from "../../../entities/repositoryInterfaces/package/activities-repository.interface";
-import { activitiesDB } from "../../../frameworks/database/models/acitivities.model";
+import {
+  activitiesDB,
+  IActivitiesModel,
+} from "../../../frameworks/database/models/acitivities.model";
 import { ActivityDto } from "../../../shared/dto/packageDto";
 import { ActivityMapper } from "../../mappers/activity.mapper";
+import { BaseRepository } from "../baseRepository";
+import { Document } from "mongoose";
 
 @injectable()
-export class ActivitiesRepository implements IActivitiesRepository {
+export class ActivitiesRepository
+  extends BaseRepository<IActivitiesModel, IActivitiesEntity>
+  implements IActivitiesRepository
+{
+  constructor() {
+    super(activitiesDB, ActivityMapper.toEntity);
+  }
+
   async save(
     data: IActivitiesEntity,
     session?: any
@@ -35,10 +47,6 @@ export class ActivitiesRepository implements IActivitiesRepository {
     console.log(data, "--->datas");
     const modelData = await activitiesDB.create(data, options);
     return modelData.map((doc) => ActivityMapper.toEntity(doc));
-  }
-
-  async findById(id: string): Promise<IActivitiesEntity | null> {
-    return await activitiesDB.findById(id);
   }
 
   async findByIds(ids: string[]): Promise<IActivitiesEntity[]> {

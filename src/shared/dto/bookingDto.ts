@@ -67,6 +67,11 @@ export interface BookingListWithPackageDetailsDto {
   createdAt: Date;
 }
 
+export interface IBookingWithPackage extends Omit<IBookingEntity, "packageId"> {
+  packageId: IPackageEntity;
+}
+
+
 //booking list vendor dto
 export interface BookingListVendorDto {
   _id: string;

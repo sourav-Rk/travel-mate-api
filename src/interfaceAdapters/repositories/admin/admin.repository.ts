@@ -2,19 +2,26 @@ import { injectable } from "tsyringe";
 
 import { IAdminEntity } from "../../../entities/modelsEntity/admin.entity";
 import { IAdminRepository } from "../../../entities/repositoryInterfaces/admin/admin-repository.interface";
-import { adminDB } from "../../../frameworks/database/models/admin.model";
+import {
+  adminDB,
+  IAdminModel,
+} from "../../../frameworks/database/models/admin.model";
+import { BaseRepository } from "../baseRepository";
 
 @injectable()
-export class AdminRepository implements IAdminRepository{
-    async findByEmail(email: string): Promise<IAdminEntity | null> {
-        return await adminDB.findOne({email})
-    }
+export class AdminRepository
+  extends BaseRepository<IAdminModel, IAdminEntity>
+  implements IAdminRepository
+{
+  constructor() {
+    super(adminDB);
+  }
 
-    async findByNumber(phone: string): Promise<IAdminEntity | null> {
-        return await adminDB.findOne({phone})
-    }
+  async findByEmail(email: string): Promise<IAdminEntity | null> {
+    return await adminDB.findOne({ email });
+  }
 
-    async findById(id: any): Promise<IAdminEntity | null> {
-        return await adminDB.findById(id);
-    }
+  async findByNumber(phone: string): Promise<IAdminEntity | null> {
+    return await adminDB.findOne({ phone });
+  }
 }

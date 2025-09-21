@@ -1,3 +1,4 @@
+import { injectable } from "tsyringe";
 import {
   authorizeRole,
   decodeToken,
@@ -23,6 +24,7 @@ import { CommonUploadRoutes } from "../common/common-upload.route";
 import { SignedUrlRoute } from "../common/signedUrl.route";
 import { FcmTokenRoutes } from "../fcmToken/fcmToken.route";
 
+@injectable()
 export class VendorRoute extends BaseRoute {
   constructor() {
     super();
@@ -36,7 +38,7 @@ export class VendorRoute extends BaseRoute {
     this.router.use("/", new FcmTokenRoutes("vendor").router);
 
     this.router.put(
-      "/vendor/bookings/:packageId/payment-alert",
+      "/bookings/:packageId/payment-alert",
       verifyAuth,
       blockMiddleware.checkBlockedStatus,
       asyncHandler(
@@ -45,7 +47,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router.get(
-      "/vendor/bookings/users/:bookingId",
+      "/bookings/users/:bookingId",
       verifyAuth,
       authorizeRole(["vendor"]),
       blockMiddleware.checkBlockedStatus,
@@ -55,7 +57,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router.get(
-      "/vendor/bookings/:packageId",
+      "/bookings/:packageId",
       verifyAuth,
       authorizeRole(["vendor"]),
       blockMiddleware.checkBlockedStatus,
@@ -65,7 +67,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router.put(
-      "/vendor/package/status",
+      "/package/status",
       verifyAuth,
       authorizeRole(["vendor"]),
       blockMiddleware.checkBlockedStatus,
@@ -73,7 +75,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router
-      .route("/vendor/package/:id")
+      .route("/package/:id")
       .get(
         verifyAuth,
         authorizeRole(["vendor"]),
@@ -88,7 +90,7 @@ export class VendorRoute extends BaseRoute {
       );
 
     this.router.put(
-      "/vendor/itinerary/:id",
+      "/itinerary/:id",
       verifyAuth,
       authorizeRole(["vendor"]),
       blockMiddleware.checkBlockedStatus,
@@ -98,7 +100,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router
-      .route("/vendor/package")
+      .route("/package")
       .post(
         verifyAuth,
         authorizeRole(["vendor"]),
@@ -113,7 +115,7 @@ export class VendorRoute extends BaseRoute {
       );
 
     this.router.put(
-      "/vendor/activity/:activityId",
+      "/activity/:activityId",
       verifyAuth,
       authorizeRole(["vendor"]),
       blockMiddleware.checkBlockedStatus,
@@ -121,7 +123,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router.post(
-      "/vendor/activity",
+      "/activity",
       verifyAuth,
       authorizeRole(["vendor"]),
       blockMiddleware.checkBlockedStatus,
@@ -129,7 +131,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router.delete(
-      "/vendor/activity",
+      "/activity",
       verifyAuth,
       authorizeRole(["vendor"]),
       blockMiddleware.checkBlockedStatus,
@@ -137,7 +139,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router
-      .route("/vendor/details")
+      .route("/details")
       .get(
         verifyAuth,
         authorizeRole(["vendor"]),
@@ -158,7 +160,7 @@ export class VendorRoute extends BaseRoute {
       );
 
     this.router.post(
-      "/vendor/change-email",
+      "/change-email",
       verifyAuth,
       authorizeRole(["vendor"]),
       blockMiddleware.checkBlockedStatus,
@@ -166,7 +168,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router.post(
-      "/vendor/resent-otp",
+      "/resent-otp",
       verifyAuth,
       authorizeRole(["vendor"]),
       blockMiddleware.checkBlockedStatus,
@@ -174,7 +176,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router.post(
-      "/vendor/verify-otp",
+      "/verify-otp",
       verifyAuth,
       authorizeRole(["vendor"]),
       blockMiddleware.checkBlockedStatus,
@@ -182,7 +184,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router.put(
-      "/vendor/update-password",
+      "/update-password",
       verifyAuth,
       authorizeRole(["vendor"]),
       blockMiddleware.checkBlockedStatus,
@@ -192,7 +194,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router.post(
-      "/vendor/address",
+      "/address",
       verifyAuth,
       authorizeRole(["vendor"]),
       blockMiddleware.checkBlockedStatus,
@@ -200,7 +202,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router.put(
-      "/vendor/address",
+      "/address",
       verifyAuth,
       authorizeRole(["vendor"]),
       blockMiddleware.checkBlockedStatus,
@@ -208,7 +210,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router
-      .route("/vendor/guide")
+      .route("/guide")
       .get(
         verifyAuth,
         authorizeRole(["vendor"]),
@@ -223,7 +225,7 @@ export class VendorRoute extends BaseRoute {
       );
 
     this.router.get(
-      "/vendor/guide-details",
+      "/guide-details",
       verifyAuth,
       authorizeRole(["vendor"]),
       blockMiddleware.checkBlockedStatus,
@@ -231,7 +233,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router.post(
-      "/vendor/kyc",
+      "/kyc",
       verifyAuth,
       authorizeRole(["vendor"]),
       blockMiddleware.checkBlockedStatus,
@@ -239,7 +241,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router.patch(
-      "/vendor/status",
+      "/status",
       verifyAuth,
       authorizeRole(["vendor"]),
       blockMiddleware.checkBlockedStatus,
@@ -247,7 +249,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router.get(
-      "/vendor/profile",
+      "/profile",
       verifyAuth,
       authorizeRole(["vendor"]),
       blockMiddleware.checkBlockedStatus,
@@ -255,7 +257,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router.patch(
-      "/vendor/notifications/:notificationId",
+      "/notifications/:notificationId",
       verifyAuth,
       authorizeRole(["vendor"]),
       blockMiddleware.checkBlockedStatus,
@@ -265,7 +267,7 @@ export class VendorRoute extends BaseRoute {
     );
 
     this.router
-      .route("/vendor/notifications")
+      .route("/notifications")
       .get(
         verifyAuth,
         authorizeRole(["vendor"]),
@@ -284,19 +286,5 @@ export class VendorRoute extends BaseRoute {
           )
         )
       );
-
-    this.router.post(
-      "/vendor/logout",
-      verifyAuth,
-      authorizeRole(["vendor"]),
-      blockMiddleware.checkBlockedStatus,
-      asyncHandler(authController.logout.bind(authController))
-    );
-
-    this.router.post(
-      "/vendor/refresh-token",
-      decodeToken,
-      asyncHandler(authController.refreshToken.bind(authController))
-    );
   }
 }

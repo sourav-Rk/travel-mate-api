@@ -4,11 +4,13 @@ import {
   BookingDetailsWithUserDetailsDto,
   BookingListWithPackageDetailsDto,
   BookingListWithUserDetailsDto,
+  IBookingWithPackage,
   PaginatedBookingListWithUserDetails,
 } from "../../../shared/dto/bookingDto";
 import { IBookingEntity } from "../../modelsEntity/booking.entity";
+import { IBaseRepository } from "../baseRepository.interface";
 
-export interface IBookingRepository {
+export interface IBookingRepository extends IBaseRepository<IBookingEntity> {
   createBooking(data: Partial<IBookingEntity>): Promise<IBookingEntity>;
   findByBookingId(id: string): Promise<IBookingModel | null>;
   findByUserId(userId: string): Promise<IBookingEntity | null>;
@@ -40,7 +42,7 @@ export interface IBookingRepository {
   getAllConfirmedBookingsByUserIdWithPackageDetails(
     userId: string,
     status: BookingStatus
-  ): Promise<IBookingEntity[] | []>;
+  ): Promise<IBookingWithPackage[] | []>;
 
   findByBookingIdWithUserDetails(
     bookingId: string

@@ -1,9 +1,9 @@
 import { PackageStatus, TRole } from "../../../shared/constants";
 import { IPackage, PaginatedPackagesRepo } from "../../../shared/dto/packageDto";
 import { IPackageEntity } from "../../modelsEntity/package.entity";
+import { IBaseRepository } from "../baseRepository.interface";
 
-export interface IPackageRepository {
-  findById(id: string): Promise<IPackageEntity | null>;
+export interface IPackageRepository extends IBaseRepository<IPackageEntity> {
   findByPackageId(packageId : string) : Promise<IPackageEntity | null>;
   findByItineraryId(id : string) : Promise<IPackageEntity | null>;
   findByPackagesByTodayDate(startDate : Date) : Promise<IPackageEntity[]>;

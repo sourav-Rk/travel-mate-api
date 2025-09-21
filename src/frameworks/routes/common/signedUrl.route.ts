@@ -16,7 +16,7 @@ export class SignedUrlRoute {
 
   private configureRoutes(): void {
     this.router.post(
-      `/${this.role}/signed-url`,
+      '/signed-url',
       verifyAuth,
       authorizeRole([`${this.role}`]),
       asyncHandler(

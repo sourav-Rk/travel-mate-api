@@ -1,9 +1,11 @@
-import mongoose from "mongoose";
+import mongoose, { Document, ObjectId } from "mongoose";
 
 import { IAdminEntity } from "../../../entities/modelsEntity/admin.entity";
 import { adminSchema } from "../schemas/admin.schema";
 
  
-export interface IAdminModel extends IAdminEntity {}
+export interface IAdminModel extends Omit<IAdminEntity,"_id">,Document {
+    _id : ObjectId
+}
 
 export const adminDB = mongoose.model("admins",adminSchema);

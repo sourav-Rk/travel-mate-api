@@ -2,10 +2,22 @@ import { injectable } from "tsyringe";
 
 import { IGuideEntity } from "../../../entities/modelsEntity/guide.entity";
 import { IGuideRepository } from "../../../entities/repositoryInterfaces/guide/guide-repository.interface";
-import { guideDB } from "../../../frameworks/database/models/guide.model";
+import {
+  guideDB,
+  IGuideModel,
+} from "../../../frameworks/database/models/guide.model";
+import { BaseRepository } from "../baseRepository";
+
 
 @injectable()
-export class GuideRepository implements IGuideRepository {
+export class GuideRepository
+  extends BaseRepository<IGuideModel, IGuideEntity>
+  implements IGuideRepository
+{
+  constructor() {
+    super(guideDB);
+  }
+
   async find(
     agencyId: string,
     searchTerm: string,
@@ -43,14 +55,11 @@ export class GuideRepository implements IGuideRepository {
 
     const users: IGuideEntity[] = user.map((doc) => ({
       ...doc.toObject(),
+      _id: doc._id.toString(),
       agencyId: doc.agencyId.toString(),
     }));
 
     return { user: users, total };
-  }
-
-  async findById(id: any): Promise<IGuideEntity | null> {
-    return await guideDB.findById(id);
   }
 
   async findByEmail(email: string): Promise<IGuideEntity | null> {
@@ -61,13 +70,13 @@ export class GuideRepository implements IGuideRepository {
     return await guideDB.findOne({ phone });
   }
 
-  async save(data: Partial<IGuideEntity>): Promise<IGuideEntity> {
-    const doc = await guideDB.create(data);
-    return {
-      ...doc.toObject(),
-      agencyId: doc.agencyId.toString(),
-    };
-  }
+  // async save(data: Partial<IGuideEntity>): Promise<IGuideEntity> {
+  //   const doc = await guideDB.create(data);
+  //   return {
+  //     ...doc.toObject(),
+  //     agencyId: doc.agencyId.toString(),
+  //   };
+  // }
 
   async findByIdAndUpdatePassword(
     guideId: string,

@@ -39,6 +39,7 @@ export class UserMapper {
        phone : doc.phone,
        profileImage : doc.profileImage,
        role : doc.role as "client",
+       isBlocked : doc.isBlocked
      }
   }
 }

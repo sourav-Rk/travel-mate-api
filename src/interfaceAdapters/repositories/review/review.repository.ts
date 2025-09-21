@@ -1,15 +1,21 @@
 import { injectable } from "tsyringe";
 import { IReviewRepository } from "../../../entities/repositoryInterfaces/review/review-repository.interface";
 import { IReviewEntity } from "../../../entities/modelsEntity/review.entity";
-import { reviewDB } from "../../../frameworks/database/models/review.model";
+import {
+  IReviewModel,
+  reviewDB,
+} from "../../../frameworks/database/models/review.model";
 import { ReviewMapper } from "../../mappers/review.mapper";
 import { ReviewListWithUserDetailsDto } from "../../../shared/dto/reviewDto";
+import { BaseRepository } from "../baseRepository";
 
 @injectable()
-export class ReviewRepository implements IReviewRepository {
-  async save(data: Partial<IReviewEntity>): Promise<IReviewEntity> {
-    const modelData = await reviewDB.create(data);
-    return ReviewMapper.toEntity(modelData);
+export class ReviewRepository
+  extends BaseRepository<IReviewModel, IReviewEntity>
+  implements IReviewRepository
+{
+  constructor() {
+    super(reviewDB, ReviewMapper.toEntity);
   }
 
   async findByPackageIdAndUserId(

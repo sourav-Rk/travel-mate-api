@@ -1,5 +1,6 @@
 export interface PackageDetailsWishlistDto{
     _id : string;
+    packageId : string;
     packageName : string;
     title : string;
     category : string;

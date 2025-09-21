@@ -2,12 +2,23 @@ import { injectable } from "tsyringe";
 
 import { IItineraryEntity } from "../../../entities/modelsEntity/itinerary.entity";
 import { IItineraryRepository } from "../../../entities/repositoryInterfaces/package/itinerary-repository.interface";
-import { itineraryDB } from "../../../frameworks/database/models/itinerary.model";
+import {
+  IItineraryModel,
+  itineraryDB,
+} from "../../../frameworks/database/models/itinerary.model";
 import { ItineraryEditDto } from "../../../shared/dto/itineraryDto";
 import { ItineraryMapper } from "../../mappers/itinerary.mapper";
+import { BaseRepository } from "../baseRepository";
 
 @injectable()
-export class ItineraryRepository implements IItineraryRepository {
+export class ItineraryRepository
+  extends BaseRepository<IItineraryModel, IItineraryEntity>
+  implements IItineraryRepository
+{
+  constructor() {
+    super(itineraryDB, ItineraryMapper.toEntity);
+  }
+
   async save(data: IItineraryEntity, session?: any): Promise<IItineraryEntity> {
     const options = session ? { session } : {};
     const modelData = await itineraryDB
@@ -17,9 +28,6 @@ export class ItineraryRepository implements IItineraryRepository {
     return ItineraryMapper.toEntity(modelData);
   }
 
-  async findById(id: string): Promise<IItineraryEntity | null> {
-    return await itineraryDB.findById(id);
-  }
 
   async findByPackageId(packageId: string): Promise<IItineraryEntity | null> {
     return await itineraryDB.findOne({ packageId });

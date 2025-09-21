@@ -53,6 +53,6 @@ export class UpdateClientDetailsUsecase implements IUpdateClientDetailsUsecase {
         );
     }
 
-    await this._clientRepository.updateClientProfileById(userId, data);
+    await this._clientRepository.updateById(userId, data);
   }
 }

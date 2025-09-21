@@ -156,6 +156,8 @@ import { IAddReviewUsecase } from "../../entities/useCaseInterfaces/review/add-r
 import { AddReviewUsecase } from "../../useCases/review/add-review.usecase";
 import { IGetPackageReviewsUsecase } from "../../entities/useCaseInterfaces/review/getPackageReviews-usecase.interface";
 import { GetPackageReviewsUsecase } from "../../useCases/review/getPackageReviews.usecase";
+import { ILogoutUsecase } from "../../entities/useCaseInterfaces/auth/logout-usecase.interface";
+import { LogoutUsecase } from "../../useCases/auth/logout.usecase";
 
 export class UsecaseRegistory {
   static registerUsecases(): void {
@@ -208,6 +210,10 @@ export class UsecaseRegistory {
 
     container.register<ISendEmailOtpUsecase>("ISendEmailOtpUsecase", {
       useClass: SendEmailOtpUsecase,
+    });
+
+    container.register<ILogoutUsecase>("ILogoutUsecase", {
+      useClass: LogoutUsecase,
     });
 
     //register strategies
@@ -585,5 +591,6 @@ export class UsecaseRegistory {
     container.register<LoggerMiddleware>("LoggerMiddleware", {
       useClass: LoggerMiddleware,
     });
+
   }
 }

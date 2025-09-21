@@ -54,8 +54,26 @@ import { IWishlistController } from "../../entities/controllerInterfaces/wishlis
 import { WishlistController } from "../../interfaceAdapters/controllers/wishlist/wishlist.controller";
 import { IReviewController } from "../../entities/controllerInterfaces/review/review-controller.interface";
 import { ReviewController } from "../../interfaceAdapters/controllers/review/review.controller";
+import { ClientRoute } from "../routes/client/client.route";
+import { AuthRoutes } from "../routes/auth/auth";
+import { AdminRoute } from "../routes/admin/admin.route";
+import { VendorRoute } from "../routes/vendor/vendor.route";
+import { GuideRoute } from "../routes/guide/guide.route";
 
 DependencyInjection.registerAll();
+
+//Middlewares
+export const errorMiddleware =
+  container.resolve<IErrorMiddleware>(ErrorMiddleware);
+
+//Block middleware
+export const blockMiddleware =
+  container.resolve<IBlockedMiddleware>(BlockedMiddleware);
+
+//logger servie middleware
+export const injectedLoggerMiddleware =
+  container.resolve<LoggerMiddleware>("LoggerMiddleware");
+export const injectedLogger = container.resolve<ILogger>("ILogger");
 
 //authController
 export const authController =
@@ -146,15 +164,17 @@ export const signedUrlController =
 //cron scheduler
 export const cronScheduler = container.resolve<ICronScheduler>(CronScheduler);
 
-//Middlewares
-export const errorMiddleware =
-  container.resolve<IErrorMiddleware>(ErrorMiddleware);
+//auth route
+export const authRoutes = container.resolve(AuthRoutes);
 
-//Block middleware
-export const blockMiddleware =
-  container.resolve<IBlockedMiddleware>(BlockedMiddleware);
+//client route
+export const clientRoutes = container.resolve(ClientRoute);
 
-//logger servie middleware
-export const injectedLoggerMiddleware =
-  container.resolve<LoggerMiddleware>("LoggerMiddleware");
-export const injectedLogger = container.resolve<ILogger>("ILogger");
+//admin route
+export const adminRoutes = container.resolve(AdminRoute);
+
+//vendor route
+export const vendorRoutes = container.resolve(VendorRoute);
+
+//guide route
+export const guideRoutes = container.resolve(GuideRoute);

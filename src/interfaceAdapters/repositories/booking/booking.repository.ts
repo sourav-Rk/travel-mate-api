@@ -12,12 +12,17 @@ import {
   BookingDetailsWithUserDetailsDto,
   BookingListWithPackageDetailsDto,
   BookingListWithUserDetailsDto,
+  IBookingWithPackage,
   PaginatedBookingListWithUserDetails,
 } from "../../../shared/dto/bookingDto";
 import { IClientEntity } from "../../../entities/modelsEntity/client.entity";
+import { BaseRepository } from "../baseRepository";
 
 @injectable()
-export class BookingRepository implements IBookingRepository {
+export class BookingRepository
+  extends BaseRepository<IBookingModel, IBookingEntity>
+  implements IBookingRepository
+{
   async createBooking(data: Partial<IBookingEntity>): Promise<IBookingEntity> {
     const modelData = await bookingDB.create(data);
     return BookingMapper.toEntity(modelData);
@@ -58,11 +63,17 @@ export class BookingRepository implements IBookingRepository {
   async getAllConfirmedBookingsByUserIdWithPackageDetails(
     userId: string,
     status: BookingStatus
-  ): Promise<IBookingEntity[] | []> {
+  ): Promise<IBookingWithPackage[] | []> {
     return await bookingDB
       .find({ userId, status })
-      .populate<{ packageId: IPackageEntity }>("packageId")
-      .lean<IBookingEntity[]>();
+      .populate({
+        path: "packageId",
+        model: "packages",
+        localField: "packageId",
+        foreignField: "packageId",
+        justOne: true,
+      })
+      .lean<IBookingWithPackage[]>();
   }
 
   async countByPackageIdAndStatus(

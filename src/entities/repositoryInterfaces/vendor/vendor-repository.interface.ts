@@ -1,11 +1,10 @@
 import { TRole } from "../../../shared/constants";
 import { IVendorEntity } from "../../modelsEntity/vendor.entity";
+import { IBaseRepository } from "../baseRepository.interface";
 
-export interface IVendorRepository {
-  save(data: Partial<IVendorEntity>): Promise<IVendorEntity>;
+export interface IVendorRepository extends IBaseRepository<IVendorEntity> {
   findByEmail(email: string): Promise<IVendorEntity | null>;
   findByNumber(phone: string): Promise<IVendorEntity | null>;
-  findById(vendorId: string): Promise<IVendorEntity | null>;
   findByIdAndUpdate(id: string, data: Partial<IVendorEntity>): Promise<void>;
   findByIdAndUpdatePassword(
     id: any,

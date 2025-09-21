@@ -22,6 +22,7 @@ export interface ClientDto {
   gender?: string;
   profileImage?: string;
   googleId?: string;
+  isBlocked ?: boolean;
   role: "client";
 }
 

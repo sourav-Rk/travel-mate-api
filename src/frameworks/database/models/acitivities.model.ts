@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 
 import { IActivitiesEntity } from "../../../entities/modelsEntity/activites.entity";
 import { activitiesSchema } from "../schemas/activities.schema";

@@ -4,9 +4,16 @@ import cors from "cors";
 import express, { Application } from "express";
 
 import { config } from "../../shared/config";
-import { errorMiddleware, injectedLoggerMiddleware } from "../di/resolve";
-import { AuthRoutes } from "../routes/auth/auth";
-import { PrivateRoute } from "../routes/common/private.route";
+import {
+  adminRoutes,
+  authRoutes,
+  clientRoutes,
+  errorMiddleware,
+  guideRoutes,
+  injectedLoggerMiddleware,
+  vendorRoutes,
+} from "../di/resolve";
+
 
 export class App {
   private _app: Application;
@@ -19,8 +26,11 @@ export class App {
   }
 
   private configureRoutes(): void {
-    this._app.use("/api/auth", new AuthRoutes().getRouter());
-    this._app.use("/api/pvt", new PrivateRoute().router);
+    this._app.use("/api/v1/auth", authRoutes.router);
+    this._app.use("/api/v1/client", clientRoutes.router);
+    this._app.use("/api/v1/vendor", vendorRoutes.router);
+    this._app.use("/api/v1/admin", adminRoutes.router);
+    this._app.use("/api/v1/guide",guideRoutes.router);
   }
 
   private configureMiddleware(): void {
@@ -30,14 +40,14 @@ export class App {
         credentials: true,
       })
     );
-    this._app.use((req,res,next) => {
-      if(req.originalUrl === "/api/pvt/_cl/client/payment/webhook"){
+    this._app.use((req, res, next) => {
+      if (req.originalUrl === "/api/pvt/_cl/client/payment/webhook") {
         next();
-      }else{
-        express.json()(req,res,next)
+      } else {
+        express.json()(req, res, next);
       }
     });
-    
+
     this._app.use(express.urlencoded({ extended: true }));
 
     this._app.use(

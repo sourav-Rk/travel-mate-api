@@ -48,6 +48,7 @@ export const ERROR_MESSAGE = {
   INVALID_REFRESH_TOKEN: "invalid refresh token",
   TOKEN_EXPIRED_ACCESS: "Access Token time out",
   TOKEN_EXPIRED_REFRESH: "Token time out, Please loggin again",
+  TOKEN_MISSING : "Authorization token is required",
   SERVER_ERROR: "An error occurred, please try again later.",
   BLOCKED_ERROR: "You are blocked by Admin. please contact admin",
   NOT_ALLOWED: "You are not allowed",
@@ -83,10 +84,11 @@ export const ERROR_MESSAGE = {
   DUE_DATE_FOR_FULL_PAYMENT_END: "The due date for the full payment has ended",
   ALREADY_PAID_ADVANCE: "You already paid the advance amount",
   ALREADY_PAID_FULL_AMOUNT: "You already paid the full amount",
-  PACKAGE_CANNOT_BE_BLOCKED : "Package cannot be blocked after payment alert is sent.",
-  WISHLIST_NOT_FOUND : "Wishlist not found",
-  REQUIRED_FIELDS_MISSING : "Required fields are missing",
-  ALREADY_REVIEWED  : "You already added the review"
+  PACKAGE_CANNOT_BE_BLOCKED:
+    "Package cannot be blocked after payment alert is sent.",
+  WISHLIST_NOT_FOUND: "Wishlist not found",
+  REQUIRED_FIELDS_MISSING: "Required fields are missing",
+  ALREADY_REVIEWED: "You already added the review",
 };
 
 export const SUCCESS_MESSAGE = {
@@ -112,15 +114,16 @@ export const SUCCESS_MESSAGE = {
     "Your request is in waiting list! we will notify you if seats are available",
   BOOKING_APPLIED:
     "You have successfully applied to the package! Wait for the agency to verify",
-  BOOKING_ADVANCE_PENDING : "You have successfully applied to the package! Pay the advance to confirm the slot",
+  BOOKING_ADVANCE_PENDING:
+    "You have successfully applied to the package! Pay the advance to confirm the slot",
   PAYMENT_ALERT: "Payment alert have been send successfully to the travelers",
   MARK_AS_READ: "Notification marked as read",
   ALL_MARK_READ: "Marked all as read",
   CHECKOUT_SESSION_CREATED: "checkout session created",
   WEBHOOK_PROCESSED: "Webhook processes",
-  ADDED_TO_WISHLIST : "Added to wishlist",
-  REMOVED_FROM_WISHLIST : "Removed from wishlist",
-  ADDED_REVIEW : "Review added successfully"
+  ADDED_TO_WISHLIST: "Added to wishlist",
+  REMOVED_FROM_WISHLIST: "Removed from wishlist",
+  ADDED_REVIEW: "Review added successfully",
 };
 
 export const ROLES = {
@@ -171,3 +174,9 @@ export enum MAIL_CONTENT_PURPOSE {
 
 //email purpose
 export type EmailOtpPurpose = "signup" | "forgot-password" | "resend";
+
+//cookies names
+export const COOKIES_NAMES = {
+  REFRESH_TOKEN: "_secure_rt_auth",
+  ACCESS_TOKEN: "_secure_at_auth",
+};

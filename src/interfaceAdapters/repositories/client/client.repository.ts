@@ -2,20 +2,22 @@ import { injectable } from "tsyringe";
 
 import { IClientEntity } from "../../../entities/modelsEntity/client.entity";
 import { IClientRepository } from "../../../entities/repositoryInterfaces/client/client.repository.interface";
-import { clientDB } from "../../../frameworks/database/models/client.model";
+import {
+  clientDB,
+  IClientModel,
+} from "../../../frameworks/database/models/client.model";
 import { TRole } from "../../../shared/constants";
 import { NotFoundError } from "../../../shared/utils/error/notFoundError";
 import { UserMapper } from "../../mappers/user.mapper";
+import { BaseRepository } from "../baseRepository";
 
 @injectable()
-export class ClientRepository implements IClientRepository {
-  async save(data: Partial<IClientEntity>): Promise<IClientEntity> {
-    const modelData = await clientDB.create(data);
-    return UserMapper.toEntity(modelData);
-  }
-
-  async findById(id: string): Promise<IClientEntity | null> {
-    return await clientDB.findById(id);
+export class ClientRepository
+  extends BaseRepository<IClientModel, IClientEntity>
+  implements IClientRepository
+{
+  constructor() {
+    super(clientDB, UserMapper.toEntity);
   }
 
   async findByEmail(email: string): Promise<IClientEntity | null> {
@@ -49,12 +51,12 @@ export class ClientRepository implements IClientRepository {
     return updated.isBlocked;
   }
 
-  async updateClientProfileById(
-    id: string,
-    data: Partial<IClientEntity>
-  ): Promise<void> {
-    await clientDB.findByIdAndUpdate(id, { $set: data });
-  }
+  // async updateClientProfileById(
+  //   id: string,
+  //   data: Partial<IClientEntity>
+  // ): Promise<void> {
+  //   await clientDB.findByIdAndUpdate(id, { $set: data });
+  // }
 
   async find(
     searchTerm: string,

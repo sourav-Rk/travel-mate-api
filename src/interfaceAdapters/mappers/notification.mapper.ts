@@ -7,7 +7,6 @@ export class NotificationMapper {
             _id : String(doc._id),
             userId : String(doc.userId),
             message : doc.message,
-            role : doc.role,
             title : doc.title,
             type : doc.type,
             isRead : doc.isRead,

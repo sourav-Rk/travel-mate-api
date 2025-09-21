@@ -1,4 +1,4 @@
-import { Response, NextFunction } from "express";
+import { Response, NextFunction, RequestHandler } from "express";
 import { inject, injectable } from "tsyringe";
 
 import { IBlockedMiddleware } from "../../entities/middleWareInterfaces/blocked-middleware.interface";
@@ -18,8 +18,7 @@ export class BlockedMiddleware implements IBlockedMiddleware {
     @inject("IVendorRepository")
     private readonly vendorRepository: IVendorRepository,
     @inject("IBlackListTokenUsecase")
-    private readonly blackListTokenUseCase: IBlackListTokenUsecase,
-
+    private readonly blackListTokenUseCase: IBlackListTokenUsecase
   ) {}
 
   checkBlockedStatus = async (
@@ -28,7 +27,9 @@ export class BlockedMiddleware implements IBlockedMiddleware {
     next: NextFunction
   ) => {
     try {
-      if (!req.user) {
+      const customReq = req as CustomRequest;
+
+      if (!customReq.user) {
         res.status(HTTP_STATUS.UNAUTHORIZED).json({
           success: false,
           message: ERROR_MESSAGE.UNAUTH_NO_USER_FOUND,
@@ -36,40 +37,41 @@ export class BlockedMiddleware implements IBlockedMiddleware {
         return;
       }
 
-      const { id, role } = req.user;
-      let blocked ;
+      const { id, role } = customReq.user;
+      let blocked;
 
-        if (role === "client") {
-          const client = await this.clientRepository.findById(id);
-          if (!client) {
-            res.status(HTTP_STATUS.NOT_FOUND).json({
-              success: false,
-              message: ERROR_MESSAGE.USER_NOT_FOUND,
-            });
-            return;
-          }
-          blocked = client.isBlocked;
-        } else if (role === "vendor") {
-          const vendor = await this.vendorRepository.findById(id);
-          if (!vendor) {
-            res.status(HTTP_STATUS.NOT_FOUND).json({
-              success: false,
-              message: ERROR_MESSAGE.USER_NOT_FOUND,
-            });
-            return;
-          }
-          blocked = vendor.isBlocked;
-        } else {
-          res.status(HTTP_STATUS.BAD_REQUEST).json({
+      if (role === "client") {
+        const client = await this.clientRepository.findById(id);
+        if (!client) {
+          res.status(HTTP_STATUS.NOT_FOUND).json({
             success: false,
-            message: ERROR_MESSAGE.INVALID_ROLE,
+            message: ERROR_MESSAGE.USER_NOT_FOUND,
           });
           return;
         }
+        blocked = client.isBlocked;
+      } else if (role === "vendor") {
+        const vendor = await this.vendorRepository.findById(id);
+        if (!vendor) {
+          res.status(HTTP_STATUS.NOT_FOUND).json({
+            success: false,
+            message: ERROR_MESSAGE.USER_NOT_FOUND,
+          });
+          return;
+        }
+        blocked = vendor.isBlocked;
+      } else if (role === "admin" || role === "guide") {
+        blocked = false;
+      } else {
+        res.status(HTTP_STATUS.BAD_REQUEST).json({
+          success: false,
+          message: ERROR_MESSAGE.INVALID_ROLE,
+        });
+        return;
+      }
 
-    
-      if(blocked) {
-        await this.blackListTokenUseCase.execute(req.user.access_token);
+      if (blocked) {
+        await this.blackListTokenUseCase.execute(customReq.user.accessToken);
 
         const accessTokenName = `${role}_access_token`;
         const refreshTokenName = `${role}_refresh_token`;

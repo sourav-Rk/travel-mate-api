@@ -25,10 +25,11 @@ export class VendorController implements IVendorController {
   }
 
   async updateVendorStatus(req: Request, res: Response): Promise<void> {
-    const { vendorId, status } = req.body as {
-      vendorId: string;
+    const vendorId = (req as CustomRequest).user.id;
+    const { status } = req.body as {
       status: string;
     };
+    console.log(req.body,"--p")
     await this.updateVendorStatusUsecase.execute(
       vendorId,
       status

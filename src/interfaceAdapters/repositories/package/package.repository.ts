@@ -3,22 +3,29 @@ import { injectable } from "tsyringe";
 
 import { IPackageEntity } from "../../../entities/modelsEntity/package.entity";
 import { IPackageRepository } from "../../../entities/repositoryInterfaces/package/package-repository.interface";
-import { packageDB } from "../../../frameworks/database/models/package.model";
+import {
+  IPackageModel,
+  packageDB,
+} from "../../../frameworks/database/models/package.model";
 import { PackageStatus, TRole } from "../../../shared/constants";
 import {
   IPackage,
   PaginatedPackagesRepo,
 } from "../../../shared/dto/packageDto";
 import { PackageMapper } from "../../mappers/package.mapper";
+import { BaseRepository } from "../baseRepository";
 
 @injectable()
-export class PackageRepository implements IPackageRepository {
-  async findById(id: string): Promise<IPackageEntity | null> {
-    return await packageDB.findById(id);
+export class PackageRepository
+  extends BaseRepository<IPackageModel, IPackageEntity>
+  implements IPackageRepository
+{
+  constructor() {
+    super(packageDB, PackageMapper.toEntity);
   }
 
   async findByPackageId(packageId: string): Promise<IPackageEntity | null> {
-      return await packageDB.findOne({packageId})
+    return await packageDB.findOne({ packageId });
   }
 
   async findByItineraryId(id: string): Promise<IPackageEntity | null> {
@@ -29,8 +36,10 @@ export class PackageRepository implements IPackageRepository {
     return await packageDB.find({ startDate });
   }
 
-  async findByPackagesApplicationDeadline(deadline: Date): Promise<IPackageEntity[]> {
-      return await packageDB.find({applicationDeadline : deadline});
+  async findByPackagesApplicationDeadline(
+    deadline: Date
+  ): Promise<IPackageEntity[]> {
+    return await packageDB.find({ applicationDeadline: deadline });
   }
 
   async save(data: IPackageEntity, session?: any): Promise<IPackageEntity> {
@@ -49,7 +58,7 @@ export class PackageRepository implements IPackageRepository {
     const options = session
       ? { session, new: true, runValidators: true }
       : { new: true, runValidators: true };
-    const result = await packageDB.findOneAndUpdate({_id : id}, data, options);
+    const result = await packageDB.findOneAndUpdate({ _id: id }, data, options);
 
     if (!result) {
       throw new Error(`Package with id ${id} not found`);
@@ -142,7 +151,7 @@ export class PackageRepository implements IPackageRepository {
 
   async getPackageDetails(id: any): Promise<IPackage> {
     const packageData = await packageDB.aggregate([
-      { $match: { packageId : id} },
+      { $match: { packageId: id } },
 
       {
         $lookup: {

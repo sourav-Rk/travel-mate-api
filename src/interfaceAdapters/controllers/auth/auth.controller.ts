@@ -16,6 +16,7 @@ import { ISendEmailOtpUsecase } from "../../../entities/useCaseInterfaces/auth/s
 import { ISendEmailUsecase } from "../../../entities/useCaseInterfaces/auth/send-email-usecase.interface";
 import { IVerifyOtpUsecase } from "../../../entities/useCaseInterfaces/auth/verifyOtpUsecase";
 import {
+  COOKIES_NAMES,
   ERROR_MESSAGE,
   HTTP_STATUS,
   SUCCESS_MESSAGE,
@@ -29,7 +30,8 @@ import {
 import { CustomRequest } from "../../middlewares/auth.middleware";
 
 import { userSchemas } from "./validation/user-signup-validation.schema";
-
+import { ILogoutUsecase } from "../../../entities/useCaseInterfaces/auth/logout-usecase.interface";
+import { ResponseHelper } from "../../../frameworks/http/helpers/response.helper";
 
 @injectable()
 export class AuthController implements IAuthController {
@@ -44,39 +46,42 @@ export class AuthController implements IAuthController {
     private _SendEmailUsecase: ISendEmailUsecase,
 
     @inject("ILoginUsecase")
-    private _LoginUsecase: ILoginUsecase,
+    private _loginUsecase: ILoginUsecase,
 
     @inject("IVerifyOtpUsecase")
-    private _VerifyOtpUsecase: IVerifyOtpUsecase,
+    private _verifyOtpUsecase: IVerifyOtpUsecase,
 
     @inject("IOtpService")
-    private _OtpService: IOtpService,
+    private _otpService: IOtpService,
 
-    @inject('ISendEmailOtpUsecase')
-    private _sendEmailOtpUsecase : ISendEmailOtpUsecase,
+    @inject("ISendEmailOtpUsecase")
+    private _sendEmailOtpUsecase: ISendEmailOtpUsecase,
 
     @inject("IResendOtpUsecase")
-    private _ResendOtpUsecase: IResendOtpUsecase,
+    private _resendOtpUsecase: IResendOtpUsecase,
 
     @inject("IGenerateTokenUseCase")
-    private _GenerateTokenUsecase: IGenerateTokenUseCase,
+    private _generateTokenUsecase: IGenerateTokenUseCase,
 
     @inject("IRefreshTokenUsecase")
-    private RefreshTokenUsecase: IRefreshTokenUsecase,
+    private _refreshTokenUsecase: IRefreshTokenUsecase,
 
     @inject("IBlackListTokenUsecase")
-    private BlackListTokenUsecase: IBlackListTokenUsecase,
+    private _blackListTokenUsecase: IBlackListTokenUsecase,
 
-    @inject('IForgotPasswordSendMailUsecase')
-    private _forgotPasswordSendMailUsecase : IForgotPasswordSendMailUsecase,
+    @inject("IForgotPasswordSendMailUsecase")
+    private _forgotPasswordSendMailUsecase: IForgotPasswordSendMailUsecase,
 
-    @inject('IForgotPasswordResetUsecase')
-    private _forgotPasswordResetUsecase : IForgotPasswordResetUsecase
+    @inject("IForgotPasswordResetUsecase")
+    private _forgotPasswordResetUsecase: IForgotPasswordResetUsecase,
+
+    @inject("ILogoutUsecase")
+    private _logoutUsecase: ILogoutUsecase
   ) {}
 
   async signup(req: Request, res: Response): Promise<void> {
     const { email } = req.body;
-    const formData = (await this._OtpService.getFormData(email)) as UserDto;
+    const formData = (await this._otpService.getFormData(email)) as UserDto;
     if (!formData) {
       res.status(HTTP_STATUS.BAD_REQUEST).json({
         success: false,
@@ -106,21 +111,18 @@ export class AuthController implements IAuthController {
 
     const userId = user._id.toString();
 
-    const tokens = await this._GenerateTokenUsecase.execute(
+    const tokens = await this._generateTokenUsecase.execute(
       userId,
       user.email,
       user.role
     );
 
-    const accessTokenName = `${user.role}_access_token`;
-    const refreshTokenName = `${user.role}_refresh_token`;
-
     setAuthCookies(
       res,
       tokens.accessToken,
       tokens.refreshToken,
-      accessTokenName,
-      refreshTokenName
+      COOKIES_NAMES.ACCESS_TOKEN,
+      COOKIES_NAMES.REFRESH_TOKEN
     );
 
     res.status(HTTP_STATUS.OK).json({
@@ -144,21 +146,23 @@ export class AuthController implements IAuthController {
       .json({ success: true, message: "Otp send successfully" });
   }
 
-  async sendEmailOtp(req : Request, res : Response) : Promise<void> {
-     const {email} = req.body;
-     await this._sendEmailOtpUsecase.execute(email);
-     res.status(HTTP_STATUS.OK).json({status : true,message : "Otp send successfully"})
+  async sendEmailOtp(req: Request, res: Response): Promise<void> {
+    const { email } = req.body;
+    await this._sendEmailOtpUsecase.execute(email);
+    res
+      .status(HTTP_STATUS.OK)
+      .json({ status: true, message: "Otp send successfully" });
   }
 
   async verifyOtp(req: Request, res: Response): Promise<void> {
     const { email, otp } = req.body;
-    const response = await this._VerifyOtpUsecase.execute(email, otp);
+    const response = await this._verifyOtpUsecase.execute(email, otp);
     res.status(response.statusCode).json(response.content);
   }
 
   async resendOtp(req: Request, res: Response): Promise<void> {
     const { email } = req.body;
-    await this._ResendOtpUsecase.execute(email);
+    await this._resendOtpUsecase.execute(email);
     res
       .status(HTTP_STATUS.OK)
       .json({ success: true, message: SUCCESS_MESSAGE.OTP_RESENT_SUCCESS });
@@ -167,7 +171,7 @@ export class AuthController implements IAuthController {
   async login(req: Request, res: Response): Promise<void> {
     const data = req.body as LoginUserDTO;
 
-    const user = await this._LoginUsecase.execute(data);
+    const user = await this._loginUsecase.execute(data);
 
     if (!user._id || !user.email || !user.role) {
       throw new Error("User id , email or role  is missing");
@@ -175,22 +179,28 @@ export class AuthController implements IAuthController {
 
     const userId = user._id.toString();
 
-    const tokens = await this._GenerateTokenUsecase.execute(
+    const tokens = await this._generateTokenUsecase.execute(
       userId,
       user.email,
       user.role
     );
 
-    const accessTokenName = `${user.role}_access_token`;
-    const refreshTokenName = `${user.role}_refresh_token`;
-
     setAuthCookies(
       res,
       tokens.accessToken,
       tokens.refreshToken,
-      accessTokenName,
-      refreshTokenName
+      COOKIES_NAMES.ACCESS_TOKEN,
+      COOKIES_NAMES.REFRESH_TOKEN
     );
+     
+    // ResponseHelper.success(res,HTTP_STATUS.OK,"user logged in successfully",{user:{
+    //    id: user._id,
+    //     firstName: user.firstName,
+    //     lastName: user.lastName,
+    //     email: user.email,
+    //     role: user.role,
+    //     status: user?.status,
+    // }})
 
     res.status(HTTP_STATUS.OK).json({
       success: true,
@@ -208,27 +218,37 @@ export class AuthController implements IAuthController {
     });
   }
 
-  async forgotPasswordSendMail(req : Request, res : Response) : Promise<void>{
-     const {email} = req.body;
-     await this._forgotPasswordSendMailUsecase.execute(email);
-     res.status(HTTP_STATUS.OK).json({success : true,message : SUCCESS_MESSAGE.RESET_LINK_SEND});
+  async forgotPasswordSendMail(req: Request, res: Response): Promise<void> {
+    const { email } = req.body;
+    await this._forgotPasswordSendMailUsecase.execute(email);
+    res
+      .status(HTTP_STATUS.OK)
+      .json({ success: true, message: SUCCESS_MESSAGE.RESET_LINK_SEND });
   }
 
-  async forgotPasswordReset(req : Request,res:Response) : Promise<void>{
-    const {token,password,confirmPassword} = req.body;
-    await this._forgotPasswordResetUsecase.execute(token,password,confirmPassword);
-    res.status(HTTP_STATUS.OK).json({success : true,message : "Password changed successfully!"})
+  async forgotPasswordReset(req: Request, res: Response): Promise<void> {
+    const { token, password, confirmPassword } = req.body;
+    await this._forgotPasswordResetUsecase.execute(
+      token,
+      password,
+      confirmPassword
+    );
+    res
+      .status(HTTP_STATUS.OK)
+      .json({ success: true, message: "Password changed successfully!" });
   }
 
   async logout(req: Request, res: Response): Promise<void> {
-    await this.BlackListTokenUsecase.execute(
-      (req as CustomRequest).user.access_token
+    const refreshToken = (req as CustomRequest).user.refreshToken;
+    const accessToken = (req as CustomRequest).user.accessToken;
+
+    await this._blackListTokenUsecase.execute(
+      accessToken
     );
 
-    const user = (req as CustomRequest).user;
-    const accessTokenName = `${user.role}_access_token`;
-    const refreshTokenName = `${user.role}_refresh_token`;
-    clearCookie(res, accessTokenName, refreshTokenName);
+    await this._logoutUsecase.execute(refreshToken,accessToken);
+
+    clearCookie(res, COOKIES_NAMES.ACCESS_TOKEN, COOKIES_NAMES.REFRESH_TOKEN);
     res
       .status(HTTP_STATUS.OK)
       .json({ success: true, message: SUCCESS_MESSAGE.LOGOUT_SUCCESS });
@@ -237,10 +257,21 @@ export class AuthController implements IAuthController {
   async refreshToken(req: Request, res: Response): Promise<void> {
     try {
       console.log("hit refresh token controller");
-      const refreshToken = (req as CustomRequest).user.refresh_token;
-      const newToken = this.RefreshTokenUsecase.execute(refreshToken);
-      const accessTokenName = `${newToken.role}_access_token`;
-      updateCookieWithAccessToken(res, newToken.accessToken, accessTokenName);
+      const refreshToken = req.cookies[COOKIES_NAMES.REFRESH_TOKEN];
+
+      if (!refreshToken) {
+        res
+          .status(HTTP_STATUS.UNAUTHORIZED)
+          .json({ suceess: false, message: ERROR_MESSAGE.TOKEN_MISSING });
+        return;
+      }
+
+      const newToken = await this._refreshTokenUsecase.execute(refreshToken);
+      updateCookieWithAccessToken(
+        res,
+        newToken.accessToken,
+        COOKIES_NAMES.ACCESS_TOKEN
+      );
       console.log("success refresh token controller");
       res.status(HTTP_STATUS.OK).json({
         success: true,
@@ -249,11 +280,7 @@ export class AuthController implements IAuthController {
       });
     } catch (error) {
       console.log(error);
-      clearCookie(
-        res,
-        `${(req as CustomRequest).user.role}_access_token`,
-        `${(req as CustomRequest).user.role}_refresh_token`
-      );
+      clearCookie(res, COOKIES_NAMES.ACCESS_TOKEN, COOKIES_NAMES.REFRESH_TOKEN);
       res
         .status(HTTP_STATUS.UNAUTHORIZED)
         .json({ message: ERROR_MESSAGE.INVALID_TOKEN });

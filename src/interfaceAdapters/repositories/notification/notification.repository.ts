@@ -1,11 +1,22 @@
 import { injectable } from "tsyringe";
 import { INotificationRepository } from "../../../entities/repositoryInterfaces/notification/notification-repository.interface";
 import { INotificationEntity } from "../../../entities/modelsEntity/notification.entity";
-import { notificationDB } from "../../../frameworks/database/models/notification.model";
+import {
+  INotificationModel,
+  notificationDB,
+} from "../../../frameworks/database/models/notification.model";
 import { NotificationMapper } from "../../mappers/notification.mapper";
+import { BaseRepository } from "../baseRepository";
 
 @injectable()
-export class NotificationRepository implements INotificationRepository {
+export class NotificationRepository
+  extends BaseRepository<INotificationModel, INotificationEntity>
+  implements INotificationRepository
+{
+  constructor() {
+    super(notificationDB, NotificationMapper.toEntity);
+  }
+
   async createNotification(
     data: INotificationEntity
   ): Promise<INotificationEntity> {
@@ -13,9 +24,6 @@ export class NotificationRepository implements INotificationRepository {
     return NotificationMapper.toEntity(modelData);
   }
 
-  async findById(id: string): Promise<INotificationEntity | null> {
-      return await notificationDB.findById(id);
-  }
 
   async getUserNotifications(userId: string): Promise<INotificationEntity[]> {
     const modelData = await notificationDB

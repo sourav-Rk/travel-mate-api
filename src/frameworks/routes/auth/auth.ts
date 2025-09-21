@@ -1,52 +1,65 @@
 import { Router } from "express";
 
 import { asyncHandler } from "../../../shared/async-handler";
-import { authController } from "../../di/resolve";
+import { authController, blockMiddleware } from "../../di/resolve";
+import { BaseRoute } from "../base.route";
+import { injectable } from "tsyringe";
+import { verifyAuth } from "../../../interfaceAdapters/middlewares/auth.middleware";
 
-export class AuthRoutes {
-  private _router: Router;
-
+@injectable()
+export class AuthRoutes extends BaseRoute {
   constructor() {
-    this._router = Router();
-    this.configureRoutes();
+    super();
   }
 
-  private configureRoutes(): void {
-    this._router.post(
+  protected initializeRoutes(): void {
+    this.router.post(
       "/signup",
       asyncHandler(authController.signup.bind(authController))
     );
-      this._router.post(
-        "/login",
-        asyncHandler(authController.login.bind(authController))
-      );
-    this._router.post(
+    this.router.post(
+      "/login",
+      asyncHandler(authController.login.bind(authController))
+    );
+    this.router.post(
       "/google-auth",
       asyncHandler(authController.googleSignup.bind(authController))
     );
-    this._router.post(
+    this.router.post(
       "/send-otp",
       asyncHandler(authController.sendEmail.bind(authController))
     );
-      this._router.post(
-        "/resend-otp",
-        asyncHandler(authController.resendOtp.bind(authController))
-      );
-    this._router.post(
+    this.router.post(
+      "/resend-otp",
+      asyncHandler(authController.resendOtp.bind(authController))
+    );
+    this.router.post(
       "/verify-otp",
       asyncHandler(authController.verifyOtp.bind(authController))
     );
-    this._router.post(
+    this.router.post(
       "/forgot-password/mail",
       asyncHandler(authController.forgotPasswordSendMail.bind(authController))
     );
-    this._router.post(
+    this.router.post(
       "/forgot-password/reset",
       asyncHandler(authController.forgotPasswordReset.bind(authController))
     );
+
+    this.router.post(
+      "/refresh-token",
+      asyncHandler(authController.refreshToken.bind(authController))
+    );
+
+    this.router.post(
+      "/logout",
+      verifyAuth,
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(authController.logout.bind(authController))
+    );
   }
 
-  public getRouter(): Router {
-    return this._router;
-  }
+  // public getRouter(): Router {
+  //   return this.router;
+  // }
 }

@@ -30,7 +30,7 @@ export class AddToWishListUsecase implements IAddToWishListUsecase {
     const wishlist = await this._wishlistRepository.findByUserId(userId);
 
     if (!wishlist) {
-      await this._wishlistRepository.create({ userId, packages: [] });
+      await this._wishlistRepository.save({ userId, packages: [] });
     }
 
     await this._wishlistRepository.addToWishList(userId, packageId);

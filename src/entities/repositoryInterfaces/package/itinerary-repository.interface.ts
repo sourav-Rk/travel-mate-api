@@ -1,8 +1,8 @@
 import { ItineraryEditDto } from "../../../shared/dto/itineraryDto";
 import { IItineraryEntity } from "../../modelsEntity/itinerary.entity";
+import { IBaseRepository } from "../baseRepository.interface";
 
-export interface IItineraryRepository {
-  findById(id: string): Promise<IItineraryEntity | null>;
+export interface IItineraryRepository extends IBaseRepository<IItineraryEntity> {
   findByPackageId(packageId: string): Promise<IItineraryEntity | null>;
   save(data: IItineraryEntity, session?: any): Promise<IItineraryEntity>;
   update(
