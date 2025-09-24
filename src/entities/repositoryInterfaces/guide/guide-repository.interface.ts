@@ -3,11 +3,15 @@ import { IBaseRepository } from "../baseRepository.interface";
 
 export interface IGuideRepository extends IBaseRepository<IGuideEntity> {
   find(
-    agencyId : string,
+    pageNumber: number,
+    pageSize: number,
     searchTerm: string,
     status: string,
-    validPageNumber: number,
-    validPageSize: number
+    agencyId: any,
+    languages ?: string[],
+    minExperience ?: number,
+    maxExperience ?: number,
+    gender ?: string
   ): Promise<{ user: IGuideEntity[] | []; total: number }>;
   findByEmail(email: string): Promise<IGuideEntity | null>;
   findByNumber(phone: string): Promise<IGuideEntity | null>;
