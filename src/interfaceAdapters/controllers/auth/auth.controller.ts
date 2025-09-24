@@ -170,7 +170,8 @@ export class AuthController implements IAuthController {
 
   async login(req: Request, res: Response): Promise<void> {
     const data = req.body as LoginUserDTO;
-
+    
+    console.log(data);
     const user = await this._loginUsecase.execute(data);
 
     if (!user._id || !user.email || !user.role) {

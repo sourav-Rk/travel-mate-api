@@ -23,7 +23,7 @@ export class GuideController implements IGuideController {
     private _getAllGuideUsecase: IGetAllGuidesUsecase,
 
     @inject("IGetGuideDetailsUsecase")
-    private _getGuideDetailsUsecase: IGetGuideDetailsUsecase
+    private _getGuideDetailsUsecase: IGetGuideDetailsUsecase,
   ) {}
 
   async resetPassword(req: Request, res: Response): Promise<void> {
@@ -45,24 +45,63 @@ export class GuideController implements IGuideController {
 
   async getAllGuides(req: Request, res: Response): Promise<void> {
     const agencyId = (req as CustomRequest).user.id;
-    const { page = 1, limit = 10, searchTerm, status } = req.query;
+    console.log(req.query)
+    const {
+      page = 1,
+      limit = 10,
+      searchTerm,
+      status = "verified",
+      languages,
+      minExperience,
+      maxExperience,
+      gender,
+    } = req.query;
     const pageNumber = Number(page);
     const pageSize = Number(limit);
+
+    let languagesArray: string[] | undefined;
+  
+
+  if (languages) {
+    if (typeof languages === "string") {
+ 
+      if (languages.startsWith("[")) {
+     
+        try {
+          languagesArray = JSON.parse(languages);
+        } catch (error) {
+          languagesArray = languages.split(",");
+        }
+      } else {
+    
+        languagesArray = languages.split(",");
+      }
+    } else if (Array.isArray(languages)) {
+      languagesArray = languages as string[];
+    }
+
+    if (languagesArray) {
+      languagesArray = languagesArray.map(lang => lang.trim()).filter(lang => lang.length > 0);
+    }
+  }
+
     const { user, total } = await this._getAllGuideUsecase.execute(
       pageNumber,
       pageSize,
       searchTerm as string,
       status as string,
-      agencyId
+      agencyId,
+      languagesArray,
+      minExperience ? Number(minExperience) : undefined,
+      maxExperience ? Number(maxExperience) : undefined,
+      gender as string
     );
-    res
-      .status(HTTP_STATUS.OK)
-      .json({
-        success: true,
-        users: user,
-        totalPages: total,
-        currentPage: pageNumber,
-      });
+    res.status(HTTP_STATUS.OK).json({
+      success: true,
+      users: user,
+      totalPages: total,
+      currentPage: pageNumber,
+    });
   }
 
   async getGuideDetails(req: Request, res: Response): Promise<void> {
@@ -71,4 +110,10 @@ export class GuideController implements IGuideController {
     const guide = await this._getGuideDetailsUsecase.execute(agencyId, id);
     res.status(HTTP_STATUS.OK).json({ success: true, user: guide });
   }
+  
+  async assignGuide(req: Request, res: Response): Promise<void> {
+      const {packageId} = req.params;
+      
+  }
+
 }

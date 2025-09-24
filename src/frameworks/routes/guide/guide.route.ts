@@ -5,7 +5,13 @@ import {
   verifyResetToken,
 } from "../../../interfaceAdapters/middlewares/auth.middleware";
 import { asyncHandler } from "../../../shared/async-handler";
-import { guideController, guideProfileController } from "../../di/resolve";
+import {
+  blockMiddleware,
+  guideBookingController,
+  guideController,
+  guidePackageController,
+  guideProfileController,
+} from "../../di/resolve";
 import { BaseRoute } from "../base.route";
 
 @injectable()
@@ -15,10 +21,17 @@ export class GuideRoute extends BaseRoute {
   }
 
   protected initializeRoutes(): void {
+    this.router.post(
+      "/reset-password",
+      verifyResetToken,
+      asyncHandler(guideController.resetPassword.bind(guideController))
+    );
+
+    //middleware
+    this.router.use(verifyAuth, authorizeRole(["guide"]));
+
     this.router.get(
       "/details",
-      verifyAuth,
-      authorizeRole(["guide"]),
       asyncHandler(
         guideProfileController.getGuideProfile.bind(guideProfileController)
       )
@@ -26,17 +39,61 @@ export class GuideRoute extends BaseRoute {
 
     this.router.put(
       "/update-password",
-      verifyAuth,
-      authorizeRole(["guide"]),
       asyncHandler(
         guideProfileController.updatePassword.bind(guideProfileController)
       )
     );
 
-    this.router.post(
-      "/reset-password",
-      verifyResetToken,
-      asyncHandler(guideController.resetPassword.bind(guideController))
+    // -------------------------
+    //  Package  Routes
+    // -------------------------
+
+    //get assigned packages
+    this.router.get(
+      "/assigned-packages",
+      asyncHandler(
+        guidePackageController.getAssignedPackages.bind(guidePackageController)
+      )
+    );
+
+    //get package details
+    this.router.get(
+      "/package/:packageId",
+      asyncHandler(
+        guidePackageController.getPackageDetails.bind(guidePackageController)
+      )
+    );
+
+    //update the status of the package
+    this.router.put(
+      "/package/status",
+      asyncHandler(
+        guidePackageController.updatePackageStatus.bind(guidePackageController)
+      )
+    );
+
+    // -------------------------
+    //  Booking  Routes
+    // -------------------------
+
+    //get bookings of a package
+    this.router.get(
+      "/bookings/:packageId",
+      asyncHandler(
+        guideBookingController.getBookingsOfThePackage.bind(
+          guideBookingController
+        )
+      )
+    );
+
+    //get booking details
+    this.router.get(
+      "/bookings/user/:bookingId",
+      asyncHandler(
+        guideBookingController.getBookingDetailsGuide.bind(
+          guideBookingController
+        )
+      )
     );
   }
 }

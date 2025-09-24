@@ -52,9 +52,17 @@ export class TokenService implements ITokenService {
     });
   }
 
-  verifyAccessToken(token: string): JwtPayload  {
-      return jwt.verify(token, this._accessSecretKey) as JwtPayload;
+  // verifyAccessToken(token: string): JwtPayload  {
+  //     return jwt.verify(token, this._accessSecretKey) as JwtPayload;
+  // }
+
+  verifyAccessToken(token: string): JwtPayload | null {
+  try {
+    return jwt.verify(token, this._accessSecretKey) as JwtPayload;
+  } catch (error) {
+    return null;
   }
+}
 
   verifyRefreshToken(token: string): JwtPayload | null {
     try {

@@ -59,6 +59,10 @@ import { AuthRoutes } from "../routes/auth/auth";
 import { AdminRoute } from "../routes/admin/admin.route";
 import { VendorRoute } from "../routes/vendor/vendor.route";
 import { GuideRoute } from "../routes/guide/guide.route";
+import { IGuidePackageController } from "../../entities/controllerInterfaces/package/guide-package-controller.interface";
+import { GuidePackageController } from "../../interfaceAdapters/controllers/package/guide-package-controller";
+import { IGuideBookingController } from "../../entities/controllerInterfaces/booking/guide-booking-controller.interface";
+import { GuideBookingController } from "../../interfaceAdapters/controllers/booking/guide-booking-controller";
 
 DependencyInjection.registerAll();
 
@@ -125,6 +129,10 @@ export const activityController =
 export const clientPackageController =
   container.resolve<IClientPackageController>(ClientPackageController);
 
+//guide-package controller
+export const guidePackageController =
+  container.resolve<IGuidePackageController>(GuidePackageController);
+
 //client-booking controler
 export const clientBookingController =
   container.resolve<IClientBookingController>(ClientBookingController);
@@ -132,6 +140,10 @@ export const clientBookingController =
 //vendor-booking controller
 export const vendorBookingController =
   container.resolve<IVendorBookingController>(VendorBookingController);
+
+//guide-booking controller
+export const guideBookingController =
+  container.resolve<IGuideBookingController>(GuideBookingController);
 
 //payment controller
 export const paymentController =

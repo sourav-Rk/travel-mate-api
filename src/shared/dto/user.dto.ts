@@ -59,6 +59,7 @@ export interface GuideDto {
   documents: string[];
   bio?: string;
   profileImage?: string;
+  isAvailable : boolean;
 }
 
 export type UserDto = ClientDto | VendorDto | GuideDto;

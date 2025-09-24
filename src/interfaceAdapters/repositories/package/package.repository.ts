@@ -42,6 +42,10 @@ export class PackageRepository
     return await packageDB.find({ applicationDeadline: deadline });
   }
 
+  async findByGuideId(guideId: string): Promise<IPackageEntity[] | []> {
+    return await packageDB.find({ guideId });
+  }
+
   async save(data: IPackageEntity, session?: any): Promise<IPackageEntity> {
     const options = session ? { session } : {};
     const modelData = await packageDB
@@ -270,5 +274,39 @@ export class PackageRepository
       .limit(6);
 
     return packages.map((doc) => PackageMapper.toEntity(doc));
+  }
+
+  async findAssignedPackages(
+    packageIds: string[],
+    searchTerm: string,
+    status: string,
+    pageNumber: number,
+    pageSize: number
+  ): Promise<PaginatedPackagesRepo> {
+    const filter: any = { packageId: { $in: packageIds } };
+
+    if (searchTerm) {
+      filter.$or = [
+        { packageName: { $regex: searchTerm, $options: "i" } },
+        { title: { $regex: searchTerm, $options: "i" } },
+      ];
+    }
+
+    if (status !== "all") {
+      filter.status = status;
+    }
+
+    const skip = (pageNumber - 1) * pageSize;
+    const limit = pageSize;
+
+    const [packages, total] = await Promise.all([
+      packageDB.find(filter).skip(skip).limit(limit).sort({ createdAt: -1 }),
+      packageDB.countDocuments(filter),
+    ]);
+
+    return {
+      packages: packages.map((doc) => PackageMapper.toEntity(doc)),
+      total,
+    };
   }
 }

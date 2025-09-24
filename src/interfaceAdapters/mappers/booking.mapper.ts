@@ -15,7 +15,7 @@ export class BookingMapper {
   static toEntity(doc: IBookingModel): IBookingEntity {
     return {
       _id: String(doc._id),
-      bookingId : doc.bookingId,
+      bookingId: doc.bookingId,
       packageId: String(doc.packageId),
       userId: String(doc.userId),
       status: doc.status,
@@ -32,11 +32,10 @@ export class BookingMapper {
   ): ClientPackageBookingDto {
     const bookingDetail: ClientPackageBookingDto = {
       _id: String(doc._id),
-      bookingId : doc.bookingId,
+      bookingId: doc.bookingId,
       status: doc.status,
       isWaitlisted: doc.isWaitlisted ?? false,
       packageId: doc.packageId,
-      
     };
     if (doc?.cancelledAt) {
       bookingDetail.cancelledAt = doc.cancelledAt;
@@ -49,7 +48,7 @@ export class BookingMapper {
   ): BookingListDTO {
     const bookingDetails = {
       id: String(entity._id),
-      bookingId : entity.bookingId,
+      bookingId: entity.bookingId,
       userId: entity.userId.toString(),
       status: entity.status,
       isWaitlisted: entity.isWaitlisted ?? false,
@@ -75,7 +74,7 @@ export class BookingMapper {
       package: entity.packageId
         ? {
             id: String(entity.packageId._id),
-            packageId : entity.packageId,
+            packageId: entity.packageId,
             images: entity.packageId.images[0] ?? undefined,
             name: entity.packageId.packageName,
             price: entity.packageId.price,
@@ -97,16 +96,39 @@ export class BookingMapper {
   ): BookingListVendorDto {
     const bookingList: BookingListVendorDto = {
       _id: String(doc._id),
-      bookingId : doc.bookingId!,
+      bookingId: doc.bookingId!,
       status: doc.status as BOOKINGSTATUS,
       isWaitlisted: doc.isWaitlisted,
-      user: doc.userId
+      user: doc.user
         ? {
-            _id: String(doc.userId._id),
-            firstName: doc.userId.firstName,
-            lastName: doc.userId.lastName,
-            email: doc.userId.email,
-            phone: doc.userId.phone ?? "",
+            _id: String(doc.user._id),
+            firstName: doc.user.firstName,
+            lastName: doc.user.lastName,
+            email: doc.user.email,
+            phone: doc.user.phone ?? "",
+          }
+        : null,
+      cancelledAt: doc.cancelledAt ?? null,
+    };
+
+    return bookingList;
+  }
+
+  static mapToGuideBookingListDto(
+    doc: BookingListWithUserDetailsDto
+  ): BookingListVendorDto {
+    const bookingList: BookingListVendorDto = {
+      _id: String(doc._id),
+      bookingId: doc.bookingId!,
+      status: doc.status as BOOKINGSTATUS,
+      isWaitlisted: doc.isWaitlisted,
+      user: doc.user
+        ? {
+            _id: String(doc.user._id),
+            firstName: doc.user.firstName,
+            lastName: doc.user.lastName,
+            email: doc.user.email,
+            phone: doc.user.phone ?? "",
           }
         : null,
       cancelledAt: doc.cancelledAt ?? null,
@@ -118,7 +140,7 @@ export class BookingMapper {
   static mapToBookingDetailsDto(doc: IBookingModel): BookingDetailsDto {
     return {
       _id: String(doc._id),
-      bookingId : doc.bookingId,
+      bookingId: doc.bookingId,
       packageId: String(doc.packageId),
       userId: String(doc.userId),
       isWaitlisted: doc.isWaitlisted ?? false,
@@ -141,19 +163,21 @@ export class BookingMapper {
         : null,
     };
   }
-  static mapToBookingDetailsWithUserDetailsDto(doc: BookingListWithUserDetailsDto): BookingDetailsWithUserDetailsDto {
+  static mapToBookingDetailsWithUserDetailsDto(
+    doc: BookingListWithUserDetailsDto
+  ): BookingDetailsWithUserDetailsDto {
     return {
       _id: String(doc._id),
-      bookingId : doc.bookingId!,
+      bookingId: doc.bookingId!,
       packageId: String(doc.packageId),
-      userId: {
-          _id : String(doc.userId._id),
-          firstName : doc.userId.firstName,
-          lastName : doc.userId.lastName,
-          gender : doc.userId.gender!,
-          phone : doc.userId.phone!,
-          email : doc.userId.email
-      },
+      user:  {
+        _id: String(doc.user._id),
+        firstName: doc.user.firstName,
+        lastName: doc.user.lastName,
+        gender: doc.user.gender!,
+        phone: doc.user.phone!,
+        email: doc.user.email,
+      } ,
       isWaitlisted: doc.isWaitlisted ?? false,
       status: doc.status as BOOKINGSTATUS,
       advancePayment: doc.advancePayment

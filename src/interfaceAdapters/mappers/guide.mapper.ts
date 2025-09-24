@@ -1,3 +1,4 @@
+import { profile } from "console";
 import { IGuideEntity } from "../../entities/modelsEntity/guide.entity";
 import { GuideListDto, GuideProfileDto } from "../../shared/dto/guideDto";
 import { GuideDto } from "../../shared/dto/user.dto";
@@ -12,6 +13,12 @@ export class GuideMapper {
       gender: doc.gender ?? "N/A",
       phone: doc.phone ?? "N/A",
       status: doc.status ?? "N/A",
+      alternatePhone : doc.alternatePhone,
+      languageSpoken : doc.languageSpoken,
+      yearOfExperience : doc.yearOfExperience,
+      profileImage : doc.profileImage ?? "",
+      isAvailable : doc.isAvailable
+
     };
   }
 
@@ -31,6 +38,7 @@ export class GuideMapper {
       documents: doc.documents,
       profileImage: doc.profileImage,
       role: "guide",
+      isAvailable : doc.isAvailable,
     };
   }
 

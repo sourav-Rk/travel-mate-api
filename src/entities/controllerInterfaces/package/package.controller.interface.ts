@@ -7,4 +7,5 @@ export interface IPackageController {
   updatePackage(req: Request, res: Response): Promise<void>;
   updatePackageStatus(req : Request,res : Response) : Promise<void>;
   updateBlockStatus(req : Request,res : Response) : Promise<void>;
+  assignGuideToTrip(req : Request,res : Response) : Promise<void>;
 }

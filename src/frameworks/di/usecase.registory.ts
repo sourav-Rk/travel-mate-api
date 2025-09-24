@@ -158,6 +158,18 @@ import { IGetPackageReviewsUsecase } from "../../entities/useCaseInterfaces/revi
 import { GetPackageReviewsUsecase } from "../../useCases/review/getPackageReviews.usecase";
 import { ILogoutUsecase } from "../../entities/useCaseInterfaces/auth/logout-usecase.interface";
 import { LogoutUsecase } from "../../useCases/auth/logout.usecase";
+import { IAssignGuideToTripUsecase } from "../../entities/useCaseInterfaces/package/assign-guide-to-trip-usecase.interface";
+import { AssignGuideToTripUsecase } from "../../useCases/package/assign-guide-to-trip.usecase";
+import { IAssignedTripsUsecase } from "../../entities/useCaseInterfaces/guideTrips/assignedTrips-usecase.interface";
+import { AssignedTripsUsecase } from "../../useCases/guidetrips/viewAssignedTrips.usecase";
+import { IViewPackageDetailsUsecase } from "../../entities/useCaseInterfaces/guideTrips/viewPackageDetails-usecase.interface";
+import { ViewPackageDetailsGuideUsecase } from "../../useCases/guidetrips/viewPackageDetails.usecase";
+import { IGetBookingsGuideUsecase } from "../../entities/useCaseInterfaces/booking/guide-booking/get-bookings-usecase.interface";
+import { GetBookingsGuideUsecase } from "../../useCases/booking/guide-booking/get-bookings.usecase";
+import { IGetBookingDetailsGuideUsecase } from "../../entities/useCaseInterfaces/booking/guide-booking/get-booking-details-guide-usecase.interface";
+import { GetBookingDetailsGuideUsecase } from "../../useCases/booking/guide-booking/get-booking-details-guide.usecase";
+import { IUpdatePackageStatusUsecaseGuide } from "../../entities/useCaseInterfaces/guideTrips/update-package-status-usecase.interface";
+import { UpdatePackageStatusUsecaseGuide } from "../../useCases/guidetrips/update-package-status.usecase";
 
 export class UsecaseRegistory {
   static registerUsecases(): void {
@@ -494,6 +506,31 @@ export class UsecaseRegistory {
       }
     );
 
+    //guide bookings usecase
+    container.register<IGetBookingsGuideUsecase>("IGetBookingsGuideUsecase", {
+      useClass: GetBookingsGuideUsecase,
+    });
+
+    container.register<IGetBookingDetailsGuideUsecase>('IGetBookingDetailsGuideUsecase',{
+      useClass : GetBookingDetailsGuideUsecase
+    });
+
+    //guide packages usecases
+    container.register<IAssignedTripsUsecase>("IAssignedTripsUsecase", {
+      useClass: AssignedTripsUsecase,
+    });
+
+    container.register<IViewPackageDetailsUsecase>(
+      "IViewPackageDetailsUsecase",
+      {
+        useClass: ViewPackageDetailsGuideUsecase,
+      }
+    );
+
+    container.register<IUpdatePackageStatusUsecaseGuide>('IUpdatePackageStatusUsecaseGuide',{
+      useClass : UpdatePackageStatusUsecaseGuide
+    });
+
     //payment usecases
     container.register<IPayAdvanceAmountUsecase>("IPayAdvanceAmountUsecase", {
       useClass: PayAdvanceAmountUsecase,
@@ -560,6 +597,11 @@ export class UsecaseRegistory {
       }
     );
 
+    //vendor -> guide usecase
+    container.register<IAssignGuideToTripUsecase>("IAssignGuideToTripUsecase", {
+      useClass: AssignGuideToTripUsecase,
+    });
+
     //token
     container.register<IBlackListTokenUsecase>("IBlackListTokenUsecase", {
       useClass: BlackListTokenUsecase,
@@ -591,6 +633,5 @@ export class UsecaseRegistory {
     container.register<LoggerMiddleware>("LoggerMiddleware", {
       useClass: LoggerMiddleware,
     });
-
   }
 }

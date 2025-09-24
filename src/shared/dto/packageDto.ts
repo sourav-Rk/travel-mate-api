@@ -126,6 +126,9 @@ export interface PackageListingTableDto {
   price: number;
   status: string;
   isBlocked: boolean;
+  guideId ?: string;
+  startDate ?: string;
+  endDate ?: string;
 }
 
 export interface PackageListingUserSideDto {
@@ -156,3 +159,4 @@ export interface PaginatedPackagesUserSideListing {
   packages: PackageListingUserSideDto[] | [];
   total: number;
 }
+

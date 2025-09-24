@@ -17,21 +17,30 @@ export class GetAllGuideUsecase implements IGetAllGuidesUsecase {
     pageSize: number,
     searchTerm: string,
     status: string,
-    agencyId: any
+    agencyId: any,
+    languages?: string[],
+    minExperience?: number,
+    maxExperience?: number,
+    gender?: string
   ): Promise<PaginatedUsers> {
     const validPageNumber = Math.max(1, pageNumber || 0);
     const validPageSize = Math.max(1, pageSize || 10);
 
     const { user, total } = await this._guideRepository.find(
-      agencyId,
+      validPageNumber,
+      validPageSize,
       searchTerm,
       status,
-      validPageNumber,
-      validPageSize
+      agencyId,
+      languages,
+      minExperience,
+      maxExperience,
+      gender
     );
 
+    const totalPages = Math.ceil(total/ validPageSize)
 
     const users = user.map((doc) => GuideMapper.mapGuideToVendorTableDto(doc));
-    return { user: users, total };
+    return { user: users, total : totalPages };
   }
 }

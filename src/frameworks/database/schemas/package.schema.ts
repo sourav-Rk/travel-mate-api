@@ -117,6 +117,10 @@ export const packageSchema = new mongoose.Schema<IPackageModel>(
     paymentAlertSentAt: {
       type: Date,
     },
+    guideId : {
+      type : mongoose.Schema.Types.ObjectId,
+      ref : "guides",
+    }
   },
   {
     timestamps: true,

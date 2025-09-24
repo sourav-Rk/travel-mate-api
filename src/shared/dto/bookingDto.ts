@@ -92,7 +92,7 @@ export interface BookingListVendorDto {
 export interface BookingListWithUserDetailsDto {
   _id: string;
   bookingId ?: string;
-  userId: IClientEntity;
+  user: IClientEntity;
   status: string;
   isWaitlisted: boolean;
   cancelledAt: Date;
@@ -137,7 +137,7 @@ export interface BookingDetailsDto {
 //booking details dto for booking details view
 export interface BookingDetailsWithUserDetailsDto {
   _id: string;
-  userId: {
+  user: {
     _id : string;
     firstName : string;
     lastName : string;
@@ -174,4 +174,11 @@ export interface PaginatedBookingListWithUserDetailsVendorDto {
   bookings: BookingListVendorDto[];
   total: number;
   minTravelersCount: number;
+}
+
+
+//PAGINATED BOOKING WITH USER DETAILS GUIDE LISTING DTO
+export interface PaginatedBookingListWithUserDetailsGuideDto {
+  bookings : BookingListVendorDto[];
+  total : number;
 }
