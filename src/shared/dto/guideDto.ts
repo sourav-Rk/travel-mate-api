@@ -6,6 +6,11 @@ export interface GuideListDto {
   phone: string;
   status: string;
   gender: string;
+  alternatePhone : string;
+  languageSpoken : string[];
+  yearOfExperience : string;
+  profileImage : string;
+  isAvailable : boolean
 }
 
 
@@ -24,3 +29,5 @@ export interface GuideProfileDto {
    languageSpoken : string[];
    documents : string[];
 }
+
+//assigned guide with 

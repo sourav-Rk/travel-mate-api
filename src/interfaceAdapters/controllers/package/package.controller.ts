@@ -22,6 +22,7 @@ import {
 import { basicDetailsSchemaEdit } from "../../../shared/validations/editPackageValidation";
 import { packageFormSchema } from "../../../shared/validations/package.validation";
 import { CustomRequest } from "../../middlewares/auth.middleware";
+import { IAssignGuideToTripUsecase } from "../../../entities/useCaseInterfaces/package/assign-guide-to-trip-usecase.interface";
 
 @injectable()
 export class PackageController implements IPackageController {
@@ -42,7 +43,10 @@ export class PackageController implements IPackageController {
     private _updatePackageStatusUsecase: IUpdatePackageStatusUsecase,
 
     @inject("IUpdateBlockStatusUsecase")
-    private _updateBlockStatus: IUpdateBlockStatusUsecase
+    private _updateBlockStatus: IUpdateBlockStatusUsecase,
+
+    @inject("IAssignGuideToTripUsecase")
+    private _assignGuideToTripUsecase: IAssignGuideToTripUsecase
   ) {}
 
   async addPackage(req: Request, res: Response): Promise<void> {
@@ -61,7 +65,7 @@ export class PackageController implements IPackageController {
     } as PackageBasicDetailsDto;
     const itinerary = req.body.data.itinerary as ItineraryDto;
 
-    console.log(req.body)
+    console.log(req.body);
 
     await this._addPackageUsecase.execute(basicDetails, itinerary);
     res
@@ -157,5 +161,19 @@ export class PackageController implements IPackageController {
     res
       .status(HTTP_STATUS.OK)
       .json({ success: true, message: "Status updated successfully" });
+  }
+
+  async assignGuideToTrip(req: Request, res: Response): Promise<void> {
+    const { packageId } = req.params;
+    const { guideId } = req.body;
+    console.log(req.params);
+    console.log(req.body,"body")
+    await this._assignGuideToTripUsecase.execute(packageId, guideId);
+    res
+      .status(HTTP_STATUS.OK)
+      .json({
+        success: true,
+        message: SUCCESS_MESSAGE.GUIDE_ASSIGNED_SUCCESSFULLY,
+      });
   }
 }

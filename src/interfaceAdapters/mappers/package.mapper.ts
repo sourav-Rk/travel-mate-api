@@ -34,6 +34,7 @@ export class PackageMapper {
       itineraryId: String(doc.itineraryId),
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
+      guideId : doc.guideId ? String(doc.guideId) : undefined
     };
   }
 
@@ -53,6 +54,7 @@ export class PackageMapper {
       title: doc.title,
       status: doc.status ?? "",
       isBlocked: doc.isBlocked ?? false,
+      guideId : doc.guideId ? doc.guideId : ""
     };
   }
 
@@ -73,5 +75,25 @@ export class PackageMapper {
       tags: doc.tags,
       title: doc.title,
     };
+  }
+
+  static mapPackageToGuideTableDto(
+    doc : IPackageEntity
+  ) : PackageListingTableDto {
+     return {
+      packageId : doc.packageId!,
+      packageName : doc.packageName,
+      title : doc.title,
+      category : doc.category,
+      duration : doc.duration,
+      maxGroupSize : doc.maxGroupSize,
+      images : doc.images,
+      isBlocked : doc.isBlocked!,
+       meetingPoint : doc.meetingPoint,
+       price : doc.price,
+       status : doc.status!,
+       startDate : doc.startDate.toISOString(),
+       endDate : doc.endDate.toISOString(),
+     }
   }
 }

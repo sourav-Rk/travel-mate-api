@@ -48,7 +48,7 @@ export const ERROR_MESSAGE = {
   INVALID_REFRESH_TOKEN: "invalid refresh token",
   TOKEN_EXPIRED_ACCESS: "Access Token time out",
   TOKEN_EXPIRED_REFRESH: "Token time out, Please loggin again",
-  TOKEN_MISSING : "Authorization token is required",
+  TOKEN_MISSING: "Authorization token is required",
   SERVER_ERROR: "An error occurred, please try again later.",
   BLOCKED_ERROR: "You are blocked by Admin. please contact admin",
   NOT_ALLOWED: "You are not allowed",
@@ -89,6 +89,15 @@ export const ERROR_MESSAGE = {
   WISHLIST_NOT_FOUND: "Wishlist not found",
   REQUIRED_FIELDS_MISSING: "Required fields are missing",
   ALREADY_REVIEWED: "You already added the review",
+  GUIDE_NOT_FOUND: "Guide not found",
+  GUIDE_AND_AGENCY_CONFLICT: "Guide and Package belong to different agencies",
+  PACKAGE_ALREADY_COMPLETED: "Package is already completed",
+  ONLY_ASSIGN_GUIDE_IF_PACKAGE_IS_CLOSED : "Guide can only be assigned after the applications are closed",
+  GUIDE_ASSIGNED_FOR_ANOTHER_TRIP : "Guide not available as the guide is assigned for another trip",
+  GUIDE_ALREADY_ASSIGNED : "Guide already assigned for this trip",
+  STATUS_REQUIRED : "Status is required",
+  TRIP_ALREADY_COMPLETED : "Trip is already completed",
+  CANNOT_CHANGE_STATUS : "Status cant be updated as the trip is not over yet"
 };
 
 export const SUCCESS_MESSAGE = {
@@ -124,6 +133,7 @@ export const SUCCESS_MESSAGE = {
   ADDED_TO_WISHLIST: "Added to wishlist",
   REMOVED_FROM_WISHLIST: "Removed from wishlist",
   ADDED_REVIEW: "Review added successfully",
+  GUIDE_ASSIGNED_SUCCESSFULLY : "Guide assigned successfully"
 };
 
 export const ROLES = {

@@ -7,5 +7,7 @@ export interface IGuideEntity extends IUserEntity{
     languageSpoken : string[];
     yearOfExperience : string;
     bio : string;
+    assignedTrips : string[];
+    isAvailable : boolean;
     documents : string[];
 }

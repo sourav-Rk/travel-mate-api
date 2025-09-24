@@ -75,11 +75,16 @@ export const guideSchema = new mongoose.Schema<IGuideModel>(
       type: [String],
       default: null,
     },
+    assignedTrips: {
+      type: [String],
+      default: null,
+    },
+    isAvailable: {
+      type: Boolean,
+      default: true,       
+    },
   },
   {
     timestamps: true,
   }
 );
-
-
-

@@ -34,4 +34,5 @@ export interface IPackageEntity {
   paymentAlertSentAt ?: Date;
   createdAt?: Date;
   updatedAt?: Date;
+  guideId?: string;
 }

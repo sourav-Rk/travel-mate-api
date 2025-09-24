@@ -31,12 +31,18 @@ export class VendorRoute extends BaseRoute {
   }
 
   protected initializeRoutes(): void {
+    // -------------------------
+    //  Common Upload & Utilities Routes
+    // -------------------------
     this.router.use("/", new CommonUploadRoutes("vendor").router);
-
     this.router.use("/", new SignedUrlRoute("vendor").router);
-
     this.router.use("/", new FcmTokenRoutes("vendor").router);
 
+    // -------------------------
+    //  Booking Routes
+    // -------------------------
+
+    // Send payment alert for a booking
     this.router.put(
       "/bookings/:packageId/payment-alert",
       verifyAuth,
@@ -46,6 +52,7 @@ export class VendorRoute extends BaseRoute {
       )
     );
 
+    // Get details of a specific booking by bookingId
     this.router.get(
       "/bookings/users/:bookingId",
       verifyAuth,
@@ -56,6 +63,7 @@ export class VendorRoute extends BaseRoute {
       )
     );
 
+    // Get all bookings for a package
     this.router.get(
       "/bookings/:packageId",
       verifyAuth,
@@ -66,6 +74,11 @@ export class VendorRoute extends BaseRoute {
       )
     );
 
+    // -------------------------
+    //  Package Routes
+    // -------------------------
+
+    // Update package status (active/inactive)
     this.router.put(
       "/package/status",
       verifyAuth,
@@ -74,6 +87,7 @@ export class VendorRoute extends BaseRoute {
       asyncHandler(packageConroller.updatePackageStatus.bind(packageConroller))
     );
 
+    // Get or update package by ID
     this.router
       .route("/package/:id")
       .get(
@@ -89,16 +103,7 @@ export class VendorRoute extends BaseRoute {
         asyncHandler(packageConroller.updatePackage.bind(packageConroller))
       );
 
-    this.router.put(
-      "/itinerary/:id",
-      verifyAuth,
-      authorizeRole(["vendor"]),
-      blockMiddleware.checkBlockedStatus,
-      asyncHandler(
-        itineraryController.updateItinerary.bind(itineraryController)
-      )
-    );
-
+    // Add new package or get all packages
     this.router
       .route("/package")
       .post(
@@ -114,6 +119,34 @@ export class VendorRoute extends BaseRoute {
         asyncHandler(packageConroller.getPackages.bind(packageConroller))
       );
 
+    //Assign a guide to the package
+    this.router.put(
+      "/package/:packageId/assign-guide",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(packageConroller.assignGuideToTrip.bind(packageConroller))
+    );
+
+    // -------------------------
+    //  Itinerary Routes
+    // -------------------------
+
+    // Update itinerary by ID
+    this.router.put(
+      "/itinerary/:id",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(
+        itineraryController.updateItinerary.bind(itineraryController)
+      )
+    );
+
+    // -------------------------
+    // Activity Routes
+    // -------------------------
+    // Update an existing activity
     this.router.put(
       "/activity/:activityId",
       verifyAuth,
@@ -121,7 +154,7 @@ export class VendorRoute extends BaseRoute {
       blockMiddleware.checkBlockedStatus,
       asyncHandler(activityController.updateActivity.bind(activityController))
     );
-
+    // Create a new activity
     this.router.post(
       "/activity",
       verifyAuth,
@@ -130,6 +163,7 @@ export class VendorRoute extends BaseRoute {
       asyncHandler(activityController.createActivity.bind(activityController))
     );
 
+    // Delete an activity
     this.router.delete(
       "/activity",
       verifyAuth,
@@ -138,6 +172,11 @@ export class VendorRoute extends BaseRoute {
       asyncHandler(activityController.deleteActivity.bind(activityController))
     );
 
+    // -------------------------
+    // Vendor Profile Routes
+    // -------------------------
+
+    // Get or update vendor profile details
     this.router
       .route("/details")
       .get(
@@ -159,6 +198,11 @@ export class VendorRoute extends BaseRoute {
         )
       );
 
+    // -------------------------
+    // Authentication Routes
+    // -------------------------
+
+    // Update vendor password
     this.router.post(
       "/change-email",
       verifyAuth,
@@ -193,6 +237,11 @@ export class VendorRoute extends BaseRoute {
       )
     );
 
+    // -------------------------
+    //  Address Routes And Kyc Routes
+    // -------------------------
+
+    // Add new address
     this.router.post(
       "/address",
       verifyAuth,
@@ -201,6 +250,7 @@ export class VendorRoute extends BaseRoute {
       asyncHandler(addressController.addAddress.bind(addressController))
     );
 
+    // Update existing address
     this.router.put(
       "/address",
       verifyAuth,
@@ -209,6 +259,19 @@ export class VendorRoute extends BaseRoute {
       asyncHandler(addressController.updateAddress.bind(addressController))
     );
 
+    this.router.post(
+      "/kyc",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(kycController.addKyc.bind(kycController))
+    );
+
+    // -------------------------
+    //  Guide Routes
+    // -------------------------
+
+    // Get all guides or add a new guide
     this.router
       .route("/guide")
       .get(
@@ -224,6 +287,7 @@ export class VendorRoute extends BaseRoute {
         asyncHandler(guideController.addGuide.bind(guideController))
       );
 
+    // Get details of a specific guide
     this.router.get(
       "/guide-details",
       verifyAuth,
@@ -232,14 +296,11 @@ export class VendorRoute extends BaseRoute {
       guideController.getGuideDetails.bind(guideController)
     );
 
-    this.router.post(
-      "/kyc",
-      verifyAuth,
-      authorizeRole(["vendor"]),
-      blockMiddleware.checkBlockedStatus,
-      asyncHandler(kycController.addKyc.bind(kycController))
-    );
+    // -------------------------
+    //  Vendor Management Routes
+    // -------------------------
 
+    // Update vendor status
     this.router.patch(
       "/status",
       verifyAuth,
@@ -248,6 +309,7 @@ export class VendorRoute extends BaseRoute {
       asyncHandler(vendorController.updateVendorStatus.bind(vendorController))
     );
 
+    // Get vendor profile for status
     this.router.get(
       "/profile",
       verifyAuth,
@@ -256,6 +318,11 @@ export class VendorRoute extends BaseRoute {
       asyncHandler(vendorController.getDetailsforStatus.bind(vendorController))
     );
 
+    // -------------------------
+    //  Notification Routes
+    // -------------------------
+
+    // Mark a specific notification as read
     this.router.patch(
       "/notifications/:notificationId",
       verifyAuth,
@@ -266,6 +333,7 @@ export class VendorRoute extends BaseRoute {
       )
     );
 
+    // Get all notifications or mark all as read
     this.router
       .route("/notifications")
       .get(

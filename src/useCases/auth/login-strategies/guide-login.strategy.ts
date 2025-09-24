@@ -20,6 +20,8 @@ export class GuideLoginStrategy implements ILoginStrategy{
     async login(user: LoginUserDTO): Promise<Partial<IUserEntity>> {
         const guide = await this._guideRepository.findByEmail(user.email);
 
+        console.log(guide,"-->guide")
+
         if(!guide){
             throw new NotFoundError(ERROR_MESSAGE.EMAIL_NOT_FOUND)
         }

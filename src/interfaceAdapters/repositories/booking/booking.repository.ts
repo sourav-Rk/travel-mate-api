@@ -17,6 +17,7 @@ import {
 } from "../../../shared/dto/bookingDto";
 import { IClientEntity } from "../../../entities/modelsEntity/client.entity";
 import { BaseRepository } from "../baseRepository";
+import mongoose from "mongoose";
 
 @injectable()
 export class BookingRepository
@@ -109,9 +110,9 @@ export class BookingRepository
     pageSize: number
   ): Promise<PaginatedBookingListWithUserDetails> {
     let filter: any = { packageId };
-    if (searchTerm) {
-      filter.$or = [{ bookingId: { $regex: searchTerm, $options: "i" } }];
-    }
+    // if (searchTerm) {
+    //   filter.$or = [{ bookingId: { $regex: searchTerm, $options: "i" } }];
+    // }
 
     if (status && status !== "all") {
       filter.status = status;
@@ -120,30 +121,124 @@ export class BookingRepository
     const skip = (pageNumber - 1) * pageSize;
     const limit = pageSize;
 
-    const [bookings, total] = await Promise.all([
-      bookingDB
-        .find(filter)
-        .populate<{ userId: IClientEntity }>("userId")
-        .skip(skip)
-        .limit(limit)
-        .sort({ createdAt: -1 })
-        .lean<IBookingEntity[]>(),
-      bookingDB.countDocuments(filter),
-    ]);
+        const pipeline: any[] = [
+        { $match: filter },
+        {
+            $lookup: {
+                from: "clients", 
+                localField: "userId",
+                foreignField: "_id",
+                as: "user"
+            }
+        },
+        { $unwind: "$user" }
+    ];
 
-    console.log(filter);
+      if (searchTerm) {
+        pipeline.push({
+            $match: {
+                $or: [
+                    { bookingId: { $regex: searchTerm, $options: "i" } },
+                    { "user.firstName": { $regex: searchTerm, $options: "i" } },
+                    { "user.lastName": { $regex: searchTerm, $options: "i" } },
+                    { "user.email": { $regex: searchTerm, $options: "i" } },
+                    { "user.phone": { $regex: searchTerm, $options: "i" } }
+                ]
+            }
+        });
+    }
+
+    pipeline.push({$sort : {createdAt : -1}})
+
+    const countPipeline = [...pipeline, { $count: "total" }];
+    const totalResult = await bookingDB.aggregate(countPipeline);
+    const total = totalResult.length > 0 ? totalResult[0].total : 0;
+
+    // Add pagination
+    pipeline.push({ $skip: skip }, { $limit: limit });
+
+    const bookings = await bookingDB.aggregate(pipeline);
+
     return {
-      bookings: bookings as unknown as BookingListWithUserDetailsDto[],
-      total,
+        bookings: bookings as unknown as BookingListWithUserDetailsDto[],
+        total,
     };
+
+    // const [bookings, total] = await Promise.all([
+    //   bookingDB
+    //     .find(filter)
+    //     .populate<{ userId: IClientEntity }>("userId")
+    //     .skip(skip)
+    //     .limit(limit)
+    //     .sort({ createdAt: -1 })
+    //     .lean<IBookingEntity[]>(),
+    //   bookingDB.countDocuments(filter),
+    // ]);
+
+    // console.log(filter);
+    // return {
+    //   bookings: bookings as unknown as BookingListWithUserDetailsDto[],
+    //   total,
+    // };
   }
+
+  // async findByBookingIdWithUserDetails(
+  //   bookingId: string
+  // ): Promise<BookingDetailsWithUserDetailsDto | null> {
+  //   return bookingDB
+  //     .findById(bookingId)
+  //     .populate("userId")
+  //     .lean<BookingDetailsWithUserDetailsDto | null>();
+  // }
 
   async findByBookingIdWithUserDetails(
     bookingId: string
-  ): Promise<BookingDetailsWithUserDetailsDto | null> {
-    return bookingDB
-      .findById(bookingId)
-      .populate("userId")
-      .lean<BookingDetailsWithUserDetailsDto | null>();
-  }
+): Promise<BookingDetailsWithUserDetailsDto | null> {
+    const pipeline = [
+        { 
+            $match: { 
+                _id: new mongoose.Types.ObjectId(bookingId) 
+            } 
+        },
+        {
+            $lookup: {
+                from: "clients", 
+                localField: "userId",
+                foreignField: "_id",
+                as: "user"
+            }
+        },
+        { 
+            $unwind: {
+                path: "$user",
+                preserveNullAndEmptyArrays: true 
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                bookingId: 1,
+                packageId: 1,
+                status: 1,
+                isWaitlisted: 1,
+                cancelledAt: 1,
+                advancePayment: 1,
+                fullPayment: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                user: {
+                    _id: "$user._id",
+                    firstName: "$user.firstName",
+                    lastName: "$user.lastName",
+                    email: "$user.email",
+                    phone: "$user.phone",
+                    gender : "$user.gender",
+                }
+            }
+        }
+    ];
+
+    const result = await bookingDB.aggregate(pipeline);
+    return result.length > 0 ? result[0] as BookingDetailsWithUserDetailsDto : null;
+}
 }

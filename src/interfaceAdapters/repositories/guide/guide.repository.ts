@@ -8,7 +8,6 @@ import {
 } from "../../../frameworks/database/models/guide.model";
 import { BaseRepository } from "../baseRepository";
 
-
 @injectable()
 export class GuideRepository
   extends BaseRepository<IGuideModel, IGuideEntity>
@@ -19,11 +18,15 @@ export class GuideRepository
   }
 
   async find(
-    agencyId: string,
+    validPageNumber: number,
+    validPageSize: number,
     searchTerm: string,
     status: string,
-    validPageNumber: number,
-    validPageSize: number
+    agencyId: any,
+    languages?: string[],
+    minExperience?: number,
+    maxExperience?: number,
+    gender?: string,
   ): Promise<{ user: IGuideEntity[] | []; total: number }> {
     const filter: any = { agencyId };
 
@@ -38,6 +41,47 @@ export class GuideRepository
     if (status && status !== "all") {
       filter.status = status;
     }
+
+  if (languages && languages.length > 0) {  const lowercaseLanguages = languages.map(lang => lang.toLowerCase());
+  
+  filter.languageSpoken = {
+    $in: lowercaseLanguages.map(lang => new RegExp(`^${lang}$`, 'i'))
+  };
+}
+
+    if (gender) {
+      filter.gender = gender;
+    }
+
+    if (minExperience !== undefined || maxExperience !== undefined) {
+    const experienceRanges = ["0-1", "1-3", "3-5", "5-10", "10+"];
+    const matchingRanges: string[] = [];
+
+    for (const range of experienceRanges) {
+      let rangeMin: number, rangeMax: number;
+
+      if (range === "10+") {
+        rangeMin = 10;
+        rangeMax = Infinity;
+      } else {
+        const [minStr, maxStr] = range.split("-");
+        rangeMin = parseInt(minStr);
+        rangeMax = parseInt(maxStr);
+      }
+
+      // Check if this range overlaps with the filter range
+      const matchesMin = minExperience === undefined || rangeMax >= minExperience;
+      const matchesMax = maxExperience === undefined || rangeMin <= maxExperience;
+      
+      if (matchesMin && matchesMax) {
+        matchingRanges.push(range);
+      }
+    }
+
+    if (matchingRanges.length > 0) {
+      filter.yearOfExperience = { $in: matchingRanges }; // Fixed: yearOfExperience not yearsOfExperience
+    }
+  }
 
     const skip = (validPageNumber - 1) * validPageSize;
     const limit = validPageSize;
@@ -69,14 +113,6 @@ export class GuideRepository
   async findByNumber(phone: string): Promise<IGuideEntity | null> {
     return await guideDB.findOne({ phone });
   }
-
-  // async save(data: Partial<IGuideEntity>): Promise<IGuideEntity> {
-  //   const doc = await guideDB.create(data);
-  //   return {
-  //     ...doc.toObject(),
-  //     agencyId: doc.agencyId.toString(),
-  //   };
-  // }
 
   async findByIdAndUpdatePassword(
     guideId: string,

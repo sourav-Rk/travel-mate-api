@@ -35,13 +35,6 @@ const isBlackListed = async (token: string): Promise<boolean> => {
   return result !== null;
 };
 
-/**
- * Middleware: verifyAuth
- * - Ensures access token exists
- * - Verifies access token signature and payload
- * - Checks if token is blacklisted
- * - Attaches decoded user + tokens to `req.user`
- */
 export const verifyAuth = async (
   req: Request,
   res: Response,
@@ -96,8 +89,6 @@ export const verifyAuth = async (
 
 /**
  * Middleware: decodeToken
- * - Similar to verifyAuth, but does NOT validate expiration
- * - Used when you just need to decode token payload
  */
 
 export const decodeToken = async (
@@ -126,6 +117,9 @@ export const decodeToken = async (
 
     const user = tokenService.decodeAcessToken(token);
     console.log("decode:", user);
+    if(!user || !user.id){
+       throw new CustomError(HTTP_STATUS.UNAUTHORIZED,ERROR_MESSAGE.UNAUTHORIZED_ACCESS);
+    }
     (req as CustomRequest).user = {
       id: user?.id,
       email: user?.email,

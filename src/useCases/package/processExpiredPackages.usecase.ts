@@ -21,6 +21,7 @@ export class ProcessExpiredPackagesUsecase
   ) {}
 
   async execute(): Promise<void> {
+    console.log("process expired packages triggered")
     const today = new Date();
 
     const todayUTC = new Date(
@@ -40,6 +41,7 @@ export class ProcessExpiredPackagesUsecase
             pkg._id!,
             "applications_closed"
           );
+          console.log(pkg)
         }
       } else {
         for (const booking of bookings) {
