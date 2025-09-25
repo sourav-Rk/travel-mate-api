@@ -52,6 +52,9 @@ export const verifyAuth = async (
 
     const user = tokenService.verifyAccessToken(token) as CustomJwtPayload;
 
+    console.log(user)
+
+
     if (!user || !user.id) {
       res
         .status(HTTP_STATUS.UNAUTHORIZED)
