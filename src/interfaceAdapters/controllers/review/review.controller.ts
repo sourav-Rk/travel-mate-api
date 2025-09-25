@@ -5,6 +5,7 @@ import { Request, Response } from "express";
 import { CustomRequest } from "../../middlewares/auth.middleware";
 import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
 import { IGetPackageReviewsUsecase } from "../../../entities/useCaseInterfaces/review/getPackageReviews-usecase.interface";
+import { IGetGuideReviewUsecase } from "../../../entities/useCaseInterfaces/review/get-guide-reviews.usecase";
 
 @injectable()
 export class ReviewController implements IReviewController {
@@ -13,7 +14,10 @@ export class ReviewController implements IReviewController {
     private _addReviewUsecase: IAddReviewUsecase,
 
     @inject("IGetPackageReviewsUsecase")
-    private _getPackageReviewUsecase: IGetPackageReviewsUsecase
+    private _getPackageReviewUsecase: IGetPackageReviewsUsecase,
+
+    @inject("IGetGuideReviewUsecase")
+    private _getGuideReviewUsecase: IGetGuideReviewUsecase
   ) {}
 
   async addReview(req: Request, res: Response): Promise<void> {
@@ -35,6 +39,15 @@ export class ReviewController implements IReviewController {
   async getReviews(req: Request, res: Response): Promise<void> {
     const { packageId } = req.params;
     const reviews = await this._getPackageReviewUsecase.execute(packageId);
+    res.status(HTTP_STATUS.OK).json({ success: true, reviews });
+  }
+
+  async getGuideReviews(req: Request, res: Response): Promise<void> {
+    const { guideId, packageId } = req.params;
+    const reviews = await this._getGuideReviewUsecase.execute(
+      packageId,
+      guideId
+    );
     res.status(HTTP_STATUS.OK).json({ success: true, reviews });
   }
 }

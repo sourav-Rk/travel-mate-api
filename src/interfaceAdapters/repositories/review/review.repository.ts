@@ -29,9 +29,28 @@ export class ReviewRepository
     packageId: string
   ): Promise<ReviewListWithUserDetailsDto[] | null> {
     const modelData = await reviewDB
-      .find({ packageId })
+      .find({ packageId,targetType : "package" })
       .populate("userId")
       .lean<ReviewListWithUserDetailsDto[]>();
+    return modelData;
+  }
+
+  async findByGuideIdAndUserId(
+    userId: string,
+    guideId: string
+  ): Promise<IReviewEntity | null> {
+    return await reviewDB.findOne({ userId, guideId });
+  }
+
+  async findByPackageIdAndGuideId(
+    packageId: string,
+    guideId: string
+  ): Promise<ReviewListWithUserDetailsDto[] | null> {
+    const modelData = await reviewDB
+      .find({ packageId, guideId,targetType : "guide" })
+      .populate("userId")
+      .lean<ReviewListWithUserDetailsDto[]>();
+
     return modelData;
   }
 }

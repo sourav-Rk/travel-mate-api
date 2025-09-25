@@ -170,6 +170,13 @@ import { IGetBookingDetailsGuideUsecase } from "../../entities/useCaseInterfaces
 import { GetBookingDetailsGuideUsecase } from "../../useCases/booking/guide-booking/get-booking-details-guide.usecase";
 import { IUpdatePackageStatusUsecaseGuide } from "../../entities/useCaseInterfaces/guideTrips/update-package-status-usecase.interface";
 import { UpdatePackageStatusUsecaseGuide } from "../../useCases/guidetrips/update-package-status.usecase";
+import { IReviewStrategy } from "../../useCases/review/review-strategy/review-strategy.interface";
+import { AddPackageReviewStrategy } from "../../useCases/review/review-strategy/add-package-review.strategy";
+import { AddGuideReviewStrategy } from "../../useCases/review/review-strategy/add-guide-review.strategy";
+import { IGetGuideReviewUsecase } from "../../entities/useCaseInterfaces/review/get-guide-reviews.usecase";
+import { GetGuideReviewsUsecase } from "../../useCases/review/get-guide-review.usecase";
+import { IGetGuideDetailsClientUsecase } from "../../entities/useCaseInterfaces/guide/get-guide-details-client-usecase.interface";
+import { GetGuideDetailsClient } from "../../useCases/guide/get-guide-details-client.usecase";
 
 export class UsecaseRegistory {
   static registerUsecases(): void {
@@ -373,6 +380,13 @@ export class UsecaseRegistory {
       }
     );
 
+    container.register<IGetGuideDetailsClientUsecase>(
+      "IGetGuideDetailsClientUsecase",
+      {
+        useClass: GetGuideDetailsClient,
+      }
+    );
+
     //address usecases
     container.register<IUpdateAddressUsecase>("IUpdateAddressUsecase", {
       useClass: UpdateAddressUsecase,
@@ -511,9 +525,12 @@ export class UsecaseRegistory {
       useClass: GetBookingsGuideUsecase,
     });
 
-    container.register<IGetBookingDetailsGuideUsecase>('IGetBookingDetailsGuideUsecase',{
-      useClass : GetBookingDetailsGuideUsecase
-    });
+    container.register<IGetBookingDetailsGuideUsecase>(
+      "IGetBookingDetailsGuideUsecase",
+      {
+        useClass: GetBookingDetailsGuideUsecase,
+      }
+    );
 
     //guide packages usecases
     container.register<IAssignedTripsUsecase>("IAssignedTripsUsecase", {
@@ -527,9 +544,12 @@ export class UsecaseRegistory {
       }
     );
 
-    container.register<IUpdatePackageStatusUsecaseGuide>('IUpdatePackageStatusUsecaseGuide',{
-      useClass : UpdatePackageStatusUsecaseGuide
-    });
+    container.register<IUpdatePackageStatusUsecaseGuide>(
+      "IUpdatePackageStatusUsecaseGuide",
+      {
+        useClass: UpdatePackageStatusUsecaseGuide,
+      }
+    );
 
     //payment usecases
     container.register<IPayAdvanceAmountUsecase>("IPayAdvanceAmountUsecase", {
@@ -552,8 +572,21 @@ export class UsecaseRegistory {
       useClass: AddReviewUsecase,
     });
 
+    //review strategies
+    container.register<IReviewStrategy>("AddPackageReviewStrategy", {
+      useClass: AddPackageReviewStrategy,
+    });
+
+    container.register<IReviewStrategy>("AddGuideReviewStrategy", {
+      useClass: AddGuideReviewStrategy,
+    });
+
     container.register<IGetPackageReviewsUsecase>("IGetPackageReviewsUsecase", {
       useClass: GetPackageReviewsUsecase,
+    });
+
+    container.register<IGetGuideReviewUsecase>("IGetGuideReviewUsecase", {
+      useClass: GetGuideReviewsUsecase,
     });
 
     //notification usecase
