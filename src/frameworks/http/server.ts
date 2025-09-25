@@ -41,7 +41,7 @@ export class App {
       })
     );
     this._app.use((req, res, next) => {
-      if (req.originalUrl === "/api/pvt/_cl/client/payment/webhook") {
+      if (req.originalUrl === "/api/v1/client/payment/webhook") {
         next();
       } else {
         express.json()(req, res, next);

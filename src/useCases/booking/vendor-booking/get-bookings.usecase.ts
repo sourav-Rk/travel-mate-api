@@ -62,8 +62,8 @@ export class GetBookingsUsecaseVendor implements IGetBookingsVendorUsecase {
       BookingMapper.mapToVendorBookingListDto(doc)
     );
 
-    console.log(mappedData)
+    const totalPages = Math.ceil(total / validPageSize);
 
-    return { bookings: mappedData, total,minTravelersCount : packageExists.minGroupSize  };
+    return { bookings: mappedData, total : totalPages,minTravelersCount : packageExists.minGroupSize  };
   }
 }

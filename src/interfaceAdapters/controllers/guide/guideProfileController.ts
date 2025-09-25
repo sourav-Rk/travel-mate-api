@@ -6,6 +6,7 @@ import { IGetGuideProfileUsecase } from "../../../entities/useCaseInterfaces/gui
 import { IUpdateGuidePasswordUsecase } from "../../../entities/useCaseInterfaces/guide/updateGuidePassword-usecase.interface";
 import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
 import { CustomRequest } from "../../middlewares/auth.middleware";
+import { IGetGuideDetailsClientUsecase } from "../../../entities/useCaseInterfaces/guide/get-guide-details-client-usecase.interface";
 
 @injectable()
 export class GuideProfileController implements IGuideProfileController {
@@ -13,8 +14,11 @@ export class GuideProfileController implements IGuideProfileController {
     @inject("IGetGuideProfileUsecase")
     private _getGuideProfileUsecase: IGetGuideProfileUsecase,
 
-    @inject('IUpdateGuidePasswordUsecase')
-    private _updateGuidePasswordUsecase : IUpdateGuidePasswordUsecase
+    @inject("IUpdateGuidePasswordUsecase")
+    private _updateGuidePasswordUsecase: IUpdateGuidePasswordUsecase,
+
+    @inject("IGetGuideDetailsClientUsecase")
+    private _getGuideDetailsClientUsecase: IGetGuideDetailsClientUsecase
   ) {}
 
   async getGuideProfile(req: Request, res: Response): Promise<void> {
@@ -23,14 +27,30 @@ export class GuideProfileController implements IGuideProfileController {
     res.status(HTTP_STATUS.OK).json({ success: true, guide });
   }
 
-  async updatePassword(req : Request,res:Response) : Promise<void> {
-     const guideId = (req as CustomRequest).user.id;
-     const {currentPassword,newPassword} = req.body as {
-      currentPassword : string,
-      newPassword : string
-     };
+  async updatePassword(req: Request, res: Response): Promise<void> {
+    const guideId = (req as CustomRequest).user.id;
+    const { currentPassword, newPassword } = req.body as {
+      currentPassword: string;
+      newPassword: string;
+    };
 
-     await this._updateGuidePasswordUsecase.execute(guideId,currentPassword,newPassword);
-     res.status(HTTP_STATUS.OK).json({success : true,message : SUCCESS_MESSAGE.PASSWORD_CHANGED});
+    await this._updateGuidePasswordUsecase.execute(
+      guideId,
+      currentPassword,
+      newPassword
+    );
+    res
+      .status(HTTP_STATUS.OK)
+      .json({ success: true, message: SUCCESS_MESSAGE.PASSWORD_CHANGED });
+  }
+
+  async getGuideDetailsForClient(req: Request, res: Response): Promise<void> {
+    const userId = (req as CustomRequest).user.id;
+    const { guideId }  = req.params;
+    const guide = await this._getGuideDetailsClientUsecase.execute(
+      userId,
+      guideId
+    );
+    res.status(HTTP_STATUS.OK).json({ success: true, guide });
   }
 }

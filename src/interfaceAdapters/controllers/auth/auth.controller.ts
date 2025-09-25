@@ -194,14 +194,6 @@ export class AuthController implements IAuthController {
       COOKIES_NAMES.REFRESH_TOKEN
     );
      
-    // ResponseHelper.success(res,HTTP_STATUS.OK,"user logged in successfully",{user:{
-    //    id: user._id,
-    //     firstName: user.firstName,
-    //     lastName: user.lastName,
-    //     email: user.email,
-    //     role: user.role,
-    //     status: user?.status,
-    // }})
 
     res.status(HTTP_STATUS.OK).json({
       success: true,
@@ -259,7 +251,7 @@ export class AuthController implements IAuthController {
     try {
       console.log("hit refresh token controller");
       const refreshToken = req.cookies[COOKIES_NAMES.REFRESH_TOKEN];
-
+      
       if (!refreshToken) {
         res
           .status(HTTP_STATUS.UNAUTHORIZED)
