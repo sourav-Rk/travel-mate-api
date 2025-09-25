@@ -34,7 +34,8 @@ export class PackageMapper {
       itineraryId: String(doc.itineraryId),
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
-      guideId : doc.guideId ? String(doc.guideId) : undefined
+      guideId : doc.guideId ? String(doc.guideId) : undefined,
+      paymentAlertSentAt : doc.paymentAlertSentAt
     };
   }
 

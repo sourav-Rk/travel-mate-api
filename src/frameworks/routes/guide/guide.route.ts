@@ -21,7 +21,7 @@ export class GuideRoute extends BaseRoute {
   }
 
   protected initializeRoutes(): void {
-    this.router.post(
+    this.router.put(
       "/reset-password",
       verifyResetToken,
       asyncHandler(guideController.resetPassword.bind(guideController))

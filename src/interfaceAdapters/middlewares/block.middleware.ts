@@ -5,7 +5,7 @@ import { IBlockedMiddleware } from "../../entities/middleWareInterfaces/blocked-
 import { IClientRepository } from "../../entities/repositoryInterfaces/client/client.repository.interface";
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { IBlackListTokenUsecase } from "../../entities/useCaseInterfaces/auth/blacklist-token-usecase.interface";
-import { ERROR_MESSAGE, HTTP_STATUS } from "../../shared/constants";
+import { COOKIES_NAMES, ERROR_MESSAGE, HTTP_STATUS } from "../../shared/constants";
 import { clearCookie } from "../../shared/utils/cookieHelper";
 
 import { CustomRequest } from "./auth.middleware";
@@ -73,8 +73,8 @@ export class BlockedMiddleware implements IBlockedMiddleware {
       if (blocked) {
         await this.blackListTokenUseCase.execute(customReq.user.accessToken);
 
-        const accessTokenName = `${role}_access_token`;
-        const refreshTokenName = `${role}_refresh_token`;
+        const accessTokenName = COOKIES_NAMES.ACCESS_TOKEN;
+        const refreshTokenName = COOKIES_NAMES.REFRESH_TOKEN;
         clearCookie(res, accessTokenName, refreshTokenName);
         res.status(HTTP_STATUS.FORBIDDEN).json({
           success: false,

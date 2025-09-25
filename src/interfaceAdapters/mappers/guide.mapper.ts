@@ -6,8 +6,34 @@ import {
   GuideProfileDto,
 } from "../../shared/dto/guideDto";
 import { GuideDto } from "../../shared/dto/user.dto";
+import { IGuideModel } from "../../frameworks/database/models/guide.model";
 
 export class GuideMapper {
+  static toEntity(doc: IGuideModel): IGuideEntity {
+    return {
+      _id: String(doc._id),
+      agencyId: String(doc.agencyId),
+      firstName: doc.firstName,
+      lastName: doc.lastName,
+      phone: doc.phone,
+      alternatePhone: doc.alternatePhone,
+      email: doc.email,
+      languageSpoken: doc.languageSpoken,
+      assignedTrips: doc.assignedTrips,
+      isAvailable: doc.isAvailable,
+      bio: doc.bio,
+      documents: doc.documents,
+      dob: doc.dob,
+      role: doc.role,
+      yearOfExperience: doc.yearOfExperience,
+      gender: doc.gender,
+      profileImage: doc.profileImage,
+      password: doc.password,
+      createdAt: doc.createdAt,
+      updatedAt: doc.updatedAt,
+    };
+  }
+
   static mapGuideToVendorTableDto(doc: IGuideEntity): GuideListDto {
     return {
       _id: doc._id,
@@ -76,7 +102,7 @@ export class GuideMapper {
       profileImage: doc.profileImage ?? "",
       languageSpoken: doc.languageSpoken,
       yearOfExperience: doc.yearOfExperience,
-      totalTrips : doc.assignedTrips.length
+      totalTrips: doc.assignedTrips.length,
     };
   }
 }
