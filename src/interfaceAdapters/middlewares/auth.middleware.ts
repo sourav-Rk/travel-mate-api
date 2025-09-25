@@ -136,10 +136,7 @@ export const decodeToken = async (
   }
 };
 
-/**
- * Middleware factory: authorizeRole
- * - Ensures the logged-in user has one of the allowed roles
- */
+
 export const authorizeRole = (allowedRoles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const user = (req as CustomRequest).user;
@@ -176,6 +173,7 @@ export const verifyResetToken = async (
 
   try {
     const user = tokenService.verifyResetToken(token);
+    console.log(user,"reset")
     req.body.id = user?.id;
     next();
   } catch (error) {
