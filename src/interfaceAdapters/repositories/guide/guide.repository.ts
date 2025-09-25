@@ -7,6 +7,7 @@ import {
   IGuideModel,
 } from "../../../frameworks/database/models/guide.model";
 import { BaseRepository } from "../baseRepository";
+import { GuideMapper } from "../../mappers/guide.mapper";
 
 @injectable()
 export class GuideRepository
@@ -14,7 +15,7 @@ export class GuideRepository
   implements IGuideRepository
 {
   constructor() {
-    super(guideDB);
+    super(guideDB,GuideMapper.toEntity);
   }
 
   async find(
