@@ -24,11 +24,13 @@ export class UpdateBlockStatusUsecase implements IUpdateBlockStatusUsecase{
             throw new NotFoundError(ERROR_MESSAGE.PACKAGE_NOT_FOUND);
         }
 
+
+
         if(existingPackage.paymentAlertSentAt){
             throw new ValidationError(ERROR_MESSAGE.PACKAGE_CANNOT_BE_BLOCKED);
         }
        
-        await this._packageRepository.updateBlock(packageId,existingPackage.isBlocked ?? false);
+        await this._packageRepository.updateBlock(packageId,existingPackage.isBlocked!);
         
     }
 }
