@@ -87,6 +87,8 @@ export class AddGuideUsecase implements IAddGuideUsecase {
       status : "pending",
     });
     
+
+
     const payload = {
       id : String(guide._id),
       email : guide.email,
