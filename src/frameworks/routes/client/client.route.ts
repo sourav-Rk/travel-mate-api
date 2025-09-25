@@ -8,11 +8,11 @@ import {
 } from "../../../interfaceAdapters/middlewares/auth.middleware";
 import { asyncHandler } from "../../../shared/async-handler";
 import {
-  authController,
   blockMiddleware,
   clientBookingController,
   clientPackageController,
   clientProfileController,
+  guideProfileController,
   notificationController,
   paymentController,
   reviewController,
@@ -22,7 +22,6 @@ import { BaseRoute } from "../base.route";
 import { CommonUploadRoutes } from "../common/common-upload.route";
 import { FcmTokenRoutes } from "../fcmToken/fcmToken.route";
 import { injectable } from "tsyringe";
-
 
 @injectable()
 export class ClientRoute extends BaseRoute {
@@ -142,7 +141,9 @@ export class ClientRoute extends BaseRoute {
       authorizeRole(["client"]),
       blockMiddleware.checkBlockedStatus,
       blockMiddleware.checkBlockedStatus as RequestHandler,
-      asyncHandler(clientProfileController.updatePassword.bind(clientProfileController))
+      asyncHandler(
+        clientProfileController.updatePassword.bind(clientProfileController)
+      )
     );
 
     // ----------------- Notification Routes -----------------
@@ -238,6 +239,16 @@ export class ClientRoute extends BaseRoute {
 
     // ----------------- Review Routes ----------------
 
+    //get guide reviews
+    this.router.get(
+      "/reviews/guides/:guideId/:packageId",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(reviewController.getGuideReviews.bind(reviewController))
+    );
+
+    //get packages review
     this.router.get(
       "/reviews/packages/:packageId",
       verifyAuth,
@@ -254,5 +265,17 @@ export class ClientRoute extends BaseRoute {
       asyncHandler(reviewController.addReview.bind(reviewController))
     );
 
+    // ----------------- Guide Routes ----------------
+    this.router.get(
+      "/guide/:guideId",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(
+        guideProfileController.getGuideDetailsForClient.bind(
+          guideProfileController
+        )
+      )
+    );
   }
 }
