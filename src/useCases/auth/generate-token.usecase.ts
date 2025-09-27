@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 
 import { ITokenService } from "../../entities/serviceInterfaces/token-service.interface";
 import { IGenerateTokenUseCase } from "../../entities/useCaseInterfaces/auth/generate-token-usecase.interface";
-import { ITokenRepository } from "../../entities/repositoryInterfaces/token/token-repository.interface";
+
 
 @injectable()
 export class GenerateTokenUseCase implements IGenerateTokenUseCase {
@@ -10,8 +10,6 @@ export class GenerateTokenUseCase implements IGenerateTokenUseCase {
     @inject("ITokenService")
     private _tokenService: ITokenService,
 
-    @inject("ITokenRepository")
-    private _tokenRepository: ITokenRepository
   ) {}
 
   async execute(
@@ -30,11 +28,11 @@ export class GenerateTokenUseCase implements IGenerateTokenUseCase {
     const accessToken = this._tokenService.generateAccessToken(payload);
     const refreshToken = this._tokenService.generateRefreshToken(payload);
 
-    const refreshPayload = this._tokenService.verifyRefreshToken(refreshToken);
+    // const refreshPayload = this._tokenService.verifyRefreshToken(refreshToken);
 
-    const expiry = new Date((refreshPayload?.exp ?? 0) * 1000);
+    // const expiry = new Date((refreshPayload?.exp ?? 0) * 1000);
 
-    await this._tokenRepository.save(id, refreshToken, expiry);
+    // await this._tokenRepository.save(id, refreshToken, expiry);
 
     return {
       accessToken,

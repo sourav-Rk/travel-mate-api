@@ -22,52 +22,40 @@ export class AdminRoute extends BaseRoute {
   protected initializeRoutes(): void {
     this.router.use("/", new SignedUrlRoute("admin").router);
 
+    this.router.use(verifyAuth, authorizeRole(["admin"]));
+
     this.router.put(
       "/package/block",
-      verifyAuth,
-      authorizeRole(["admin"]),
       asyncHandler(packageConroller.updateBlockStatus.bind(packageConroller))
     );
 
     this.router.get(
       "/package/:id",
-      verifyAuth,
-      authorizeRole(["admin"]),
       asyncHandler(packageConroller.getPackageDetails.bind(packageConroller))
     );
 
     this.router.get(
       "/package",
-      verifyAuth,
-      authorizeRole(["admin"]),
       asyncHandler(packageConroller.getPackages.bind(packageConroller))
     );
 
     this.router.patch(
       "/vendor-status",
-      verifyAuth,
-      authorizeRole(["admin"]),
       asyncHandler(adminController.updateVendorStatus.bind(adminController))
     );
 
     this.router.get(
       "/users",
-      verifyAuth,
-      authorizeRole(["admin"]),
       asyncHandler(adminController.getAllUsers.bind(adminController))
     );
 
     this.router.get(
       "/user-details",
-      verifyAuth,
-      authorizeRole(["admin"]),
       asyncHandler(adminController.getUserDetails.bind(adminController))
     );
 
     this.router.patch(
       "/user-status",
-      verifyAuth,
-      authorizeRole(["admin"]),
       asyncHandler(adminController.updateUserStatus.bind(adminController))
     );
   }

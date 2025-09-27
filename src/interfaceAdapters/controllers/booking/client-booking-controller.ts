@@ -31,6 +31,12 @@ export class ClientBookingController implements IClientBookingController {
     res.status(response.statusCode).json(response.content);
   }
 
+  /**
+   * 
+   * @param req 
+   * @param res 
+   */
+
   async getBookingDetailOfPackage(req: Request, res: Response): Promise<void> {
     const userId = (req as CustomRequest).user.id;
     const { packageId } = req.params;

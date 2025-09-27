@@ -5,41 +5,44 @@ import { ITokenService } from "../../entities/serviceInterfaces/token-service.in
 import { IRefreshTokenUsecase } from "../../entities/useCaseInterfaces/auth/refresh-token-usecase.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../shared/constants";
 import { CustomError } from "../../shared/utils/error/customError";
-import { ITokenRepository } from "../../entities/repositoryInterfaces/token/token-repository.interface";
+
 
 @injectable()
 export class RefreshTokenUsecase implements IRefreshTokenUsecase {
   constructor(
     @inject("ITokenService")
     private _tokenService: ITokenService,
-
-    @inject("ITokenRepository")
-    private _tokenRepository: ITokenRepository
   ) {}
 
   async execute(
     refreshToken: string
   ): Promise<{ role: string; accessToken: string }> {
+
+
+    if(!refreshToken){
+      throw new CustomError(HTTP_STATUS.UNAUTHORIZED,ERROR_MESSAGE.TOKEN_MISSING)
+    }
+
     const payload = this._tokenService.verifyRefreshToken(refreshToken);
 
     if (!payload) {
       throw new CustomError(
-        HTTP_STATUS.BAD_REQUEST,
+        HTTP_STATUS.UNAUTHORIZED,
         ERROR_MESSAGE.TOKEN_EXPIRED_REFRESH
       );
     }
 
-    const isValid = await this._tokenRepository.tokenExists(
-      refreshToken,
-      (payload as JwtPayload).id
-    );
+    // const isValid = await this._tokenRepository.tokenExists(
+    //   refreshToken,
+    //   (payload as JwtPayload).id
+    // );
 
-    if (!isValid) {
-      throw new CustomError(
-        HTTP_STATUS.FORBIDDEN,
-        ERROR_MESSAGE.TOKEN_EXPIRED_REFRESH
-      );
-    }
+    // if (!isValid) {
+    //   throw new CustomError(
+    //     HTTP_STATUS.FORBIDDEN,
+    //     ERROR_MESSAGE.TOKEN_EXPIRED_REFRESH
+    //   );
+    // }
 
     const newPayload = {
       id: payload.id,
