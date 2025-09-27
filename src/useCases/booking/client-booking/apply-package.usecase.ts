@@ -19,6 +19,7 @@ import { CustomError } from "../../../shared/utils/error/customError";
 import { INotificationRepository } from "../../../entities/repositoryInterfaces/notification/notification-repository.interface";
 import { IPushNotificationService } from "../../../entities/serviceInterfaces/push-notifications.interface";
 import { IWishListRepository } from "../../../entities/repositoryInterfaces/wishlist/wishlist-repository.interface";
+import { bookingDB } from "../../../frameworks/database/models/booking.model";
 
 @injectable()
 export class ApplyPackageUsecase implements IApplyPackageUsecase {
@@ -58,12 +59,14 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
     }
 
     //package existence
-    const existingPackage = await this._packageRepository.findByPackageId(packageId);
+    const existingPackage = await this._packageRepository.findByPackageId(
+      packageId
+    );
     if (!existingPackage) {
       throw new NotFoundError(ERROR_MESSAGE.PACKAGE_NOT_FOUND);
     }
 
-    console.log(existingPackage,"1 --existingpackage")
+    console.log(existingPackage, "1 --existingpackage");
 
     //checking status of the package
     if (existingPackage.status !== "active") {
@@ -95,7 +98,7 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
       throw new ValidationError(ERROR_MESSAGE.ALREADY_APPLIED_PACKAGE);
     }
 
-    console.log(existingForThisPackage,"2 -> existing for this package")
+    console.log(existingForThisPackage, "2 -> existing for this package");
 
     //checking conflicting trips
     const userActiveBookings =
@@ -104,7 +107,7 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
         "applied"
       );
 
-      console.log(userActiveBookings,"3-->acitive bookings")
+    console.log(userActiveBookings, "3-->acitive bookings");
     if (userActiveBookings?.length > 0) {
       for (const booking of userActiveBookings) {
         const pkg: any = booking.packageId;
@@ -134,7 +137,7 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
       seatOccupyingStatuses
     );
 
-    console.log(activeCount,"4 --> active count")
+    console.log(activeCount, "4 --> active count");
 
     let statusToCreate = BOOKINGSTATUS.APPLIED;
     let isWaitlisted = false;
@@ -147,22 +150,24 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
     }
 
     //create the booking
-    await this._bookingRepository.createBooking({
+    const booking = await this._bookingRepository.createBooking({
       userId,
       packageId,
       status: statusToCreate,
       isWaitlisted,
     });
-   
+
     //remove from wishlist if it is already present
     const wishlist = await this._wishlistRepository.findByUserId(userId);
 
     if (wishlist) {
-      console.log(wishlist,"-->wishlist")
-      const packageExistingInWishlist = wishlist.packages.find(id => id.toString() === packageId);
-      console.log(packageExistingInWishlist,"5-->wisling")
+      console.log(wishlist, "-->wishlist");
+      const packageExistingInWishlist = wishlist.packages.find(
+        (id) => id.toString() === packageId
+      );
+      console.log(packageExistingInWishlist, "5-->wisling");
       if (packageExistingInWishlist) {
-        await this._wishlistRepository.removeFromWishlist(userId,packageId);
+        await this._wishlistRepository.removeFromWishlist(userId, packageId);
       }
     }
 

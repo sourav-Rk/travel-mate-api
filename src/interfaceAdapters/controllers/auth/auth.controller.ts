@@ -239,7 +239,7 @@ export class AuthController implements IAuthController {
       accessToken
     );
 
-    await this._logoutUsecase.execute(refreshToken,accessToken);
+    // await this._logoutUsecase.execute(refreshToken,accessToken);
 
     clearCookie(res, COOKIES_NAMES.ACCESS_TOKEN, COOKIES_NAMES.REFRESH_TOKEN);
     res

@@ -34,8 +34,7 @@ import { IWishListRepository } from "../../entities/repositoryInterfaces/wishlis
 import { WishlistRepository } from "../../interfaceAdapters/repositories/wishlist/wishlist.repository";
 import { IReviewRepository } from "../../entities/repositoryInterfaces/review/review-repository.interface";
 import { ReviewRepository } from "../../interfaceAdapters/repositories/review/review.repository";
-import { ITokenRepository } from "../../entities/repositoryInterfaces/token/token-repository.interface";
-import { TokenRepository } from "../../interfaceAdapters/repositories/token/token.repository";
+
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -53,10 +52,6 @@ export class RepositoryRegistry {
 
     container.register<IAdminRepository>("IAdminRepository", {
       useClass: AdminRepository,
-    });
-
-    container.register<ITokenRepository>("ITokenRepository", {
-      useClass: TokenRepository,
     });
 
     container.register<IKYCRepository>("IKYCRepository", {

@@ -36,48 +36,13 @@ export class ClientRoute extends BaseRoute {
     // Routes to manage client FCM tokens (push notifications)
     this.router.use("/", new FcmTokenRoutes("client").router);
 
-    // ----------------- Booking Routes -----------------
-
-    // Get details of a specific booking by bookingId
-    this.router.get(
-      "/booking/:bookingId",
-      verifyAuth,
-      authorizeRole(["client"]),
-      asyncHandler(
-        clientBookingController.getBookingDetails.bind(clientBookingController)
-      )
-    );
-
-    // Get booking details of a specific package
-    this.router.get(
-      "/booking/package/:packageId",
-      verifyAuth,
-      authorizeRole(["client"]),
-      asyncHandler(
-        clientBookingController.getBookingDetailOfPackage.bind(
-          clientBookingController
-        )
-      )
-    );
-
-    // Get all bookings
-    this.router.get(
-      "/bookings",
-      verifyAuth,
-      authorizeRole(["client"]),
-      asyncHandler(
-        clientBookingController.getBookings.bind(clientBookingController)
-      )
-    );
-
-    // Apply for a package
+    //===========public routes=========================
+    
+    // Handle Stripe webhook events (raw body required)
     this.router.post(
-      "/booking/apply",
-      verifyAuth,
-      authorizeRole(["client"]),
-      asyncHandler(
-        clientBookingController.applyPackage.bind(clientBookingController)
-      )
+      "/payment/webhook",
+      express.raw({ type: "application/json" }),
+      asyncHandler(paymentController.handleWebhook.bind(paymentController))
     );
 
     // ----------------- Package Routes -----------------
@@ -110,15 +75,59 @@ export class ClientRoute extends BaseRoute {
       )
     );
 
+    this.router.use(
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockMiddleware.checkBlockedStatus
+    );
+
+
+
+    //==================Authenticated Routes=====================
+
+
+    // ----------------- Booking Routes -----------------
+
+    // Get details of a specific booking by bookingId
+    this.router.get(
+      "/booking/:bookingId",
+      asyncHandler(
+        clientBookingController.getBookingDetails.bind(clientBookingController)
+      )
+    );
+
+    // Get booking details of a specific package
+    this.router.get(
+      "/booking/package/:packageId",
+      asyncHandler(
+        clientBookingController.getBookingDetailOfPackage.bind(
+          clientBookingController
+        )
+      )
+    );
+
+    // Get all bookings
+    this.router.get(
+      "/bookings",
+      asyncHandler(
+        clientBookingController.getBookings.bind(clientBookingController)
+      )
+    );
+
+    // Apply for a package
+    this.router.post(
+      "/booking/apply",
+      asyncHandler(
+        clientBookingController.applyPackage.bind(clientBookingController)
+      )
+    );
+
     // ----------------- Profile Routes -----------------
 
     // Update or fetch client profile details
     this.router
       .route("/details")
       .put(
-        verifyAuth,
-        authorizeRole(["client"]),
-        blockMiddleware.checkBlockedStatus,
         asyncHandler(
           clientProfileController.updateClientProfile.bind(
             clientProfileController
@@ -126,9 +135,6 @@ export class ClientRoute extends BaseRoute {
         )
       )
       .get(
-        verifyAuth,
-        authorizeRole(["client"]),
-        blockMiddleware.checkBlockedStatus,
         asyncHandler(
           clientProfileController.getClientDetails.bind(clientProfileController)
         )
@@ -137,10 +143,6 @@ export class ClientRoute extends BaseRoute {
     // Update client password
     this.router.put(
       "/update-password",
-      verifyAuth,
-      authorizeRole(["client"]),
-      blockMiddleware.checkBlockedStatus,
-      blockMiddleware.checkBlockedStatus as RequestHandler,
       asyncHandler(
         clientProfileController.updatePassword.bind(clientProfileController)
       )
@@ -151,9 +153,6 @@ export class ClientRoute extends BaseRoute {
     // Mark a single notification as read
     this.router.patch(
       "/notifications/:notificationId",
-      verifyAuth,
-      authorizeRole(["client"]),
-      blockMiddleware.checkBlockedStatus,
       asyncHandler(
         notificationController.markReadNotification.bind(notificationController)
       )
@@ -163,17 +162,11 @@ export class ClientRoute extends BaseRoute {
     this.router
       .route("/notifications")
       .get(
-        verifyAuth,
-        authorizeRole(["client"]),
-        blockMiddleware.checkBlockedStatus,
         asyncHandler(
           notificationController.getNotifications.bind(notificationController)
         )
       )
       .patch(
-        verifyAuth,
-        authorizeRole(["client"]),
-        blockMiddleware.checkBlockedStatus,
         asyncHandler(
           notificationController.markAsReadAllNotification.bind(
             notificationController
@@ -186,26 +179,13 @@ export class ClientRoute extends BaseRoute {
     // Pay advance amount for a booking
     this.router.post(
       "/payment/advance",
-      verifyAuth,
-      authorizeRole(["client"]),
-      blockMiddleware.checkBlockedStatus,
       asyncHandler(paymentController.payAdvanceAmount.bind(paymentController))
     );
 
     // Pay full amount for a booking
     this.router.post(
       "/payment/full",
-      verifyAuth,
-      authorizeRole(["client"]),
-      blockMiddleware.checkBlockedStatus,
       asyncHandler(paymentController.payFullAmount.bind(paymentController))
-    );
-
-    // Handle Stripe webhook events (raw body required)
-    this.router.post(
-      "/payment/webhook",
-      express.raw({ type: "application/json" }),
-      asyncHandler(paymentController.handleWebhook.bind(paymentController))
     );
 
     // ----------------- Wishlist Routes -----------------
@@ -214,24 +194,15 @@ export class ClientRoute extends BaseRoute {
     this.router
       .route("/wishlist")
       .get(
-        verifyAuth,
-        authorizeRole(["client"]),
-        blockMiddleware.checkBlockedStatus,
         asyncHandler(wishlistController.getWishlist.bind(wishlistController))
       )
       .put(
-        verifyAuth,
-        authorizeRole(["client"]),
-        blockMiddleware.checkBlockedStatus,
         asyncHandler(wishlistController.addToWishlist.bind(wishlistController))
       );
 
     //to remove from the wishlist
     this.router.patch(
       "/wishlist/remove",
-      verifyAuth,
-      authorizeRole(["client"]),
-      blockMiddleware.checkBlockedStatus,
       asyncHandler(
         wishlistController.removeFromWishlist.bind(wishlistController)
       )
@@ -242,35 +213,23 @@ export class ClientRoute extends BaseRoute {
     //get guide reviews
     this.router.get(
       "/reviews/guides/:guideId/:packageId",
-      verifyAuth,
-      authorizeRole(["client"]),
-      blockMiddleware.checkBlockedStatus,
       asyncHandler(reviewController.getGuideReviews.bind(reviewController))
     );
 
     //get packages review
     this.router.get(
       "/reviews/packages/:packageId",
-      verifyAuth,
-      authorizeRole(["client"]),
-      blockMiddleware.checkBlockedStatus,
       asyncHandler(reviewController.getReviews.bind(reviewController))
     );
 
     this.router.post(
       "/review",
-      verifyAuth,
-      authorizeRole(["client"]),
-      blockMiddleware.checkBlockedStatus,
       asyncHandler(reviewController.addReview.bind(reviewController))
     );
 
     // ----------------- Guide Routes ----------------
     this.router.get(
       "/guide/:guideId",
-      verifyAuth,
-      authorizeRole(["client"]),
-      blockMiddleware.checkBlockedStatus,
       asyncHandler(
         guideProfileController.getGuideDetailsForClient.bind(
           guideProfileController
