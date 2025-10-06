@@ -1,0 +1,68 @@
+import { Router } from "express";
+
+import { asyncHandler } from "../../../shared/async-handler";
+import {
+  authController,
+  blockMiddleware,
+} from "../../../infrastructure/dependencyInjection/resolve";
+import { BaseRoute } from "../base.route";
+import { injectable } from "tsyringe";
+import { verifyAuth } from "../../middlewares/auth.middleware";
+
+@injectable()
+export class AuthRoutes extends BaseRoute {
+  constructor() {
+    super();
+  }
+
+  protected initializeRoutes(): void {
+    this.router.post(
+      "/signup",
+      asyncHandler(authController.signup.bind(authController))
+    );
+    this.router.post(
+      "/login",
+      asyncHandler(authController.login.bind(authController))
+    );
+    this.router.post(
+      "/google-auth",
+      asyncHandler(authController.googleSignup.bind(authController))
+    );
+    this.router.post(
+      "/send-otp",
+      asyncHandler(authController.sendEmail.bind(authController))
+    );
+    this.router.post(
+      "/resend-otp",
+      asyncHandler(authController.resendOtp.bind(authController))
+    );
+    this.router.post(
+      "/verify-otp",
+      asyncHandler(authController.verifyOtp.bind(authController))
+    );
+    this.router.post(
+      "/forgot-password/mail",
+      asyncHandler(authController.forgotPasswordSendMail.bind(authController))
+    );
+    this.router.post(
+      "/forgot-password/reset",
+      asyncHandler(authController.forgotPasswordReset.bind(authController))
+    );
+
+    this.router.post(
+      "/refresh-token",
+      asyncHandler(authController.refreshToken.bind(authController))
+    );
+
+    this.router.post(
+      "/logout",
+      verifyAuth,
+      blockMiddleware.checkBlockedStatus,
+      asyncHandler(authController.logout.bind(authController))
+    );
+  }
+
+  // public getRouter(): Router {
+  //   return this.router;
+  // }
+}
