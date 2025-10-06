@@ -15,20 +15,21 @@ export interface GuideListDto {
 
 
 //guide profile dto
-export interface GuideProfileDto {
-   firstName : string;
-   lastName : string;
-   email : string;
-   phone : string;
-   alternatePhone : string;
-   status : string;
-   bio : string;
-   dob : string;
-   profileImage : string;
-   yearOfExperience : string;
-   languageSpoken : string[];
-   documents : string[];
-}
+  export interface GuideProfileDto {
+    firstName : string;
+    lastName : string;
+    email : string;
+    phone : string;
+    alternatePhone : string;
+    status : string;
+    bio : string;
+    dob : string;
+    profileImage : string;
+    yearOfExperience : string;
+    languageSpoken : string[];
+    documents : string[];
+    gender ?: string;
+  }
 
 //guide profile details for client
 export interface GuideDetailsForClientDto{

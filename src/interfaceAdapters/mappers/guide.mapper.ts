@@ -85,6 +85,7 @@ export class GuideMapper {
       yearOfExperience: doc.yearOfExperience,
       status: doc.status ?? "",
       documents: doc.documents,
+      gender : doc.gender ?? "",
     };
   }
 
