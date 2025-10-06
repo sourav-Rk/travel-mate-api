@@ -22,8 +22,8 @@ export class WishlistController implements IWishlistController {
 
   async getWishlist(req: Request, res: Response): Promise<void> {
     const userId = (req as CustomRequest).user.id;
-    const wishlist = await this._getWishlistUsecase.execute(userId);
-    res.status(HTTP_STATUS.OK).json({ success: true, wishlist });
+    const data = await this._getWishlistUsecase.execute(userId);
+    res.status(HTTP_STATUS.OK).json({ success: true, data });
   }
 
   async addToWishlist(req: Request, res: Response): Promise<void> {
