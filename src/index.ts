@@ -1,12 +1,11 @@
-console.log("server starts")
+console.log("server starts");
 import "reflect-metadata";
-import { MongoConnect } from "./frameworks/database/mongoDB/mongoConnect";
-import { App } from "./frameworks/http/server";
+import { MongoConnect } from "./infrastructure/database/mongoDB/mongoConnect";
+import { App } from "./infrastructure/config/server/server";
 import { config } from "./shared/config";
-import { cronScheduler } from "./frameworks/di/resolve";
+import { cronScheduler } from "./infrastructure/dependencyInjection/resolve";
 
 try {
-  console.log("server starts")
   const app = new App();
   const mongoConnect = new MongoConnect();
 
