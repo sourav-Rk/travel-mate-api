@@ -6,7 +6,7 @@ import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../../shared/constants";
 import { LoginUserDTO } from "../../../../dto/response/user.dto";
 import { CustomError } from "../../../../../domain/errors/customError";
 
-import { ILoginStrategy } from "../../../../../useCases/auth/login-strategies/login-strategy.interface";
+import { ILoginStrategy } from "./login-strategy.interface";
 
 @injectable()
 export class ClientGoogleLoginStrategy implements ILoginStrategy {
