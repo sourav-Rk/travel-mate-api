@@ -6,9 +6,14 @@ export class ResponseHelper {
     res: Response,
     statusCode: number = 200,
     message?: string,
-    data?: T
+    payload?: T,
+    key: string = "data"
   ): Response<ApiResponse> {
-    return res.status(statusCode).json({ success: true, message, data });
+    const responseBody: any = { success: true, message };
+    if (payload !== undefined) {
+      responseBody[key] = payload;
+    }
+   return res.status(statusCode).json(responseBody);
   }
 
   static error(res: Response, message: string, statusCode: number = 500) {

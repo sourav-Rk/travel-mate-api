@@ -22,6 +22,13 @@ import { BaseRoute } from "../base.route";
 import { CommonUploadRoutes } from "../common/common-upload.route";
 import { FcmTokenRoutes } from "../fcmToken/fcmToken.route";
 import { injectable } from "tsyringe";
+import { validationMiddleware } from "../../middlewares/validation.middleware";
+import { UpdateClientProfileDTO, UpdatePasswordReqDTO } from "../../../application/dto/request/client.dto";
+import { MarkReadNotificationReqDTO } from "../../../application/dto/request/notification.dto";
+import { AddReviewReqDTO } from "../../../application/dto/request/review.dto";
+import { GetAvailablePackagesReqDTO } from "../../../application/dto/request/package.dto";
+import { BookingPaymentReqDTO } from "../../../application/dto/request/payment.dto";
+import { GetGuideDetailsForClientReqDTO } from "../../../application/dto/request/guide.dto";
 
 @injectable()
 export class ClientRoute extends BaseRoute {
@@ -68,6 +75,7 @@ export class ClientRoute extends BaseRoute {
     // Get list of all available packages
     this.router.get(
       "/packages",
+      // validationMiddleware(GetAvailablePackagesReqDTO),
       asyncHandler(
         clientPackageController.getAvailablePackages.bind(
           clientPackageController
@@ -125,6 +133,7 @@ export class ClientRoute extends BaseRoute {
     this.router
       .route("/details")
       .put(
+        validationMiddleware(UpdateClientProfileDTO),
         asyncHandler(
           clientProfileController.updateClientProfile.bind(
             clientProfileController
@@ -140,6 +149,7 @@ export class ClientRoute extends BaseRoute {
     // Update client password
     this.router.put(
       "/update-password",
+      validationMiddleware(UpdatePasswordReqDTO),
       asyncHandler(
         clientProfileController.updatePassword.bind(clientProfileController)
       )
@@ -150,12 +160,13 @@ export class ClientRoute extends BaseRoute {
     // Mark a single notification as read
     this.router.patch(
       "/notifications/:notificationId",
+      validationMiddleware(MarkReadNotificationReqDTO),
       asyncHandler(
         notificationController.markReadNotification.bind(notificationController)
       )
     );
 
-    // Get all notifications or mark all as readdx
+    // Get all notifications or mark all as read
     this.router
       .route("/notifications")
       .get(
@@ -176,12 +187,14 @@ export class ClientRoute extends BaseRoute {
     // Pay advance amount for a booking
     this.router.post(
       "/payment/advance",
+      validationMiddleware(BookingPaymentReqDTO),
       asyncHandler(paymentController.payAdvanceAmount.bind(paymentController))
     );
 
     // Pay full amount for a booking
     this.router.post(
       "/payment/full",
+      validationMiddleware(BookingPaymentReqDTO),
       asyncHandler(paymentController.payFullAmount.bind(paymentController))
     );
 
@@ -221,12 +234,14 @@ export class ClientRoute extends BaseRoute {
 
     this.router.post(
       "/review",
+      validationMiddleware(AddReviewReqDTO),
       asyncHandler(reviewController.addReview.bind(reviewController))
     );
 
     // ----------------- Guide Routes ----------------
     this.router.get(
       "/guide/:guideId",
+      validationMiddleware(GetGuideDetailsForClientReqDTO),
       asyncHandler(
         guideProfileController.getGuideDetailsForClient.bind(
           guideProfileController

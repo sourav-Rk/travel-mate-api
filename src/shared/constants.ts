@@ -31,6 +31,7 @@ export enum HTTP_STATUS {
 }
 
 export const ERROR_MESSAGE = {
+  RESTART_SIGNUP : "Form data expired or not found. Please restart signup",
   REQUEST_REJECTED_BY_ADMIN:
     "Your request has been rejected by the admin ! Please contact admin !",
   USER_NOT_FOUND: "User not found",
@@ -48,6 +49,7 @@ export const ERROR_MESSAGE = {
   INVALID_REFRESH_TOKEN: "invalid refresh token",
   TOKEN_EXPIRED_ACCESS: "Access Token time out",
   TOKEN_EXPIRED_REFRESH: "Token time out, Please loggin again",
+  TOKEN_BLACK_LISTED : "Token is blacklisted",
   TOKEN_MISSING: "Authorization token is required",
   SERVER_ERROR: "An error occurred, please try again later.",
   BLOCKED_ERROR: "You are blocked by Admin. please contact admin",
@@ -104,6 +106,7 @@ export const SUCCESS_MESSAGE = {
   LOGIN_SUCCESS: "Logged in successfully",
   LOGOUT_SUCCESS: "Logout successfully!",
   OTP_RESENT_SUCCESS: "OTP resend successfully",
+  OTP_SEND_SUCCESS : "Otp send successfully",
   OPERATION_SUCCESS: "Operation completed successfully.",
   ADD_GUIDE_SUCCESSFULLY:
     "Added guide successfully  ! Link for password reset has been sent to the guide email id",
@@ -187,6 +190,6 @@ export type EmailOtpPurpose = "signup" | "forgot-password" | "resend";
 
 //cookies names
 export const COOKIES_NAMES = {
-  REFRESH_TOKEN: "_secure_rt_auth",
-  ACCESS_TOKEN: "_secure_at_auth",
+  REFRESH_TOKEN: "refresh_token",
+  ACCESS_TOKEN: "access_token",
 };

@@ -25,6 +25,7 @@ export class ClientPackageController implements IClientPackageController {
   ) {}
 
   async getAvailablePackages(req: Request, res: Response): Promise<void> {
+    console.log(req.query)
     const {
       page = "1",
       limit = "10",

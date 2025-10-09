@@ -1,7 +1,6 @@
 import { injectable } from "tsyringe";
 import {
   authorizeRole,
-  decodeToken,
   verifyAuth,
 } from "../../middlewares/auth.middleware";
 import { asyncHandler } from "../../../shared/async-handler";
@@ -12,6 +11,8 @@ import {
 } from "../../../infrastructure/dependencyInjection/resolve";
 import { BaseRoute } from "../base.route";
 import { SignedUrlRoute } from "../common/signedUrl.route";
+import { validationMiddleware } from "../../middlewares/validation.middleware";
+import { GetAllUsersReqDTO, GetUserDetailsReqDTO, UpdateUserStatusReqDTO, UpdateVendorStatusReqDTO } from "../../../application/dto/request/admin.dto";
 
 @injectable()
 export class AdminRoute extends BaseRoute {
@@ -41,21 +42,25 @@ export class AdminRoute extends BaseRoute {
 
     this.router.patch(
       "/vendor-status",
+      validationMiddleware(UpdateVendorStatusReqDTO),
       asyncHandler(adminController.updateVendorStatus.bind(adminController))
     );
 
     this.router.get(
       "/users",
+      validationMiddleware(GetAllUsersReqDTO),
       asyncHandler(adminController.getAllUsers.bind(adminController))
     );
 
     this.router.get(
       "/user-details",
+      validationMiddleware(GetUserDetailsReqDTO),
       asyncHandler(adminController.getUserDetails.bind(adminController))
     );
 
     this.router.patch(
       "/user-status",
+      validationMiddleware(UpdateUserStatusReqDTO),
       asyncHandler(adminController.updateUserStatus.bind(adminController))
     );
   }

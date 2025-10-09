@@ -20,8 +20,6 @@ export class GuideBookingController implements IGuideBookingController {
     const guideId = (req as CustomRequest).user.id;
     const { packageId } = req.params;
 
-    console.log(req.query);
-
     const { page = 1, limit = 5, searchTerm, status } = req.query;
     const pageNumber = Number(page);
     const pageSize = Number(limit);

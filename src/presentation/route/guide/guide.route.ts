@@ -13,6 +13,10 @@ import {
   guideProfileController,
 } from "../../../infrastructure/dependencyInjection/resolve";
 import { BaseRoute } from "../base.route";
+import { validationMiddleware } from "../../middlewares/validation.middleware";
+import { ResetPasswordGuideDTO, UpdatePasswordGuideReqDTO } from "../../../application/dto/request/guide.dto";
+import { GetAssignedPackagesReqDTO, UpdatePackageStatusReqDTO } from "../../../application/dto/request/package.dto";
+import { GetBookingOfThePackageGuideReqDTO } from "../../../application/dto/request/booking.dto";
 
 @injectable()
 export class GuideRoute extends BaseRoute {
@@ -24,6 +28,7 @@ export class GuideRoute extends BaseRoute {
     this.router.put(
       "/reset-password",
       verifyResetToken,
+      validationMiddleware(ResetPasswordGuideDTO),
       asyncHandler(guideController.resetPassword.bind(guideController))
     );
 
@@ -39,6 +44,7 @@ export class GuideRoute extends BaseRoute {
 
     this.router.put(
       "/update-password",
+      validationMiddleware(UpdatePasswordGuideReqDTO),
       asyncHandler(
         guideProfileController.updatePassword.bind(guideProfileController)
       )
@@ -51,6 +57,7 @@ export class GuideRoute extends BaseRoute {
     //get assigned packages
     this.router.get(
       "/assigned-packages",
+      validationMiddleware(GetAssignedPackagesReqDTO),
       asyncHandler(
         guidePackageController.getAssignedPackages.bind(guidePackageController)
       )
@@ -67,6 +74,7 @@ export class GuideRoute extends BaseRoute {
     //update the status of the package
     this.router.put(
       "/package/status",
+      validationMiddleware(UpdatePackageStatusReqDTO),
       asyncHandler(
         guidePackageController.updatePackageStatus.bind(guidePackageController)
       )
@@ -79,6 +87,7 @@ export class GuideRoute extends BaseRoute {
     //get bookings of a package
     this.router.get(
       "/bookings/:packageId",
+      validationMiddleware(GetBookingOfThePackageGuideReqDTO),
       asyncHandler(
         guideBookingController.getBookingsOfThePackage.bind(
           guideBookingController
