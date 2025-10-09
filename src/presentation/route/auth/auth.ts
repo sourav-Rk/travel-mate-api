@@ -1,5 +1,3 @@
-import { Router } from "express";
-
 import { asyncHandler } from "../../../shared/async-handler";
 import {
   authController,
@@ -8,6 +6,8 @@ import {
 import { BaseRoute } from "../base.route";
 import { injectable } from "tsyringe";
 import { verifyAuth } from "../../middlewares/auth.middleware";
+import { validationMiddleware } from "../../middlewares/validation.middleware";
+import { ForgotPasswordResetReqDTO, GoogleSignupReqDTO, LoginReqDTO, OtpReqDTO, ResendOtpReqDTO } from "../../../application/dto/request/auth.dto";
 
 @injectable()
 export class AuthRoutes extends BaseRoute {
@@ -22,10 +22,12 @@ export class AuthRoutes extends BaseRoute {
     );
     this.router.post(
       "/login",
+      validationMiddleware(LoginReqDTO),
       asyncHandler(authController.login.bind(authController))
     );
     this.router.post(
       "/google-auth",
+      validationMiddleware(GoogleSignupReqDTO),
       asyncHandler(authController.googleSignup.bind(authController))
     );
     this.router.post(
@@ -34,18 +36,22 @@ export class AuthRoutes extends BaseRoute {
     );
     this.router.post(
       "/resend-otp",
+      validationMiddleware(ResendOtpReqDTO),
       asyncHandler(authController.resendOtp.bind(authController))
     );
     this.router.post(
       "/verify-otp",
+      validationMiddleware(OtpReqDTO),
       asyncHandler(authController.verifyOtp.bind(authController))
     );
     this.router.post(
       "/forgot-password/mail",
+      validationMiddleware(ResendOtpReqDTO),
       asyncHandler(authController.forgotPasswordSendMail.bind(authController))
     );
     this.router.post(
       "/forgot-password/reset",
+      validationMiddleware(ForgotPasswordResetReqDTO),
       asyncHandler(authController.forgotPasswordReset.bind(authController))
     );
 
@@ -62,7 +68,4 @@ export class AuthRoutes extends BaseRoute {
     );
   }
 
-  // public getRouter(): Router {
-  //   return this.router;
-  // }
 }

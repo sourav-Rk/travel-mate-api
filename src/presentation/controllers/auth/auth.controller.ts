@@ -76,10 +76,7 @@ export class AuthController implements IAuthController {
     private _forgotPasswordSendMailUsecase: IForgotPasswordSendMailUsecase,
 
     @inject("IForgotPasswordResetUsecase")
-    private _forgotPasswordResetUsecase: IForgotPasswordResetUsecase,
-
-    @inject("ILogoutUsecase")
-    private _logoutUsecase: ILogoutUsecase
+    private _forgotPasswordResetUsecase: IForgotPasswordResetUsecase
   ) {}
 
   async signup(req: Request, res: Response): Promise<void> {
@@ -88,7 +85,7 @@ export class AuthController implements IAuthController {
     if (!formData) {
       res.status(HTTP_STATUS.BAD_REQUEST).json({
         success: false,
-        message: "Form data expired or not found. Please restart signup",
+        message: ERROR_MESSAGE.RESTART_SIGNUP,
       });
       return;
     }
@@ -128,47 +125,56 @@ export class AuthController implements IAuthController {
       COOKIES_NAMES.REFRESH_TOKEN
     );
 
-    res.status(HTTP_STATUS.OK).json({
-      success: true,
-      message: SUCCESS_MESSAGE.LOGIN_SUCCESS,
-      user: {
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.LOGIN_SUCCESS,
+      {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
         role: user.role,
       },
-    });
+      "user"
+    );
   }
 
   async sendEmail(req: Request, res: Response): Promise<void> {
     const formData = req.body;
     const { email, phone } = req.body;
     await this._SendEmailUsecase.execute(email, phone, formData, "signup");
-    res
-      .status(HTTP_STATUS.OK)
-      .json({ success: true, message: "Otp send successfully" });
+
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.OTP_RESENT_SUCCESS
+    );
   }
 
   async sendEmailOtp(req: Request, res: Response): Promise<void> {
     const { email } = req.body;
     await this._sendEmailOtpUsecase.execute(email);
-    res
-      .status(HTTP_STATUS.OK)
-      .json({ status: true, message: "Otp send successfully" });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.OTP_SEND_SUCCESS
+    );
   }
 
   async verifyOtp(req: Request, res: Response): Promise<void> {
     const { email, otp } = req.body;
     const response = await this._verifyOtpUsecase.execute(email, otp);
-    res.status(response.statusCode).json(response.content);
+    ResponseHelper.success(res, response.statusCode, response.content.message);
   }
 
   async resendOtp(req: Request, res: Response): Promise<void> {
     const { email } = req.body;
     await this._resendOtpUsecase.execute(email);
-    res
-      .status(HTTP_STATUS.OK)
-      .json({ success: true, message: SUCCESS_MESSAGE.OTP_RESENT_SUCCESS });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.OTP_RESENT_SUCCESS
+    );
   }
 
   async login(req: Request, res: Response): Promise<void> {
@@ -199,7 +205,7 @@ export class AuthController implements IAuthController {
 
     res.status(HTTP_STATUS.OK).json({
       success: true,
-      message: "user logged in succesfully",
+      message: SUCCESS_MESSAGE.LOGIN_SUCCESS,
       user: {
         id: user._id,
         firstName: user.firstName,
@@ -214,23 +220,29 @@ export class AuthController implements IAuthController {
   }
 
   async forgotPasswordSendMail(req: Request, res: Response): Promise<void> {
+    console.log(req.body);
     const { email } = req.body;
     await this._forgotPasswordSendMailUsecase.execute(email);
-    res
-      .status(HTTP_STATUS.OK)
-      .json({ success: true, message: SUCCESS_MESSAGE.RESET_LINK_SEND });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.RESET_LINK_SEND
+    );
   }
 
   async forgotPasswordReset(req: Request, res: Response): Promise<void> {
+    console.log(req.body);
     const { token, password, confirmPassword } = req.body;
     await this._forgotPasswordResetUsecase.execute(
       token,
       password,
       confirmPassword
     );
-    res
-      .status(HTTP_STATUS.OK)
-      .json({ success: true, message: "Password changed successfully!" });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.PASSWORD_CHANGED
+    );
   }
 
   async logout(req: Request, res: Response): Promise<void> {
@@ -238,13 +250,10 @@ export class AuthController implements IAuthController {
     const accessToken = (req as CustomRequest).user.accessToken;
 
     await this._blackListTokenUsecase.execute(accessToken);
-
-    // await this._logoutUsecase.execute(refreshToken,accessToken);
+    await this._blackListTokenUsecase.execute(refreshToken);
 
     clearCookie(res, COOKIES_NAMES.ACCESS_TOKEN, COOKIES_NAMES.REFRESH_TOKEN);
-    res
-      .status(HTTP_STATUS.OK)
-      .json({ success: true, message: SUCCESS_MESSAGE.LOGOUT_SUCCESS });
+    ResponseHelper.success(res, HTTP_STATUS.OK, SUCCESS_MESSAGE.LOGIN_SUCCESS);
   }
 
   async refreshToken(req: Request, res: Response): Promise<void> {
@@ -253,10 +262,7 @@ export class AuthController implements IAuthController {
       const refreshToken = req.cookies[COOKIES_NAMES.REFRESH_TOKEN];
 
       if (!refreshToken) {
-        res
-          .status(HTTP_STATUS.UNAUTHORIZED)
-          .json({ suceess: false, message: ERROR_MESSAGE.TOKEN_MISSING });
-        return;
+        ResponseHelper.error(res,ERROR_MESSAGE.TOKEN_MISSING,HTTP_STATUS.UNAUTHORIZED);
       }
 
       const newToken = await this._refreshTokenUsecase.execute(refreshToken);
@@ -266,17 +272,14 @@ export class AuthController implements IAuthController {
         COOKIES_NAMES.ACCESS_TOKEN
       );
       console.log("success refresh token controller");
-      res.status(HTTP_STATUS.OK).json({
-        success: true,
-        message: SUCCESS_MESSAGE.OPERATION_SUCCESS,
-        token: newToken.accessToken,
-      });
+      ResponseHelper.success(res,HTTP_STATUS.OK,SUCCESS_MESSAGE.OPERATION_SUCCESS);
     } catch (error) {
       console.log(error);
       clearCookie(res, COOKIES_NAMES.ACCESS_TOKEN, COOKIES_NAMES.REFRESH_TOKEN);
       res
         .status(HTTP_STATUS.UNAUTHORIZED)
         .json({ message: ERROR_MESSAGE.INVALID_TOKEN });
+        ResponseHelper.error(res,ERROR_MESSAGE.INVALID_TOKEN,HTTP_STATUS.UNAUTHORIZED)
     }
   }
 }

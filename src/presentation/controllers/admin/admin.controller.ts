@@ -6,16 +6,16 @@ import { IGetAllUsersUsecase } from "../../../application/usecase/interfaces/adm
 import { IGetUserByIdUsecase } from "../../../application/usecase/interfaces/admin/getUserById-usecase.interface";
 import { IUpdateUserstatusUsecase } from "../../../application/usecase/interfaces/admin/update-user-status-usecase.interface";
 import { IAdminUpdateVendorStatusUsecase } from "../../../application/usecase/interfaces/admin/update-vendor-usecase.interface";
-import { HTTP_STATUS } from "../../../shared/constants";
+import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
 
 @injectable()
 export class AdminController implements IAdminController {
   constructor(
     @inject("IGetAllUsersUsecase")
-    private getAllUsersUsecase: IGetAllUsersUsecase,
+    private _getAllUsersUsecase: IGetAllUsersUsecase,
 
     @inject("IUpdateUserstatusUsecase")
-    private updateUserStatusUsecase: IUpdateUserstatusUsecase,
+    private _updateUserStatusUsecase: IUpdateUserstatusUsecase,
 
     @inject("IGetUserByIdUsecase")
     private _getUserByIdUsecase: IGetUserByIdUsecase,
@@ -30,7 +30,7 @@ export class AdminController implements IAdminController {
     const pageSize = Number(limit);
     const userTypeString = typeof userType === "string" ? userType : "client";
 
-    const { user, total } = await this.getAllUsersUsecase.execute(
+    const { user, total } = await this._getAllUsersUsecase.execute(
       userTypeString,
       pageNumber,
       pageSize,
@@ -48,11 +48,10 @@ export class AdminController implements IAdminController {
 
   async updateUserStatus(req: Request, res: Response): Promise<void> {
     const { userType, userId } = req.query as { userType: string; userId: any };
-    const response = await this.updateUserStatusUsecase.execute(
+    const response = await this._updateUserStatusUsecase.execute(
       userType,
       userId
     );
-    console.log(response, "--------->");
     res.status(response.statusCode).json(response.content);
   }
 
@@ -79,6 +78,6 @@ export class AdminController implements IAdminController {
     );
     res
       .status(HTTP_STATUS.OK)
-      .json({ success: true, message: "status updated successfully" });
+      .json({ success: true, message: SUCCESS_MESSAGE.STATUS_UPDATED_SUCCESS });
   }
 }

@@ -23,6 +23,26 @@ import { BaseRoute } from "../base.route";
 import { CommonUploadRoutes } from "../common/common-upload.route";
 import { SignedUrlRoute } from "../common/signedUrl.route";
 import { FcmTokenRoutes } from "../fcmToken/fcmToken.route";
+import { validationMiddleware } from "../../middlewares/validation.middleware";
+import { GetBookingsVendorReqDTO } from "../../../application/dto/request/booking.dto";
+import { GetPackagesVendorReqDTO } from "../../../application/dto/request/package.dto";
+import {
+  ChangeEmailReqDto,
+  UpdatePasswordVendorDTO,
+  VendorProfileReqDTO,
+} from "../../../application/dto/request/vendor.dto";
+import {
+  OtpReqDTO,
+  ResendOtpReqDTO,
+} from "../../../application/dto/request/auth.dto";
+import {
+  AddAddressReqDTO,
+  UpdateAddressReqDTO,
+} from "../../../application/dto/request/address.dto";
+import { AddKycReqDTO } from "../../../application/dto/request/kyc.dto";
+import { AddGuideReqDTO } from "../../../application/dto/request/guide.dto";
+import { UpdateVendorStatusReqDTO } from "../../../application/dto/request/admin.dto";
+import { MarkReadNotificationReqDTO } from "../../../application/dto/request/notification.dto";
 
 @injectable()
 export class VendorRoute extends BaseRoute {
@@ -67,6 +87,7 @@ export class VendorRoute extends BaseRoute {
     // Get all bookings for a package
     this.router.get(
       "/bookings/:packageId",
+      validationMiddleware(GetBookingsVendorReqDTO),
       asyncHandler(
         vendorBookingController.getBookings.bind(vendorBookingController)
       )
@@ -94,7 +115,10 @@ export class VendorRoute extends BaseRoute {
     this.router
       .route("/package")
       .post(asyncHandler(packageConroller.addPackage.bind(packageConroller)))
-      .get(asyncHandler(packageConroller.getPackages.bind(packageConroller)));
+      .get(
+        validationMiddleware(GetPackagesVendorReqDTO),
+        asyncHandler(packageConroller.getPackages.bind(packageConroller))
+      );
 
     //Assign a guide to the package
     this.router.put(
@@ -147,6 +171,7 @@ export class VendorRoute extends BaseRoute {
         )
       )
       .put(
+        validationMiddleware(VendorProfileReqDTO),
         asyncHandler(
           vendorProfileController.updateVendorProfile.bind(
             vendorProfileController
@@ -161,21 +186,25 @@ export class VendorRoute extends BaseRoute {
     // Update vendor password
     this.router.post(
       "/change-email",
+      validationMiddleware(ChangeEmailReqDto),
       asyncHandler(authController.sendEmailOtp.bind(authController))
     );
 
     this.router.post(
       "/resent-otp",
+      validationMiddleware(ResendOtpReqDTO),
       asyncHandler(authController.resendOtp.bind(authController))
     );
 
     this.router.post(
       "/verify-otp",
+      validationMiddleware(OtpReqDTO),
       asyncHandler(authController.verifyOtp.bind(authController))
     );
 
     this.router.put(
       "/update-password",
+      validationMiddleware(UpdatePasswordVendorDTO),
       asyncHandler(
         vendorProfileController.updatePassword.bind(vendorProfileController)
       )
@@ -188,17 +217,20 @@ export class VendorRoute extends BaseRoute {
     // Add new address
     this.router.post(
       "/address",
+      validationMiddleware(AddAddressReqDTO),
       asyncHandler(addressController.addAddress.bind(addressController))
     );
 
     // Update existing address
     this.router.put(
       "/address",
+      validationMiddleware(UpdateAddressReqDTO),
       asyncHandler(addressController.updateAddress.bind(addressController))
     );
 
     this.router.post(
       "/kyc",
+      validationMiddleware(AddKycReqDTO),
       asyncHandler(kycController.addKyc.bind(kycController))
     );
 
@@ -210,7 +242,10 @@ export class VendorRoute extends BaseRoute {
     this.router
       .route("/guide")
       .get(asyncHandler(guideController.getAllGuides.bind(guideController)))
-      .post(asyncHandler(guideController.addGuide.bind(guideController)));
+      .post(
+        validationMiddleware(AddGuideReqDTO),
+        asyncHandler(guideController.addGuide.bind(guideController))
+      );
 
     // Get details of a specific guide
     this.router.get(
@@ -225,6 +260,7 @@ export class VendorRoute extends BaseRoute {
     // Update vendor status
     this.router.patch(
       "/status",
+      validationMiddleware(UpdateVendorStatusReqDTO),
       asyncHandler(vendorController.updateVendorStatus.bind(vendorController))
     );
 
@@ -241,6 +277,7 @@ export class VendorRoute extends BaseRoute {
     // Mark a specific notification as read
     this.router.patch(
       "/notifications/:notificationId",
+      validationMiddleware(MarkReadNotificationReqDTO),
       asyncHandler(
         notificationController.markReadNotification.bind(notificationController)
       )

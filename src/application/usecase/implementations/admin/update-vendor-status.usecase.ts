@@ -27,10 +27,6 @@ export class AdminUpateVendorStatusUsecase
   ): Promise<void> {
     console.log("status check", status === "rejected", !!reason);
 
-    console.log("triggereddd");
-    console.log(vendorId, "-->vendor id");
-    console.log(status, "-->vendor sttatus");
-    console.log(reason, "-->vendor reason");
     if (!vendorId || !status)
       throw new CustomError(
         HTTP_STATUS.BAD_REQUEST,

@@ -42,6 +42,7 @@ export const verifyAuth = async (
 ) => {
   try {
     console.log("verify auth middleware worked");
+    const refreshToken = req.cookies[COOKIES_NAMES.REFRESH_TOKEN];
     const token = req.cookies[COOKIES_NAMES.ACCESS_TOKEN];
     if (!token) {
       res
@@ -49,6 +50,8 @@ export const verifyAuth = async (
         .json({ message: ERROR_MESSAGE.UNAUTHORIZED_ACCESS });
       return;
     }
+
+
 
     const user = tokenService.verifyAccessToken(token) as CustomJwtPayload;
 
@@ -64,8 +67,13 @@ export const verifyAuth = async (
     if (await isBlackListed(token)) {
       res
         .status(HTTP_STATUS.FORBIDDEN)
-        .json({ message: "Token is black listed" });
+        .json({ message: ERROR_MESSAGE.TOKEN_BLACK_LISTED});
       return;
+    }
+
+    if(await isBlackListed(refreshToken)){
+      res.status(HTTP_STATUS.FORBIDDEN)
+      .json({message : ERROR_MESSAGE.TOKEN_BLACK_LISTED})
     }
 
     (req as CustomRequest).user = {
@@ -113,7 +121,7 @@ export const decodeToken = async (
       console.log("token is black listed worked");
       res
         .status(HTTP_STATUS.FORBIDDEN)
-        .json({ message: "Token is blacklisted" });
+        .json({ message: ERROR_MESSAGE.TOKEN_BLACK_LISTED });
       return;
     }
 

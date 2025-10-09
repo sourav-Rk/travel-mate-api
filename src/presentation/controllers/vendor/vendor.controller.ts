@@ -30,7 +30,7 @@ export class VendorController implements IVendorController {
     const { status } = req.body as {
       status: string;
     };
-    console.log(req.body, "--p");
+
     await this.updateVendorStatusUsecase.execute(vendorId, status);
     res
       .status(HTTP_STATUS.OK)
