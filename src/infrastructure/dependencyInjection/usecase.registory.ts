@@ -177,6 +177,20 @@ import { IGetGuideReviewUsecase } from "../../application/usecase/interfaces/rev
 import { GetGuideReviewsUsecase } from "../../application/usecase/implementations/review/get-guide-review.usecase";
 import { IGetGuideDetailsClientUsecase } from "../../application/usecase/interfaces/guide/get-guide-details-client-usecase.interface";
 import { GetGuideDetailsClient } from "../../application/usecase/implementations/guide/get-guide-details-client.usecase";
+import { ISendMessageUseCase } from "../../application/usecase/interfaces/chat/send-message-usecase.interface";
+import { SendMessageUsecase } from "../../application/usecase/implementations/chat/send-message.usecase";
+import { IMarkReadUsecase } from "../../application/usecase/interfaces/chat/mark-read-usecase.interface";
+import { MarkReadUsecase } from "../../application/usecase/implementations/chat/mark-read.usecase";
+import { ICheckChatRoomUsecase } from "../../application/usecase/interfaces/chat/check-chat-room-usecase.interface";
+import { CheckChatRoomUsecase } from "../../application/usecase/implementations/chat/check-chat-room.usecase";
+import { IGetMessagesUsecase } from "../../application/usecase/interfaces/chat/get-message-usecase.interface";
+import { GetMessagesUsecase } from "../../application/usecase/implementations/chat/get-messages.usecase";
+import { IMarkAsDeliveredUsecase } from "../../application/usecase/interfaces/chat/mark-delivered-usecase.interface";
+import { MarkAsDeliveredUsecase } from "../../application/usecase/implementations/chat/mark-delivered.usecase";
+import { IGetChatHistoryUsecase } from "../../application/usecase/interfaces/chat/get-chat-history-usecase.interface";
+import { GetChatHistoryUsecase } from "../../application/usecase/implementations/chat/get-chat-history.usecase";
+import { IGetChatroomUsecase } from "../../application/usecase/interfaces/chat/get-chatroom-usecase.interface";
+import { GetChatroomUsecase } from "../../application/usecase/implementations/chat/get-chatroom.usecase";
 
 export class UsecaseRegistory {
   static registerUsecases(): void {
@@ -634,6 +648,36 @@ export class UsecaseRegistory {
     container.register<IAssignGuideToTripUsecase>("IAssignGuideToTripUsecase", {
       useClass: AssignGuideToTripUsecase,
     });
+
+    //chat usecase
+    container.register<ISendMessageUseCase>('ISendMessageUseCase',{
+      useClass : SendMessageUsecase
+    });
+
+    container.register<IMarkReadUsecase>('IMarkReadUsecase',{
+      useClass : MarkReadUsecase
+    });
+
+    container.register<IGetMessagesUsecase>('IGetMessagesUsecase',{
+      useClass : GetMessagesUsecase
+    });
+
+    container.register<IMarkAsDeliveredUsecase>('IMarkAsDeliveredUsecase',{
+      useClass : MarkAsDeliveredUsecase
+    })
+
+    //chat-room-usecase
+    container.register<ICheckChatRoomUsecase>('ICheckChatRoomUsecase',{
+      useClass : CheckChatRoomUsecase
+    });
+
+    container.register<IGetChatHistoryUsecase>('IGetChatHistoryUsecase',{
+      useClass : GetChatHistoryUsecase
+    });
+
+    container.register<IGetChatroomUsecase>('IGetChatroomUsecase',{
+      useClass : GetChatroomUsecase
+    })
 
     //token
     container.register<IBlackListTokenUsecase>("IBlackListTokenUsecase", {

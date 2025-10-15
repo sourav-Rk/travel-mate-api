@@ -180,7 +180,6 @@ export class AuthController implements IAuthController {
   async login(req: Request, res: Response): Promise<void> {
     const data = req.body as LoginUserDTO;
 
-    console.log(data);
     const user = await this._loginUsecase.execute(data);
 
     if (!user._id || !user.email || !user.role) {
@@ -250,7 +249,6 @@ export class AuthController implements IAuthController {
     const accessToken = (req as CustomRequest).user.accessToken;
 
     await this._blackListTokenUsecase.execute(accessToken);
-    await this._blackListTokenUsecase.execute(refreshToken);
 
     clearCookie(res, COOKIES_NAMES.ACCESS_TOKEN, COOKIES_NAMES.REFRESH_TOKEN);
     ResponseHelper.success(res, HTTP_STATUS.OK, SUCCESS_MESSAGE.LOGIN_SUCCESS);

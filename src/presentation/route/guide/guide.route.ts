@@ -7,16 +7,25 @@ import {
 import { asyncHandler } from "../../../shared/async-handler";
 import {
   blockMiddleware,
+  chatController,
   guideBookingController,
+  guideClientController,
   guideController,
   guidePackageController,
   guideProfileController,
 } from "../../../infrastructure/dependencyInjection/resolve";
 import { BaseRoute } from "../base.route";
 import { validationMiddleware } from "../../middlewares/validation.middleware";
-import { ResetPasswordGuideDTO, UpdatePasswordGuideReqDTO } from "../../../application/dto/request/guide.dto";
-import { GetAssignedPackagesReqDTO, UpdatePackageStatusReqDTO } from "../../../application/dto/request/package.dto";
+import {
+  ResetPasswordGuideDTO,
+  UpdatePasswordGuideReqDTO,
+} from "../../../application/dto/request/guide.dto";
+import {
+  GetAssignedPackagesReqDTO,
+  UpdatePackageStatusReqDTO,
+} from "../../../application/dto/request/package.dto";
 import { GetBookingOfThePackageGuideReqDTO } from "../../../application/dto/request/booking.dto";
+import { GetMessagesReqDto } from "../../../application/dto/request/chat.dto";
 
 @injectable()
 export class GuideRoute extends BaseRoute {
@@ -103,6 +112,28 @@ export class GuideRoute extends BaseRoute {
           guideBookingController
         )
       )
+    );
+
+    // -------------------------
+    //  User Details Routes
+    // -------------------------
+    this.router.get(
+      "/client/:clientId",
+      asyncHandler(
+        guideClientController.getClientDetailsForGuide.bind(
+          guideClientController
+        )
+      )
+    );
+
+    // -------------------------
+    //  Chat Routes
+    // -------------------------
+
+    this.router.get(
+      "/messages",
+      validationMiddleware(GetMessagesReqDto),
+      asyncHandler(chatController.getMessages.bind(chatController))
     );
   }
 }
