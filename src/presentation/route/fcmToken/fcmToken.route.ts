@@ -12,7 +12,7 @@ export class FcmTokenRoutes {
 
   private configureRoutes(): void {
     this.router.post(
-      `/${this.role}/fcm/save`,
+      `/fcm/save`,
       verifyAuth,
       authorizeRole(["client", "vendor"]),
       asyncHandler(fcmTokenController.saveFcmToken.bind(fcmTokenController))

@@ -34,6 +34,10 @@ import { IWishListRepository } from "../../domain/repositoryInterfaces/wishlist/
 import { WishlistRepository } from "../repository/wishlist/wishlist.repository";
 import { IReviewRepository } from "../../domain/repositoryInterfaces/review/review-repository.interface";
 import { ReviewRepository } from "../repository/review/review.repository";
+import { IMessageRepository } from "../../domain/repositoryInterfaces/message/message-repository.interface";
+import { MessageRepository } from "../repository/message/message.repository";
+import { IChatRoomRepository } from "../../domain/repositoryInterfaces/chatroom/chatroom-repository.interface";
+import { ChatRoomRepository } from "../repository/chatroom/chatroom-repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -104,6 +108,16 @@ export class RepositoryRegistry {
     //redis token repository
     container.register<IRedisTokenRepository>("IRedisTokenRepository", {
       useClass: RedisTokenRepository,
+    });
+
+    //message repository
+    container.register<IMessageRepository>('IMessageRepository',{
+      useClass : MessageRepository
+    });
+
+    //chatroom repository
+    container.register<IChatRoomRepository>('IChatRoomRepository',{
+      useClass : ChatRoomRepository
     });
 
     //database session

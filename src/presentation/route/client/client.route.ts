@@ -9,6 +9,7 @@ import {
 import { asyncHandler } from "../../../shared/async-handler";
 import {
   blockMiddleware,
+  chatController,
   clientBookingController,
   clientPackageController,
   clientProfileController,
@@ -23,12 +24,16 @@ import { CommonUploadRoutes } from "../common/common-upload.route";
 import { FcmTokenRoutes } from "../fcmToken/fcmToken.route";
 import { injectable } from "tsyringe";
 import { validationMiddleware } from "../../middlewares/validation.middleware";
-import { UpdateClientProfileDTO, UpdatePasswordReqDTO } from "../../../application/dto/request/client.dto";
+import {
+  UpdateClientProfileDTO,
+  UpdatePasswordReqDTO,
+} from "../../../application/dto/request/client.dto";
 import { MarkReadNotificationReqDTO } from "../../../application/dto/request/notification.dto";
 import { AddReviewReqDTO } from "../../../application/dto/request/review.dto";
 import { GetAvailablePackagesReqDTO } from "../../../application/dto/request/package.dto";
 import { BookingPaymentReqDTO } from "../../../application/dto/request/payment.dto";
 import { GetGuideDetailsForClientReqDTO } from "../../../application/dto/request/guide.dto";
+import { GetMessagesReqDto } from "../../../application/dto/request/chat.dto";
 
 @injectable()
 export class ClientRoute extends BaseRoute {
@@ -247,6 +252,23 @@ export class ClientRoute extends BaseRoute {
           guideProfileController
         )
       )
+    );
+
+    //--------------=Chat Routes ---------------------
+    this.router.get(
+      "/messages",
+      validationMiddleware(GetMessagesReqDto),
+      asyncHandler(chatController.getMessages.bind(chatController))
+    );
+
+    this.router.get(
+      "/chatroom/:chatroomId",
+      asyncHandler(chatController.getChatroom.bind(chatController))
+    );
+
+    this.router.get(
+      "/history",
+      asyncHandler(chatController.getChatHistory.bind(chatController))
     );
   }
 }

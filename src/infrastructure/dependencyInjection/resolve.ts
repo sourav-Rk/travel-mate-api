@@ -63,6 +63,12 @@ import { IGuidePackageController } from "../../presentation/interfaces/controlle
 import { GuidePackageController } from "../../presentation/controllers/package/guide-package-controller";
 import { IGuideBookingController } from "../../presentation/interfaces/controllers/booking/guide-booking-controller.interface";
 import { GuideBookingController } from "../../presentation/controllers/booking/guide-booking-controller";
+import { IChatSocketHandler } from "../../presentation/interfaces/socket/chat-socket-handler.interface";
+import { ChatSocketHandler } from "../../presentation/socket/chatSocketHandler";
+import { IChatController } from "../../presentation/interfaces/controllers/chat/chat-controller.interface";
+import { ChatController } from "../../presentation/controllers/chat/chat.controller";
+import { IGuideClientController } from "../../presentation/interfaces/controllers/client/guideClient-controller.interface";
+import { GuideClientController } from "../../presentation/controllers/client/guideClient.controller";
 
 DependencyInjection.registerAll();
 
@@ -145,6 +151,9 @@ export const vendorBookingController =
 export const guideBookingController =
   container.resolve<IGuideBookingController>(GuideBookingController);
 
+//guide-client controller
+export const guideClientController = container.resolve<IGuideClientController>(GuideClientController);  
+
 //payment controller
 export const paymentController =
   container.resolve<IPaymentController>(PaymentController);
@@ -169,6 +178,10 @@ export const wishlistController =
 export const reviewController =
   container.resolve<IReviewController>(ReviewController);
 
+//chat controller
+export const chatController = container.resolve(ChatController);
+
+
 //signed url controller
 export const signedUrlController =
   container.resolve<ISignedUrlController>(SignedUrlController);
@@ -190,3 +203,12 @@ export const vendorRoutes = container.resolve(VendorRoute);
 
 //guide route
 export const guideRoutes = container.resolve(GuideRoute);
+
+//chat socker handler
+container.register<IChatSocketHandler>("IChatSocketHandler", {
+  useClass: ChatSocketHandler,
+});
+
+// chat socket handler
+export const chatSocketHandler =
+  container.resolve<IChatSocketHandler>("IChatSocketHandler");

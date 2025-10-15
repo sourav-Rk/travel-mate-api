@@ -10,7 +10,6 @@ import { FcmTokenMapper } from "../../../application/mapper/fcmToken.mapper";
 @injectable()
 export class FCMTokenRepository implements IFCMTokenRepository {
   async createFcmToken(userId: string, token: string): Promise<void> {
-    console.log(userId, token);
     await fcmTokenDb.findOneAndUpdate(
       { userId },
       { token },
