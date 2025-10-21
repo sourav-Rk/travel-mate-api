@@ -113,12 +113,18 @@ export const ERROR_MESSAGE = {
     CANCELLATION_NOT_ALLOWED: "Cancellation not allowed for this booking",
     NO_CANCELLATION_REQUEST: "No cancellation request pending for this booking",
     INVALID_CANCELLATION_DATA: "Invalid cancellation request data",
-    CANCELLATION_ALREADY_REQUESTED : "Cancellation Already requested",
+    CANCELLATION_ALREADY_REQUESTED: "Cancellation Already requested",
   },
 
   REFUND: {
     REFUND_AMOUNT_GREATER_THAN_ZERO: "Refund amount must be greater than 0",
   },
+
+  GUIDE_INSTRUCTIONS : {
+    NO_TRAVELLERS_FOUND : "No travellers found for this package",
+    GUIDE_ASSIGNED_CONFLICT : "This guide is not assigned for this trip",
+    INSTRUCTION_NOT_FOUND : "Instruction not found"
+  }
 };
 
 export const SUCCESS_MESSAGE = {
@@ -160,10 +166,16 @@ export const SUCCESS_MESSAGE = {
   DETAILS_FETCHED: "Details fetched successfully",
 
   BOOKING_CANCELLATION: {
-    CANCELLATION_REQUESTED: (amount : number) =>
+    CANCELLATION_REQUESTED: (amount: number) =>
       `Cancellation requested successfully! Your refund of ₹${amount} will be processed after vendor approval.`,
-    CANCELLATION_APPROVED : 'Cancellation Approved successfully'
+    CANCELLATION_APPROVED: "Cancellation Approved successfully",
   },
+
+  GUIDE_INSTRUCTION : {
+    ADDED_SUCCESSFULLY : "Instruction added successfully",
+    INSTRUCTION_MARKED_AS_READ : "Instruction marked as read",
+    ALL_INSTRUCTIONS_MARKED_AS_READ : "All instructions marked as read"
+  }
 };
 
 export const ROLES = {
@@ -299,3 +311,11 @@ export const CANCELLATION_POLICIES: Record<
     advanceRefundPercentage: 0,
   },
 };
+
+export type INSTRUCTION_PRIORITY = "LOW" | "MEDIUM" | "HIGH" | "URGENT";
+export type INSTRUCTION_TYPE =  
+    | "MEETING_POINT"
+    | "ITINERARY_UPDATE"
+    | "SAFETY_INFO"
+    | "REMINDER"
+    | "GENERAL";

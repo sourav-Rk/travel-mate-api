@@ -207,6 +207,14 @@ import { IGetCancellationRequests } from "../../application/usecase/interfaces/b
 import { GetCancellationRequests } from "../../application/usecase/implementations/booking-cancell/get-cancellation-requests.usecase";
 import { IGetCancelledBookingDetailsUsecase } from "../../application/usecase/interfaces/booking-cancell/get-cancelled-bookingDetails-usecase.interface";
 import { GetCancelledBookingDetailsUsecase } from "../../application/usecase/implementations/booking-cancell/get-cancelled-bookingDetails.usecase";
+import { ICreateInstructionUsecase } from "../../application/usecase/interfaces/guide-instruction/create-instruction-usecase.interface";
+import { CreateInstructionUsecase } from "../../application/usecase/implementations/guide-instructions/create-instruction.usecase";
+import { IGetInstructionsClientUsecase } from "../../application/usecase/interfaces/guide-instruction/get-instructions-client-usecase.interface";
+import { GetInstructionsClientUsecase } from "../../application/usecase/implementations/guide-instructions/get-instructions-client.usecase";
+import { IMarkInstructionReadUseCase } from "../../application/usecase/interfaces/guide-instruction/mark-instruction-read-usecase.interface";
+import { MarkInstructionReadUseCase } from "../../application/usecase/implementations/guide-instructions/mark-instruction-read.usecase";
+import { IMarkAllInstructionsReadUseCase } from "../../application/usecase/interfaces/guide-instruction/mark-all-instructions-usecase.interface";
+import { MarkAllInstructionsReadUseCase } from "../../application/usecase/implementations/guide-instructions/mark-all-instructons-read.usecase";
 
 export class UsecaseRegistory {
   static registerUsecases(): void {
@@ -734,6 +742,23 @@ export class UsecaseRegistory {
 
     container.register<IGetWalletByUserIdUsecase>("IGetWalletByUserIdUsecase", {
       useClass: GetWalletByUserIdUsecase,
+    });
+
+    //guide-instruction usecase
+    container.register<ICreateInstructionUsecase>("ICreateInstructionUsecase",{
+      useClass : CreateInstructionUsecase
+    });
+
+    container.register<IGetInstructionsClientUsecase>('IGetInstructionsClientUsecase',{
+      useClass : GetInstructionsClientUsecase
+    })
+
+    container.register<IMarkInstructionReadUseCase>('IMarkInstructionReadUseCase',{
+      useClass : MarkInstructionReadUseCase
+    });
+
+    container.register<IMarkAllInstructionsReadUseCase>('IMarkAllInstructionsReadUseCase',{
+      useClass : MarkAllInstructionsReadUseCase
     });
 
     //token

@@ -11,6 +11,7 @@ import {
   guideBookingController,
   guideClientController,
   guideController,
+  guideInstructionController,
   guidePackageController,
   guideProfileController,
 } from "../../../infrastructure/dependencyInjection/resolve";
@@ -26,6 +27,7 @@ import {
 } from "../../../application/dto/request/package.dto";
 import { GetBookingOfThePackageGuideReqDTO } from "../../../application/dto/request/booking.dto";
 import { GetMessagesReqDto } from "../../../application/dto/request/chat.dto";
+import { CreateInstructionDto } from "../../../application/dto/request/guide-instruction.dto";
 
 @injectable()
 export class GuideRoute extends BaseRoute {
@@ -122,6 +124,19 @@ export class GuideRoute extends BaseRoute {
       asyncHandler(
         guideClientController.getClientDetailsForGuide.bind(
           guideClientController
+        )
+      )
+    );
+
+    // -------------------------
+    // Instruction Routes
+    // -------------------------
+    this.router.post(
+      "/instructions",
+      validationMiddleware(CreateInstructionDto),
+      asyncHandler(
+        guideInstructionController.createInstruction.bind(
+          guideInstructionController
         )
       )
     );

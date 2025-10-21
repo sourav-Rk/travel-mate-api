@@ -70,6 +70,7 @@ import { ChatController } from "../../presentation/controllers/chat/chat.control
 import { IGuideClientController } from "../../presentation/interfaces/controllers/client/guideClient-controller.interface";
 import { GuideClientController } from "../../presentation/controllers/client/guideClient.controller";
 import { WalletController } from "../../presentation/controllers/wallet/wallet.controller";
+import { GuideInstructionController } from "../../presentation/controllers/guide-instruction/guide-instruction.controller";
 
 DependencyInjection.registerAll();
 
@@ -184,6 +185,9 @@ export const chatController = container.resolve(ChatController);
 
 //wallet controller
 export const walletController = container.resolve(WalletController);
+
+//guide instruction controller
+export const guideInstructionController = container.resolve(GuideInstructionController);
 
 //signed url controller
 export const signedUrlController =
