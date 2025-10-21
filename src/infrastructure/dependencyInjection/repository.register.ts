@@ -42,6 +42,8 @@ import { IWalletRepository } from "../../domain/repositoryInterfaces/wallet/wall
 import { WalletRepository } from "../repository/wallet/wallet.repository";
 import { IWalletTransactionsRepository } from "../../domain/repositoryInterfaces/wallet/wallet-transactions-repository.interface";
 import { WalletTransactionsRepository } from "../repository/wallet/wallet-transactions.repository";
+import { IGuideInstructionRepository } from "../../domain/repositoryInterfaces/guide-instruction/guide-instruction-repository.interface";
+import { GuideInstructionRepository } from "../repository/guide-instruction/guide-instruction.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -132,6 +134,11 @@ export class RepositoryRegistry {
     //wallet transaction repository
     container.register<IWalletTransactionsRepository>('IWalletTransactionsRepository',{
       useClass : WalletTransactionsRepository
+    });
+
+    //guide-instruction repository
+    container.register<IGuideInstructionRepository>('IGuideInstructionRepository',{
+      useClass : GuideInstructionRepository
     });
 
     //database session

@@ -13,6 +13,7 @@ import {
   clientBookingController,
   clientPackageController,
   clientProfileController,
+  guideInstructionController,
   guideProfileController,
   notificationController,
   paymentController,
@@ -291,6 +292,38 @@ export class ClientRoute extends BaseRoute {
       "/transactions",
       asyncHandler(
         walletController.getWalletTransactions.bind(walletController)
+      )
+    );
+
+    //--------------Instructions routes-------------------
+
+    //mark instruction as read
+    this.router.put(
+      "/instructions/:instructionId",
+      asyncHandler(
+        guideInstructionController.markInstructionRead.bind(
+          guideInstructionController
+        )
+      )
+    );
+
+    //get instructions
+    this.router.get(
+      "/instructions",
+      asyncHandler(
+        guideInstructionController.getInstructionsClient.bind(
+          guideInstructionController
+        )
+      )
+    );
+
+    //mark all instructions as read
+    this.router.put(
+      "/instructions",
+      asyncHandler(
+        guideInstructionController.markAllInstructionsRead.bind(
+          guideInstructionController
+        )
       )
     );
   }
