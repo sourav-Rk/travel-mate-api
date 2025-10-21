@@ -1,4 +1,4 @@
-import { BOOKINGSTATUS } from "../../shared/constants";
+import { BOOKINGSTATUS, CANCELLATION_REFUND_POLICY } from "../../shared/constants";
 
 export interface IBookingEntity {
   _id?: string;
@@ -21,4 +21,12 @@ export interface IBookingEntity {
   isWaitlisted?: boolean;
   appliedAt?: Date;
   cancelledAt?: Date;
+  refundAmount?:number;
+
+  cancellationRequest?: {
+    requestedAt: Date;
+    reason: string;
+    calculatedRefund?: number;
+    approvedAt ?: Date;
+  };
 }

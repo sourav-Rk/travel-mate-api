@@ -9,10 +9,12 @@ import {
   BookingDetailsWithUserDetailsDto,
   BookingListWithPackageDetailsDto,
   BookingListWithUserDetailsDto,
+  CancelledBookingDetailsWithUserAndPackageDetailsDto,
+  FindCancellationRequestsDto,
   IBookingWithPackage,
   PaginatedBookingListWithUserDetails,
+  PaginatedCancellationRequests,
 } from "../../../application/dto/response/bookingDto";
-import { IClientEntity } from "../../../domain/entities/client.entity";
 import { BaseRepository } from "../baseRepository";
 import mongoose from "mongoose";
 
@@ -24,6 +26,12 @@ export class BookingRepository
   async createBooking(data: Partial<IBookingEntity>): Promise<IBookingEntity> {
     const modelData = await bookingDB.create(data);
     return BookingMapper.toEntity(modelData);
+  }
+
+  async findByCustomBookingId(
+    bookingId: string
+  ): Promise<IBookingEntity | null> {
+    return bookingDB.findOne({ bookingId });
   }
 
   async findByBookingId(id: string): Promise<IBookingModel | null> {
@@ -107,9 +115,6 @@ export class BookingRepository
     pageSize: number
   ): Promise<PaginatedBookingListWithUserDetails> {
     let filter: any = { packageId };
-    // if (searchTerm) {
-    //   filter.$or = [{ bookingId: { $regex: searchTerm, $options: "i" } }];
-    // }
 
     if (status && status !== "all") {
       filter.status = status;
@@ -160,33 +165,7 @@ export class BookingRepository
       bookings: bookings as unknown as BookingListWithUserDetailsDto[],
       total,
     };
-
-    // const [bookings, total] = await Promise.all([
-    //   bookingDB
-    //     .find(filter)
-    //     .populate<{ userId: IClientEntity }>("userId")
-    //     .skip(skip)
-    //     .limit(limit)
-    //     .sort({ createdAt: -1 })
-    //     .lean<IBookingEntity[]>(),
-    //   bookingDB.countDocuments(filter),
-    // ]);
-
-    // console.log(filter);
-    // return {
-    //   bookings: bookings as unknown as BookingListWithUserDetailsDto[],
-    //   total,
-    // };
   }
-
-  // async findByBookingIdWithUserDetails(
-  //   bookingId: string
-  // ): Promise<BookingDetailsWithUserDetailsDto | null> {
-  //   return bookingDB
-  //     .findById(bookingId)
-  //     .populate("userId")
-  //     .lean<BookingDetailsWithUserDetailsDto | null>();
-  // }
 
   async findByBookingIdWithUserDetails(
     bookingId: string
@@ -236,8 +215,164 @@ export class BookingRepository
     ];
 
     const result = await bookingDB.aggregate(pipeline);
+    console.log(result);
     return result.length > 0
       ? (result[0] as BookingDetailsWithUserDetailsDto)
       : null;
+  }
+
+  async findCancelledBookingIdWithUserDetails(
+    bookingId: string
+  ): Promise<CancelledBookingDetailsWithUserAndPackageDetailsDto | null> {
+    const pipeline = [
+      {
+        $match: {
+          bookingId,
+        },
+      },
+      {
+        $lookup: {
+          from: "clients",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      {
+        $unwind: {
+          path: "$user",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: "packages",
+          localField: "packageId",
+          foreignField: "packageId",
+          as: "package",
+        },
+      },
+      {
+        $unwind: { path: "$package", preserveNullAndEmptyArrays: true },
+      },
+      {
+        $project: {
+          _id: 1,
+          bookingId: 1,
+          packageId: 1,
+          status: 1,
+          isWaitlisted: 1,
+          cancelledAt: 1,
+          advancePayment: 1,
+          fullPayment: 1,
+          cancellationRequest: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          user: {
+            _id: "$user._id",
+            firstName: "$user.firstName",
+            lastName: "$user.lastName",
+            email: "$user.email",
+            phone: "$user.phone",
+            gender: "$user.gender",
+          },
+          package: {
+            packageId: "$package.packageId",
+            packageName: "$package.packageName",
+            title: "$package.title",
+            startDate: "$package.startDate",
+            endDate: "$package.endDate",
+            price: "$package.price",
+            status: "$package.status"
+          },
+        },
+      },
+    ];
+
+    const result = await bookingDB.aggregate(pipeline);
+
+    return result.length > 0
+      ? (result[0] as CancelledBookingDetailsWithUserAndPackageDetailsDto)
+      : null;
+  }
+
+  async findCancellationRequests(
+    packageIds: string[],page:number,limit : number,searchTerm?:string,status?: "cancellation_requested" | "cancelled",
+  ): Promise<PaginatedCancellationRequests> {
+    if (!packageIds || packageIds.length === 0) {
+      return { bookings: [], total: 0 };
+    }
+   const skip = (page - 1) * limit;
+    const matchConditions: any = {
+    packageId: { $in: packageIds }
+  };
+
+   if (status === 'cancelled') {
+    matchConditions.status = BOOKINGSTATUS.CANCELLED;
+  } else {
+    matchConditions.status = BOOKINGSTATUS.CANCELLATION_REQUESTED
+  }
+
+   if (searchTerm) {
+    matchConditions.$or = [
+      { bookingId: { $regex: searchTerm, $options: 'i' } },
+      { 'user.name': { $regex: searchTerm, $options: 'i' } },
+      { 'user.email': { $regex: searchTerm, $options: 'i' } }
+    ];
+  }
+  
+    const [result] = await bookingDB.aggregate([
+      {
+        $facet: {
+          bookings: [
+            {
+              $match: matchConditions,
+            },
+            {
+              $lookup: {
+                from: "packages",
+                localField: "packageId",
+                foreignField: "packageId",
+                as: "package",
+              },
+            },
+            { $unwind: { path: "$package", preserveNullAndEmptyArrays: true } },
+            {
+              $lookup: {
+                from: "clients",
+                localField: "userId",
+                foreignField: "_id",
+                as: "user",
+              },
+            },
+            { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
+            { $sort: { createdAt: -1 } },
+            {$skip : skip},
+            {$limit : limit},
+
+          ],
+          total: [
+            {
+              $match: matchConditions,
+            },
+            { $count: "count" },
+          ],
+        },
+      },
+    ]);
+
+    const bookings = result?.bookings || [];
+    const total = result?.total?.[0]?.count || 0;
+
+    console.log(bookings);
+
+    const data = bookings.map((bkg: FindCancellationRequestsDto) =>
+      BookingMapper.mapToCancellationRequestsDto(bkg)
+    );
+
+    return {
+      bookings: data,
+      total,
+    };
   }
 }

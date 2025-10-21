@@ -5,4 +5,5 @@ export interface IClientBookingController {
     getBookingDetailOfPackage(req : Request,res : Response) : Promise<void>;
     getBookings(req : Request, res : Response) : Promise<void>;
     getBookingDetails(req : Request,res : Response) : Promise<void>;
+    cancellBooking(req : Request,res : Response) :Promise<void>;
 }

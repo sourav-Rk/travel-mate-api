@@ -17,6 +17,7 @@ import {
   notificationController,
   paymentController,
   reviewController,
+  walletController,
   wishlistController,
 } from "../../../infrastructure/dependencyInjection/resolve";
 import { BaseRoute } from "../base.route";
@@ -129,6 +130,14 @@ export class ClientRoute extends BaseRoute {
       "/booking/apply",
       asyncHandler(
         clientBookingController.applyPackage.bind(clientBookingController)
+      )
+    );
+
+    //cancell a booking
+    this.router.post(
+      "/booking/cancel/:bookingId",
+      asyncHandler(
+        clientBookingController.cancellBooking.bind(clientBookingController)
       )
     );
 
@@ -269,6 +278,20 @@ export class ClientRoute extends BaseRoute {
     this.router.get(
       "/history",
       asyncHandler(chatController.getChatHistory.bind(chatController))
+    );
+
+    //--------------Wallet Routes ---------------------
+
+    this.router.get(
+      "/wallet",
+      asyncHandler(walletController.getWalletByUserId.bind(walletController))
+    );
+
+    this.router.get(
+      "/transactions",
+      asyncHandler(
+        walletController.getWalletTransactions.bind(walletController)
+      )
     );
   }
 }

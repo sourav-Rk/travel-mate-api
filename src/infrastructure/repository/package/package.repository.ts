@@ -306,4 +306,8 @@ export class PackageRepository
       total,
     };
   }
+
+  async findByAgencyId(vendorId: string): Promise<IPackageEntity[] | []> {
+     return await packageDB.find({agencyId : vendorId})
+  }
 }

@@ -191,6 +191,22 @@ import { IGetChatHistoryUsecase } from "../../application/usecase/interfaces/cha
 import { GetChatHistoryUsecase } from "../../application/usecase/implementations/chat/get-chat-history.usecase";
 import { IGetChatroomUsecase } from "../../application/usecase/interfaces/chat/get-chatroom-usecase.interface";
 import { GetChatroomUsecase } from "../../application/usecase/implementations/chat/get-chatroom.usecase";
+import { ICreateWalletUsecase } from "../../application/usecase/interfaces/wallet/createWallet-usecase.interface";
+import { CreateWalletUsecase } from "../../application/usecase/implementations/wallet/createWallet.usecase";
+import { IGetWalletTransactionsUsecase } from "../../application/usecase/interfaces/wallet/getWalletTransactions-usecase.interface";
+import { GetWalletTransactionsUsecase } from "../../application/usecase/implementations/wallet/getWalletTransactions.usecase";
+import { IGetWalletByIdUsecase } from "../../application/usecase/interfaces/wallet/get-walletById-usecase.interface";
+import { GetWalletByIdUsecase } from "../../application/usecase/implementations/wallet/get-walletById.usecase";
+import { IGetWalletByUserIdUsecase } from "../../application/usecase/interfaces/wallet/get-walletByUserId-usecase.interface";
+import { GetWalletByUserIdUsecase } from "../../application/usecase/implementations/wallet/get-walletByUserId.usecase";
+import { ICancellBookingUsecase } from "../../application/usecase/interfaces/booking-cancell/cancell-booking-usecase.interface";
+import { CancellBookingUsecase } from "../../application/usecase/implementations/booking-cancell/cancell-booking.usecase";
+import { IVendorApproveCancellationUsecase } from "../../application/usecase/interfaces/booking-cancell/vendor-approve-cancellation.-usecase.interface";
+import { VendorApproveCancellationUsecase } from "../../application/usecase/implementations/booking-cancell/vendorApproveCancellation.usecase";
+import { IGetCancellationRequests } from "../../application/usecase/interfaces/booking-cancell/get-cancellation-requests-usecase.interface";
+import { GetCancellationRequests } from "../../application/usecase/implementations/booking-cancell/get-cancellation-requests.usecase";
+import { IGetCancelledBookingDetailsUsecase } from "../../application/usecase/interfaces/booking-cancell/get-cancelled-bookingDetails-usecase.interface";
+import { GetCancelledBookingDetailsUsecase } from "../../application/usecase/implementations/booking-cancell/get-cancelled-bookingDetails.usecase";
 
 export class UsecaseRegistory {
   static registerUsecases(): void {
@@ -546,6 +562,27 @@ export class UsecaseRegistory {
       }
     );
 
+    //cancell booking usecase
+    container.register<ICancellBookingUsecase>("ICancellBookingUsecase", {
+      useClass: CancellBookingUsecase,
+    });
+
+    container.register<IVendorApproveCancellationUsecase>(
+      "IVendorApproveCancellationUsecase",
+      {
+        useClass: VendorApproveCancellationUsecase,
+      }
+    );
+
+
+    container.register<IGetCancellationRequests>('IGetCancellationRequests',{
+      useClass : GetCancellationRequests
+    })
+
+    container.register<IGetCancelledBookingDetailsUsecase>('IGetCancelledBookingDetailsUsecase',{
+      useClass : GetCancelledBookingDetailsUsecase
+    }); 
+
     //guide packages usecases
     container.register<IAssignedTripsUsecase>("IAssignedTripsUsecase", {
       useClass: AssignedTripsUsecase,
@@ -650,34 +687,54 @@ export class UsecaseRegistory {
     });
 
     //chat usecase
-    container.register<ISendMessageUseCase>('ISendMessageUseCase',{
-      useClass : SendMessageUsecase
+    container.register<ISendMessageUseCase>("ISendMessageUseCase", {
+      useClass: SendMessageUsecase,
     });
 
-    container.register<IMarkReadUsecase>('IMarkReadUsecase',{
-      useClass : MarkReadUsecase
+    container.register<IMarkReadUsecase>("IMarkReadUsecase", {
+      useClass: MarkReadUsecase,
     });
 
-    container.register<IGetMessagesUsecase>('IGetMessagesUsecase',{
-      useClass : GetMessagesUsecase
+    container.register<IGetMessagesUsecase>("IGetMessagesUsecase", {
+      useClass: GetMessagesUsecase,
     });
 
-    container.register<IMarkAsDeliveredUsecase>('IMarkAsDeliveredUsecase',{
-      useClass : MarkAsDeliveredUsecase
-    })
+    container.register<IMarkAsDeliveredUsecase>("IMarkAsDeliveredUsecase", {
+      useClass: MarkAsDeliveredUsecase,
+    });
 
     //chat-room-usecase
-    container.register<ICheckChatRoomUsecase>('ICheckChatRoomUsecase',{
-      useClass : CheckChatRoomUsecase
+    container.register<ICheckChatRoomUsecase>("ICheckChatRoomUsecase", {
+      useClass: CheckChatRoomUsecase,
     });
 
-    container.register<IGetChatHistoryUsecase>('IGetChatHistoryUsecase',{
-      useClass : GetChatHistoryUsecase
+    container.register<IGetChatHistoryUsecase>("IGetChatHistoryUsecase", {
+      useClass: GetChatHistoryUsecase,
     });
 
-    container.register<IGetChatroomUsecase>('IGetChatroomUsecase',{
-      useClass : GetChatroomUsecase
-    })
+    container.register<IGetChatroomUsecase>("IGetChatroomUsecase", {
+      useClass: GetChatroomUsecase,
+    });
+
+    //wallet usecases
+    container.register<ICreateWalletUsecase>("ICreateWalletUsecase", {
+      useClass: CreateWalletUsecase,
+    });
+
+    container.register<IGetWalletTransactionsUsecase>(
+      "IGetWalletTransactionsUsecase",
+      {
+        useClass: GetWalletTransactionsUsecase,
+      }
+    );
+
+    container.register<IGetWalletByIdUsecase>("IGetWalletByIdUsecase", {
+      useClass: GetWalletByIdUsecase,
+    });
+
+    container.register<IGetWalletByUserIdUsecase>("IGetWalletByUserIdUsecase", {
+      useClass: GetWalletByUserIdUsecase,
+    });
 
     //token
     container.register<IBlackListTokenUsecase>("IBlackListTokenUsecase", {

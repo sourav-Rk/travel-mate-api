@@ -10,6 +10,7 @@ import {
 } from "../../../../shared/utils/successResponseHandler";
 
 import { IRegisterStrategy } from "./register-strategies/register-strategy.interface";
+import { IWalletRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
 
 @injectable()
 export class RegisterUserUsecase implements IRegisterUserUsecase {
@@ -19,7 +20,10 @@ export class RegisterUserUsecase implements IRegisterUserUsecase {
     private clientRegister: IRegisterStrategy,
 
     @inject("VendorRegisteryStrategy")
-    private vendorRegister: IRegisterStrategy
+    private vendorRegister: IRegisterStrategy,
+
+    @inject("IWalletRepository")
+    private _walletRepository: IWalletRepository
   ) {
     this.strategies = {
       client: this.clientRegister,
@@ -37,6 +41,13 @@ export class RegisterUserUsecase implements IRegisterUserUsecase {
     }
 
     await strategy.register(user);
+
+    await this._walletRepository.save({
+      userId: user._id,
+      userType: user.role,
+      balance: 0,
+      currency: "INR",
+    });
 
     return successResponseHandler(
       true,

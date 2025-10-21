@@ -69,6 +69,7 @@ import { IChatController } from "../../presentation/interfaces/controllers/chat/
 import { ChatController } from "../../presentation/controllers/chat/chat.controller";
 import { IGuideClientController } from "../../presentation/interfaces/controllers/client/guideClient-controller.interface";
 import { GuideClientController } from "../../presentation/controllers/client/guideClient.controller";
+import { WalletController } from "../../presentation/controllers/wallet/wallet.controller";
 
 DependencyInjection.registerAll();
 
@@ -181,6 +182,8 @@ export const reviewController =
 //chat controller
 export const chatController = container.resolve(ChatController);
 
+//wallet controller
+export const walletController = container.resolve(WalletController);
 
 //signed url controller
 export const signedUrlController =

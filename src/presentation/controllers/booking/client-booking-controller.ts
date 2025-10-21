@@ -3,10 +3,16 @@ import { IClientBookingController } from "../../interfaces/controllers/booking/c
 import { IApplyPackageUsecase } from "../../../application/usecase/interfaces/booking/client-booking/apply-package-usecase.interface";
 import { Request, Response } from "express";
 import { CustomRequest } from "../../middlewares/auth.middleware";
-import { BOOKINGSTATUS, HTTP_STATUS } from "../../../shared/constants";
+import {
+  BOOKINGSTATUS,
+  HTTP_STATUS,
+  SUCCESS_MESSAGE,
+} from "../../../shared/constants";
 import { IGetBookingsUsecase } from "../../../application/usecase/interfaces/booking/client-booking/getBookings-usecase.interface";
 import { IGetBookingDetailsClientUsecase } from "../../../application/usecase/interfaces/booking/client-booking/get-booking-details-user-usecase.interface";
 import { IGetClientBookingDetailsUsecase } from "../../../application/usecase/interfaces/booking/client-booking/get-booking-details-client-usecase.interface";
+import { ICancellBookingUsecase } from "../../../application/usecase/interfaces/booking-cancell/cancell-booking-usecase.interface";
+import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 
 @injectable()
 export class ClientBookingController implements IClientBookingController {
@@ -21,7 +27,10 @@ export class ClientBookingController implements IClientBookingController {
     private _getBookingsUsecase: IGetBookingsUsecase,
 
     @inject("IGetClientBookingDetailsUsecase")
-    private _getClientBookingDetailsUsecase: IGetClientBookingDetailsUsecase
+    private _getClientBookingDetailsUsecase: IGetClientBookingDetailsUsecase,
+
+    @inject("ICancellBookingUsecase")
+    private _cancellBookingUsecase: ICancellBookingUsecase
   ) {}
 
   async applyPackage(req: Request, res: Response): Promise<void> {
@@ -69,5 +78,25 @@ export class ClientBookingController implements IClientBookingController {
       bookingId
     );
     res.status(HTTP_STATUS.OK).json({ success: true, bookingDetails });
+  }
+
+  async cancellBooking(req: Request, res: Response): Promise<void> {
+    const { bookingId } = req.params;
+    const { cancellationReason } = req.body;
+
+    console.log(bookingId,"-->booking id cancell")
+    console.log(cancellationReason,"--->reason");
+    const userId = (req as CustomRequest).user.id;
+    const { refundAmount } = await this._cancellBookingUsecase.execute(
+      userId,
+      bookingId,
+      cancellationReason
+    );
+
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.BOOKING_CANCELLATION.CANCELLATION_REQUESTED(refundAmount)
+    );
   }
 }

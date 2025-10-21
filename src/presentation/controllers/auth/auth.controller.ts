@@ -35,6 +35,7 @@ import { CustomRequest } from "../../middlewares/auth.middleware";
 import { userSchemas } from "./validation/user-signup-validation.schema";
 import { ILogoutUsecase } from "../../../application/usecase/interfaces/auth/logout-usecase.interface";
 import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
+import { ICreateWalletUsecase } from "../../../application/usecase/interfaces/wallet/createWallet-usecase.interface";
 
 @injectable()
 export class AuthController implements IAuthController {
@@ -76,7 +77,7 @@ export class AuthController implements IAuthController {
     private _forgotPasswordSendMailUsecase: IForgotPasswordSendMailUsecase,
 
     @inject("IForgotPasswordResetUsecase")
-    private _forgotPasswordResetUsecase: IForgotPasswordResetUsecase
+    private _forgotPasswordResetUsecase: IForgotPasswordResetUsecase,
   ) {}
 
   async signup(req: Request, res: Response): Promise<void> {
@@ -100,6 +101,8 @@ export class AuthController implements IAuthController {
     }
     const validateData = schema.parse(formData);
     const response = await this._RegisterUserUsecase.execute(validateData);
+  
+
     res.status(response.statusCode).json(response.content);
   }
 

@@ -1,4 +1,6 @@
 import { IBookingEntity } from "../../domain/entities/booking.entity";
+import { IClientEntity } from "../../domain/entities/client.entity";
+import { IPackageEntity } from "../../domain/entities/package.entity";
 import { IBookingModel } from "../../infrastructure/database/models/booking.model";
 import { BOOKINGSTATUS } from "../../shared/constants";
 import {
@@ -8,7 +10,10 @@ import {
   BookingListVendorDto,
   BookingListWithPackageDetailsDto,
   BookingListWithUserDetailsDto,
+  CancellationRequestsList,
+  CancelledBookingDetailsWithUserAndPackageDetailsDto,
   ClientPackageBookingDto,
+  FindCancellationRequestsDto,
 } from "../dto/response/bookingDto";
 
 export class BookingMapper {
@@ -24,6 +29,8 @@ export class BookingMapper {
       cancelledAt: doc.cancelledAt,
       advancePayment: doc.advancePayment,
       fullPayment: doc.fullPayment,
+      cancellationRequest: doc.cancellationRequest,
+      refundAmount: doc.refundAmount,
     };
   }
 
@@ -145,6 +152,9 @@ export class BookingMapper {
       userId: String(doc.userId),
       isWaitlisted: doc.isWaitlisted ?? false,
       status: doc.status,
+      appliedAt : doc.appliedAt,
+      cancelledAt : doc.cancelledAt,
+      refundAmount : doc.refundAmount,
       advancePayment: doc.advancePayment
         ? {
             amount: doc.advancePayment.amount,
@@ -161,6 +171,12 @@ export class BookingMapper {
             paidAt: doc.fullPayment.paidAt,
           }
         : null,
+        cancellationRequest : doc.cancellationRequest ?{
+          requestedAt : doc.cancellationRequest.requestedAt,
+          reason : doc.cancellationRequest.reason,
+          calculatedRefund : doc.cancellationRequest.calculatedRefund,
+          approvedAt : doc.cancellationRequest.approvedAt
+        } : null
     };
   }
   static mapToBookingDetailsWithUserDetailsDto(
@@ -196,6 +212,68 @@ export class BookingMapper {
             paidAt: doc.fullPayment.paidAt!,
           }
         : null,
+    };
+  }
+
+  static mapToCancellationRequestsDto(
+    data: FindCancellationRequestsDto
+  ): CancellationRequestsList {
+    return {
+      bookingId: data.bookingId,
+      refundAmount: data.cancellationRequest?.calculatedRefund || 0,
+      status: data.status,
+      cancellationReason: data.cancellationRequest?.reason!,
+      
+      requestedAt: data.cancellationRequest?.requestedAt.toDateString()!,
+      package: {
+        packageId: data.package.packageId!,
+        packageName: data.package.packageName,
+        endDate: data.package.endDate,
+        startDate: data.package.startDate,
+        title: data.package.title,
+      },
+      user: {
+        userId: String(data.userId),
+        name: `${data.user.firstName} ${data.user.lastName}`,
+        email: data.user.email,
+        phone: data.user.phone!,
+      },
+    };
+  }
+
+  static mapToCancelledBookingWithUserAndPackageDetailsDto(
+    booking: CancelledBookingDetailsWithUserAndPackageDetailsDto
+  ): CancelledBookingDetailsWithUserAndPackageDetailsDto {
+    return {
+      _id: booking._id,
+      bookingId: booking.bookingId,
+      packageId : booking.packageId,
+      status: booking.status,
+      isWaitlisted: booking.isWaitlisted,
+      cancelledAt: booking.cancelledAt,
+      advancePayment: booking.advancePayment,
+      fullPayment: booking.fullPayment,
+      cancellationRequest: booking.cancellationRequest,
+      user: booking.user
+        ? {
+            _id: String(booking.user._id),
+            firstName: booking.user.firstName!,
+            lastName: booking.user.lastName!,
+            email: booking.user.email!,
+            phone: booking.user.phone!,
+            gender: booking.user.gender!,
+          }
+        : undefined,
+      package: booking.package
+        ? {
+            packageId: booking.package.packageId,
+            packageName: booking.package.packageName,
+            title: booking.package.title,
+            startDate: booking.package.startDate,
+            endDate: booking.package.endDate,
+            price: booking.package.price,
+          }
+        : undefined,
     };
   }
 }
