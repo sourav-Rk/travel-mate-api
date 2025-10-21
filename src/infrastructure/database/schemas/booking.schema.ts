@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { IBookingModel } from "../models/booking.model";
 import { BOOKINGSTATUS } from "../../../shared/constants";
 import { v4 as uuidv4 } from "uuid";
+import { string } from "zod";
 
 const paymentFields = {
   amount: {
@@ -22,9 +23,21 @@ const paymentFields = {
   },
 };
 
+const cancellationRequestFields = {
+  requestedAt: { type: Date },
+  reason: { type: String },
+  calculatedRefund: { type: Number },
+  approvedAt: { type: Date },
+};
+
 const advancePaymentSchema = new mongoose.Schema(paymentFields, { _id: false });
 
 const fullPaymentSchema = new mongoose.Schema(paymentFields, { _id: false });
+
+const cancellationRequestSchema = new mongoose.Schema(
+  cancellationRequestFields,
+  { _id: false }
+);
 
 export const bookingSchema = new mongoose.Schema<IBookingModel>(
   {
@@ -72,6 +85,10 @@ export const bookingSchema = new mongoose.Schema<IBookingModel>(
     cancelledAt: {
       type: Date,
     },
+    refundAmount: {
+      type: Number,
+    },
+    cancellationRequest: cancellationRequestSchema,
   },
   {
     timestamps: true,

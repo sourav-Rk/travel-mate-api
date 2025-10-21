@@ -18,27 +18,31 @@ export const config = {
     EMAIL: process.env.EMAIL_USER || "",
     PASSWORD: process.env.EMAIL_PASS || "",
   },
+  admin: {
+    adminId: process.env.ADMIN_ID,
+  },
   jwt: {
     ACCESS_SECRET_KEY: process.env.ACCESS_SECRET_KEY || "your-secret-key",
     ACCESS_EXPIRES_IN: process.env.ACCESS_EXPIRES_IN || "your-secret-key",
     REFRESH_SECRET: process.env.REFRESH_SECRET_KEY || "",
     REFRESH_EXPIRES_IN: process.env.REFRESH_EXPIRES_IN || "",
-    RESET_SECRET : process.env.RESET_SECRET_KEY || "",
-    RESET_EXPIRES_IN : process.env.RESET_EXPIRES_IN || ""
+    RESET_SECRET: process.env.RESET_SECRET_KEY || "",
+    RESET_EXPIRES_IN: process.env.RESET_EXPIRES_IN || "",
   },
-  cloudinary :{
-    cloud_name : process.env.CLOUD_NAME,
-    api_key : process.env.CLOUD_API_KEY,
-    api_secret : process.env.CLOUD_API_SECRET
+  cloudinary: {
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET,
   },
-  firebase : {
-    service_account_key_json : process.env.FIREBASE_SERVICE_ACCOUNT_KEY_JSON || ""
+  firebase: {
+    service_account_key_json:
+      process.env.FIREBASE_SERVICE_ACCOUNT_KEY_JSON || "",
   },
-  stripe : {
-    secret_key : process.env.STRIPE_SECRET_KEY,
-    currency : "inr",
-    cancel_url : `${process.env.CLIENT_URI}/cancel`,
-    endpoint_secret : process.env.STRIPE_ENDPOINT_SECRET || "",
-    webhook_secret : process.env.STRIPE_WEBHOOK_SECRET || ""
-  }
+  stripe: {
+    secret_key: process.env.STRIPE_SECRET_KEY,
+    currency: "inr",
+    cancel_url: `${process.env.CLIENT_URI}/cancel`,
+    endpoint_secret: process.env.STRIPE_ENDPOINT_SECRET || "",
+    webhook_secret: process.env.STRIPE_WEBHOOK_SECRET || "",
+  },
 };

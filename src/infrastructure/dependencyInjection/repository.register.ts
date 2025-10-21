@@ -38,6 +38,10 @@ import { IMessageRepository } from "../../domain/repositoryInterfaces/message/me
 import { MessageRepository } from "../repository/message/message.repository";
 import { IChatRoomRepository } from "../../domain/repositoryInterfaces/chatroom/chatroom-repository.interface";
 import { ChatRoomRepository } from "../repository/chatroom/chatroom-repository";
+import { IWalletRepository } from "../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
+import { WalletRepository } from "../repository/wallet/wallet.repository";
+import { IWalletTransactionsRepository } from "../../domain/repositoryInterfaces/wallet/wallet-transactions-repository.interface";
+import { WalletTransactionsRepository } from "../repository/wallet/wallet-transactions.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -118,6 +122,16 @@ export class RepositoryRegistry {
     //chatroom repository
     container.register<IChatRoomRepository>('IChatRoomRepository',{
       useClass : ChatRoomRepository
+    });
+
+    //wallet repositorry
+    container.register<IWalletRepository>('IWalletRepository',{
+      useClass : WalletRepository
+    });
+
+    //wallet transaction repository
+    container.register<IWalletTransactionsRepository>('IWalletTransactionsRepository',{
+      useClass : WalletTransactionsRepository
     });
 
     //database session

@@ -10,6 +10,10 @@ import {
 } from "../../../shared/constants";
 import { ISendPaymentAlertUsecase } from "../../../application/usecase/interfaces/booking/vendor-bookings/send-payment-alert-usecase.interface";
 import { IGetBookingDetailsVendorUsecase } from "../../../application/usecase/interfaces/booking/vendor-bookings/get-booking-details-usecase.interface";
+import { IVendorApproveCancellationUsecase } from "../../../application/usecase/interfaces/booking-cancell/vendor-approve-cancellation.-usecase.interface";
+import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
+import { IGetCancellationRequests } from "../../../application/usecase/interfaces/booking-cancell/get-cancellation-requests-usecase.interface";
+import { IGetCancelledBookingDetailsUsecase } from "../../../application/usecase/interfaces/booking-cancell/get-cancelled-bookingDetails-usecase.interface";
 
 @injectable()
 export class VendorBookingController implements IVendorBookingController {
@@ -21,7 +25,16 @@ export class VendorBookingController implements IVendorBookingController {
     private _getBookingDetailsVendorUsecase: IGetBookingDetailsVendorUsecase,
 
     @inject("ISendPaymentAlertUsecase")
-    private _sendPaymentAlertUsecase: ISendPaymentAlertUsecase
+    private _sendPaymentAlertUsecase: ISendPaymentAlertUsecase,
+
+    @inject("IVendorApproveCancellationUsecase")
+    private _vendorApproveCancellationUsecase: IVendorApproveCancellationUsecase,
+
+    @inject("IGetCancellationRequests")
+    private _getCancellationRequests: IGetCancellationRequests,
+
+    @inject("IGetCancelledBookingDetailsUsecase")
+    private _getCancelledBookingDetails: IGetCancelledBookingDetailsUsecase
   ) {}
 
   async getBookings(req: Request, res: Response): Promise<void> {
@@ -65,5 +78,42 @@ export class VendorBookingController implements IVendorBookingController {
     res
       .status(HTTP_STATUS.OK)
       .json({ success: true, message: SUCCESS_MESSAGE });
+  }
+
+  async verifyBookingCancellation(req: Request, res: Response): Promise<void> {
+    const { bookingId } = req.params;
+    const userId = (req as CustomRequest).user.id;
+    console.log(bookingId, "booing id in controller");
+    await this._vendorApproveCancellationUsecase.execute(userId, bookingId);
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.BOOKING_CANCELLATION.CANCELLATION_APPROVED
+    );
+  }
+
+  async getCancellationRequests(req: Request, res: Response): Promise<void> {
+    const vendorId = (req as CustomRequest).user.id;
+    const { searchTerm, page = 1, limit = 10, status } = req.query;
+    const { bookings, total } = await this._getCancellationRequests.execute(
+      vendorId,
+      +page,
+      +limit,
+      String(searchTerm),
+      status as "cancellation_requested" | "cancelled"
+    );
+
+    ResponseHelper.paginated(res, bookings, total, +page);
+  }
+
+  async getCancelledBookingDetails(req: Request, res: Response): Promise<void> {
+    const { bookingId } = req.params;
+    const data = await this._getCancelledBookingDetails.execute(bookingId);
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      data
+    );
   }
 }

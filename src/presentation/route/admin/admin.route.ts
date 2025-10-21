@@ -1,18 +1,21 @@
 import { injectable } from "tsyringe";
-import {
-  authorizeRole,
-  verifyAuth,
-} from "../../middlewares/auth.middleware";
+import { authorizeRole, verifyAuth } from "../../middlewares/auth.middleware";
 import { asyncHandler } from "../../../shared/async-handler";
 import {
   adminController,
   authController,
   packageConroller,
+  walletController,
 } from "../../../infrastructure/dependencyInjection/resolve";
 import { BaseRoute } from "../base.route";
 import { SignedUrlRoute } from "../common/signedUrl.route";
 import { validationMiddleware } from "../../middlewares/validation.middleware";
-import { GetAllUsersReqDTO, GetUserDetailsReqDTO, UpdateUserStatusReqDTO, UpdateVendorStatusReqDTO } from "../../../application/dto/request/admin.dto";
+import {
+  GetAllUsersReqDTO,
+  GetUserDetailsReqDTO,
+  UpdateUserStatusReqDTO,
+  UpdateVendorStatusReqDTO,
+} from "../../../application/dto/request/admin.dto";
 
 @injectable()
 export class AdminRoute extends BaseRoute {
@@ -62,6 +65,19 @@ export class AdminRoute extends BaseRoute {
       "/user-status",
       validationMiddleware(UpdateUserStatusReqDTO),
       asyncHandler(adminController.updateUserStatus.bind(adminController))
+    );
+
+    //----------wallet------------
+    this.router.get(
+      "/wallet",
+      asyncHandler(walletController.getWalletByUserId.bind(walletController))
+    );
+
+    this.router.get(
+      "/transactions",
+      asyncHandler(
+        walletController.getWalletTransactions.bind(walletController)
+      )
     );
   }
 }

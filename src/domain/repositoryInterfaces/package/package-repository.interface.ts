@@ -56,4 +56,6 @@ export interface IPackageRepository extends IBaseRepository<IPackageEntity> {
     pageNumber: number,
     pageSize: number
   ): Promise<PaginatedPackagesRepo>;
+
+  findByAgencyId(vendorId : string) : Promise<IPackageEntity[] | []>;
 }

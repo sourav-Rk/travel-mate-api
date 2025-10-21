@@ -119,6 +119,9 @@ export interface BookingDetailsDto {
   packageId: string;
   status: BOOKINGSTATUS;
   isWaitlisted: boolean;
+  appliedAt ?: Date;
+  cancelledAt ?: Date;
+  refundAmount ?: number;
   advancePayment?: {
     amount: number;
     paid: boolean;
@@ -131,6 +134,12 @@ export interface BookingDetailsDto {
     dueDate: Date | null;
     paidAt: Date | null;
   } | null;
+  cancellationRequest?: {
+    requestedAt : Date;
+    reason : string;
+    calculatedRefund?: number;
+    approvedAt?:Date;
+  }|null;
 }
 
 //booking details dto for booking details view
@@ -162,6 +171,81 @@ export interface BookingDetailsWithUserDetailsDto {
   } | null;
 }
 
+//booking details dto for booking details view
+export interface CancelledBookingDetailsWithUserAndPackageDetailsDto {
+  _id: string;
+  bookingId: string;
+  packageId: string;
+  status: BOOKINGSTATUS;
+  isWaitlisted: boolean;
+  cancelledAt?:Date;
+  advancePayment?: {
+    amount: number;
+    paid: boolean;
+    dueDate: Date;
+    paidAt: Date | null;
+  } | null;
+  fullPayment?: {
+    amount: number;
+    paid: boolean;
+    dueDate: Date | null;
+    paidAt: Date | null;
+  } | null;
+
+  cancellationRequest?:{
+    requestedAt: Date;
+    reason:string;
+    calculatedRefund:number;
+    approvedAt?:Date;
+  }
+
+    user?: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
+    gender: string;
+    email: string;
+  };
+
+  package?: {
+    packageId?: string;
+    packageName?: string;
+    title?: string;
+    startDate?: Date;
+    endDate?: Date;
+    price?: number;
+  };
+}
+
+
+//cancelled requests with package and booking details
+export interface CancellationRequestsList {
+  bookingId: string;
+  status: BOOKINGSTATUS;
+  refundAmount: number;
+  cancellationReason : string;
+  requestedAt : string;
+  user: {
+    userId : string;
+    name: string;
+    email: string;
+    phone: string;
+  };
+  package: {
+    packageId : string;
+    packageName: string;
+    title: string;
+    startDate: Date;
+    endDate: Date;
+  };
+}
+
+export type FindCancellationRequestsDto = IBookingEntity & {
+  package: IPackageEntity; 
+  user: IClientEntity; 
+};
+
 //PAGINATED BOOKING WITH USER DETAILS
 export interface PaginatedBookingListWithUserDetails {
   bookings: BookingListWithUserDetailsDto[];
@@ -179,4 +263,11 @@ export interface PaginatedBookingListWithUserDetailsVendorDto {
 export interface PaginatedBookingListWithUserDetailsGuideDto {
   bookings: BookingListVendorDto[];
   total: number;
+}
+
+
+//PAGINATED CANCELLATION REQUESTS
+export interface PaginatedCancellationRequests {
+  bookings : CancellationRequestsList[],
+  total : number;
 }

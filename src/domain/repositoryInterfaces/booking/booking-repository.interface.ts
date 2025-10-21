@@ -4,14 +4,18 @@ import {
   BookingDetailsWithUserDetailsDto,
   BookingListWithPackageDetailsDto,
   BookingListWithUserDetailsDto,
+  CancelledBookingDetailsWithUserAndPackageDetailsDto,
+  FindCancellationRequestsDto,
   IBookingWithPackage,
   PaginatedBookingListWithUserDetails,
+  PaginatedCancellationRequests,
 } from "../../../application/dto/response/bookingDto";
 import { IBookingEntity } from "../../entities/booking.entity";
 import { IBaseRepository } from "../baseRepository.interface";
 
 export interface IBookingRepository extends IBaseRepository<IBookingEntity> {
   createBooking(data: Partial<IBookingEntity>): Promise<IBookingEntity>;
+  findByCustomBookingId(bookingId: string): Promise<IBookingEntity | null>;
   findByBookingId(id: string): Promise<IBookingModel | null>;
   findByUserId(userId: string): Promise<IBookingEntity | null>;
   updateBooking(
@@ -47,4 +51,15 @@ export interface IBookingRepository extends IBaseRepository<IBookingEntity> {
   findByBookingIdWithUserDetails(
     bookingId: string
   ): Promise<BookingDetailsWithUserDetailsDto | null>;
+  findCancelledBookingIdWithUserDetails(
+    bookingId: string
+  ): Promise<CancelledBookingDetailsWithUserAndPackageDetailsDto | null>;
+
+  findCancellationRequests(
+    packageIds: string[],
+    page: number,
+    limit: number,
+    searchTerm?: string,
+    status?: "cancellation_requested" | "cancelled"
+  ): Promise<PaginatedCancellationRequests>;
 }

@@ -13,6 +13,7 @@ export enum BOOKINGSTATUS {
   CANCELLED = "cancelled",
   EXPIRED = "expired",
   ADVANCE_PENDING = "advance_pending",
+  CANCELLATION_REQUESTED = "cancellation_requested",
 }
 
 export type REVIEWTARGET = "guide" | "package";
@@ -103,9 +104,21 @@ export const ERROR_MESSAGE = {
   STATUS_REQUIRED: "Status is required",
   TRIP_ALREADY_COMPLETED: "Trip is already completed",
   CANNOT_CHANGE_STATUS: "Status cant be updated as the trip is not over yet",
-  FAILED_TO_SEND_MESSAGE : "Failed to sent message",
-  MARK_READ_FAILED : "Mark as read failed",
-  CHATROOM_NOT_FOUND : "Chatroom not found"
+  FAILED_TO_SEND_MESSAGE: "Failed to sent message",
+  MARK_READ_FAILED: "Mark as read failed",
+  CHATROOM_NOT_FOUND: "Chatroom not found",
+  WALLET_NOT_FOUND: "Wallet not found",
+
+  BOOKING_CANCELLATION: {
+    CANCELLATION_NOT_ALLOWED: "Cancellation not allowed for this booking",
+    NO_CANCELLATION_REQUEST: "No cancellation request pending for this booking",
+    INVALID_CANCELLATION_DATA: "Invalid cancellation request data",
+    CANCELLATION_ALREADY_REQUESTED : "Cancellation Already requested",
+  },
+
+  REFUND: {
+    REFUND_AMOUNT_GREATER_THAN_ZERO: "Refund amount must be greater than 0",
+  },
 };
 
 export const SUCCESS_MESSAGE = {
@@ -143,8 +156,14 @@ export const SUCCESS_MESSAGE = {
   REMOVED_FROM_WISHLIST: "Removed from wishlist",
   ADDED_REVIEW: "Review added successfully",
   GUIDE_ASSIGNED_SUCCESSFULLY: "Guide assigned successfully",
-  MESSAGES_FETCHED : "messages fetched successfully",
-  DETAILS_FETCHED : "Details fetched successfully"
+  MESSAGES_FETCHED: "messages fetched successfully",
+  DETAILS_FETCHED: "Details fetched successfully",
+
+  BOOKING_CANCELLATION: {
+    CANCELLATION_REQUESTED: (amount : number) =>
+      `Cancellation requested successfully! Your refund of ₹${amount} will be processed after vendor approval.`,
+    CANCELLATION_APPROVED : 'Cancellation Approved successfully'
+  },
 };
 
 export const ROLES = {
@@ -200,4 +219,83 @@ export type EmailOtpPurpose = "signup" | "forgot-password" | "resend";
 export const COOKIES_NAMES = {
   REFRESH_TOKEN: "refresh_token",
   ACCESS_TOKEN: "access_token",
+};
+
+export enum TRANSACTION_TYPE {
+  CREDIT = "credit",
+  DEBIT = "debit",
+}
+
+export type TRANSACTION_TYPE_FILTER = "credit" | "debit" | "all";
+
+export type SORT_BY_TRANSACTIONS = "newest" | "oldest";
+
+export const TRANSACTION_DESCRIPTIONS = {
+  ADVANCE_PAYMENT: (bookingId: string) =>
+    `Advance payment for booking ${bookingId}`,
+  ADVANCE_COMMISSION: (bookingId: string) =>
+    `Commission from advance payment for booking ${bookingId}`,
+  FULL_COMMISSION: (bookingId: string) =>
+    `Commision for full payment for booking ${bookingId}`,
+  REFUND_FOR_BOOKING_CANCELLATION: (bookingId: string) =>
+    `Refund for cancellation of booking ${bookingId}`,
+  CANCELLATION_REFUND: (bookingId: string) =>
+    `Refund deduction for cancelled booking ${bookingId}`,
+};
+
+export interface CancellationPolicy {
+  id: CANCELLATION_REFUND_POLICY;
+  label: string;
+  description: string;
+  refundPercentage: number;
+  advanceRefundPercentage: number;
+}
+
+export enum CANCELLATION_REFUND_POLICY {
+  CONFIRMED_MORE_THAN_10_DAYS = "confirmed_more_than_10_days",
+  CONFIRMED_LESS_THAN_10_DAYS = "confirmed_less_than_10_days",
+  FULLY_PAID_MORE_THAN_7_DAYS = "fully_paid_more_than_7_days",
+  FULLY_PAID_LESS_THAN_7_DAYS = "fully_paid_less_than_7_days",
+  NON_REFUNDABLE = "non_refundable",
+}
+
+export const CANCELLATION_POLICIES: Record<
+  CANCELLATION_REFUND_POLICY,
+  CancellationPolicy
+> = {
+  [CANCELLATION_REFUND_POLICY.CONFIRMED_MORE_THAN_10_DAYS]: {
+    id: CANCELLATION_REFUND_POLICY.CONFIRMED_MORE_THAN_10_DAYS,
+    label: "≥10 days before trip",
+    description: "80% of advance refundable",
+    refundPercentage: 0,
+    advanceRefundPercentage: 80,
+  },
+  [CANCELLATION_REFUND_POLICY.CONFIRMED_LESS_THAN_10_DAYS]: {
+    id: CANCELLATION_REFUND_POLICY.CONFIRMED_LESS_THAN_10_DAYS,
+    label: "<10 days before trip",
+    description: "60% of advance refundable",
+    refundPercentage: 0,
+    advanceRefundPercentage: 60,
+  },
+  [CANCELLATION_REFUND_POLICY.FULLY_PAID_MORE_THAN_7_DAYS]: {
+    id: CANCELLATION_REFUND_POLICY.FULLY_PAID_MORE_THAN_7_DAYS,
+    label: "≥7 days before trip",
+    description: "70% of total amount refundable",
+    refundPercentage: 70,
+    advanceRefundPercentage: 100,
+  },
+  [CANCELLATION_REFUND_POLICY.FULLY_PAID_LESS_THAN_7_DAYS]: {
+    id: CANCELLATION_REFUND_POLICY.FULLY_PAID_LESS_THAN_7_DAYS,
+    label: "<7 days before trip",
+    description: "60% of total amount refundable",
+    refundPercentage: 60,
+    advanceRefundPercentage: 100,
+  },
+  [CANCELLATION_REFUND_POLICY.NON_REFUNDABLE]: {
+    id: CANCELLATION_REFUND_POLICY.NON_REFUNDABLE,
+    label: "Non-refundable",
+    description: "No refund available",
+    refundPercentage: 0,
+    advanceRefundPercentage: 0,
+  },
 };

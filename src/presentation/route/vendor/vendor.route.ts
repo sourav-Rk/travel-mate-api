@@ -18,6 +18,7 @@ import {
   vendorBookingController,
   vendorController,
   vendorProfileController,
+  walletController,
 } from "../../../infrastructure/dependencyInjection/resolve";
 import { BaseRoute } from "../base.route";
 import { CommonUploadRoutes } from "../common/common-upload.route";
@@ -90,6 +91,36 @@ export class VendorRoute extends BaseRoute {
       validationMiddleware(GetBookingsVendorReqDTO),
       asyncHandler(
         vendorBookingController.getBookings.bind(vendorBookingController)
+      )
+    );
+
+    //verify cancellation
+    this.router.post(
+      "/bookings/verify-cancellation/:bookingId",
+      asyncHandler(
+        vendorBookingController.verifyBookingCancellation.bind(
+          vendorBookingController
+        )
+      )
+    );
+
+    //get cancellation-requests
+    this.router.get(
+      "/cancellation-requests",
+      asyncHandler(
+        vendorBookingController.getCancellationRequests.bind(
+          vendorBookingController
+        )
+      )
+    );
+
+    //get cancelled booking details
+    this.router.get(
+      "/bookings/:bookingId/cancelled",
+      asyncHandler(
+        vendorBookingController.getCancelledBookingDetails.bind(
+          vendorBookingController
+        )
       )
     );
 
@@ -250,7 +281,7 @@ export class VendorRoute extends BaseRoute {
     // Get details of a specific guide
     this.router.get(
       "/guide-details",
-      guideController.getGuideDetails.bind(guideController)
+      asyncHandler(guideController.getGuideDetails.bind(guideController))
     );
 
     // -------------------------
@@ -298,5 +329,20 @@ export class VendorRoute extends BaseRoute {
           )
         )
       );
+
+    // -------------------------
+    //  Wallet Routes
+    // -------------------------
+    this.router.get(
+      "/wallet",
+      asyncHandler(walletController.getWalletByUserId.bind(walletController))
+    );
+
+    this.router.get(
+      "/transactions",
+      asyncHandler(
+        walletController.getWalletTransactions.bind(walletController)
+      )
+    );
   }
 }

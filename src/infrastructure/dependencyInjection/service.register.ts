@@ -16,6 +16,12 @@ import { IPaymentService } from "../../domain/service-interfaces/payment-service
 import { StripePaymentService } from "../service/payment.service";
 import { stripe } from "../config/stripe/stripe.confige";
 import Stripe from "stripe";
+import { IRevenueDistributionService } from "../../domain/service-interfaces/revenue-distribution-service.interface";
+import { RevenueDistributionService } from "../service/revenue-distribution.service";
+import { IVendorPaymentService } from "../../domain/service-interfaces/vendor-payment-service.interface";
+import { VendorPaymentService } from "../service/vendor-payment.service";
+import { IAdminPaymentService } from "../../domain/service-interfaces/admin-payment-service.interface";
+import { AdminPaymentService } from "../service/admin-payment.service";
 
 export class ServiceRegistory {
   static registerService(): void {
@@ -49,6 +55,21 @@ export class ServiceRegistory {
 
     container.register<Stripe>("Stripe", {
       useValue: stripe,
+    });
+
+    container.register<IRevenueDistributionService>(
+      "IRevenueDistributionService",
+      {
+        useClass: RevenueDistributionService,
+      }
+    );
+
+    container.register<IVendorPaymentService>("IVendorPaymentService", {
+      useClass: VendorPaymentService,
+    });
+
+    container.register<IAdminPaymentService>("IAdminPaymentService", {
+      useClass: AdminPaymentService,
     });
 
     container.resolve(EmailService);

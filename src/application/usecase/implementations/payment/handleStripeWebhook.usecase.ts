@@ -5,6 +5,7 @@ import { IBookingRepository } from "../../../../domain/repositoryInterfaces/book
 import { BOOKINGSTATUS } from "../../../../shared/constants";
 import { IPaymentService } from "../../../../domain/service-interfaces/payment-service.interface";
 import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
+import { IRevenueDistributionService } from "../../../../domain/service-interfaces/revenue-distribution-service.interface";
 
 @injectable()
 export class HandleStripeWebHookUsecase implements IHandleStripeWebHookUsecase {
@@ -16,7 +17,10 @@ export class HandleStripeWebHookUsecase implements IHandleStripeWebHookUsecase {
     private _packageRepository: IPackageRepository,
 
     @inject("IPaymentService")
-    private _paymentService: IPaymentService
+    private _paymentService: IPaymentService,
+
+    @inject("IRevenueDistributionService")
+    private _revenueDistributionService: IRevenueDistributionService
   ) {}
 
   async execute(
@@ -38,6 +42,7 @@ export class HandleStripeWebHookUsecase implements IHandleStripeWebHookUsecase {
         const session = event.data.object as Stripe.Checkout.Session;
         const bookingId = session.metadata?.bookingId;
         const type = session.metadata?.type;
+
         if (bookingId && type === "advance") {
           const booking = await this._bookingRepository.findByBookingId(
             bookingId
@@ -75,6 +80,12 @@ export class HandleStripeWebHookUsecase implements IHandleStripeWebHookUsecase {
             advancePayment: booking.advancePayment,
             fullPayment: booking.fullPayment,
           });
+
+          await this._revenueDistributionService.execute(
+            booking.bookingId,
+            booking.advancePayment.amount,
+            "advance"
+          );
         } else if (bookingId && type === "full_payment") {
           const booking = await this._bookingRepository.findByBookingId(
             bookingId
@@ -91,6 +102,12 @@ export class HandleStripeWebHookUsecase implements IHandleStripeWebHookUsecase {
             status: BOOKINGSTATUS.FULLY_PAID,
             fullPayment: booking.fullPayment,
           });
+
+          await this._revenueDistributionService.execute(
+            booking.bookingId,
+            booking.fullPayment.amount,
+            "full"
+          );
         }
         break;
       }

@@ -16,7 +16,33 @@ export class ResponseHelper {
    return res.status(statusCode).json(responseBody);
   }
 
+   static paginated<T>(
+    res: Response,
+    data: T,
+    totalPages: number,
+    currentPage: number,
+    message?: string,
+    dataKey: string = "data"
+  ): Response<ApiResponse> {
+    
+    
+    const responseBody: any = {
+      success: true,
+      [dataKey]: data,
+        currentPage,
+        totalPages,
+    };
+    
+    if (message) {
+      responseBody.message = message;
+    }
+    
+    return res.status(200).json(responseBody);
+  }
+
   static error(res: Response, message: string, statusCode: number = 500) {
     return res.status(statusCode).json({ success: false, message });
   }
+
+
 }
