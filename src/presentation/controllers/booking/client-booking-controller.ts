@@ -40,12 +40,6 @@ export class ClientBookingController implements IClientBookingController {
     res.status(response.statusCode).json(response.content);
   }
 
-  /**
-   *
-   * @param req
-   * @param res
-   */
-
   async getBookingDetailOfPackage(req: Request, res: Response): Promise<void> {
     const userId = (req as CustomRequest).user.id;
     const { packageId } = req.params;
@@ -53,9 +47,13 @@ export class ClientBookingController implements IClientBookingController {
       userId,
       packageId
     );
-    res
-      .status(HTTP_STATUS.OK)
-      .json({ success: true, bookingDetails: response });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      response,
+      "bookingDetails"
+    );
   }
 
   async getBookings(req: Request, res: Response): Promise<void> {
@@ -67,7 +65,13 @@ export class ClientBookingController implements IClientBookingController {
       userId,
       statuses as BOOKINGSTATUS[]
     );
-    res.status(HTTP_STATUS.OK).json({ success: true, bookings: response });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      response,
+      "bookings"
+    );
   }
 
   async getBookingDetails(req: Request, res: Response): Promise<void> {
@@ -77,15 +81,21 @@ export class ClientBookingController implements IClientBookingController {
       userId,
       bookingId
     );
-    res.status(HTTP_STATUS.OK).json({ success: true, bookingDetails });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      bookingDetails,
+      "bookingDetails"
+    );
   }
 
   async cancellBooking(req: Request, res: Response): Promise<void> {
     const { bookingId } = req.params;
     const { cancellationReason } = req.body;
 
-    console.log(bookingId,"-->booking id cancell")
-    console.log(cancellationReason,"--->reason");
+    console.log(bookingId, "-->booking id cancell");
+    console.log(cancellationReason, "--->reason");
     const userId = (req as CustomRequest).user.id;
     const { refundAmount } = await this._cancellBookingUsecase.execute(
       userId,
