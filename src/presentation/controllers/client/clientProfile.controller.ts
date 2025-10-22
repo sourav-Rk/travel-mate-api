@@ -7,6 +7,8 @@ import { IUpdateClientPasswordUsecase } from "../../../application/usecase/inter
 import { IUpdateClientDetailsUsecase } from "../../../application/usecase/interfaces/client/updateClientDetails-usecase.interface";
 import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
 import { CustomRequest } from "../../middlewares/auth.middleware";
+import { IGetClientDetailsVendorUsecase } from "../../../application/usecase/interfaces/client/get-client-details-vendor-usecase.interface";
+import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 
 @injectable()
 export class ClientProfileController implements IClientProfileController {
@@ -18,23 +20,33 @@ export class ClientProfileController implements IClientProfileController {
     private _updateClientDetailsUsecase: IUpdateClientDetailsUsecase,
 
     @inject("IUpdateClientPasswordUsecase")
-    private _updateClientPasswordUsecase: IUpdateClientPasswordUsecase
+    private _updateClientPasswordUsecase: IUpdateClientPasswordUsecase,
+
+    @inject("IGetClientDetailsVendorUsecase")
+    private _getClientDeatailsVendorUsecase: IGetClientDetailsVendorUsecase
   ) {}
 
   async getClientDetails(req: Request, res: Response): Promise<void> {
     const userId = (req as CustomRequest).user.id;
     const client = await this._getClientDetailsUsecase.execute(userId);
-    res.status(HTTP_STATUS.OK).json({ success: true, client });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      client,
+      "client"
+    );
   }
 
   async updateClientProfile(req: Request, res: Response): Promise<void> {
     const userId = (req as CustomRequest).user.id;
     const data = req.body;
     await this._updateClientDetailsUsecase.execute(userId, data);
-    res.status(HTTP_STATUS.CREATED).json({
-      success: true,
-      message: SUCCESS_MESSAGE.PROFILE_UPDATED_SUCCESS,
-    });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.CREATED,
+      SUCCESS_MESSAGE.PROFILE_UPDATED_SUCCESS
+    );
   }
 
   async updatePassword(req: Request, res: Response): Promise<void> {
@@ -48,8 +60,21 @@ export class ClientProfileController implements IClientProfileController {
       currentPassword,
       newPassword
     );
-    res
-      .status(HTTP_STATUS.OK)
-      .json({ success: true, message: SUCCESS_MESSAGE.PASSWORD_CHANGED });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.PASSWORD_CHANGED
+    );
+  }
+
+  async getClientDetailsVendor(req: Request, res: Response): Promise<void> {
+    const { clientId } = req.params;
+    const data = await this._getClientDeatailsVendorUsecase.execute(clientId);
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      data
+    );
   }
 }

@@ -7,6 +7,8 @@ import { IUpdateVendorPasswordUsecase } from "../../../application/usecase/inter
 import { IUpdateVendorProfileUsecase } from "../../../application/usecase/interfaces/vendor/update-vendor-profile-usecase.interface";
 import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
 import { CustomRequest } from "../../middlewares/auth.middleware";
+import { IGetVendorDetailsClientUsecase } from "../../../application/usecase/interfaces/vendor/get-vendor-details-client-usecase.interface";
+import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 
 @injectable()
 export class VendorProfileController implements IVendorProfileController {
@@ -18,7 +20,10 @@ export class VendorProfileController implements IVendorProfileController {
     private _updateVendorProfileUsecase: IUpdateVendorProfileUsecase,
 
     @inject("IUpdateVendorPasswordUsecase")
-    private _updateVendorPasswordUsecase: IUpdateVendorPasswordUsecase
+    private _updateVendorPasswordUsecase: IUpdateVendorPasswordUsecase,
+
+    @inject("IGetVendorDetailsClientUsecase")
+    private _getVendorDetailsClientUsecase: IGetVendorDetailsClientUsecase
   ) {}
 
   async getVendorDetails(req: Request, res: Response): Promise<void> {
@@ -53,5 +58,16 @@ export class VendorProfileController implements IVendorProfileController {
     res
       .status(HTTP_STATUS.OK)
       .json({ success: true, message: SUCCESS_MESSAGE.PASSWORD_CHANGED });
+  }
+
+  async getVendorDetailsClient(req: Request, res: Response): Promise<void> {
+    const { vendorId } = req.params;
+    const data = await this._getVendorDetailsClientUsecase.execute(vendorId);
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      data
+    );
   }
 }

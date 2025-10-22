@@ -52,10 +52,9 @@ export class ChatRoomRepository
     const userObjectId = new mongoose.Types.ObjectId(userId);
 
     const pipeline: any[] = [
-      // Step 1: Find all rooms where current user participates
-      { $match: { "participants.userId": userObjectId } },
+      // Find all rooms where current user participates
+      { $match: { "participants.userId": userObjectId ,contextType : "vendor_client"} },
 
-      // Step 2: Extract peer participant (the other one)
       {
         $addFields: {
           peer: {
@@ -70,7 +69,7 @@ export class ChatRoomRepository
         },
       },
 
-      // Step 3: Lookup from all 3 collections separately
+      //  Lookup from all 3 collections separately
       {
         $facet: {
           clients: [
@@ -109,7 +108,7 @@ export class ChatRoomRepository
         },
       },
 
-      // Step 4: Merge them all back into one array
+      //  Merge them all back into one array
       {
         $project: {
           all: { $concatArrays: ["$clients", "$guides", "$vendors"] },
@@ -118,14 +117,14 @@ export class ChatRoomRepository
       { $unwind: "$all" },
       { $replaceRoot: { newRoot: "$all" } },
 
-      // Step 5: Get the peer info
+      //  Get the peer info
       {
         $addFields: {
           peerInfo: { $arrayElemAt: ["$peerInfo", 0] },
         },
       },
 
-      // Step 6: Lookup last message details
+      //Lookup last message details
       {
         $lookup: {
           from: "messages",
@@ -144,7 +143,7 @@ export class ChatRoomRepository
         },
       },
 
-      // Step 7: Optional search
+      // Optional search
       ...(searchTerm
         ? [
             {
@@ -155,12 +154,12 @@ export class ChatRoomRepository
           ]
         : []),
 
-      // Step 8: Sorting and pagination
+      // Sorting and pagination
       { $sort: { lastMessageAt: -1 } },
       { $skip: skip },
       { $limit: limit },
 
-      // Step 9: Project clean response
+      // S Project clean response
       {
         $project: {
           roomId: "$_id",
@@ -168,6 +167,8 @@ export class ChatRoomRepository
           "peer.userType": 1,
           "peerInfo.firstName": 1,
           "peerInfo.profileImage": 1,
+          contextType: 1,
+          contextId: 1,
           lastMessage: "$lastMessageInfo.message",
           lastMessageStatus: "$lastMessageInfo.status",
           lastMessageReadAt: "$lastMessageInfo.readAt",

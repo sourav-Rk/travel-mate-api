@@ -215,6 +215,10 @@ import { IMarkInstructionReadUseCase } from "../../application/usecase/interface
 import { MarkInstructionReadUseCase } from "../../application/usecase/implementations/guide-instructions/mark-instruction-read.usecase";
 import { IMarkAllInstructionsReadUseCase } from "../../application/usecase/interfaces/guide-instruction/mark-all-instructions-usecase.interface";
 import { MarkAllInstructionsReadUseCase } from "../../application/usecase/implementations/guide-instructions/mark-all-instructons-read.usecase";
+import { IGetVendorDetailsClientUsecase } from "../../application/usecase/interfaces/vendor/get-vendor-details-client-usecase.interface";
+import { GetVendorDetailsClientUsecase } from "../../application/usecase/implementations/vendor/get-vendor-details-client.usecase";
+import { IGetClientDetailsVendorUsecase } from "../../application/usecase/interfaces/client/get-client-details-vendor-usecase.interface";
+import { GetClientDetailsVendorUsecase } from "../../application/usecase/implementations/client/get-client-details-vendor-usecase";
 
 export class UsecaseRegistory {
   static registerUsecases(): void {
@@ -322,6 +326,10 @@ export class UsecaseRegistory {
       }
     );
 
+    container.register<IGetClientDetailsVendorUsecase>('IGetClientDetailsVendorUsecase',{
+      useClass : GetClientDetailsVendorUsecase
+    });
+
     //vendor usecases
     container.register<IGetVendorDetailsForStatusUsecase>(
       "IGetVendorDetailsForStatusUsecase",
@@ -366,6 +374,10 @@ export class UsecaseRegistory {
         useClass: UpdateVendorProfileUsecase,
       }
     );
+
+    container.register<IGetVendorDetailsClientUsecase>('IGetVendorDetailsClientUsecase',{
+      useClass : GetVendorDetailsClientUsecase
+    });
 
     //admin usecases
     container.register<IUpdateVendorStatusUsecase>(

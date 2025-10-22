@@ -3,6 +3,10 @@ import { ICheckChatRoomUsecase } from "../../interfaces/chat/check-chat-room-use
 import { IChatRoomRepository } from "../../../../domain/repositoryInterfaces/chatroom/chatroom-repository.interface";
 import { IChatRoomEntity } from "../../../../domain/entities/chatroom.entity";
 import { Participants } from "../../../dto/response/chatroomDto";
+import {
+  acquireChatroomLock,
+  releaseChatroomLock,
+} from "../../../../infrastructure/config/socket/chatroomMutex";
 
 @injectable()
 export class CheckChatRoomUsecase implements ICheckChatRoomUsecase {
@@ -16,9 +20,7 @@ export class CheckChatRoomUsecase implements ICheckChatRoomUsecase {
     contextType: "vendor_client" | "guide_client" | "client_client",
     contextId: string
   ): Promise<IChatRoomEntity | null> {
-
-
-    console.log(participants,contextType,contextId,"-->usecase data")
+    console.log(participants, contextType, contextId, "-->usecase data");
 
     let chatroom = await this._chatRoomRepository.findByParticipants(
       participants,
@@ -26,16 +28,61 @@ export class CheckChatRoomUsecase implements ICheckChatRoomUsecase {
       contextId
     );
 
-    console.log(chatroom,"-->chatrrrom")
+    if (chatroom) {
+      return chatroom;
+    }
 
-    if (!chatroom) {
-      chatroom = await this._chatRoomRepository.save({
+    const lockAcquired = acquireChatroomLock(
+      participants,
+      contextType,
+      contextId
+    );
+
+    if (!lockAcquired) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      chatroom = await this._chatRoomRepository.findByParticipants(
         participants,
         contextType,
         contextId
-      });
+      );
+
+      if (chatroom) {
+        return chatroom;
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      chatroom = await this._chatRoomRepository.findByParticipants(
+        participants,
+        contextType,
+        contextId
+      );
+
+      if (chatroom) {
+        return chatroom;
+      }
     }
 
-    return chatroom;
+    try {
+      chatroom = await this._chatRoomRepository.findByParticipants(
+        participants,
+        contextType,
+        contextId
+      );
+
+      if (chatroom) {
+        return chatroom;
+      }
+
+      chatroom = await this._chatRoomRepository.save({
+        participants,
+        contextType,
+        contextId,
+      });
+
+      return chatroom;
+    } finally {
+      releaseChatroomLock(participants, contextType, contextId);
+    }
   }
 }

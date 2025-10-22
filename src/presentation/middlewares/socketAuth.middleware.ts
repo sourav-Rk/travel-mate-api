@@ -4,6 +4,7 @@ import { CustomError } from "../../domain/errors/customError";
 import {
   COOKIES_NAMES,
   ERROR_MESSAGE,
+  TRole,
 } from "../../shared/constants";
 import { parse } from "cookie";
 
@@ -11,13 +12,12 @@ export const socketAuthMiddleware =
   (tokenService: ITokenService, allowedRoles: string[]) =>
   (socket: Socket, next: (err?: any) => void) => {
     try {
-      console.log("Socket Auth Middleware triggered");
 
       const rawCookie = socket.handshake.headers.cookie;
 
       if (!rawCookie) {
         console.log("No cookies found");
-        throw new CustomError(401, "No cookie found");
+        throw new CustomError(401,ERROR_MESSAGE.COOKIE_NOT_FOUND);
       }
 
       const cookies = parse(rawCookie);
@@ -26,7 +26,7 @@ export const socketAuthMiddleware =
 
       if (!token) {
         console.log(" No refresh token in cookies");
-        throw new CustomError(401, "No token provided");
+        throw new CustomError(401,ERROR_MESSAGE.TOKEN_MISSING);
       }
       const payload = tokenService.verifyRefreshToken(token);
 
@@ -34,7 +34,7 @@ export const socketAuthMiddleware =
         throw new Error(ERROR_MESSAGE.INVALID_TOKEN);
       }
 
-      const userRole = payload.role as "client" | "guide" | "vendor";
+      const userRole = payload.role as TRole;
       if (!allowedRoles.includes(userRole)) {
         console.log(`Role not allowed: ${userRole}, allowed: ${allowedRoles}`);
         throw new Error(ERROR_MESSAGE.FORBIDDEN_ROLE);

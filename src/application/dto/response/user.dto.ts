@@ -69,3 +69,13 @@ export interface LoginUserDTO {
   password?: string;
   role: TRole;
 }
+
+//client details for vendor
+export interface ClientDetailsForVendorDto {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  profileImage?: string;
+}
