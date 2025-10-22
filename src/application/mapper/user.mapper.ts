@@ -1,6 +1,6 @@
 import { IClientEntity } from "../../domain/entities/client.entity";
 import { IClientModel } from "../../infrastructure/database/models/client.model";
-import { ClientDto } from "../dto/response/user.dto";
+import { ClientDetailsForVendorDto, ClientDto } from "../dto/response/user.dto";
 
 export class UserMapper {
   static toEntity(doc: IClientModel): IClientEntity {
@@ -40,6 +40,19 @@ export class UserMapper {
       profileImage: doc.profileImage,
       role: doc.role as "client",
       isBlocked: doc.isBlocked,
+    };
+  }
+
+  static mapToClientDetailsForVendorDto(
+    doc: IClientEntity
+  ): ClientDetailsForVendorDto {
+    return {
+      _id: String(doc._id),
+      firstName: doc.firstName,
+      lastName: doc.lastName,
+      email: doc.email,
+      phone: doc.phone ?? "N/A",
+      profileImage: doc.profileImage,
     };
   }
 }
