@@ -53,6 +53,8 @@ export const ERROR_MESSAGE = {
   TOKEN_EXPIRED_REFRESH: "Token time out, Please loggin again",
   TOKEN_BLACK_LISTED: "Token is blacklisted",
   TOKEN_MISSING: "Authorization token is required",
+  COOKIE_NOT_FOUND : "Cookie not found", 
+  LIMIT : "Limit must be between 1 and    00",
   SERVER_ERROR: "An error occurred, please try again later.",
   BLOCKED_ERROR: "You are blocked by Admin. please contact admin",
   NOT_ALLOWED: "You are not allowed",
@@ -124,6 +126,12 @@ export const ERROR_MESSAGE = {
     NO_TRAVELLERS_FOUND : "No travellers found for this package",
     GUIDE_ASSIGNED_CONFLICT : "This guide is not assigned for this trip",
     INSTRUCTION_NOT_FOUND : "Instruction not found"
+  },
+
+  GROUP :{
+    ATLEAST_TWO_MEMBERS : "Group chat must have at least 2 members",
+    NO_GROUP_CHAT : "No group chat found for this package",
+    NOT_A_MEMBER : "You are not a member of this group chat",
   }
 };
 
