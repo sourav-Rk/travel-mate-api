@@ -12,7 +12,7 @@ export interface VendorProfileDto {
   status: "pending" | "verified" | "rejected" | "reviewing";
   rejectionReason?: string;
   createdAt: Date;
-  
+
   address: {
     street: string;
     city: string;
@@ -27,4 +27,15 @@ export interface VendorProfileDto {
     registrationNumber: string;
     documents: string[];
   } | null;
+}
+
+export interface VendorDetailsForClientDto {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  agencyName: string;
+  description?: string;
+  profileImage?: string | null;
 }
