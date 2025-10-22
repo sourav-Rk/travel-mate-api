@@ -57,14 +57,13 @@ export class ChatSocketHandler implements IChatSocketHandler {
     });
 
     socket.on("start_chat", async (data, ack?: (res: any) => void) => {
+      const startTime = Date.now();
+      const requestId = Math.random().toString(36).substr(2, 9);
+      
       try {
-        console.log("Start chat request:", data);
         const { receiverId, receiverType, contextType, contextId } = data;
         const senderId = socket.data.userId;
         const senderType = socket.data.role;
-
-        console.log(`Sender: ${senderId} (${senderType})`);
-        console.log(`Receiver: ${receiverId} (${receiverType})`);
 
         const participants = [
           { userId: senderId, userType: senderType },
@@ -77,21 +76,19 @@ export class ChatSocketHandler implements IChatSocketHandler {
           contextType,
           contextId
         );
-
         socket.data.chatRoomId = chatroom?._id.toString();
 
         // Join user to the room
         socket.join(chatroom?._id.toString()!);
-        console.log(`${senderId} joined room ${chatroom?._id!}`);
 
         // Notify client
         socket.emit("chat_joined", { chatRoomId: chatroom?._id });
+
 
         if (ack) {
           ack({ success: true, chatRoomId: chatroom?._id });
         }
       } catch (err) {
-        console.error(" Error in start_chat:", err);
         socket.emit("error", { message: "failed to start chat" });
         if (ack) {
           ack({ success: false, error: "Failed to start chat" });
@@ -101,7 +98,7 @@ export class ChatSocketHandler implements IChatSocketHandler {
 
     socket.on("send_message", async (data, ack?: (res: any) => void) => {
       try {
-        console.log("📤 Send message request:", data);
+        console.log("Send message request:", data);
 
         const {
           chatRoomId,
@@ -122,7 +119,7 @@ export class ChatSocketHandler implements IChatSocketHandler {
           !receiverType ||
           !contextType
         ) {
-          console.error("❌ Missing message data:", data);
+          console.error("Missing message data:", data);
           return ack?.({ success: false, error: "Missing message data" });
         }
 
@@ -141,7 +138,7 @@ export class ChatSocketHandler implements IChatSocketHandler {
 
         // Check if receiver is online
         const isReceiverOnline = isUserOnline(receiverId);
-        console.log(`📱 Receiver ${receiverId} online: ${isReceiverOnline}`);
+        console.log(`Receiver ${receiverId} online: ${isReceiverOnline}`);
 
         if (isReceiverOnline) {
           try {
@@ -153,13 +150,10 @@ export class ChatSocketHandler implements IChatSocketHandler {
           }
         }
 
-        console.log(`📨 Emitting to room: ${newMessage.chatRoomId}`);
 
-        // Emit to all participants in room
         io.to(newMessage.chatRoomId).emit("new_message", newMessage);
-        console.log(`✅ Message emitted to room ${newMessage.chatRoomId}`);
 
-        // ✅ Acknowledge success
+
         ack?.({ success: true, message: newMessage });
       } catch (err: any) {
         console.error("send_message error:", err);
@@ -179,16 +173,11 @@ export class ChatSocketHandler implements IChatSocketHandler {
           return ack?.({ success: false, error: "Missing data" });
         }
 
-        console.log(
-          `📨 Marking messages as delivered in room ${chatRoomId} for user ${userId}`
-        );
-
         const result = await this._markAsDeliveredUsecase.execute(
           chatRoomId,
           userId
         );
 
-        // Notify other users in the room
         socket.to(chatRoomId).emit("messages_delivered", {
           chatRoomId,
           userId,
@@ -196,7 +185,6 @@ export class ChatSocketHandler implements IChatSocketHandler {
           messageIds: result.messageIds,
         });
 
-        console.log(`Messages marked as delivered for user ${userId}`);
         ack?.({ success: true });
       } catch (error) {
         console.error("mark_messages_delivered error:", error);
@@ -217,13 +205,8 @@ export class ChatSocketHandler implements IChatSocketHandler {
           return ack?.({ success: false, error: "Missing data" });
         }
 
-        console.log(
-          `👀 Marking messages as read in room ${chatRoomId} for user ${userId}`
-        );
 
         const result = await this._markReadUsecase.execute(chatRoomId, userId);
-
-        // Notify other users in the room about the read status
         socket.to(chatRoomId).emit("messages_read", {
           chatRoomId,
           userId,
@@ -231,7 +214,6 @@ export class ChatSocketHandler implements IChatSocketHandler {
           messageIds: result.messageIds,
         });
 
-        console.log(`Messages marked as read for user ${userId}`);
         ack?.({ success: true });
       } catch (error) {
         console.error(" mark_messages_read error:", error);
@@ -267,7 +249,7 @@ export class ChatSocketHandler implements IChatSocketHandler {
           console.error("Missing data for stop_typing");
           return;
         }
-        console.log(`${userId} stopped typing in room ${chatRoomId}`);
+
 
         socket
           .to(chatRoomId)
@@ -288,11 +270,10 @@ export class ChatSocketHandler implements IChatSocketHandler {
 
       const userId = socket.data.userId;
 
-      // Leave chat room if joined
       if (socket.data.chatRoomId) {
         socket.leave(socket.data.chatRoomId);
         console.log(
-          `🚪 User left room ${socket.data.chatRoomId} on disconnect`
+          `User left room ${socket.data.chatRoomId} on disconnect`
         );
       }
 
@@ -318,7 +299,6 @@ export class ChatSocketHandler implements IChatSocketHandler {
       const userId = socket.data.userId;
       const isFirstConnection = userConnected(userId, socket.id);
 
-      // Emit online only if first socket for that user
       if (isFirstConnection) {
         console.log(`User ${userId} is now online (first socket connection)`);
         io.emit("user_online", { userId });
