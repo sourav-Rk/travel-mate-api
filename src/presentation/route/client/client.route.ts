@@ -1,11 +1,7 @@
 import { RequestHandler } from "express";
 import express from "express";
 
-import {
-  authorizeRole,
-  decodeToken,
-  verifyAuth,
-} from "../../middlewares/auth.middleware";
+import { authorizeRole, verifyAuth } from "../../middlewares/auth.middleware";
 import { asyncHandler } from "../../../shared/async-handler";
 import {
   blockMiddleware,
@@ -18,6 +14,8 @@ import {
   notificationController,
   paymentController,
   reviewController,
+  vendorController,
+  vendorProfileController,
   walletController,
   wishlistController,
 } from "../../../infrastructure/dependencyInjection/resolve";
@@ -323,6 +321,16 @@ export class ClientRoute extends BaseRoute {
       asyncHandler(
         guideInstructionController.markAllInstructionsRead.bind(
           guideInstructionController
+        )
+      )
+    );
+
+    //--------------Vendor details routes-------------------
+    this.router.get(
+      "/vendor/:vendorId",
+      asyncHandler(
+        vendorProfileController.getVendorDetailsClient.bind(
+          vendorProfileController
         )
       )
     );

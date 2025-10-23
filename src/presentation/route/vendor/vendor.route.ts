@@ -10,6 +10,8 @@ import {
   addressController,
   authController,
   blockMiddleware,
+  chatController,
+  clientProfileController,
   guideController,
   itineraryController,
   kycController,
@@ -44,6 +46,7 @@ import { AddKycReqDTO } from "../../../application/dto/request/kyc.dto";
 import { AddGuideReqDTO } from "../../../application/dto/request/guide.dto";
 import { UpdateVendorStatusReqDTO } from "../../../application/dto/request/admin.dto";
 import { MarkReadNotificationReqDTO } from "../../../application/dto/request/notification.dto";
+import { GetMessagesReqDto } from "../../../application/dto/request/chat.dto";
 
 @injectable()
 export class VendorRoute extends BaseRoute {
@@ -342,6 +345,37 @@ export class VendorRoute extends BaseRoute {
       "/transactions",
       asyncHandler(
         walletController.getWalletTransactions.bind(walletController)
+      )
+    );
+
+    // -------------------------
+    //  Chat Routes
+    // -------------------------
+    this.router.get(
+      "/messages",
+      validationMiddleware(GetMessagesReqDto),
+      asyncHandler(chatController.getMessages.bind(chatController))
+    );
+
+    this.router.get(
+      "/chatroom/:chatroomId",
+      asyncHandler(chatController.getChatroom.bind(chatController))
+    );
+
+     this.router.get(
+      "/history",
+      asyncHandler(chatController.getChatHistory.bind(chatController))
+    );
+
+    // -------------------------
+    //  Cliet details Routes
+    // -------------------------
+    this.router.get(
+      "/client/:clientId",
+      asyncHandler(
+        clientProfileController.getClientDetailsVendor.bind(
+          clientProfileController
+        )
       )
     );
   }

@@ -1,7 +1,10 @@
 import { IVendorEntity } from "../../domain/entities/vendor.entity";
 import { IVendorModel } from "../../infrastructure/database/models/vendor.model";
 import { VendorDto } from "../dto/response/user.dto";
-import { VendorProfileDto } from "../dto/response/vendor.dto";
+import {
+  VendorDetailsForClientDto,
+  VendorProfileDto,
+} from "../dto/response/vendor.dto";
 
 export class VendorMapper {
   static toEntity(doc: IVendorModel): IVendorEntity {
@@ -74,6 +77,21 @@ export class VendorMapper {
             documents: doc.kycDetails.documents,
           }
         : null,
+    };
+  }
+
+  static mapToVendorDetailsForClientDto(
+    doc: IVendorEntity
+  ): VendorDetailsForClientDto {
+    return {
+      _id: String(doc._id),
+      agencyName: doc.agencyName,
+      email: doc.agencyName,
+      firstName: doc.firstName,
+      lastName: doc.lastName,
+      phone: doc.phone ?? "N/A",
+      description: doc.description,
+      profileImage: doc.profileImage,
     };
   }
 }

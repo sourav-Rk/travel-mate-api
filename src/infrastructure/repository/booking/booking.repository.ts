@@ -119,7 +119,7 @@ export class BookingRepository
     if (status && status !== "all") {
       filter.status = status;
     }
-
+    
     const skip = (pageNumber - 1) * pageSize;
     const limit = pageSize;
 

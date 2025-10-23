@@ -27,6 +27,8 @@ export class GetChatHistoryUsecase implements IGetChatHistoryUsecase {
       roomId: r.roomId,
       peer: r.peer,
       peerInfo: r.peerInfo,
+      contextType : r.contextType,
+      contextId : r.contextId,
       lastMessage: r.lastMessage,
       lastMessageAt: r.lastMessageAt,
       lastMessageReadAt: r.lastMessageReadAt,
