@@ -133,6 +133,7 @@ export class AuthController implements IAuthController {
       HTTP_STATUS.OK,
       SUCCESS_MESSAGE.LOGIN_SUCCESS,
       {
+        id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,

@@ -4,6 +4,7 @@ import { IMessageModel, messageDB } from "../../database/models/message.model";
 import { IMessageEntity } from "../../../domain/entities/message.entity";
 import { IMessageRepository } from "../../../domain/repositoryInterfaces/message/message-repository.interface";
 import { MessageMapper } from "../../../application/mapper/message.mapper";
+import { FilterQuery } from "mongoose";
 
 @injectable()
 export class MessageRepository
@@ -19,7 +20,7 @@ export class MessageRepository
     limit: number,
     before?: string
   ): Promise<IMessageEntity[]> {
-    const query: any = { chatRoomId };
+    const query: FilterQuery<IMessageModel> = { chatRoomId };
 
     if (before && !isNaN(new Date(before).getTime())) {
       query.createdAt = { $lt: new Date(before) };
@@ -73,7 +74,7 @@ export class MessageRepository
     messageId: string,
     status: "sent" | "delivered" | "read"
   ): Promise<IMessageEntity | null> {
-    const updateData: any = { status };
+    const updateData: FilterQuery<IMessageModel> = { status };
 
     if (status === "read") {
       updateData.readAt = new Date();
@@ -88,19 +89,21 @@ export class MessageRepository
     return updatedMessage ? MessageMapper.toEntity(updatedMessage) : null;
   }
 
-  async markAsDelivered(chatRoomId: string, userId: string): Promise<{messageIds : string[]}> {
-
+  async markAsDelivered(
+    chatRoomId: string,
+    userId: string
+  ): Promise<{ messageIds: string[] }> {
     const messagesToUpdate = await messageDB.find({
       chatRoomId,
-      receiverId : userId,
-      status : "sent"
+      receiverId: userId,
+      status: "sent",
     });
 
-    if(messagesToUpdate.length === 0) {
-      return {messageIds : []}
+    if (messagesToUpdate.length === 0) {
+      return { messageIds: [] };
     }
 
-    const messageIds = messagesToUpdate.map(msg => msg._id.toString())
+    const messageIds = messagesToUpdate.map((msg) => msg._id.toString());
 
     await messageDB.updateMany(
       {
@@ -113,7 +116,7 @@ export class MessageRepository
         $addToSet: { deliveredTo: userId },
       }
     );
-    return {messageIds}
+    return { messageIds };
   }
 
   async getUnreadCount(chatRoomId: string, userId: string): Promise<number> {

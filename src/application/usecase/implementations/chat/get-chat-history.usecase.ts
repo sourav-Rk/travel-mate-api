@@ -35,7 +35,6 @@ export class GetChatHistoryUsecase implements IGetChatHistoryUsecase {
       lastMessageStatus: r.lastMessageStatus,
     }));
 
-    console.log(data,"usecase history")
     return data
   }
 }

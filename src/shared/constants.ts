@@ -53,8 +53,8 @@ export const ERROR_MESSAGE = {
   TOKEN_EXPIRED_REFRESH: "Token time out, Please loggin again",
   TOKEN_BLACK_LISTED: "Token is blacklisted",
   TOKEN_MISSING: "Authorization token is required",
-  COOKIE_NOT_FOUND : "Cookie not found", 
-  LIMIT : "Limit must be between 1 and    00",
+  COOKIE_NOT_FOUND: "Cookie not found",
+  LIMIT: "Limit must be between 1 and    00",
   SERVER_ERROR: "An error occurred, please try again later.",
   BLOCKED_ERROR: "You are blocked by Admin. please contact admin",
   NOT_ALLOWED: "You are not allowed",
@@ -122,17 +122,32 @@ export const ERROR_MESSAGE = {
     REFUND_AMOUNT_GREATER_THAN_ZERO: "Refund amount must be greater than 0",
   },
 
-  GUIDE_INSTRUCTIONS : {
-    NO_TRAVELLERS_FOUND : "No travellers found for this package",
-    GUIDE_ASSIGNED_CONFLICT : "This guide is not assigned for this trip",
-    INSTRUCTION_NOT_FOUND : "Instruction not found"
+  GUIDE_INSTRUCTIONS: {
+    NO_TRAVELLERS_FOUND: "No travellers found for this package",
+    GUIDE_ASSIGNED_CONFLICT: "This guide is not assigned for this trip",
+    INSTRUCTION_NOT_FOUND: "Instruction not found",
   },
 
-  GROUP :{
-    ATLEAST_TWO_MEMBERS : "Group chat must have at least 2 members",
-    NO_GROUP_CHAT : "No group chat found for this package",
-    NOT_A_MEMBER : "You are not a member of this group chat",
-  }
+  GROUP: {
+    ATLEAST_TWO_MEMBERS: "Group chat must have at least 2 members",
+    NO_GROUP_CHAT: "No group chat found for this package",
+    NOT_A_MEMBER: "You are not a member of this group chat",
+    GROUP_NOT_FOUND: "Group not found",
+    FAILED_TO_JOIN_GROUP_CHAT: "Failed to join group chat",
+    MISSING_MESSAGE_DATA: "Missing message data",
+    MISSING_GROUP_CHAT_ID: "Missing group chat id",
+    FAILED_TO_LEAVE_GROUP_CHAT: "Failed to leave group chat",
+    MISSING_REQUIRED_DATA: "Missing required data",
+    FAILED_TO_START_TYPING: "Failed to start typing",
+    FAILED_TO_STOP_TYPING: "Failed to stop typing",
+    FAILED_TO_GET_ONLINE_MEMBERS: "Failed to get online members",
+    FAILED_TO_MARK_MESSAGE_DELIVERED: "Failed to mark message as delivered",
+    FAILED_TO_MARK_MESSAGE_READ: "Failed to mark message as read",
+  },
+
+  CHAT: {
+    FAILED_TO_START_CHAT: "Failed to start chat",
+  },
 };
 
 export const SUCCESS_MESSAGE = {
@@ -179,11 +194,11 @@ export const SUCCESS_MESSAGE = {
     CANCELLATION_APPROVED: "Cancellation Approved successfully",
   },
 
-  GUIDE_INSTRUCTION : {
-    ADDED_SUCCESSFULLY : "Instruction added successfully",
-    INSTRUCTION_MARKED_AS_READ : "Instruction marked as read",
-    ALL_INSTRUCTIONS_MARKED_AS_READ : "All instructions marked as read"
-  }
+  GUIDE_INSTRUCTION: {
+    ADDED_SUCCESSFULLY: "Instruction added successfully",
+    INSTRUCTION_MARKED_AS_READ: "Instruction marked as read",
+    ALL_INSTRUCTIONS_MARKED_AS_READ: "All instructions marked as read",
+  },
 };
 
 export const ROLES = {
@@ -321,9 +336,16 @@ export const CANCELLATION_POLICIES: Record<
 };
 
 export type INSTRUCTION_PRIORITY = "LOW" | "MEDIUM" | "HIGH" | "URGENT";
-export type INSTRUCTION_TYPE =  
-    | "MEETING_POINT"
-    | "ITINERARY_UPDATE"
-    | "SAFETY_INFO"
-    | "REMINDER"
-    | "GENERAL";
+export type INSTRUCTION_TYPE =
+  | "MEETING_POINT"
+  | "ITINERARY_UPDATE"
+  | "SAFETY_INFO"
+  | "REMINDER"
+  | "GENERAL";
+
+export type CHAT_CONTEXT_TYPE =
+  | "vendor_client"
+  | "guide_client"
+  | "client_client";
+export type CHAT_USERS = "client" | "guide" | "vendor";
+  

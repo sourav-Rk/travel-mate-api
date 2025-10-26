@@ -3,10 +3,12 @@ import { ITokenService } from "../../../domain/service-interfaces/token-service.
 import { logger } from "../logger/winston.logger.config";
 import { socketAuthMiddleware } from "../../../presentation/middlewares/socketAuth.middleware";
 import { IChatSocketHandler } from "../../../presentation/interfaces/socket/chat-socket-handler.interface";
+import { IGroupChatSocketHandler } from "../../../presentation/interfaces/socket/group-chat-socket-handler.interface";
 import { isUserOnline, userConnected, userDisconnected } from "./onlineUsers";
 export function configureSocket(
   io: Server,
   chatSocketHandler: IChatSocketHandler,
+  groupChatSocketHandler: IGroupChatSocketHandler,
   tokenService: ITokenService
 ) {
   console.log("Socket configuration triggered");
@@ -23,7 +25,11 @@ export function configureSocket(
     io.emit("user_online", { userId: socket.data.userId });
   }
 
+  console.log("🔵 Registering chat socket handler...");
   chatSocketHandler.register(io, socket);
+  
+  console.log("🔵 Registering group chat socket handler...");
+  groupChatSocketHandler.register(io, socket);
 
   socket.on("disconnect", () => {
     console.log(`🔴 Socket disconnected: ${socket.id}, User: ${socket.data.userId}`);

@@ -1,4 +1,5 @@
 import { IChatRoomEntity } from "../../../../domain/entities/chatroom.entity";
+import { CHAT_CONTEXT_TYPE } from "../../../../shared/constants";
 import {
   ChatRoomFindDto,
   Participants,
@@ -7,7 +8,7 @@ import {
 export interface ICheckChatRoomUsecase {
   execute(
     participants: Participants[],
-    contextType: "vendor_client" | "guide_client" | "client_client",
+    contextType: CHAT_CONTEXT_TYPE,
     contextId : string
   ): Promise<IChatRoomEntity | null>;
 }

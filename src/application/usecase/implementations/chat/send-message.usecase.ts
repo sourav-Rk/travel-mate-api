@@ -3,7 +3,7 @@ import { ISendMessageUseCase } from "../../interfaces/chat/send-message-usecase.
 import { IMessageRepository } from "../../../../domain/repositoryInterfaces/message/message-repository.interface";
 import { IMessageEntity } from "../../../../domain/entities/message.entity";
 import { CustomError } from "../../../../domain/errors/customError";
-import { HTTP_STATUS } from "../../../../shared/constants";
+import { CHAT_CONTEXT_TYPE, CHAT_USERS, ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import { IChatRoomRepository } from "../../../../domain/repositoryInterfaces/chatroom/chatroom-repository.interface";
 
 @injectable()
@@ -19,25 +19,23 @@ export class SendMessageUsecase implements ISendMessageUseCase {
   async execute(data: {
     chatRoomId?: string;
     senderId: string;
-    senderType: "client" | "guide" | "vendor";
+    senderType: CHAT_USERS
     receiverId: string;
-    receiverType: "client" | "guide" | "vendor";
+    receiverType: CHAT_USERS
     message: string;
-    contextType: "vendor_client" | "guide_client" | "client_client";
+    contextType: CHAT_CONTEXT_TYPE
     contextId: string;
   }): Promise<IMessageEntity> {
     if (!data.senderId || !data.receiverId || !data.message) {
-      throw new CustomError(HTTP_STATUS.BAD_REQUEST, "Missing message data");
+      throw new CustomError(HTTP_STATUS.BAD_REQUEST,ERROR_MESSAGE.GROUP.MISSING_MESSAGE_DATA);
     }
-
-    console.log(data,"-->usecase data")
 
     let chatRoom;
 
     if (data.chatRoomId) {
       chatRoom = await this._chatroomRepository.findById(data.chatRoomId);
       if (!chatRoom) {
-        throw new CustomError(HTTP_STATUS.NOT_FOUND, "Chat room not found");
+        throw new CustomError(HTTP_STATUS.NOT_FOUND, ERROR_MESSAGE.CHATROOM_NOT_FOUND);
       }
     } else {
       const participants = [
@@ -51,7 +49,6 @@ export class SendMessageUsecase implements ISendMessageUseCase {
         data.contextId
       );
 
-      // 2️⃣ Create chat room if it doesn't exist
       if (!chatRoom) {
         chatRoom = await this._chatroomRepository.save({
           participants,

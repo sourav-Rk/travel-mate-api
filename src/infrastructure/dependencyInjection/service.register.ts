@@ -22,6 +22,8 @@ import { IVendorPaymentService } from "../../domain/service-interfaces/vendor-pa
 import { VendorPaymentService } from "../service/vendor-payment.service";
 import { IAdminPaymentService } from "../../domain/service-interfaces/admin-payment-service.interface";
 import { AdminPaymentService } from "../service/admin-payment.service";
+import { IGroupChatService } from "../../application/services/interfaces/group-chat-service.interface";
+import { GroupChatService } from "../../application/services/implementations/group-chat/groupChatService";
 
 export class ServiceRegistory {
   static registerService(): void {
@@ -71,6 +73,10 @@ export class ServiceRegistory {
     container.register<IAdminPaymentService>("IAdminPaymentService", {
       useClass: AdminPaymentService,
     });
+
+    // container.register<IGroupChatService>("IGroupChatService", {
+    //   useClass: GroupChatService,
+    // });
 
     container.resolve(EmailService);
   }

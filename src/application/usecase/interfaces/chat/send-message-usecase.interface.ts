@@ -1,14 +1,15 @@
 import { IMessageEntity } from "../../../../domain/entities/message.entity";
+import { CHAT_CONTEXT_TYPE, CHAT_USERS } from "../../../../shared/constants";
 
 export interface ISendMessageUseCase {
   execute(data: {
     chatRoomId: string;
     senderId: string;
-    senderType: "client" | "guide" | "vendor";
+    senderType: CHAT_USERS
     receiverId: string;
-    receiverType: "client" | "guide" | "vendor";
+    receiverType:CHAT_USERS
     message: string;
-    contextType: "vendor_client" | "guide_client" | "client_client";
+    contextType:CHAT_CONTEXT_TYPE
     contextId : string;
   }): Promise<IMessageEntity>;
 }

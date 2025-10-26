@@ -12,6 +12,7 @@ import {
   blockMiddleware,
   chatController,
   clientProfileController,
+  groupChatController,
   guideController,
   itineraryController,
   kycController,
@@ -362,7 +363,7 @@ export class VendorRoute extends BaseRoute {
       asyncHandler(chatController.getChatroom.bind(chatController))
     );
 
-     this.router.get(
+    this.router.get(
       "/history",
       asyncHandler(chatController.getChatHistory.bind(chatController))
     );
@@ -376,6 +377,20 @@ export class VendorRoute extends BaseRoute {
         clientProfileController.getClientDetailsVendor.bind(
           clientProfileController
         )
+      )
+    );
+
+    //--------------Group Chat routes-------------------
+
+    this.router.get(
+      "/groups",
+      asyncHandler(groupChatController.getGroups.bind(groupChatController))
+    );
+
+    this.router.get(
+      "/group-details/:groupId",
+      asyncHandler(
+        groupChatController.getGroupDetails.bind(groupChatController)
       )
     );
   }

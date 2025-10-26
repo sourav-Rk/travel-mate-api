@@ -219,6 +219,22 @@ import { IGetVendorDetailsClientUsecase } from "../../application/usecase/interf
 import { GetVendorDetailsClientUsecase } from "../../application/usecase/implementations/vendor/get-vendor-details-client.usecase";
 import { IGetClientDetailsVendorUsecase } from "../../application/usecase/interfaces/client/get-client-details-vendor-usecase.interface";
 import { GetClientDetailsVendorUsecase } from "../../application/usecase/implementations/client/get-client-details-vendor-usecase";
+import { ICreateGroupChatUsecase } from "../../application/usecase/interfaces/group-chat/create-group-chat-usecase.interface";
+import { CreateGroupChatUsecase } from "../../application/usecase/implementations/group-chat/create-group-chat.usecase";
+import { IAddMemberUsecase } from "../../application/usecase/interfaces/group-chat/add-member-usecase.interface";
+import { AddMemberUsecase } from "../../application/usecase/implementations/group-chat/add-member.usecase";
+import { IGetGroupChatByPackageUsecase } from "../../application/usecase/interfaces/group-chat/get-group-chat-by-package-usecase.interface";
+import { GetGroupChatByPackageUsecase } from "../../application/usecase/implementations/group-chat/get-group-chat-by-package.usecase";
+import { IGetGroupMessagesUsecase } from "../../application/usecase/interfaces/group-chat/get-group-messages-usecase.interface";
+import { GetGroupMessagesUsecase } from "../../application/usecase/implementations/group-chat/get-group-messages.usecase";
+import { ISendGroupMessageUsecase } from "../../application/usecase/interfaces/group-chat/send-group-message-usecase.interface";
+import { SendGroupMessageUsecase } from "../../application/usecase/implementations/group-chat/send-group-message.usecase";
+import { IGroupChatService } from "../../application/services/interfaces/group-chat-service.interface";
+import { GroupChatService } from "../../application/services/implementations/group-chat/groupChatService";
+import { IGetGroupsUsecase } from "../../application/usecase/interfaces/group-chat/get-groups-usecase.interface";
+import { GetGroupsUsecase } from "../../application/usecase/implementations/group-chat/getGroups.usecase";
+import { IGetGroupDetailsUsecase } from "../../application/usecase/interfaces/group-chat/get-group-details-usecase.interface";
+import { GetGroupDetailsUsecase } from "../../application/usecase/implementations/group-chat/get-group-details.usecase";
 
 export class UsecaseRegistory {
   static registerUsecases(): void {
@@ -771,6 +787,40 @@ export class UsecaseRegistory {
 
     container.register<IMarkAllInstructionsReadUseCase>('IMarkAllInstructionsReadUseCase',{
       useClass : MarkAllInstructionsReadUseCase
+    });
+
+    //group-chat usecases
+    container.register<ICreateGroupChatUsecase>('ICreateGroupChatUsecase',{
+      useClass : CreateGroupChatUsecase 
+    });
+
+    container.register<IAddMemberUsecase>('IAddMemberUsecase',{
+      useClass : AddMemberUsecase
+    });
+
+    container.register<IGetGroupChatByPackageUsecase>('IGetGroupChatByPackageUsecase',{
+      useClass : GetGroupChatByPackageUsecase
+    });
+
+    container.register<IGetGroupMessagesUsecase>('IGetGroupMessagesUsecase',{
+      useClass : GetGroupMessagesUsecase
+    });
+
+    
+    container.register<ISendGroupMessageUsecase>('ISendGroupMessageUsecase',{
+      useClass : SendGroupMessageUsecase
+    });
+
+    container.register<IGroupChatService>('IGroupChatService',{
+      useClass : GroupChatService
+    });
+
+    container.register<IGetGroupsUsecase>('IGetGroupsUsecase',{
+      useClass : GetGroupsUsecase
+    });
+
+    container.register<IGetGroupDetailsUsecase>('IGetGroupDetailsUsecase',{
+      useClass : GetGroupDetailsUsecase
     });
 
     //token

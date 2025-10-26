@@ -6,6 +6,7 @@ import { BOOKINGSTATUS } from "../../../../shared/constants";
 import { IPaymentService } from "../../../../domain/service-interfaces/payment-service.interface";
 import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
 import { IRevenueDistributionService } from "../../../../domain/service-interfaces/revenue-distribution-service.interface";
+import { IGroupChatService } from "../../../services/interfaces/group-chat-service.interface";
 
 @injectable()
 export class HandleStripeWebHookUsecase implements IHandleStripeWebHookUsecase {
@@ -20,7 +21,10 @@ export class HandleStripeWebHookUsecase implements IHandleStripeWebHookUsecase {
     private _paymentService: IPaymentService,
 
     @inject("IRevenueDistributionService")
-    private _revenueDistributionService: IRevenueDistributionService
+    private _revenueDistributionService: IRevenueDistributionService,
+
+    @inject("IGroupChatService")
+    private _groupChatService: IGroupChatService
   ) {}
 
   async execute(
@@ -108,6 +112,13 @@ export class HandleStripeWebHookUsecase implements IHandleStripeWebHookUsecase {
             booking.fullPayment.amount,
             "full"
           );
+
+          await this._groupChatService.handle(
+            booking.bookingId,
+            booking.packageId
+          );
+
+          console.log(`✅ Group chat handled for booking: ${bookingId}`);
         }
         break;
       }

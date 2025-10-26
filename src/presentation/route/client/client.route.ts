@@ -9,6 +9,7 @@ import {
   clientBookingController,
   clientPackageController,
   clientProfileController,
+  groupChatController,
   guideInstructionController,
   guideProfileController,
   notificationController,
@@ -332,6 +333,19 @@ export class ClientRoute extends BaseRoute {
         vendorProfileController.getVendorDetailsClient.bind(
           vendorProfileController
         )
+      )
+    );
+
+    //--------------Group Chat routes-------------------
+    this.router.get(
+      "/groups",
+      asyncHandler(groupChatController.getGroups.bind(groupChatController))
+    );
+
+    this.router.get(
+      "/group-details/:groupId",
+      asyncHandler(
+        groupChatController.getGroupDetails.bind(groupChatController)
       )
     );
   }

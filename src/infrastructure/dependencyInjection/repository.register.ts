@@ -44,6 +44,10 @@ import { IWalletTransactionsRepository } from "../../domain/repositoryInterfaces
 import { WalletTransactionsRepository } from "../repository/wallet/wallet-transactions.repository";
 import { IGuideInstructionRepository } from "../../domain/repositoryInterfaces/guide-instruction/guide-instruction-repository.interface";
 import { GuideInstructionRepository } from "../repository/guide-instruction/guide-instruction.repository";
+import { IGroupChatRepository } from "../../domain/repositoryInterfaces/group-chat/group-chat-repository.interface";
+import { GroupChatRepository } from "../repository/group-chat/group-chat.repository";
+import { IGroupMessageRepository } from "../../domain/repositoryInterfaces/group-chat/group-message-repository.interface";
+import { GroupMessageRepository } from "../repository/group-chat/group-message.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -140,6 +144,14 @@ export class RepositoryRegistry {
     container.register<IGuideInstructionRepository>('IGuideInstructionRepository',{
       useClass : GuideInstructionRepository
     });
+
+    container.register<IGroupChatRepository>('IGroupChatRepository',{
+      useClass : GroupChatRepository
+    });
+
+    container.register<IGroupMessageRepository>('IGroupMessageRepository',{
+      useClass : GroupMessageRepository
+    })
 
     //database session
     container.register<IDBSession>("IDBSession", {

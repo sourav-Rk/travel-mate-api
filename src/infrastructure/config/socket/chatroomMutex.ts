@@ -71,3 +71,4 @@ export function isChatroomLocked(
   const key = generateLockKey(participants, contextType, contextId);
   return chatroomLocks.has(key);
 }
+
