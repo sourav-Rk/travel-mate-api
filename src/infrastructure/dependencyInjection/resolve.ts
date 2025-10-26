@@ -71,6 +71,9 @@ import { IGuideClientController } from "../../presentation/interfaces/controller
 import { GuideClientController } from "../../presentation/controllers/client/guideClient.controller";
 import { WalletController } from "../../presentation/controllers/wallet/wallet.controller";
 import { GuideInstructionController } from "../../presentation/controllers/guide-instruction/guide-instruction.controller";
+import { GroupChatController } from "../../presentation/controllers/group-chat/group-chat.controller";
+import { IGroupChatSocketHandler } from "../../presentation/interfaces/socket/group-chat-socket-handler.interface";
+import { GroupChatSocketHandler } from "../../presentation/socket/groupChatSocketHandler";
 
 DependencyInjection.registerAll();
 
@@ -154,7 +157,9 @@ export const guideBookingController =
   container.resolve<IGuideBookingController>(GuideBookingController);
 
 //guide-client controller
-export const guideClientController = container.resolve<IGuideClientController>(GuideClientController);  
+export const guideClientController = container.resolve<IGuideClientController>(
+  GuideClientController
+);
 
 //payment controller
 export const paymentController =
@@ -187,7 +192,12 @@ export const chatController = container.resolve(ChatController);
 export const walletController = container.resolve(WalletController);
 
 //guide instruction controller
-export const guideInstructionController = container.resolve(GuideInstructionController);
+export const guideInstructionController = container.resolve(
+  GuideInstructionController
+);
+
+//group chat controller
+export const groupChatController = container.resolve(GroupChatController);
 
 //signed url controller
 export const signedUrlController =
@@ -219,3 +229,12 @@ container.register<IChatSocketHandler>("IChatSocketHandler", {
 // chat socket handler
 export const chatSocketHandler =
   container.resolve<IChatSocketHandler>("IChatSocketHandler");
+
+// group chat socket handler registration
+container.register<IGroupChatSocketHandler>("IGroupChatSocketHandler", {
+  useClass: GroupChatSocketHandler,
+});
+
+// group chat socket handler
+export const groupChatSocketHandler =
+  container.resolve<IGroupChatSocketHandler>("IGroupChatSocketHandler");

@@ -18,7 +18,6 @@ export class SendGroupMessageUsecase implements ISendGroupMessageUsecase {
   ) {}
 
   async execute(data: SendGroupMessageDTO): Promise<IGroupMessageEntity> {
-    console.log("Sending group message to chat:", data.groupChatId);
 
     const groupChat = await this._groupChatRepository.findById(
       data.groupChatId
@@ -30,9 +29,10 @@ export class SendGroupMessageUsecase implements ISendGroupMessageUsecase {
       );
     }
 
+
     const isMember = groupChat.members.some(
       (member) =>
-        member.userId === data.senderId && member.userType === data.senderType
+        member.userId.toString() === data.senderId && member.userType === data.senderType
     );
 
     if (!isMember) {
@@ -61,3 +61,4 @@ export class SendGroupMessageUsecase implements ISendGroupMessageUsecase {
     return groupMessage;
   }
 }
+

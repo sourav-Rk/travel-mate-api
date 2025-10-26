@@ -7,6 +7,7 @@ import {
   acquireChatroomLock,
   releaseChatroomLock,
 } from "../../../../infrastructure/config/socket/chatroomMutex";
+import { CHAT_CONTEXT_TYPE } from "../../../../shared/constants";
 
 @injectable()
 export class CheckChatRoomUsecase implements ICheckChatRoomUsecase {
@@ -17,10 +18,9 @@ export class CheckChatRoomUsecase implements ICheckChatRoomUsecase {
 
   async execute(
     participants: Participants[],
-    contextType: "vendor_client" | "guide_client" | "client_client",
+    contextType: CHAT_CONTEXT_TYPE,
     contextId: string
   ): Promise<IChatRoomEntity | null> {
-    console.log(participants, contextType, contextId, "-->usecase data");
 
     let chatroom = await this._chatRoomRepository.findByParticipants(
       participants,

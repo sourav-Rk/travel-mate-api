@@ -29,3 +29,4 @@ export class GetGroupChatByPackageUsecase
     return groupChat;
   }
 }
+

@@ -62,4 +62,9 @@ export interface IBookingRepository extends IBaseRepository<IBookingEntity> {
     searchTerm?: string,
     status?: "cancellation_requested" | "cancelled"
   ): Promise<PaginatedCancellationRequests>;
+
+  findByPackageIdAndStatus(
+    packageId: string,
+    status: BOOKINGSTATUS
+  ): Promise<IBookingEntity[] | []>;
 }

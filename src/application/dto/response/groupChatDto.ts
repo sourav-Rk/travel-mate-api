@@ -55,3 +55,35 @@ export interface GroupChatListDTO {
   groupChats: GroupChatDTO[];
   total: number;
 }
+
+export interface MemberDetailDto {
+  userId: string;
+  userType: "client" | "guide" | "vendor";
+  name: string;
+  avatar?: string;
+}
+
+export interface GroupChatDetailsQueryDto {
+  _id: string;
+  packageId: string;
+  name: string;
+  members: Array<{
+    userId: string;
+    userType: "client" | "guide" | "vendor";
+  }>;
+  memberDetails: MemberDetailDto[];
+  membersCount: number;
+  lastMessage?: string;
+  lastMessageAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface GroupChatDetailsDto {
+  _id: string;
+  packageId: string;
+  name: string;
+  memberDetails: MemberDetailDto[];
+  membersCount: number;
+  createdAt: Date;
+}

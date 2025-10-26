@@ -9,6 +9,8 @@ import { IChatRoomRepository } from "../../../domain/repositoryInterfaces/chatro
 import mongoose, { Types } from "mongoose";
 import { ChatRoomMapper } from "../../../application/mapper/chatroom.mapper";
 import { ChatListResponseDTO } from "../../../application/dto/response/chatroomDto";
+import { CHAT_CONTEXT_TYPE, CHAT_USERS } from "../../../shared/constants";
+import { PipelineStage } from "mongoose";
 
 @injectable()
 export class ChatRoomRepository
@@ -20,8 +22,8 @@ export class ChatRoomRepository
   }
 
   async findByParticipants(
-    participants: { userId: string; userType: "client" | "guide" | "vendor" }[],
-    contextType: "vendor_client" | "guide_client" | "client_client",
+    participants: { userId: string; userType: CHAT_USERS }[],
+    contextType: CHAT_CONTEXT_TYPE,
     contextId: string
   ): Promise<IChatRoomEntity | null> {
     const room = await chatRoomDB
@@ -51,9 +53,13 @@ export class ChatRoomRepository
     const skip = (page - 1) * limit;
     const userObjectId = new mongoose.Types.ObjectId(userId);
 
-    const pipeline: any[] = [
-      // Find all rooms where current user participates
-      { $match: { "participants.userId": userObjectId ,contextType : "vendor_client"} },
+    const pipeline: PipelineStage[] = [
+      {
+        $match: {
+          "participants.userId": userObjectId,
+          contextType: "vendor_client",
+        },
+      },
 
       {
         $addFields: {
@@ -69,7 +75,6 @@ export class ChatRoomRepository
         },
       },
 
-      //  Lookup from all 3 collections separately
       {
         $facet: {
           clients: [
@@ -108,7 +113,6 @@ export class ChatRoomRepository
         },
       },
 
-      //  Merge them all back into one array
       {
         $project: {
           all: { $concatArrays: ["$clients", "$guides", "$vendors"] },
@@ -117,14 +121,12 @@ export class ChatRoomRepository
       { $unwind: "$all" },
       { $replaceRoot: { newRoot: "$all" } },
 
-      //  Get the peer info
       {
         $addFields: {
           peerInfo: { $arrayElemAt: ["$peerInfo", 0] },
         },
       },
 
-      //Lookup last message details
       {
         $lookup: {
           from: "messages",
@@ -143,7 +145,6 @@ export class ChatRoomRepository
         },
       },
 
-      // Optional search
       ...(searchTerm
         ? [
             {
@@ -154,12 +155,10 @@ export class ChatRoomRepository
           ]
         : []),
 
-      // Sorting and pagination
       { $sort: { lastMessageAt: -1 } },
       { $skip: skip },
       { $limit: limit },
 
-      // S Project clean response
       {
         $project: {
           roomId: "$_id",

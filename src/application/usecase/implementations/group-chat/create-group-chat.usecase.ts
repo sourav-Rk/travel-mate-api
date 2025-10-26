@@ -14,7 +14,6 @@ export class CreateGroupChatUsecase implements ICreateGroupChatUsecase {
   ) {}
 
   async execute(data: CreateGroupChatDTO): Promise<IGroupChatEntity> {
-    console.log("Creating group chat for package:", data.packageId);
 
     const existingGroupChat = await this._groupChatRepository.findByPackage(
       data.packageId
@@ -31,7 +30,6 @@ export class CreateGroupChatUsecase implements ICreateGroupChatUsecase {
       );
     }
 
-    // Create the group chat
     const groupChat = await this._groupChatRepository.save({
       packageId: data.packageId,
       name: data.name,
@@ -42,3 +40,4 @@ export class CreateGroupChatUsecase implements ICreateGroupChatUsecase {
     return groupChat;
   }
 }
+

@@ -8,6 +8,7 @@ import { asyncHandler } from "../../../shared/async-handler";
 import {
   blockMiddleware,
   chatController,
+  groupChatController,
   guideBookingController,
   guideClientController,
   guideController,
@@ -150,5 +151,19 @@ export class GuideRoute extends BaseRoute {
       validationMiddleware(GetMessagesReqDto),
       asyncHandler(chatController.getMessages.bind(chatController))
     );
+
+        //--------------Group Chat routes-------------------
+    
+        this.router.get(
+          "/groups",
+          asyncHandler(groupChatController.getGroups.bind(groupChatController))
+        );
+    
+        this.router.get(
+          "/group-details/:groupId",
+          asyncHandler(
+            groupChatController.getGroupDetails.bind(groupChatController)
+          )
+        );
   }
 }

@@ -4,3 +4,4 @@ import { SendGroupMessageDTO } from "../../../dto/response/groupMessageDto";
 export interface ISendGroupMessageUsecase {
   execute(data: SendGroupMessageDTO): Promise<IGroupMessageEntity>;
 }
+

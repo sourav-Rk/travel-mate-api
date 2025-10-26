@@ -56,3 +56,4 @@ export class GetGroupChatByPackageReqDto {
   @IsNotEmpty()
   packageId!: string;
 }
+

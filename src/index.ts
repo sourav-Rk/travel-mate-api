@@ -4,6 +4,7 @@ import { App } from "./infrastructure/config/server/server";
 import { config } from "./shared/config";
 import {
   chatSocketHandler,
+  groupChatSocketHandler,
   cronScheduler,
 } from "./infrastructure/dependencyInjection/resolve";
 import { createServer } from "http";
@@ -37,7 +38,7 @@ try {
     },
   });
 
-  configureSocket(io, chatSocketHandler, tokenService);
+  configureSocket(io, chatSocketHandler, groupChatSocketHandler, tokenService);
 
   httpServer.listen(config.server.PORT, () =>
     console.log(`server running at port ${config.server.PORT} `)

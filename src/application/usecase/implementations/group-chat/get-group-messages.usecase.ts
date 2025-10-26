@@ -16,11 +16,7 @@ export class GetGroupMessagesUsecase implements IGetGroupMessagesUsecase {
     private _groupChatRepository: IGroupChatRepository
   ) {}
 
-  async execute(
-    groupChatId: string,
-    limit: number,
-    before?: string
-  ): Promise<IGroupMessageEntity[]> {
+  async execute(groupChatId: string): Promise<IGroupMessageEntity[]> {
     const groupChat = await this._groupChatRepository.findById(groupChatId);
     if (!groupChat) {
       throw new CustomError(
@@ -29,39 +25,10 @@ export class GetGroupMessagesUsecase implements IGetGroupMessagesUsecase {
       );
     }
 
-    if (limit <= 0 || limit > 100) {
-      throw new CustomError(HTTP_STATUS.BAD_REQUEST,ERROR_MESSAGE.LIMIT);
-    }
-
-    // Get messages from the repository
     const messages = await this._groupMessageRepository.findByGroup(
       groupChatId
     );
 
-    // Sort by creation date (newest first)
-    const sortedMessages = messages.sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-
-    // Apply pagination if 'before' is provided
-    let filteredMessages = sortedMessages;
-    if (before) {
-      const beforeDate = new Date(before);
-      if (!isNaN(beforeDate.getTime())) {
-        filteredMessages = sortedMessages.filter(
-          (msg) => new Date(msg.createdAt) < beforeDate
-        );
-      }
-    }
-
-    // Apply limit
-    const limitedMessages = filteredMessages.slice(0, limit);
-
-    // Return in chronological order (oldest first)
-    const result = limitedMessages.reverse();
-
-    console.log(`Retrieved ${result.length} group messages`);
-    return result;
+    return messages.reverse();
   }
 }

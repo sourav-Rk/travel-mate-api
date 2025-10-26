@@ -119,7 +119,7 @@ export class BookingRepository
     if (status && status !== "all") {
       filter.status = status;
     }
-    
+
     const skip = (pageNumber - 1) * pageSize;
     const limit = pageSize;
 
@@ -283,7 +283,7 @@ export class BookingRepository
             startDate: "$package.startDate",
             endDate: "$package.endDate",
             price: "$package.price",
-            status: "$package.status"
+            status: "$package.status",
           },
         },
       },
@@ -297,30 +297,34 @@ export class BookingRepository
   }
 
   async findCancellationRequests(
-    packageIds: string[],page:number,limit : number,searchTerm?:string,status?: "cancellation_requested" | "cancelled",
+    packageIds: string[],
+    page: number,
+    limit: number,
+    searchTerm?: string,
+    status?: "cancellation_requested" | "cancelled"
   ): Promise<PaginatedCancellationRequests> {
     if (!packageIds || packageIds.length === 0) {
       return { bookings: [], total: 0 };
     }
-   const skip = (page - 1) * limit;
+    const skip = (page - 1) * limit;
     const matchConditions: any = {
-    packageId: { $in: packageIds }
-  };
+      packageId: { $in: packageIds },
+    };
 
-   if (status === 'cancelled') {
-    matchConditions.status = BOOKINGSTATUS.CANCELLED;
-  } else {
-    matchConditions.status = BOOKINGSTATUS.CANCELLATION_REQUESTED
-  }
+    if (status === "cancelled") {
+      matchConditions.status = BOOKINGSTATUS.CANCELLED;
+    } else {
+      matchConditions.status = BOOKINGSTATUS.CANCELLATION_REQUESTED;
+    }
 
-   if (searchTerm) {
-    matchConditions.$or = [
-      { bookingId: { $regex: searchTerm, $options: 'i' } },
-      { 'user.name': { $regex: searchTerm, $options: 'i' } },
-      { 'user.email': { $regex: searchTerm, $options: 'i' } }
-    ];
-  }
-  
+    if (searchTerm) {
+      matchConditions.$or = [
+        { bookingId: { $regex: searchTerm, $options: "i" } },
+        { "user.name": { $regex: searchTerm, $options: "i" } },
+        { "user.email": { $regex: searchTerm, $options: "i" } },
+      ];
+    }
+
     const [result] = await bookingDB.aggregate([
       {
         $facet: {
@@ -347,9 +351,8 @@ export class BookingRepository
             },
             { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
             { $sort: { createdAt: -1 } },
-            {$skip : skip},
-            {$limit : limit},
-
+            { $skip: skip },
+            { $limit: limit },
           ],
           total: [
             {
@@ -374,5 +377,12 @@ export class BookingRepository
       bookings: data,
       total,
     };
+  }
+
+  async findByPackageIdAndStatus(
+    packageId: string,
+    status: BOOKINGSTATUS
+  ): Promise<IBookingEntity[] | []> {
+    return await bookingDB.find({ packageId, status });
   }
 }

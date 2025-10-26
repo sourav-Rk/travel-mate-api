@@ -11,6 +11,7 @@ import {
 export enum USER_TYPES {
   VENDOR = "vendor",
   CLIENT = "client",
+  GUIDE = "guide"
 }
 
 export enum VENDOR_STATUS {

@@ -58,3 +58,4 @@ export interface PaginatedGroupMessagesDTO {
   total: number;
   hasMore: boolean;
 }
+
