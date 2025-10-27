@@ -1,11 +1,12 @@
 import { inject, injectable } from "tsyringe";
-import { IGetWalletByIdUsecase } from "../../interfaces/wallet/get-walletById-usecase.interface";
-import { IWalletRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
-import { GetWalletDto } from "../../../dto/response/walletDto";
-import { ValidationError } from "../../../../domain/errors/validationError";
-import { ERROR_MESSAGE } from "../../../../shared/constants";
+
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { ValidationError } from "../../../../domain/errors/validationError";
+import { IWalletRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
+import { ERROR_MESSAGE } from "../../../../shared/constants";
+import { GetWalletDto } from "../../../dto/response/walletDto";
 import { WalletMapper } from "../../../mapper/wallet.mapper";
+import { IGetWalletByIdUsecase } from "../../interfaces/wallet/get-walletById-usecase.interface";
 
 @injectable()
 export class GetWalletByIdUsecase implements IGetWalletByIdUsecase {

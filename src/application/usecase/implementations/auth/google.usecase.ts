@@ -2,10 +2,10 @@ import { OAuth2Client } from "google-auth-library";
 import { inject, injectable } from "tsyringe";
 
 import { IUserEntity } from "../../../../domain/entities/user.entity";
-import { IUserExistenceService } from "../../../../domain/service-interfaces/user-existence-service.interface";
-import { IGoogleUsecase } from "../../interfaces/auth/google-usecase.interface";
-import { HTTP_STATUS } from "../../../../shared/constants";
 import { CustomError } from "../../../../domain/errors/customError";
+import { IUserExistenceService } from "../../../../domain/service-interfaces/user-existence-service.interface";
+import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
+import { IGoogleUsecase } from "../../interfaces/auth/google-usecase.interface";
 
 import { ILoginStrategy } from "./login-strategies/login-strategy.interface";
 import { IRegisterStrategy } from "./register-strategies/register-strategy.interface";
@@ -35,15 +35,15 @@ export class GoogleUsecase implements IGoogleUsecase {
   }
 
   async execute(
-    credential: any,
-    client_id: any,
-    role: any
+    credential: string,
+    client_id: string,
+    role: "client"
   ): Promise<Partial<IUserEntity>> {
     const registerStrategy = this._registerStrategies[role];
     const loginStrategy = this._loginStrategies[role];
 
     if (!registerStrategy || !loginStrategy) {
-      throw new CustomError(HTTP_STATUS.FORBIDDEN, "Invalid user role");
+      throw new CustomError(HTTP_STATUS.FORBIDDEN, ERROR_MESSAGE.INVALID_USER_ROLE);
     }
 
     const ticket = await this._client.verifyIdToken({
@@ -56,7 +56,7 @@ export class GoogleUsecase implements IGoogleUsecase {
     if (!payload) {
       throw new CustomError(
         HTTP_STATUS.UNAUTHORIZED,
-        "Invalid or empty token payload"
+        ERROR_MESSAGE.INVALID_OR_EMPTY_TOKEN_PAYLOAD
       );
     }
 
@@ -67,7 +67,7 @@ export class GoogleUsecase implements IGoogleUsecase {
     const profileImage = payload.picture;
 
     if (!email)
-      throw new CustomError(HTTP_STATUS.BAD_REQUEST, "Email is required");
+      throw new CustomError(HTTP_STATUS.BAD_REQUEST,ERROR_MESSAGE.EMAIL_REQUIRED);
 
     const existingUser = await loginStrategy.login({ email, role });
 
@@ -76,8 +76,8 @@ export class GoogleUsecase implements IGoogleUsecase {
         if (await this._userExistenceService.emailExists(payload?.email)) {
           throw new CustomError(
             HTTP_STATUS.CONFLICT,
-            "This email is alreday registered under a different role . Please use a different Google account"
-          );
+            ERROR_MESSAGE.EMAIL_ALREADY_REGISTERED_GOOGLE
+            );
         }
       }
 

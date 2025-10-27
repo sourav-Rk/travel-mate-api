@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
 
 import { IClientEntity } from "../../../../domain/entities/client.entity";
-import { IClientRepository } from "../../../../domain/repositoryInterfaces/client/client.repository.interface";
-import { IGetClientDetailsUsecase } from "../../interfaces/client/getClientDetails-usecase.interface";
-import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import { CustomError } from "../../../../domain/errors/customError";
+import { IClientRepository } from "../../../../domain/repositoryInterfaces/client/client.repository.interface";
+import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
+import { IGetClientDetailsUsecase } from "../../interfaces/client/getClientDetails-usecase.interface";
 
 @injectable()
 export class GetClientDetailsUsecase implements IGetClientDetailsUsecase {
@@ -14,7 +14,7 @@ export class GetClientDetailsUsecase implements IGetClientDetailsUsecase {
   ) {}
   async execute(userId: string): Promise<IClientEntity | null> {
     if (!userId)
-      throw new CustomError(HTTP_STATUS.BAD_REQUEST, "user id is required");
+      throw new CustomError(HTTP_STATUS.BAD_REQUEST,ERROR_MESSAGE.USER_ID_REQUIRED);
 
     const client = await this._clientRepository.findById(userId);
 

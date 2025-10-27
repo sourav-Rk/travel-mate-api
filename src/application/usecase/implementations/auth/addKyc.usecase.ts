@@ -1,13 +1,13 @@
 import { inject, injectable } from "tsyringe";
 
 import { IKYCRepository } from "../../../../domain/repositoryInterfaces/auth/kyc-repository.interface";
-import { IAddKycUsecase } from "../../interfaces/auth/add-kyc-usecase.interface";
-import { HTTP_STATUS } from "../../../../shared/constants";
-import { KycDto } from "../../../dto/response/kycDto";
+import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../../shared/constants";
 import {
   ISuccessResponseHandler,
   successResponseHandler,
 } from "../../../../shared/utils/successResponseHandler";
+import { KycDto } from "../../../dto/response/kycDto";
+import { IAddKycUsecase } from "../../interfaces/auth/add-kyc-usecase.interface";
 
 @injectable()
 export class AddKycUsecase implements IAddKycUsecase {
@@ -21,7 +21,7 @@ export class AddKycUsecase implements IAddKycUsecase {
     return successResponseHandler(
       true,
       HTTP_STATUS.CREATED,
-      "kyc added succesfully"
+      SUCCESS_MESSAGE.KYC.ADDED_SUCCESSFULLY
     );
   }
 }

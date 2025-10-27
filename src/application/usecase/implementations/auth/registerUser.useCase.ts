@@ -1,16 +1,17 @@
 import { inject, injectable } from "tsyringe";
 
-import { IRegisterUserUsecase } from "../../interfaces/auth/registerUsecase.interface";
-import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
-import { UserDto } from "../../../dto/response/user.dto";
 import { CustomError } from "../../../../domain/errors/customError";
+import { IWalletRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
+import { ERROR_MESSAGE, HTTP_STATUS, SUCCESS_MESSAGE } from "../../../../shared/constants";
 import {
   ISuccessResponseHandler,
   successResponseHandler,
 } from "../../../../shared/utils/successResponseHandler";
+import { UserDto } from "../../../dto/response/user.dto";
+import { IRegisterUserUsecase } from "../../interfaces/auth/registerUsecase.interface";
 
 import { IRegisterStrategy } from "./register-strategies/register-strategy.interface";
-import { IWalletRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
+
 
 @injectable()
 export class RegisterUserUsecase implements IRegisterUserUsecase {
@@ -52,7 +53,7 @@ export class RegisterUserUsecase implements IRegisterUserUsecase {
     return successResponseHandler(
       true,
       HTTP_STATUS.CREATED,
-      `Account created succesfully`
+      SUCCESS_MESSAGE.ACCOUNT_CREATED
     );
   }
 }

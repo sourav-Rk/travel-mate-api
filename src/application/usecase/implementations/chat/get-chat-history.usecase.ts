@@ -1,7 +1,8 @@
 import { inject, injectable } from "tsyringe";
-import { IGetChatHistoryUsecase } from "../../interfaces/chat/get-chat-history-usecase.interface";
+
 import { IChatRoomRepository } from "../../../../domain/repositoryInterfaces/chatroom/chatroom-repository.interface";
 import { ChatListItemDTO } from "../../../dto/response/chatroomDto";
+import { IGetChatHistoryUsecase } from "../../interfaces/chat/get-chat-history-usecase.interface";
 
 @injectable()
 export class GetChatHistoryUsecase implements IGetChatHistoryUsecase {

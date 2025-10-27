@@ -1,12 +1,13 @@
 import { inject, injectable } from "tsyringe";
-import { IBookingRepository } from "../../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
-import { ValidationError } from "../../../../../domain/errors/validationError";
-import { ERROR_MESSAGE } from "../../../../../shared/constants";
-import { IClientRepository } from "../../../../../domain/repositoryInterfaces/client/client.repository.interface";
+
 import { NotFoundError } from "../../../../../domain/errors/notFoundError";
+import { ValidationError } from "../../../../../domain/errors/validationError";
+import { IBookingRepository } from "../../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
+import { IClientRepository } from "../../../../../domain/repositoryInterfaces/client/client.repository.interface";
 import { IPackageRepository } from "../../../../../domain/repositoryInterfaces/package/package-repository.interface";
-import { BookingMapper } from "../../../../mapper/booking.mapper";
+import { ERROR_MESSAGE } from "../../../../../shared/constants";
 import { ClientPackageBookingDto } from "../../../../dto/response/bookingDto";
+import { BookingMapper } from "../../../../mapper/booking.mapper";
 import { IGetBookingDetailsClientUsecase } from "../../../interfaces/booking/client-booking/get-booking-details-user-usecase.interface";
 
 @injectable()
@@ -47,7 +48,7 @@ export class GetBookingDetailsUsecase
       throw new NotFoundError(ERROR_MESSAGE.PACKAGE_NOT_FOUND);
     }
 
-    //check if any booking recored
+    //check if any booking recorded
     const booking = await this._bookingRepository.findByPackageIdAndUserId(
       userId,
       packageId

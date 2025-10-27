@@ -1,9 +1,10 @@
-import { inject, injectable } from "tsyringe";
-import { IGetClientDetailsUsecase } from "../../../application/usecase/interfaces/client/getClientDetails-usecase.interface";
-import { IGuideClientController } from "../../interfaces/controllers/client/guideClient-controller.interface";
 import { Request, Response } from "express";
+import { inject, injectable } from "tsyringe";
+
+import { IGetClientDetailsUsecase } from "../../../application/usecase/interfaces/client/getClientDetails-usecase.interface";
 import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
+import { IGuideClientController } from "../../interfaces/controllers/client/guideClient-controller.interface";
 
 @injectable()
 export class GuideClientController implements IGuideClientController{

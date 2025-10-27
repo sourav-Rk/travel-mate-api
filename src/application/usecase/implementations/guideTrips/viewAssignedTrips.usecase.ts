@@ -1,12 +1,13 @@
 import { inject, injectable } from "tsyringe";
-import { IAssignedTripsUsecase } from "../../interfaces/guideTrips/assignedTrips-usecase.interface";
-import { IGuideRepository } from "../../../../domain/repositoryInterfaces/guide/guide-repository.interface";
-import { ValidationError } from "../../../../domain/errors/validationError";
-import { ERROR_MESSAGE } from "../../../../shared/constants";
-import { NotFoundError } from "../../../../domain/errors/notFoundError";
-import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
-import { PackageMapper } from "../../../mapper/package.mapper";
+
 import { PaginatedPackages } from "../../../../domain/entities/paginated-packages.entity";
+import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { ValidationError } from "../../../../domain/errors/validationError";
+import { IGuideRepository } from "../../../../domain/repositoryInterfaces/guide/guide-repository.interface";
+import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
+import { ERROR_MESSAGE } from "../../../../shared/constants";
+import { PackageMapper } from "../../../mapper/package.mapper";
+import { IAssignedTripsUsecase } from "../../interfaces/guideTrips/assignedTrips-usecase.interface";
 
 @injectable()
 export class AssignedTripsUsecase implements IAssignedTripsUsecase {
@@ -55,7 +56,7 @@ export class AssignedTripsUsecase implements IAssignedTripsUsecase {
       (pkg): pkg is NonNullable<typeof pkg> => pkg !== null
     );
 
-    let totalPages = Math.ceil(total / validPageSize);
+    const totalPages = Math.ceil(total / validPageSize);
 
     return {
       packages: validPackages.map((pkg) =>

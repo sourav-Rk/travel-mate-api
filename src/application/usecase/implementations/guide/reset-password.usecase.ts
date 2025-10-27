@@ -1,14 +1,14 @@
 import { JwtPayload } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
 
+import { CustomError } from "../../../../domain/errors/customError";
+import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { IGuideRepository } from "../../../../domain/repositoryInterfaces/guide/guide-repository.interface";
 import { IRedisTokenRepository } from "../../../../domain/repositoryInterfaces/redis/redis-token-repository.interface";
 import { ITokenService } from "../../../../domain/service-interfaces/token-service.interface";
-import { IResetPasswordUsecase } from "../../interfaces/guide/reset-password-usecase.interface";
-import { HTTP_STATUS } from "../../../../shared/constants";
+import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import { hashPassword } from "../../../../shared/utils/bcryptHelper";
-import { CustomError } from "../../../../domain/errors/customError";
-import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { IResetPasswordUsecase } from "../../interfaces/guide/reset-password-usecase.interface";
 
 @injectable()
 export class ResetPasswordUsecase implements IResetPasswordUsecase {
@@ -28,24 +28,24 @@ export class ResetPasswordUsecase implements IResetPasswordUsecase {
     password: string,
     token: string
   ): Promise<void> {
-    console.log("token in reset", token);
+   
     const decoded: string | JwtPayload | null =
       this._tokenService.verifyResetToken(token);
 
     if (!decoded || typeof decoded === "string" || !decoded.exp) {
-      throw new Error("Invalid Token: Missing expiration time");
+      throw new Error(ERROR_MESSAGE.INVALID_TOKEN_MISSING_EXPIRATION_TIME);
     }
 
     if (decoded.id !== guideId) {
-      throw new Error("Token does not match the user");
+      throw new Error(ERROR_MESSAGE.TOKENS_DOES_NOT_MATCH_THE_USER);
     }
 
-    if (!guideId) throw new NotFoundError("user not found");
+    if (!guideId) throw new NotFoundError(ERROR_MESSAGE.USER_NOT_FOUND);
 
     if (!password || password.length < 8) {
       throw new CustomError(
         HTTP_STATUS.BAD_REQUEST,
-        "password must be 8 characters long"
+        ERROR_MESSAGE.PASSWORD_MUST_BE_EIGHT_CHARACTER_LONG
       );
     }
 

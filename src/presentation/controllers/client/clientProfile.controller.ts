@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 
-import { IClientProfileController } from "../../interfaces/controllers/client/clientProfile-controller.interface";
+import { IGetClientDetailsVendorUsecase } from "../../../application/usecase/interfaces/client/get-client-details-vendor-usecase.interface";
 import { IGetClientDetailsUsecase } from "../../../application/usecase/interfaces/client/getClientDetails-usecase.interface";
 import { IUpdateClientPasswordUsecase } from "../../../application/usecase/interfaces/client/update-client-password-usecase.interface";
 import { IUpdateClientDetailsUsecase } from "../../../application/usecase/interfaces/client/updateClientDetails-usecase.interface";
-import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
-import { CustomRequest } from "../../middlewares/auth.middleware";
-import { IGetClientDetailsVendorUsecase } from "../../../application/usecase/interfaces/client/get-client-details-vendor-usecase.interface";
 import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
+import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
+import { IClientProfileController } from "../../interfaces/controllers/client/clientProfile-controller.interface";
+import { CustomRequest } from "../../middlewares/auth.middleware";
 
 @injectable()
 export class ClientProfileController implements IClientProfileController {

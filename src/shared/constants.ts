@@ -32,6 +32,16 @@ export enum HTTP_STATUS {
 }
 
 export const ERROR_MESSAGE = {
+  USER_ID_OR_EMAIL_OR_ROLE_MISSING: "User id, email or role is missing",
+  USER_ID_NOT_FOUND: "User Id not found",
+  INVALID_USER_TYPE: "invalid user type ! expect client or vendor",
+  INVALID_ROLE_FOR_REGISTRATION: "Invalid role for client registration",
+  USER_TYPE_AND_ID_REQUIRED: "user type and id are required",
+  USER_BLOCKED: "User blocked successfully",
+  USER_UNBLOCKED: "User unblocked successfully",
+  ID_AND_STATUS_REQUIRED: "Id and status are required",
+  DATA_MUST_BE_STRING_OR_ARARY_OF_STRINGS:
+    "Data must be a string or array of strings",
   RESTART_SIGNUP: "Form data expired or not found. Please restart signup",
   REQUEST_REJECTED_BY_ADMIN:
     "Your request has been rejected by the admin ! Please contact admin !",
@@ -41,10 +51,24 @@ export const ERROR_MESSAGE = {
     "Access denied. You do not have permission to access this resource.",
   EMAIL_NOT_FOUND: "email doesnt exists",
   EMAIL_EXISTS: "email already exists",
+  EMAIL_REQUIRED: "Email is required",
+  EMAIL_ALREADY_REGISTERED_GOOGLE:
+    "This email is alreday registered under a different role . Please use a different Google account",
   PHONE_NUMBER_EXISTS: "mobile number already exists",
+  ALTERNATE_PHONE_NUMBER_EXISTS: "alternate phone number already exists",
+  PASSWORD_AND_CONFIRM_PASSWORD_REQUIRED:
+    "Password and confirm password is required",
+  PASSWORD_AND_CONFIRM_PASSWORD_MUST_BE_SAME:
+    "Password and confirm password must be same",
+  PASSWORD_MUST_BE_EIGHT_CHARACTER_LONG: "password must be 8 characters long",
+  INVALID_OTP: "invalid otp",
   UNAUTHORIZED_ACCESS_NOT_LOGIN: "Unauthorized access. You have'nt Logged in",
   UNAUTHORIZED_ACCESS: "Unauthorized access.",
   INVALID_TOKEN: "Access Denied due to Invalid token",
+  INVALID_TOKEN_MISSING_EXPIRATION_TIME:
+    "Invalid Token : Missing expiration time",
+  INVALID_OR_EMPTY_TOKEN_PAYLOAD: "Invalid or empty token payload",
+  INVALID_OR_EXPIRED_TOKEN: "invalid or expired token",
   INVALID_USER_ROLE: "invalid user role",
   INVALID_CREDENTIALS: "Invalid Credentials",
   TOKEN_EXPIRED_FORGOT: "Link Validity Expired. Try verify email once more",
@@ -53,6 +77,8 @@ export const ERROR_MESSAGE = {
   TOKEN_EXPIRED_REFRESH: "Token time out, Please loggin again",
   TOKEN_BLACK_LISTED: "Token is blacklisted",
   TOKEN_MISSING: "Authorization token is required",
+  MISSING_OR_INVALID_PUBLIC_ID: "Missing or invalid public id",
+  TOKENS_DOES_NOT_MATCH_THE_USER: "Token does not match the user",
   COOKIE_NOT_FOUND: "Cookie not found",
   LIMIT: "Limit must be between 1 and    00",
   SERVER_ERROR: "An error occurred, please try again later.",
@@ -72,6 +98,7 @@ export const ERROR_MESSAGE = {
   ID_REQUIRED: "Id is required",
   ACTIVITY_NOT_EXIST: "Activity not exist ",
   PACKAGE_ID_IS_REQUIRED: "Package id is required",
+  INVALID_PACKAGE_ID: "Invalid package Id",
   CANNOT_EDIT_PACKAGE: "Package cannot be edited because it is already",
   INSUFFICIENT_DATA: "Insufficient data to do the operation",
   STATUS_CANNOT_BE_UPDATED: "Status cant be updated at this stage",
@@ -98,6 +125,7 @@ export const ERROR_MESSAGE = {
   GUIDE_NOT_FOUND: "Guide not found",
   GUIDE_AND_AGENCY_CONFLICT: "Guide and Package belong to different agencies",
   PACKAGE_ALREADY_COMPLETED: "Package is already completed",
+  PACKAGE_ID_MISSING_AFTER_SAVE: "Package id is missing after save",
   ONLY_ASSIGN_GUIDE_IF_PACKAGE_IS_CLOSED:
     "Guide can only be assigned after the applications are closed",
   GUIDE_ASSIGNED_FOR_ANOTHER_TRIP:
@@ -111,11 +139,16 @@ export const ERROR_MESSAGE = {
   CHATROOM_NOT_FOUND: "Chatroom not found",
   WALLET_NOT_FOUND: "Wallet not found",
 
+  ADDRESS: {
+    ADDRESS_NOT_FOUND: "Address not found",
+  },
+
   BOOKING_CANCELLATION: {
     CANCELLATION_NOT_ALLOWED: "Cancellation not allowed for this booking",
     NO_CANCELLATION_REQUEST: "No cancellation request pending for this booking",
     INVALID_CANCELLATION_DATA: "Invalid cancellation request data",
     CANCELLATION_ALREADY_REQUESTED: "Cancellation Already requested",
+    CANCELLATION_REASON_REQUIRED: "Cancellation reason is required",
   },
 
   REFUND: {
@@ -151,11 +184,16 @@ export const ERROR_MESSAGE = {
 };
 
 export const SUCCESS_MESSAGE = {
+  ACCOUNT_CREATED: `Account created succesfully`,
   LOGIN_SUCCESS: "Logged in successfully",
   LOGOUT_SUCCESS: "Logout successfully!",
   OTP_RESENT_SUCCESS: "OTP resend successfully",
   OTP_SEND_SUCCESS: "Otp send successfully",
+  OTP_VERIFIED: "Otp verified successfully",
   OPERATION_SUCCESS: "Operation completed successfully.",
+  IMAGE_UPLOADED_SUCCESSFULLY: "Image uploaded successfully",
+  FCM_TOKEN_SAVED: "Fcm Token saved successfully",
+  REQUEST_REJECTED: "Request Rejected",
   ADD_GUIDE_SUCCESSFULLY:
     "Added guide successfully  ! Link for password reset has been sent to the guide email id",
   PASSWORD_UPDATE_GUIDE:
@@ -170,6 +208,7 @@ export const SUCCESS_MESSAGE = {
   ACTIVITY_UPDATED: "Activity update successfully",
   ACTIVITY_DELETED: "Activity deleted successfully",
   STATUS_UPDATED_SUCCESS: "Status Updated successfully",
+  STATUS_TO_REVIEWING: "status updated to reviewing",
   BOOKING_WAITLISTED:
     "Your request is in waiting list! we will notify you if seats are available",
   BOOKING_APPLIED:
@@ -187,6 +226,15 @@ export const SUCCESS_MESSAGE = {
   GUIDE_ASSIGNED_SUCCESSFULLY: "Guide assigned successfully",
   MESSAGES_FETCHED: "messages fetched successfully",
   DETAILS_FETCHED: "Details fetched successfully",
+
+  ADDRESS: {
+    ADDRESS_ADDED_SUCCESSFULLY: "address added successfully",
+    ADDRESS_UPDATED: "Address Updated successfully",
+  },
+
+  KYC: {
+    ADDED_SUCCESSFULLY: "kyc added succesfully",
+  },
 
   BOOKING_CANCELLATION: {
     CANCELLATION_REQUESTED: (amount: number) =>
@@ -348,4 +396,5 @@ export type CHAT_CONTEXT_TYPE =
   | "guide_client"
   | "client_client";
 export type CHAT_USERS = "client" | "guide" | "vendor";
-  
+
+export type MetadataValue = string | number | boolean | Date | null | undefined;

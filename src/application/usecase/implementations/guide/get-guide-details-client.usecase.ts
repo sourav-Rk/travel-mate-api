@@ -1,12 +1,13 @@
 import { inject, injectable } from "tsyringe";
-import { IGetGuideDetailsClientUsecase } from "../../interfaces/guide/get-guide-details-client-usecase.interface";
+
+import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { ValidationError } from "../../../../domain/errors/validationError";
 import { IClientRepository } from "../../../../domain/repositoryInterfaces/client/client.repository.interface";
 import { IGuideRepository } from "../../../../domain/repositoryInterfaces/guide/guide-repository.interface";
-import { ValidationError } from "../../../../domain/errors/validationError";
 import { ERROR_MESSAGE } from "../../../../shared/constants";
-import { NotFoundError } from "../../../../domain/errors/notFoundError";
-import { GuideMapper } from "../../../mapper/guide.mapper";
 import { GuideDetailsForClientDto } from "../../../dto/response/guideDto";
+import { GuideMapper } from "../../../mapper/guide.mapper";
+import { IGetGuideDetailsClientUsecase } from "../../interfaces/guide/get-guide-details-client-usecase.interface";
 
 @injectable()
 export class GetGuideDetailsClient implements IGetGuideDetailsClientUsecase {

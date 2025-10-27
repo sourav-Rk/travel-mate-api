@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 
-import { IAdminController } from "../../interfaces/controllers/admin/admin.controller.interface";
 import { IGetAllUsersUsecase } from "../../../application/usecase/interfaces/admin/get-all-users-usecase.interface";
 import { IGetUserByIdUsecase } from "../../../application/usecase/interfaces/admin/getUserById-usecase.interface";
 import { IUpdateUserstatusUsecase } from "../../../application/usecase/interfaces/admin/update-user-status-usecase.interface";
 import { IAdminUpdateVendorStatusUsecase } from "../../../application/usecase/interfaces/admin/update-vendor-usecase.interface";
+import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
+import { IAdminController } from "../../interfaces/controllers/admin/admin.controller.interface";
 
 @injectable()
 export class AdminController implements IAdminController {
@@ -38,21 +39,24 @@ export class AdminController implements IAdminController {
       status as string
     );
 
-    res.status(HTTP_STATUS.OK).json({
-      success: true,
-      users: user,
-      totalPages: total,
-      currentPage: pageNumber,
-    });
+    ResponseHelper.paginated(
+      res,
+      user,
+      total,
+      pageNumber,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      "users"
+    );
   }
 
   async updateUserStatus(req: Request, res: Response): Promise<void> {
-    const { userType, userId } = req.query as { userType: string; userId: any };
+    const { userType, userId } = req.query as { userType: string; userId: string };
     const response = await this._updateUserStatusUsecase.execute(
       userType,
       userId
     );
-    res.status(response.statusCode).json(response.content);
+
+    ResponseHelper.success(res, response.statusCode, response.content.message);
   }
 
   async getUserDetails(req: Request, res: Response): Promise<void> {
@@ -61,7 +65,13 @@ export class AdminController implements IAdminController {
       userId: string;
     };
     const user = await this._getUserByIdUsecase.execute(userType, userId);
-    res.status(HTTP_STATUS.OK).json({ success: true, user });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      user,
+      "user"
+    );
   }
 
   async updateVendorStatus(req: Request, res: Response): Promise<void> {
@@ -76,8 +86,11 @@ export class AdminController implements IAdminController {
       status,
       reason
     );
-    res
-      .status(HTTP_STATUS.OK)
-      .json({ success: true, message: SUCCESS_MESSAGE.STATUS_UPDATED_SUCCESS });
+
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.STATUS_UPDATED_SUCCESS
+    );
   }
 }

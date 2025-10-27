@@ -1,7 +1,8 @@
 import { inject, injectable } from "tsyringe";
-import { ILogoutUsecase } from "../../interfaces/auth/logout-usecase.interface";
+
 import { ITokenService } from "../../../../domain/service-interfaces/token-service.interface";
 import { CustomJwtPayload } from "../../../../presentation/middlewares/auth.middleware";
+import { ILogoutUsecase } from "../../interfaces/auth/logout-usecase.interface";
 
 @injectable()
 export class LogoutUsecase implements ILogoutUsecase {

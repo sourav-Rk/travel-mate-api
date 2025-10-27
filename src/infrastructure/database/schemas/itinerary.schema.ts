@@ -57,7 +57,7 @@ export const itinerarySchema = new mongoose.Schema<IItineraryModel>(
       type: [daySchema],
       required: true,
       validate: {
-        validator: (days: any[]) => days.length > 0,
+        validator: (days: IDay[]) => days.length > 0,
         message: "At least one day must be provided in the itinerary",
       },
     },

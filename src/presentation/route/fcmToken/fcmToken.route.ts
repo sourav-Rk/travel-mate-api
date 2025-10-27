@@ -1,7 +1,8 @@
-import { NextFunction, Request, Response, Router } from "express";
-import { authorizeRole, verifyAuth } from "../../middlewares/auth.middleware";
-import { asyncHandler } from "../../../shared/async-handler";
+import { Router } from "express";
+
 import { fcmTokenController } from "../../../infrastructure/dependencyInjection/resolve";
+import { asyncHandler } from "../../../shared/async-handler";
+import { authorizeRole, verifyAuth } from "../../middlewares/auth.middleware";
 
 export class FcmTokenRoutes {
   public router = Router();

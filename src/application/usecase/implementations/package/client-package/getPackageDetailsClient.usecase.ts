@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
 
+import { NotFoundError } from "../../../../../domain/errors/notFoundError";
 import { IPackageRepository } from "../../../../../domain/repositoryInterfaces/package/package-repository.interface";
-import { IGetPackageDetailsClientUsecase } from "../../../interfaces/package/client-package/getPackageDetailsClient-usecase.interface";
 import { ERROR_MESSAGE } from "../../../../../shared/constants";
 import { IPackage } from "../../../../dto/response/packageDto";
-import { NotFoundError } from "../../../../../domain/errors/notFoundError";
+import { IGetPackageDetailsClientUsecase } from "../../../interfaces/package/client-package/getPackageDetailsClient-usecase.interface";
 
 @injectable()
 export class GetPackageDetailsClientUsecase

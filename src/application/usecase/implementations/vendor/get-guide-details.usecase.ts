@@ -1,12 +1,13 @@
 import { inject, injectable } from "tsyringe";
 
-import { IGuideRepository } from "../../../../domain/repositoryInterfaces/guide/guide-repository.interface";
-import { IVendorRepository } from "../../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
-import { IGetGuideDetailsUsecase } from "../../interfaces/vendor/get-guide-details-usecase.interface";
-import { GuideMapper } from "../../../mapper/guide.mapper";
-import { GuideDto } from "../../../dto/response/user.dto";
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { ValidationError } from "../../../../domain/errors/validationError";
+import { IGuideRepository } from "../../../../domain/repositoryInterfaces/guide/guide-repository.interface";
+import { IVendorRepository } from "../../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
+import { ERROR_MESSAGE } from "../../../../shared/constants";
+import { GuideDto } from "../../../dto/response/user.dto";
+import { GuideMapper } from "../../../mapper/guide.mapper";
+import { IGetGuideDetailsUsecase } from "../../interfaces/vendor/get-guide-details-usecase.interface";
 
 @injectable()
 export class GetGuideDetailsUsecase implements IGetGuideDetailsUsecase {
@@ -18,21 +19,21 @@ export class GetGuideDetailsUsecase implements IGetGuideDetailsUsecase {
     private _vendorRepository: IVendorRepository
   ) {}
 
-  async execute(vendorId: any, id: any): Promise<GuideDto> {
+  async execute(vendorId: string, id: string): Promise<GuideDto> {
     if (!vendorId || !id) {
-      throw new ValidationError("Vendor id and guide id is required");
+      throw new ValidationError(ERROR_MESSAGE.ID_REQUIRED);
     }
 
     const vendor = await this._vendorRepository.findById(vendorId);
 
     if (!vendor) {
-      throw new NotFoundError("vendor not found");
+      throw new NotFoundError(ERROR_MESSAGE.AGENCY_NOT_FOUND);
     }
 
     const guide = await this._guideRepository.findById(id);
 
     if (!guide) {
-      throw new NotFoundError("Guide not found");
+      throw new NotFoundError(ERROR_MESSAGE.GUIDE_NOT_FOUND);
     }
 
     const guideDetails = GuideMapper.mapGuideToVendorViewDto(guide);

@@ -26,12 +26,6 @@ export class GenerateTokenUseCase implements IGenerateTokenUseCase {
     const accessToken = this._tokenService.generateAccessToken(payload);
     const refreshToken = this._tokenService.generateRefreshToken(payload);
 
-    // const refreshPayload = this._tokenService.verifyRefreshToken(refreshToken);
-
-    // const expiry = new Date((refreshPayload?.exp ?? 0) * 1000);
-
-    // await this._tokenRepository.save(id, refreshToken, expiry);
-
     return {
       accessToken,
       refreshToken,

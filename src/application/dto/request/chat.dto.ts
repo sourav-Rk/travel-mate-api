@@ -1,4 +1,4 @@
-import { Type, Transform } from "class-transformer";
+import { Type } from "class-transformer";
 import { IsString, IsNotEmpty, IsOptional, IsInt, Min, IsDateString } from "class-validator";
 
 export class GetMessagesReqDto {

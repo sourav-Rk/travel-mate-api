@@ -1,3 +1,7 @@
+import { IAddressEntity } from "../../../domain/entities/address.entity";
+import { IKycEntity } from "../../../domain/entities/kyc.entity";
+import { IVendorEntity } from "../../../domain/entities/vendor.entity";
+
 export interface VendorProfileDto {
   _id: string;
   firstName: string;
@@ -38,4 +42,10 @@ export interface VendorDetailsForClientDto {
   agencyName: string;
   description?: string;
   profileImage?: string | null;
+}
+
+
+export interface IVendorWithAddressAndKycAggregationResult extends Omit<IVendorEntity, 'password' | '__v'> {
+  address?: IAddressEntity;
+  kycDetails?: IKycEntity;
 }

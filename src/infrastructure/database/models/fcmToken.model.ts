@@ -1,4 +1,5 @@
 import mongoose, { Document, ObjectId } from "mongoose";
+
 import { IFCMTokenEntity } from "../../../domain/entities/fcmToken.entity";
 import { fcmTokenSchema } from "../schemas/fcmToken.schema";
 

@@ -1,5 +1,5 @@
 
-export interface ISuccessResponseHandler<T = any>{
+export interface ISuccessResponseHandler<T = unknown>{
     statusCode:number,
     content:{
         success:boolean,
@@ -8,6 +8,6 @@ export interface ISuccessResponseHandler<T = any>{
     }
 }
 
-export function successResponseHandler(success:boolean,statusCode:number,message:string,data?:any):ISuccessResponseHandler{
+export function successResponseHandler(success:boolean,statusCode:number,message:string,data?:unknown):ISuccessResponseHandler{
     return {statusCode,content:{success,message,data}};
 }

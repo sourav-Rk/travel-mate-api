@@ -1,12 +1,14 @@
-import mongoose from "mongoose";
+import mongoose, { FilterQuery } from "mongoose";
 import { injectable } from "tsyringe";
-import { IVendorEntity } from "../../../domain/entities/vendor.entity";
-import { IVendorRepository } from "../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
-import { IVendorModel, vendorDB } from "../../database/models/vendor.model";
-import { TRole } from "../../../shared/constants";
-import { NotFoundError } from "../../../domain/errors/notFoundError";
-import { BaseRepository } from "../baseRepository";
+
+import { IVendorWithAddressAndKycAggregationResult } from "../../../application/dto/response/vendor.dto";
 import { VendorMapper } from "../../../application/mapper/vendor.mapper";
+import { IVendorEntity } from "../../../domain/entities/vendor.entity";
+import { NotFoundError } from "../../../domain/errors/notFoundError";
+import { IVendorRepository } from "../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
+import { TRole } from "../../../shared/constants";
+import { IVendorModel, vendorDB } from "../../database/models/vendor.model";
+import { BaseRepository } from "../baseRepository";
 
 @injectable()
 export class VendorRepository
@@ -32,7 +34,7 @@ export class VendorRepository
   }
 
   async findByIdAndUpdatePassword(
-    id: any,
+    id: string,
     password: string
   ): Promise<IVendorEntity | null> {
     return await vendorDB.findByIdAndUpdate(id, { password });
@@ -40,7 +42,7 @@ export class VendorRepository
 
   async getVendorWithAddressAndKyc(
     vendorId: string
-  ): Promise<IVendorEntity | null> {
+  ): Promise<IVendorWithAddressAndKycAggregationResult | null> {
     const vendorDetails = await vendorDB.aggregate([
       {
         $match: { _id: new mongoose.Types.ObjectId(vendorId) },
@@ -114,7 +116,7 @@ export class VendorRepository
     validPageNumber: number,
     validPageSize: number
   ): Promise<{ user: IVendorEntity[] | []; total: number }> {
-    const filter: any = {};
+    const filter: FilterQuery<IVendorModel> = {};
     if (searchTerm) {
       filter.$or = [
         { firstName: { $regex: searchTerm, $options: "i" } },

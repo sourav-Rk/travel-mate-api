@@ -1,7 +1,8 @@
 import { inject, injectable } from "tsyringe";
-import { INotificationUsecase } from "../../interfaces/notification/notification-usecase.interface";
+
 import { IFCMTokenRepository } from "../../../../domain/repositoryInterfaces/fcmToken/fcmTokenRepository.interface";
 import { IPushNotificationService } from "../../../../domain/service-interfaces/push-notifications.interface";
+import { INotificationUsecase } from "../../interfaces/notification/notification-usecase.interface";
 
 @injectable()
 export class NotificationUsecase implements INotificationUsecase {

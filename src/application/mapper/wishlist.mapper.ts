@@ -1,7 +1,9 @@
+import { IPackageEntity } from "../../domain/entities/package.entity";
 import { IWishlistEntity } from "../../domain/entities/wishlist.entity";
 import { IWishlistModel } from "../../infrastructure/database/models/wishlist.model";
+import { PackageStatus } from "../../shared/constants";
 import {
-  PackageDetailsWishlistDto,
+  IWishlistAggregationResult,
   WishlistDto,
 } from "../dto/response/wishlistDto";
 
@@ -14,26 +16,26 @@ export class WishListMapper {
     };
   }
 
-  static mapToWishlistListing(doc: any): WishlistDto {
+  static mapToWishlistListing(doc: IWishlistAggregationResult): WishlistDto {
     return {
       userId: String(doc.userId),
-      packages: doc.packagesDetails.map((pkg: any) => ({
+      packages: doc.packagesDetails.map((pkg: IPackageEntity) => ({
         _id: String(pkg._id),
-        packageId: pkg.packageId,
+        packageId: pkg.packageId ?? "",
         packageName: pkg.packageName,
         title: pkg.title,
         category: pkg.category,
-        tags: pkg.tags,
+        tags: pkg.tags ?? [],
         images: pkg.images,
-        price: pkg.price,
+        price: pkg.price.toString(),
         duration: {
           days: pkg.duration.days,
           nights: pkg.duration.nights,
         },
-        applicationDeadline: pkg.applicationDeadline,
-        status: pkg.status,
-        startDate: pkg.startDate,
-        endDate: pkg.endDate,
+        applicationDeadline: pkg.applicationDeadline?.toISOString() ?? "",
+        status: pkg.status ?? ("active" as PackageStatus),
+        startDate: pkg.startDate.toISOString(),
+        endDate: pkg.endDate.toISOString(),
       })),
     };
   }

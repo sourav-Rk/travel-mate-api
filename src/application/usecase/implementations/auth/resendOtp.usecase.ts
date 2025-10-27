@@ -1,14 +1,15 @@
 import { inject, injectable } from "tsyringe";
 
+import { ValidationError } from "../../../../domain/errors/validationError";
 import { IOtpService } from "../../../../domain/service-interfaces/otp-service.interface";
-import { IResendOtpUsecase } from "../../interfaces/auth/resendtOtp.interface";
 import {
+  ERROR_MESSAGE,
   EVENT_EMMITER_TYPE,
   MAIL_CONTENT_PURPOSE,
 } from "../../../../shared/constants";
 import { eventBus } from "../../../../shared/eventBus";
 import { mailContentProvider } from "../../../../shared/mailContentProvider";
-import { ValidationError } from "../../../../domain/errors/validationError";
+import { IResendOtpUsecase } from "../../interfaces/auth/resendtOtp.interface";
 
 @injectable()
 export class ResendOTPUsecase implements IResendOtpUsecase {
@@ -19,7 +20,7 @@ export class ResendOTPUsecase implements IResendOtpUsecase {
 
   async execute(email: string): Promise<void> {
     if (!email) {
-      throw new ValidationError("email is required");
+      throw new ValidationError(ERROR_MESSAGE.EMAIL_REQUIRED);
     }
 
     await this._otpService.deleteOtp(email);

@@ -1,4 +1,6 @@
-export interface IDBSession<SessionType = unknown>{
+import { ClientSession } from "mongoose";
+
+export interface IDBSession<SessionType = ClientSession>{
   start(): Promise<void>;
   end(): Promise<void>;
   getSession(): SessionType;

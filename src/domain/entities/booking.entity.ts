@@ -1,4 +1,4 @@
-import { BOOKINGSTATUS, CANCELLATION_REFUND_POLICY } from "../../shared/constants";
+import { BOOKINGSTATUS } from "../../shared/constants";
 
 export interface IBookingEntity {
   _id?: string;

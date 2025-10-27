@@ -1,15 +1,16 @@
+import mongoose from "mongoose";
 import { injectable } from "tsyringe";
-import { IWishListRepository } from "../../../domain/repositoryInterfaces/wishlist/wishlist-repository.interface";
+
+import { IWishlistAggregationResult, WishlistDto } from "../../../application/dto/response/wishlistDto";
+import { WishListMapper } from "../../../application/mapper/wishlist.mapper";
 import { IWishlistEntity } from "../../../domain/entities/wishlist.entity";
+import { NotFoundError } from "../../../domain/errors/notFoundError";
+import { IWishListRepository } from "../../../domain/repositoryInterfaces/wishlist/wishlist-repository.interface";
+import { ERROR_MESSAGE } from "../../../shared/constants";
 import {
   IWishlistModel,
   wishlistDB,
 } from "../../database/models/wishlist.model";
-import { WishListMapper } from "../../../application/mapper/wishlist.mapper";
-import { WishlistDto } from "../../../application/dto/response/wishlistDto";
-import { NotFoundError } from "../../../domain/errors/notFoundError";
-import { ERROR_MESSAGE } from "../../../shared/constants";
-import mongoose from "mongoose";
 import { BaseRepository } from "../baseRepository";
 
 @injectable()
@@ -27,7 +28,7 @@ export class WishlistRepository
   async getWishlistWithPackageDetails(
     userId: string
   ): Promise<WishlistDto | null> {
-    const wishlist = await wishlistDB.aggregate([
+    const wishlist = await wishlistDB.aggregate<IWishlistAggregationResult>([
       { $match: { userId: new mongoose.Types.ObjectId(userId) } },
       {
         $lookup: {

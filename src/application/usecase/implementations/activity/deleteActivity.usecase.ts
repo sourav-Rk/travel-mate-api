@@ -1,13 +1,14 @@
 import { inject, injectable } from "tsyringe";
 
-import { IActivitiesRepository } from "../../../../domain/repositoryInterfaces/package/activities-repository.interface";
-import { IItineraryRepository } from "../../../../domain/repositoryInterfaces/package/itinerary-repository.interface";
-import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
-import { IDeleteActivityUsecase } from "../../interfaces/activity/deleteActivity-usecase.interface";
-import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import { CustomError } from "../../../../domain/errors/customError";
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { ValidationError } from "../../../../domain/errors/validationError";
+import { IActivitiesRepository } from "../../../../domain/repositoryInterfaces/package/activities-repository.interface";
+import { IItineraryRepository } from "../../../../domain/repositoryInterfaces/package/itinerary-repository.interface";
+import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
+import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
+import { PackageStatus } from "../../../dto/request/package.dto";
+import { IDeleteActivityUsecase } from "../../interfaces/activity/deleteActivity-usecase.interface";
 
 @injectable()
 export class DeleteActivityUsecase implements IDeleteActivityUsecase {
@@ -35,7 +36,7 @@ export class DeleteActivityUsecase implements IDeleteActivityUsecase {
       itineraryId
     );
 
-    if (packageDetails?.status !== "draft") {
+    if (packageDetails?.status !== PackageStatus.DRAFT) {
       throw new CustomError(
         HTTP_STATUS.CONFLICT,
         ERROR_MESSAGE.CANNOT_EDIT_PACKAGE + ` ${packageDetails?.status}`

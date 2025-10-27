@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 
+import { CustomError } from "../../../../domain/errors/customError";
 import { IOtpService } from "../../../../domain/service-interfaces/otp-service.interface";
 import { IUserExistenceService } from "../../../../domain/service-interfaces/user-existence-service.interface";
-import { ISendEmailOtpUsecase } from "../../interfaces/auth/send-email-otp-usecase.interface";
 import {
   ERROR_MESSAGE,
   EVENT_EMMITER_TYPE,
@@ -11,7 +11,7 @@ import {
 } from "../../../../shared/constants";
 import { eventBus } from "../../../../shared/eventBus";
 import { mailContentProvider } from "../../../../shared/mailContentProvider";
-import { CustomError } from "../../../../domain/errors/customError";
+import { ISendEmailOtpUsecase } from "../../interfaces/auth/send-email-otp-usecase.interface";
 
 @injectable()
 export class SendEmailOtpUsecase implements ISendEmailOtpUsecase {
@@ -25,7 +25,7 @@ export class SendEmailOtpUsecase implements ISendEmailOtpUsecase {
 
   async execute(email: string): Promise<void> {
     if (!email)
-      throw new CustomError(HTTP_STATUS.BAD_REQUEST, "Email is required");
+      throw new CustomError(HTTP_STATUS.BAD_REQUEST, ERROR_MESSAGE.EMAIL_REQUIRED);
 
     const userExist = await this._userExistenceService.emailExists(email);
 

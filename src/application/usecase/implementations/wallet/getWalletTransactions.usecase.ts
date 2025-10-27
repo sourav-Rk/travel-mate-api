@@ -1,11 +1,12 @@
 import { inject, injectable } from "tsyringe";
-import { IGetWalletTransactionsUsecase } from "../../interfaces/wallet/getWalletTransactions-usecase.interface";
-import { IWalletTransactionsRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-transactions-repository.interface";
-import { PaginatedWalletTransactions } from "../../../dto/response/walletDto";
-import { ERROR_MESSAGE, TRANSACTION_TYPE } from "../../../../shared/constants";
+
+import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { ValidationError } from "../../../../domain/errors/validationError";
 import { IWalletRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
-import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { IWalletTransactionsRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-transactions-repository.interface";
+import { ERROR_MESSAGE, TRANSACTION_TYPE } from "../../../../shared/constants";
+import { PaginatedWalletTransactions } from "../../../dto/response/walletDto";
+import { IGetWalletTransactionsUsecase } from "../../interfaces/wallet/getWalletTransactions-usecase.interface";
 
 @injectable()
 export class GetWalletTransactionsUsecase

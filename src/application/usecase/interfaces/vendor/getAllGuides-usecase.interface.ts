@@ -6,7 +6,7 @@ export interface IGetAllGuidesUsecase {
     pageSize: number,
     searchTerm: string,
     status: string,
-    agencyId: any,
+    agencyId: string,
     languages?: string[],
     minExperience?: number,
     maxExperience?: number,

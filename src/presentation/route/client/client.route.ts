@@ -1,8 +1,15 @@
-import { RequestHandler } from "express";
 import express from "express";
+import { injectable } from "tsyringe";
 
-import { authorizeRole, verifyAuth } from "../../middlewares/auth.middleware";
-import { asyncHandler } from "../../../shared/async-handler";
+import { GetMessagesReqDto } from "../../../application/dto/request/chat.dto";
+import {
+  UpdateClientProfileDTO,
+  UpdatePasswordReqDTO,
+} from "../../../application/dto/request/client.dto";
+import { GetGuideDetailsForClientReqDTO } from "../../../application/dto/request/guide.dto";
+import { MarkReadNotificationReqDTO } from "../../../application/dto/request/notification.dto";
+import { BookingPaymentReqDTO } from "../../../application/dto/request/payment.dto";
+import { AddReviewReqDTO } from "../../../application/dto/request/review.dto";
 import {
   blockMiddleware,
   chatController,
@@ -15,26 +22,18 @@ import {
   notificationController,
   paymentController,
   reviewController,
-  vendorController,
   vendorProfileController,
   walletController,
   wishlistController,
 } from "../../../infrastructure/dependencyInjection/resolve";
+import { asyncHandler } from "../../../shared/async-handler";
+import { authorizeRole, verifyAuth } from "../../middlewares/auth.middleware";
+import { validationMiddleware } from "../../middlewares/validation.middleware";
 import { BaseRoute } from "../base.route";
 import { CommonUploadRoutes } from "../common/common-upload.route";
 import { FcmTokenRoutes } from "../fcmToken/fcmToken.route";
-import { injectable } from "tsyringe";
-import { validationMiddleware } from "../../middlewares/validation.middleware";
-import {
-  UpdateClientProfileDTO,
-  UpdatePasswordReqDTO,
-} from "../../../application/dto/request/client.dto";
-import { MarkReadNotificationReqDTO } from "../../../application/dto/request/notification.dto";
-import { AddReviewReqDTO } from "../../../application/dto/request/review.dto";
-import { GetAvailablePackagesReqDTO } from "../../../application/dto/request/package.dto";
-import { BookingPaymentReqDTO } from "../../../application/dto/request/payment.dto";
-import { GetGuideDetailsForClientReqDTO } from "../../../application/dto/request/guide.dto";
-import { GetMessagesReqDto } from "../../../application/dto/request/chat.dto";
+
+
 
 @injectable()
 export class ClientRoute extends BaseRoute {

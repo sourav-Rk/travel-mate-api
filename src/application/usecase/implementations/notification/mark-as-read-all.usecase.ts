@@ -1,8 +1,9 @@
 import { inject, injectable } from "tsyringe";
-import { IMarkAsAllReadUsecase } from "../../interfaces/notification/mark-as-read-all-usecase.interface";
-import { INotificationRepository } from "../../../../domain/repositoryInterfaces/notification/notification-repository.interface";
+
 import { ValidationError } from "../../../../domain/errors/validationError";
+import { INotificationRepository } from "../../../../domain/repositoryInterfaces/notification/notification-repository.interface";
 import { ERROR_MESSAGE } from "../../../../shared/constants";
+import { IMarkAsAllReadUsecase } from "../../interfaces/notification/mark-as-read-all-usecase.interface";
 
 @injectable()
 export class MarkAsReadAllUsecase implements IMarkAsAllReadUsecase {

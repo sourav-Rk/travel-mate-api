@@ -1,10 +1,6 @@
+import mongoose, { FilterQuery, PipelineStage } from "mongoose";
 import { injectable } from "tsyringe";
-import { IBookingRepository } from "../../../domain/repositoryInterfaces/booking/booking-repository.interface";
-import { IBookingEntity } from "../../../domain/entities/booking.entity";
-import { bookingDB, IBookingModel } from "../../database/models/booking.model";
-import { BookingMapper } from "../../../application/mapper/booking.mapper";
-import { BOOKINGSTATUS, BookingStatus } from "../../../shared/constants";
-import { IPackageEntity } from "../../../domain/entities/package.entity";
+
 import {
   BookingDetailsWithUserDetailsDto,
   BookingListWithPackageDetailsDto,
@@ -15,8 +11,13 @@ import {
   PaginatedBookingListWithUserDetails,
   PaginatedCancellationRequests,
 } from "../../../application/dto/response/bookingDto";
+import { BookingMapper } from "../../../application/mapper/booking.mapper";
+import { IBookingEntity } from "../../../domain/entities/booking.entity";
+import { IPackageEntity } from "../../../domain/entities/package.entity";
+import { IBookingRepository } from "../../../domain/repositoryInterfaces/booking/booking-repository.interface";
+import { BOOKINGSTATUS, BookingStatus } from "../../../shared/constants";
+import { bookingDB, IBookingModel } from "../../database/models/booking.model";
 import { BaseRepository } from "../baseRepository";
-import mongoose from "mongoose";
 
 @injectable()
 export class BookingRepository
@@ -114,7 +115,7 @@ export class BookingRepository
     pageNumber: number,
     pageSize: number
   ): Promise<PaginatedBookingListWithUserDetails> {
-    let filter: any = { packageId };
+    const filter: FilterQuery<IBookingModel> = { packageId };
 
     if (status && status !== "all") {
       filter.status = status;
@@ -123,7 +124,7 @@ export class BookingRepository
     const skip = (pageNumber - 1) * pageSize;
     const limit = pageSize;
 
-    const pipeline: any[] = [
+    const pipeline: PipelineStage[] = [
       { $match: filter },
       {
         $lookup: {
@@ -307,7 +308,7 @@ export class BookingRepository
       return { bookings: [], total: 0 };
     }
     const skip = (page - 1) * limit;
-    const matchConditions: any = {
+    const matchConditions: FilterQuery<IBookingModel> = {
       packageId: { $in: packageIds },
     };
 

@@ -1,7 +1,6 @@
-import { instanceToPlain, plainToInstance } from "class-transformer";
+
 import { IChatRoomEntity } from "../../domain/entities/chatroom.entity";
 import { IChatroomModel } from "../../infrastructure/database/models/chatroom.model";
-import { ChatRoomDTO } from "../dto/response/chatroomDto";
 
 export class ChatRoomMapper {
   static toEntity(doc: IChatroomModel): IChatRoomEntity {

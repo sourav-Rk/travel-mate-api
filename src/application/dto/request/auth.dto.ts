@@ -5,12 +5,19 @@ import {
   IsString,
   Matches,
   Validate,
-  ValidateIf,
   ValidationArguments,
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from "class-validator";
+
 import { ROLES } from "../../../shared/constants";
+
+interface IForgotPasswordReset {
+  password: string;
+  confirmPassword: string;
+  token: string;
+}
+
 import { Type } from "class-transformer";
 
 export class LoginReqDTO {
@@ -57,7 +64,7 @@ export class ForgotPasswordSendMailReqDTO extends ResendOtpReqDTO {}
 @ValidatorConstraint({ name: "passwordMatch", async: false })
 class PasswordsMatchConstraint implements ValidatorConstraintInterface {
   validate(confirmPassword: string, args: ValidationArguments) {
-    const { password } = args.object as any;
+    const { password } = args.object as IForgotPasswordReset;
     return password === confirmPassword;
   }
 

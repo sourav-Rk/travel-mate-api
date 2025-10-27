@@ -1,10 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import { IGetGroupDetailsUsecase } from "../../interfaces/group-chat/get-group-details-usecase.interface";
-import { IGroupChatRepository } from "../../../../domain/repositoryInterfaces/group-chat/group-chat-repository.interface";
-import { GroupChatDetailsDto } from "../../../dto/response/groupChatDto";
+
 import { ValidationError } from "../../../../domain/errors/validationError";
+import { IGroupChatRepository } from "../../../../domain/repositoryInterfaces/group-chat/group-chat-repository.interface";
 import { ERROR_MESSAGE } from "../../../../shared/constants";
+import { GroupChatDetailsDto } from "../../../dto/response/groupChatDto";
 import { GroupChatMapper } from "../../../mapper/group-chat.mapper";
+import { IGetGroupDetailsUsecase } from "../../interfaces/group-chat/get-group-details-usecase.interface";
 
 @injectable()
 export class GetGroupDetailsUsecase implements IGetGroupDetailsUsecase {

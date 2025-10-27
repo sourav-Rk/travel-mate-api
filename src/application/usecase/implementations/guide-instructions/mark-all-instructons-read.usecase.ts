@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
 
-import { IGuideInstructionRepository } from "../../../../domain/repositoryInterfaces/guide-instruction/guide-instruction-repository.interface";
-import { IBookingRepository } from "../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
 import { ValidationError } from "../../../../domain/errors/validationError";
-import { IMarkAllInstructionsReadUseCase } from "../../interfaces/guide-instruction/mark-all-instructions-usecase.interface";
+import { IBookingRepository } from "../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
+import { IGuideInstructionRepository } from "../../../../domain/repositoryInterfaces/guide-instruction/guide-instruction-repository.interface";
 import { ERROR_MESSAGE } from "../../../../shared/constants";
+import { IMarkAllInstructionsReadUseCase } from "../../interfaces/guide-instruction/mark-all-instructions-usecase.interface";
 
 @injectable()
 export class MarkAllInstructionsReadUseCase
@@ -29,9 +29,6 @@ export class MarkAllInstructionsReadUseCase
     const packageIds = userBookings.map((booking) => booking.packageId);
 
     if (packageIds.length === 0) {
-      console.log(
-        `User ${userId} has no bookings, no instructions to mark as read`
-      );
       return;
     }
 
@@ -44,7 +41,6 @@ export class MarkAllInstructionsReadUseCase
     );
 
     if (unreadInstructions.length === 0) {
-      console.log(`User ${userId} has no unread instructions`);
       return;
     }
 
@@ -54,9 +50,5 @@ export class MarkAllInstructionsReadUseCase
     );
 
     await Promise.all(markPromises);
-
-    console.log(
-      `Marked ${unreadInstructions.length} instructions as read for user ${userId}`
-    );
   }
 }

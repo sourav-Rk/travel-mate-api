@@ -1,13 +1,14 @@
 import { inject, injectable } from "tsyringe";
 
 import { PaginatedUsers } from "../../../../domain/entities/paginated-users.entity";
+import { CustomError } from "../../../../domain/errors/customError";
 import { IClientRepository } from "../../../../domain/repositoryInterfaces/client/client.repository.interface";
 import { IVendorRepository } from "../../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
-import { IGetAllUsersUsecase } from "../../interfaces/admin/get-all-users-usecase.interface";
+import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
+import { USER_TYPES } from "../../../dto/request/admin.dto";
 import { UserMapper } from "../../../mapper/user.mapper";
 import { VendorMapper } from "../../../mapper/vendor.mapper";
-import { HTTP_STATUS } from "../../../../shared/constants";
-import { CustomError } from "../../../../domain/errors/customError";
+import { IGetAllUsersUsecase } from "../../interfaces/admin/get-all-users-usecase.interface";
 
 @injectable()
 export class GetAllUsersUsecase implements IGetAllUsersUsecase {
@@ -29,7 +30,7 @@ export class GetAllUsersUsecase implements IGetAllUsersUsecase {
     const validPageNumber = Math.max(1, pageNumber || 0);
     const validPageSize = Math.max(1, pageSize || 10);
 
-    if (userType === "client") {
+    if (userType === USER_TYPES.CLIENT) {
       const { user, total } = await this.clientRepository.find(
         searchTerm,
         status ?? "all",
@@ -47,7 +48,7 @@ export class GetAllUsersUsecase implements IGetAllUsersUsecase {
       return response;
     }
 
-    if (userType === "vendor") {
+    if (userType ===USER_TYPES.VENDOR) {
       const { user, total } = await this.vendorRepository.find(
         searchTerm,
         status ?? "all",
@@ -69,7 +70,7 @@ export class GetAllUsersUsecase implements IGetAllUsersUsecase {
 
     throw new CustomError(
       HTTP_STATUS.BAD_REQUEST,
-      "invalid user type ! expect client or vendor"
+      ERROR_MESSAGE.INVALID_USER_ROLE
     );
   }
 }

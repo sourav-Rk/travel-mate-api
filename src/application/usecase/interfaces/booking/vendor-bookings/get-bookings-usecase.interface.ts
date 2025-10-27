@@ -1,7 +1,5 @@
 import { BOOKINGSTATUS } from "../../../../../shared/constants";
 import {
-  BookingListVendorDto,
-  PaginatedBookingListWithUserDetails,
   PaginatedBookingListWithUserDetailsVendorDto,
 } from "../../../../dto/response/bookingDto";
 

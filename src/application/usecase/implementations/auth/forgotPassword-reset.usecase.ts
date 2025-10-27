@@ -1,19 +1,19 @@
 import { JwtPayload } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
 
+import { AuthError } from "../../../../domain/errors/authError";
+import { CustomError } from "../../../../domain/errors/customError";
+import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { ValidationError } from "../../../../domain/errors/validationError";
 import { IClientRepository } from "../../../../domain/repositoryInterfaces/client/client.repository.interface";
 import { IGuideRepository } from "../../../../domain/repositoryInterfaces/guide/guide-repository.interface";
 import { IRedisTokenRepository } from "../../../../domain/repositoryInterfaces/redis/redis-token-repository.interface";
 import { IVendorRepository } from "../../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
 import { ITokenService } from "../../../../domain/service-interfaces/token-service.interface";
 import { IUserExistenceService } from "../../../../domain/service-interfaces/user-existence-service.interface";
-import { IForgotPasswordResetUsecase } from "../../interfaces/auth/forgotPassword-reset-usecase.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import { hashPassword } from "../../../../shared/utils/bcryptHelper";
-import { AuthError } from "../../../../domain/errors/authError";
-import { CustomError } from "../../../../domain/errors/customError";
-import { NotFoundError } from "../../../../domain/errors/notFoundError";
-import { ValidationError } from "../../../../domain/errors/validationError";
+import { IForgotPasswordResetUsecase } from "../../interfaces/auth/forgotPassword-reset-usecase.interface";
 
 @injectable()
 export class ForgotPasswordResetUsecase implements IForgotPasswordResetUsecase {
@@ -60,13 +60,13 @@ export class ForgotPasswordResetUsecase implements IForgotPasswordResetUsecase {
     }
 
     if (!password || !confirmPassword) {
-      throw new ValidationError("Password and confirm password is required");
+      throw new ValidationError(ERROR_MESSAGE.PASSWORD_AND_CONFIRM_PASSWORD_REQUIRED);
     }
 
     if (password !== confirmPassword) {
       throw new CustomError(
         HTTP_STATUS.BAD_REQUEST,
-        "Password and confirm password must be same"
+        ERROR_MESSAGE.PASSWORD_AND_CONFIRM_PASSWORD_MUST_BE_SAME
       );
     }
 
@@ -75,7 +75,7 @@ export class ForgotPasswordResetUsecase implements IForgotPasswordResetUsecase {
     if (!payload)
       throw new CustomError(
         HTTP_STATUS.BAD_REQUEST,
-        "invalid or expired token"
+        ERROR_MESSAGE.INVALID_OR_EXPIRED_TOKEN
       );
 
     const { email, role, id } = payload;
@@ -83,7 +83,7 @@ export class ForgotPasswordResetUsecase implements IForgotPasswordResetUsecase {
       token
     );
     if (blackListToken) {
-      throw new CustomError(HTTP_STATUS.FORBIDDEN, "Token is black listed");
+      throw new CustomError(HTTP_STATUS.FORBIDDEN, ERROR_MESSAGE.TOKEN_BLACK_LISTED);
     }
 
     //token expiry calculation
@@ -93,14 +93,14 @@ export class ForgotPasswordResetUsecase implements IForgotPasswordResetUsecase {
 
     const user = this._userExistenceService.emailExists(email);
 
-    if (!user) throw new NotFoundError("user not found");
+    if (!user) throw new NotFoundError(ERROR_MESSAGE.USER_NOT_FOUND);
 
     const hashedPassword = await hashPassword(password);
 
     const repository = this._repository[role];
 
     if (!repository) {
-      throw new CustomError(HTTP_STATUS.FORBIDDEN, "Invalid user role");
+      throw new CustomError(HTTP_STATUS.FORBIDDEN, ERROR_MESSAGE.INVALID_USER_ROLE);
     }
 
     await Promise.all([

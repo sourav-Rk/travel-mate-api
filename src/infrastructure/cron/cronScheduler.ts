@@ -1,4 +1,5 @@
 import { injectable, injectAll } from "tsyringe";
+
 import { ICron } from "../interface/cron.interface";
 import { ICronScheduler } from "../interface/cronScheduler.interface";
 

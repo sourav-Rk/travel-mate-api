@@ -1,4 +1,7 @@
-import { TRANSACTION_TYPE } from "../../shared/constants";
+import {
+  MetadataValue,
+  TRANSACTION_TYPE,
+} from "../../shared/constants";
 
 export interface IWalletTransactionEntity {
   _id: string;
@@ -7,6 +10,6 @@ export interface IWalletTransactionEntity {
   amount: number;
   description?: string;
   referenceId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, MetadataValue>;
   createdAt?: Date;
 }

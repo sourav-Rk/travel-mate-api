@@ -1,11 +1,12 @@
 import { inject, injectable } from "tsyringe";
-import { IAssignGuideToTripUsecase } from "../../interfaces/package/assign-guide-to-trip-usecase.interface";
+
+import { CustomError } from "../../../../domain/errors/customError";
+import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { ValidationError } from "../../../../domain/errors/validationError";
 import { IGuideRepository } from "../../../../domain/repositoryInterfaces/guide/guide-repository.interface";
 import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
-import { ValidationError } from "../../../../domain/errors/validationError";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
-import { NotFoundError } from "../../../../domain/errors/notFoundError";
-import { CustomError } from "../../../../domain/errors/customError";
+import { IAssignGuideToTripUsecase } from "../../interfaces/package/assign-guide-to-trip-usecase.interface";
 
 @injectable()
 export class AssignGuideToTripUsecase implements IAssignGuideToTripUsecase {
@@ -77,7 +78,7 @@ export class AssignGuideToTripUsecase implements IAssignGuideToTripUsecase {
     }
 
     //Asign guide
-    await this._packageRepository.update(pkg._id, { guideId });
+    await this._packageRepository.update(pkg._id!, { guideId });
 
     //add trips to assigned trips
     await this._guideRepository.updateById(guideId, {

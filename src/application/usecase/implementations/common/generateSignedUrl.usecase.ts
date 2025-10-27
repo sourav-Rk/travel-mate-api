@@ -1,9 +1,9 @@
 import { injectable } from "tsyringe";
 
-import { IGenerateSignedUrlUsecase } from "../../interfaces/common/generate-signedurl-usecase.interface";
-import { HTTP_STATUS } from "../../../../shared/constants";
 import { CustomError } from "../../../../domain/errors/customError";
+import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import { generateSignedUrl } from "../../../../shared/utils/generateSignedUrl";
+import { IGenerateSignedUrlUsecase } from "../../interfaces/common/generate-signedurl-usecase.interface";
 
 @injectable()
 export class GenerateSignedUrlUsecase implements IGenerateSignedUrlUsecase {
@@ -13,7 +13,7 @@ export class GenerateSignedUrlUsecase implements IGenerateSignedUrlUsecase {
     if (!publicId || typeof publicId !== "string") {
       throw new CustomError(
         HTTP_STATUS.BAD_REQUEST,
-        "Missing or invalid public id"
+        ERROR_MESSAGE.MISSING_OR_INVALID_PUBLIC_ID
       );
     }
 
@@ -29,13 +29,13 @@ export class GenerateSignedUrlUsecase implements IGenerateSignedUrlUsecase {
     if (!Array.isArray(publicIds) || publicIds.length === 0) {
       throw new CustomError(
         HTTP_STATUS.BAD_REQUEST,
-        "Missing or invalid public ids array"
+        ERROR_MESSAGE.MISSING_OR_INVALID_PUBLIC_ID
       );
     }
 
     for (const publicId of publicIds) {
       if (!publicId || typeof publicId !== "string") {
-        throw new CustomError(HTTP_STATUS.BAD_REQUEST, "Invalid public id");
+        throw new CustomError(HTTP_STATUS.BAD_REQUEST, ERROR_MESSAGE.MISSING_OR_INVALID_PUBLIC_ID);
       }
     }
 

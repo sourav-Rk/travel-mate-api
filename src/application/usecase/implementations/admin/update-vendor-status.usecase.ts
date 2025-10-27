@@ -1,16 +1,18 @@
 import { inject, injectable } from "tsyringe";
 
+import { CustomError } from "../../../../domain/errors/customError";
+import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { IVendorRepository } from "../../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
-import { IAdminUpdateVendorStatusUsecase } from "../../interfaces/admin/update-vendor-usecase.interface";
 import {
+  ERROR_MESSAGE,
   EVENT_EMMITER_TYPE,
   HTTP_STATUS,
   MAIL_CONTENT_PURPOSE,
+  SUCCESS_MESSAGE,
 } from "../../../../shared/constants";
 import { eventBus } from "../../../../shared/eventBus";
 import { mailContentProvider } from "../../../../shared/mailContentProvider";
-import { CustomError } from "../../../../domain/errors/customError";
-import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { IAdminUpdateVendorStatusUsecase } from "../../interfaces/admin/update-vendor-usecase.interface";
 
 @injectable()
 export class AdminUpateVendorStatusUsecase
@@ -25,34 +27,29 @@ export class AdminUpateVendorStatusUsecase
     status: string,
     reason?: string
   ): Promise<void> {
-    console.log("status check", status === "rejected", !!reason);
-
     if (!vendorId || !status)
       throw new CustomError(
         HTTP_STATUS.BAD_REQUEST,
-        "vendor id and status are required"
+        ERROR_MESSAGE.ID_AND_STATUS_REQUIRED
       );
 
     if (vendorId && status) {
       const vendor = await this._vendorRepository.findById(vendorId);
-      if (!vendor) throw new NotFoundError("user not found");
+      if (!vendor) throw new NotFoundError(ERROR_MESSAGE.USER_NOT_FOUND);
       await this._vendorRepository.findByIdAndUpdateStatus(
         vendorId,
         status,
         reason
       );
       if (status === "rejected" && reason) {
-        console.log("triggerd email");
         const html = mailContentProvider(
           MAIL_CONTENT_PURPOSE.REQUEST_REJECTED,
           reason
         );
-        console.log("Generated HTML", html);
-
         eventBus.emit(
           EVENT_EMMITER_TYPE.SENDMAIL,
           vendor.email,
-          "Request Rejected",
+          SUCCESS_MESSAGE.REQUEST_REJECTED,
           html
         );
       }

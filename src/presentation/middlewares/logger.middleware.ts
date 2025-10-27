@@ -11,7 +11,7 @@ export class LoggerMiddleware {
   ) {}
 
   public handle(req: Request, res: Response, next: NextFunction) {
-    this.logger.info("in logger ->", {
+    this.logger.info("Incoming Request", {
       req: req.method,
       url: req.url,
       //timestamp : new Date().toISOString(),

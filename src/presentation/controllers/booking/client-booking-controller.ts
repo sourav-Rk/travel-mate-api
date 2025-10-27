@@ -1,18 +1,19 @@
-import { inject, injectable } from "tsyringe";
-import { IClientBookingController } from "../../interfaces/controllers/booking/client-booking-controller.interface";
-import { IApplyPackageUsecase } from "../../../application/usecase/interfaces/booking/client-booking/apply-package-usecase.interface";
 import { Request, Response } from "express";
-import { CustomRequest } from "../../middlewares/auth.middleware";
+import { inject, injectable } from "tsyringe";
+
+import { IApplyPackageUsecase } from "../../../application/usecase/interfaces/booking/client-booking/apply-package-usecase.interface";
+import { IGetClientBookingDetailsUsecase } from "../../../application/usecase/interfaces/booking/client-booking/get-booking-details-client-usecase.interface";
+import { IGetBookingDetailsClientUsecase } from "../../../application/usecase/interfaces/booking/client-booking/get-booking-details-user-usecase.interface";
+import { IGetBookingsUsecase } from "../../../application/usecase/interfaces/booking/client-booking/getBookings-usecase.interface";
+import { ICancellBookingUsecase } from "../../../application/usecase/interfaces/booking-cancell/cancell-booking-usecase.interface";
+import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import {
   BOOKINGSTATUS,
   HTTP_STATUS,
   SUCCESS_MESSAGE,
 } from "../../../shared/constants";
-import { IGetBookingsUsecase } from "../../../application/usecase/interfaces/booking/client-booking/getBookings-usecase.interface";
-import { IGetBookingDetailsClientUsecase } from "../../../application/usecase/interfaces/booking/client-booking/get-booking-details-user-usecase.interface";
-import { IGetClientBookingDetailsUsecase } from "../../../application/usecase/interfaces/booking/client-booking/get-booking-details-client-usecase.interface";
-import { ICancellBookingUsecase } from "../../../application/usecase/interfaces/booking-cancell/cancell-booking-usecase.interface";
-import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
+import { IClientBookingController } from "../../interfaces/controllers/booking/client-booking-controller.interface";
+import { CustomRequest } from "../../middlewares/auth.middleware";
 
 @injectable()
 export class ClientBookingController implements IClientBookingController {
@@ -37,7 +38,7 @@ export class ClientBookingController implements IClientBookingController {
     const userId = (req as CustomRequest).user.id;
     const { packageId } = req.body;
     const response = await this._applyPackageUsecase.execute(userId, packageId);
-    res.status(response.statusCode).json(response.content);
+    ResponseHelper.success(res, response.statusCode, response.content.message);
   }
 
   async getBookingDetailOfPackage(req: Request, res: Response): Promise<void> {
@@ -93,9 +94,6 @@ export class ClientBookingController implements IClientBookingController {
   async cancellBooking(req: Request, res: Response): Promise<void> {
     const { bookingId } = req.params;
     const { cancellationReason } = req.body;
-
-    console.log(bookingId, "-->booking id cancell");
-    console.log(cancellationReason, "--->reason");
     const userId = (req as CustomRequest).user.id;
     const { refundAmount } = await this._cancellBookingUsecase.execute(
       userId,

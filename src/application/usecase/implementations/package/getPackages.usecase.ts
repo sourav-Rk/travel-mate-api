@@ -1,18 +1,18 @@
 import { inject, injectable } from "tsyringe";
 
 import { PaginatedPackages } from "../../../../domain/entities/paginated-packages.entity";
+import { CustomError } from "../../../../domain/errors/customError";
+import { ValidationError } from "../../../../domain/errors/validationError";
 import { IAdminRepository } from "../../../../domain/repositoryInterfaces/admin/admin-repository.interface";
 import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
 import { IVendorRepository } from "../../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
-import { IGetPackagesUsecase } from "../../interfaces/package/getPackages-usecase.interface";
-import { PackageMapper } from "../../../mapper/package.mapper";
 import {
   ERROR_MESSAGE,
   HTTP_STATUS,
   TRole,
 } from "../../../../shared/constants";
-import { CustomError } from "../../../../domain/errors/customError";
-import { ValidationError } from "../../../../domain/errors/validationError";
+import { PackageMapper } from "../../../mapper/package.mapper";
+import { IGetPackagesUsecase } from "../../interfaces/package/getPackages-usecase.interface";
 
 @injectable()
 export class GetPackageUsecase implements IGetPackagesUsecase {
@@ -28,7 +28,7 @@ export class GetPackageUsecase implements IGetPackagesUsecase {
   ) {}
 
   async execute(
-    userId: any,
+    userId: string,
     searchTerm: string,
     status: string,
     category: string,
@@ -37,7 +37,7 @@ export class GetPackageUsecase implements IGetPackagesUsecase {
     userType: TRole
   ): Promise<PaginatedPackages> {
     if (!userId) {
-      throw new ValidationError("Agency id is required");
+      throw new ValidationError(ERROR_MESSAGE.ID_REQUIRED);
     }
 
     if (userType === "vendor") {

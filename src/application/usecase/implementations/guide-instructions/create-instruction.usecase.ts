@@ -1,14 +1,13 @@
 import { inject, injectable } from "tsyringe";
-import { ICreateInstructionUsecase } from "../../interfaces/guide-instruction/create-instruction-usecase.interface";
-import { IGuideRepository } from "../../../../domain/repositoryInterfaces/guide/guide-repository.interface";
-import { CreateInstructionDto } from "../../../dto/request/guide-instruction.dto";
-import { IBookingRepository } from "../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
-import { IGuideInstructionRepository } from "../../../../domain/repositoryInterfaces/guide-instruction/guide-instruction-repository.interface";
+
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
-import { IGuideInstructionEntity } from "../../../../domain/entities/guide-instruction.entity";
-import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
+import { IBookingRepository } from "../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
+import { IGuideRepository } from "../../../../domain/repositoryInterfaces/guide/guide-repository.interface";
+import { IGuideInstructionRepository } from "../../../../domain/repositoryInterfaces/guide-instruction/guide-instruction-repository.interface";
 import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
-import { CustomError } from "../../../../domain/errors/customError";
+import { ERROR_MESSAGE } from "../../../../shared/constants";
+import { CreateInstructionDto } from "../../../dto/request/guide-instruction.dto";
+import { ICreateInstructionUsecase } from "../../interfaces/guide-instruction/create-instruction-usecase.interface";
 
 @injectable()
 export class CreateInstructionUsecase implements ICreateInstructionUsecase {

@@ -2,8 +2,8 @@ import { inject, injectable } from "tsyringe";
 
 import { PaginatedUsers } from "../../../../domain/entities/paginated-users.entity";
 import { IGuideRepository } from "../../../../domain/repositoryInterfaces/guide/guide-repository.interface";
-import { IGetAllGuidesUsecase } from "../../interfaces/vendor/getAllGuides-usecase.interface";
 import { GuideMapper } from "../../../mapper/guide.mapper";
+import { IGetAllGuidesUsecase } from "../../interfaces/vendor/getAllGuides-usecase.interface";
 
 @injectable()
 export class GetAllGuideUsecase implements IGetAllGuidesUsecase {
@@ -17,7 +17,7 @@ export class GetAllGuideUsecase implements IGetAllGuidesUsecase {
     pageSize: number,
     searchTerm: string,
     status: string,
-    agencyId: any,
+    agencyId: string,
     languages?: string[],
     minExperience?: number,
     maxExperience?: number,

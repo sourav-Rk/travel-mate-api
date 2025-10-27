@@ -1,5 +1,6 @@
 import { Expose, Transform } from "class-transformer";
 import { Types } from "mongoose";
+
 import { IMessageEntity } from "../../../domain/entities/message.entity";
 
 export class MessageResDTO implements IMessageEntity {

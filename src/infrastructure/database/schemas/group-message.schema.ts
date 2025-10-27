@@ -1,4 +1,5 @@
 import { Schema } from "mongoose";
+
 import { IGroupMessageModel } from "../models/group-message.model";
 
 export const groupMessageSchema = new Schema<IGroupMessageModel>(

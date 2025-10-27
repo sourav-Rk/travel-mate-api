@@ -1,4 +1,5 @@
 import mongoose, { Document } from "mongoose";
+
 import { IWalletTransactionEntity } from "../../../domain/entities/walletTransactions.entity";
 import { walletTransactionsSchema } from "../schemas/walletTransaction.schema";
 

@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 
+import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { ITokenService } from "../../../../domain/service-interfaces/token-service.interface";
 import { IUserExistenceService } from "../../../../domain/service-interfaces/user-existence-service.interface";
-import { IForgotPasswordSendMailUsecase } from "../../interfaces/auth/forgotPassword-sendMail-usecase.interface";
 import {
   ERROR_MESSAGE,
   EVENT_EMMITER_TYPE,
@@ -10,7 +10,7 @@ import {
 } from "../../../../shared/constants";
 import { eventBus } from "../../../../shared/eventBus";
 import { mailContentProvider } from "../../../../shared/mailContentProvider";
-import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { IForgotPasswordSendMailUsecase } from "../../interfaces/auth/forgotPassword-sendMail-usecase.interface";
 
 @injectable()
 export class ForgotPasswordSendMailUsecase
@@ -29,6 +29,10 @@ export class ForgotPasswordSendMailUsecase
     );
     if (!result) throw new NotFoundError(ERROR_MESSAGE.USER_NOT_FOUND);
     const { user, role } = result;
+
+    if (!user) {
+      throw new Error(ERROR_MESSAGE.USER_ID_NOT_FOUND);
+    }
     const payload = { id: user._id, email, role };
 
     const token = this._tokenService.generateResetToken(payload);

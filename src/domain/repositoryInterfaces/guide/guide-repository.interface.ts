@@ -7,7 +7,7 @@ export interface IGuideRepository extends IBaseRepository<IGuideEntity> {
     pageSize: number,
     searchTerm: string,
     status: string,
-    agencyId: any,
+    agencyId: string,
     languages?: string[],
     minExperience?: number,
     maxExperience?: number,
@@ -16,7 +16,7 @@ export interface IGuideRepository extends IBaseRepository<IGuideEntity> {
   findByEmail(email: string): Promise<IGuideEntity | null>;
   findByNumber(phone: string): Promise<IGuideEntity | null>;
   findByIdAndUpdatePassword(
-    id: any,
+    id: string,
     password: string
   ): Promise<IGuideEntity | null>;
 }

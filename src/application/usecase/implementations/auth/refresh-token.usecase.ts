@@ -1,10 +1,9 @@
-import { JwtPayload } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
 
-import { ITokenService } from "../../../../domain/service-interfaces/token-service.interface";
-import { IRefreshTokenUsecase } from "../../interfaces/auth/refresh-token-usecase.interface";
-import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import { CustomError } from "../../../../domain/errors/customError";
+import { ITokenService } from "../../../../domain/service-interfaces/token-service.interface";
+import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
+import { IRefreshTokenUsecase } from "../../interfaces/auth/refresh-token-usecase.interface";
 
 @injectable()
 export class RefreshTokenUsecase implements IRefreshTokenUsecase {
@@ -31,18 +30,6 @@ export class RefreshTokenUsecase implements IRefreshTokenUsecase {
         ERROR_MESSAGE.TOKEN_EXPIRED_REFRESH
       );
     }
-
-    // const isValid = await this._tokenRepository.tokenExists(
-    //   refreshToken,
-    //   (payload as JwtPayload).id
-    // );
-
-    // if (!isValid) {
-    //   throw new CustomError(
-    //     HTTP_STATUS.FORBIDDEN,
-    //     ERROR_MESSAGE.TOKEN_EXPIRED_REFRESH
-    //   );
-    // }
 
     const newPayload = {
       id: payload.id,

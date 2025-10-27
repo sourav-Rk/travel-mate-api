@@ -1,7 +1,9 @@
-import { inject, injectable } from "tsyringe";
-import { IWalletController } from "../../interfaces/controllers/wallet/wallet-controller.interface";
-import { IGetWalletTransactionsUsecase } from "../../../application/usecase/interfaces/wallet/getWalletTransactions-usecase.interface";
 import { Request, Response } from "express";
+import { inject, injectable } from "tsyringe";
+
+import { IGetWalletByIdUsecase } from "../../../application/usecase/interfaces/wallet/get-walletById-usecase.interface";
+import { IGetWalletByUserIdUsecase } from "../../../application/usecase/interfaces/wallet/get-walletByUserId-usecase.interface";
+import { IGetWalletTransactionsUsecase } from "../../../application/usecase/interfaces/wallet/getWalletTransactions-usecase.interface";
 import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import {
   HTTP_STATUS,
@@ -9,9 +11,8 @@ import {
   TRANSACTION_TYPE_FILTER,
   TRole,
 } from "../../../shared/constants";
-import { IGetWalletByIdUsecase } from "../../../application/usecase/interfaces/wallet/get-walletById-usecase.interface";
+import { IWalletController } from "../../interfaces/controllers/wallet/wallet-controller.interface";
 import { CustomRequest } from "../../middlewares/auth.middleware";
-import { IGetWalletByUserIdUsecase } from "../../../application/usecase/interfaces/wallet/get-walletByUserId-usecase.interface";
 
 @injectable()
 export class WalletController implements IWalletController {
@@ -63,13 +64,12 @@ export class WalletController implements IWalletController {
       sortby as "newest" | "oldest"
     );
 
-    res.status(HTTP_STATUS.OK).json({success : true,data,totalPages : total,currentPage : page})
-
-    // ResponseHelper.success(
-    //   res,
-    //   HTTP_STATUS.OK,
-    //   SUCCESS_MESSAGE.DETAILS_FETCHED,
-    //   { data, totalPages: total, currentPage: page }
-    // );
+    ResponseHelper.paginated(
+      res,
+      data,
+      total,
+      Number(page),
+      SUCCESS_MESSAGE.DETAILS_FETCHED
+    );
   }
 }

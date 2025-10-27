@@ -6,6 +6,7 @@ import {
   IsOptional,
   IsIn,
 } from "class-validator";
+
 import { ResendOtpReqDTO } from "./auth.dto";
 import { UpdatePasswordReqDTO } from "./client.dto";
 

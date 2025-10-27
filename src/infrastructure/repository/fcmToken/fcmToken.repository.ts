@@ -1,11 +1,11 @@
 import { injectable } from "tsyringe";
+
+import { FcmTokenMapper } from "../../../application/mapper/fcmToken.mapper";
+import { IFCMTokenEntity } from "../../../domain/entities/fcmToken.entity";
 import { IFCMTokenRepository } from "../../../domain/repositoryInterfaces/fcmToken/fcmTokenRepository.interface";
 import {
   fcmTokenDb,
-  IFcmTokenModel,
 } from "../../database/models/fcmToken.model";
-import { IFCMTokenEntity } from "../../../domain/entities/fcmToken.entity";
-import { FcmTokenMapper } from "../../../application/mapper/fcmToken.mapper";
 
 @injectable()
 export class FCMTokenRepository implements IFCMTokenRepository {

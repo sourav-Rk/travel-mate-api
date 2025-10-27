@@ -1,20 +1,21 @@
-import { inject, injectable } from "tsyringe";
-import { IChatSocketHandler } from "../interfaces/socket/chat-socket-handler.interface";
 import { Server, Socket } from "socket.io";
-import { ISendMessageUseCase } from "../../application/usecase/interfaces/chat/send-message-usecase.interface";
-import { IMarkReadUsecase } from "../../application/usecase/interfaces/chat/mark-read-usecase.interface";
+import { inject, injectable } from "tsyringe";
+
 import { ICheckChatRoomUsecase } from "../../application/usecase/interfaces/chat/check-chat-room-usecase.interface";
+import { IMarkAsDeliveredUsecase } from "../../application/usecase/interfaces/chat/mark-delivered-usecase.interface";
+import { IMarkReadUsecase } from "../../application/usecase/interfaces/chat/mark-read-usecase.interface";
+import { ISendMessageUseCase } from "../../application/usecase/interfaces/chat/send-message-usecase.interface";
+import { IMessageEntity } from "../../domain/entities/message.entity";
 import {
   getOnlineUsers,
   isUserOnline,
   userConnected,
   userDisconnected,
 } from "../../infrastructure/config/socket/onlineUsers";
-import { IMarkAsDeliveredUsecase } from "../../application/usecase/interfaces/chat/mark-delivered-usecase.interface";
-import { CHAT_SOCKET_EVENTS } from "../../shared/socket-events-constants";
 import { ERROR_MESSAGE } from "../../shared/constants";
-import { IMessageEntity } from "../../domain/entities/message.entity";
+import { CHAT_SOCKET_EVENTS } from "../../shared/socket-events-constants";
 import { getErrorMessage } from "../../shared/utils/error-handler";
+import { IChatSocketHandler } from "../interfaces/socket/chat-socket-handler.interface";
 
 @injectable()
 export class ChatSocketHandler implements IChatSocketHandler {
@@ -84,7 +85,7 @@ export class ChatSocketHandler implements IChatSocketHandler {
           ];
 
           // Check for existing rooms
-          let chatroom = await this._checkChatRoomUsecase.execute(
+          const chatroom = await this._checkChatRoomUsecase.execute(
             participants,
             contextType,
             contextId
@@ -173,7 +174,9 @@ export class ChatSocketHandler implements IChatSocketHandler {
                 receiverId
               );
               newMessage.status = "delivered";
-            } catch (deliveryError) {}
+            } catch (deliveryError) {
+              console.log(deliveryError)
+            }
           }
 
           io.to(newMessage.chatRoomId).emit(

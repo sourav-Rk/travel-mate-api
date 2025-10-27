@@ -1,5 +1,5 @@
-import { IsString, IsNotEmpty, IsOptional, IsInt, Min, IsArray, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
+import { IsString, IsNotEmpty, IsOptional, IsInt, Min, IsArray, ValidateNested } from "class-validator";
 
 export class CreateGroupChatReqDto {
   @IsString()

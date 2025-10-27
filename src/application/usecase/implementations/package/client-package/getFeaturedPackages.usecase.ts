@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
 
 import { IPackageEntity } from "../../../../../domain/entities/package.entity";
-import { IPackageRepository } from "../../../../../domain/repositoryInterfaces/package/package-repository.interface";
-import { IGetFeaturedPackagesUsecase } from "../../../interfaces/package/client-package/getFeaturedPackages-usecase.interface";
-import { ERROR_MESSAGE } from "../../../../../shared/constants";
 import { NotFoundError } from "../../../../../domain/errors/notFoundError";
 import { ValidationError } from "../../../../../domain/errors/validationError";
+import { IPackageRepository } from "../../../../../domain/repositoryInterfaces/package/package-repository.interface";
+import { ERROR_MESSAGE } from "../../../../../shared/constants";
+import { IGetFeaturedPackagesUsecase } from "../../../interfaces/package/client-package/getFeaturedPackages-usecase.interface";
 
 @injectable()
 export class GetFeaturedPackagesUsecase implements IGetFeaturedPackagesUsecase {
@@ -14,8 +14,7 @@ export class GetFeaturedPackagesUsecase implements IGetFeaturedPackagesUsecase {
     private _packageRepository: IPackageRepository
   ) {}
 
-  async execute(packageId: any): Promise<IPackageEntity[]> {
-    console.log(packageId, "-->usecase");
+  async execute(packageId: string): Promise<IPackageEntity[]> {
     if (!packageId) {
       throw new ValidationError(ERROR_MESSAGE.PACKAGE_ID_IS_REQUIRED);
     }

@@ -1,18 +1,15 @@
-import { Transform, Type } from "class-transformer";
+import { Type } from "class-transformer";
 import {
   ArrayNotEmpty,
   IsArray,
   IsDateString,
   IsEmail,
-  IsEnum,
   IsIn,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
   Matches,
   MaxLength,
-  Min,
   MinLength,
 } from "class-validator";
 

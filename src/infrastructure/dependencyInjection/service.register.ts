@@ -1,29 +1,27 @@
+import Stripe from "stripe";
 import { container } from "tsyringe";
 
+import { IAdminPaymentService } from "../../domain/service-interfaces/admin-payment-service.interface";
 import { IEmailService } from "../../domain/service-interfaces/email-service.interface";
 import { IOtpService } from "../../domain/service-interfaces/otp-service.interface";
+import { IPaymentService } from "../../domain/service-interfaces/payment-service.interface";
 import { IPhoneExistenceService } from "../../domain/service-interfaces/phone-existence-service.interface";
+import { IPushNotificationService } from "../../domain/service-interfaces/push-notifications.interface";
+import { IRevenueDistributionService } from "../../domain/service-interfaces/revenue-distribution-service.interface";
 import { ITokenService } from "../../domain/service-interfaces/token-service.interface";
 import { IUserExistenceService } from "../../domain/service-interfaces/user-existence-service.interface";
+import { IVendorPaymentService } from "../../domain/service-interfaces/vendor-payment-service.interface";
+import { stripe } from "../config/stripe/stripe.confige";
+import { AdminPaymentService } from "../service/admin-payment.service";
 import { EmailService } from "../service/email.servie";
 import { OtpService } from "../service/otp.service";
+import { StripePaymentService } from "../service/payment.service";
 import { PhoneExistenceService } from "../service/phone-existence.service";
+import { PushNotificationService } from "../service/push-notification.service";
+import { RevenueDistributionService } from "../service/revenue-distribution.service";
 import { TokenService } from "../service/token.service";
 import { UserExistenceServive } from "../service/user-existence.service";
-import { IPushNotificationService } from "../../domain/service-interfaces/push-notifications.interface";
-import { PushNotificationService } from "../service/push-notification.service";
-import { IPaymentService } from "../../domain/service-interfaces/payment-service.interface";
-import { StripePaymentService } from "../service/payment.service";
-import { stripe } from "../config/stripe/stripe.confige";
-import Stripe from "stripe";
-import { IRevenueDistributionService } from "../../domain/service-interfaces/revenue-distribution-service.interface";
-import { RevenueDistributionService } from "../service/revenue-distribution.service";
-import { IVendorPaymentService } from "../../domain/service-interfaces/vendor-payment-service.interface";
 import { VendorPaymentService } from "../service/vendor-payment.service";
-import { IAdminPaymentService } from "../../domain/service-interfaces/admin-payment-service.interface";
-import { AdminPaymentService } from "../service/admin-payment.service";
-import { IGroupChatService } from "../../application/services/interfaces/group-chat-service.interface";
-import { GroupChatService } from "../../application/services/implementations/group-chat/groupChatService";
 
 export class ServiceRegistory {
   static registerService(): void {

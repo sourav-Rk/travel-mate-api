@@ -1,10 +1,16 @@
-import { inject, injectable } from "tsyringe";
-import { IGuideBookingController } from "../../interfaces/controllers/booking/guide-booking-controller.interface";
 import { Request, Response } from "express";
-import { CustomRequest } from "../../middlewares/auth.middleware";
-import { IGetBookingsGuideUsecase } from "../../../application/usecase/interfaces/booking/guide-booking/get-bookings-usecase.interface";
-import { BOOKINGSTATUS, HTTP_STATUS } from "../../../shared/constants";
+import { inject, injectable } from "tsyringe";
+
 import { IGetBookingDetailsGuideUsecase } from "../../../application/usecase/interfaces/booking/guide-booking/get-booking-details-guide-usecase.interface";
+import { IGetBookingsGuideUsecase } from "../../../application/usecase/interfaces/booking/guide-booking/get-bookings-usecase.interface";
+import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
+import {
+  BOOKINGSTATUS,
+  HTTP_STATUS,
+  SUCCESS_MESSAGE,
+} from "../../../shared/constants";
+import { IGuideBookingController } from "../../interfaces/controllers/booking/guide-booking-controller.interface";
+import { CustomRequest } from "../../middlewares/auth.middleware";
 
 @injectable()
 export class GuideBookingController implements IGuideBookingController {
@@ -33,12 +39,14 @@ export class GuideBookingController implements IGuideBookingController {
       pageSize
     );
 
-    res.status(HTTP_STATUS.OK).json({
-      success: true,
+    ResponseHelper.paginated(
+      res,
       bookings,
-      totalPages: total,
-      currentPage: pageNumber,
-    });
+      total,
+      pageNumber,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      "bookings"
+    );
   }
 
   async getBookingDetailsGuide(req: Request, res: Response): Promise<void> {
@@ -48,6 +56,12 @@ export class GuideBookingController implements IGuideBookingController {
       bookingId,
       guideId
     );
-    res.status(HTTP_STATUS.OK).json({ success: true, bookingDetails });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      bookingDetails,
+      "bookingDetails"
+    );
   }
 }

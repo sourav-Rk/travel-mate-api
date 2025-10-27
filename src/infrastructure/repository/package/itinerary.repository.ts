@@ -1,13 +1,14 @@
+import { ClientSession } from "mongoose";
 import { injectable } from "tsyringe";
 
+import { ItineraryEditDto } from "../../../application/dto/response/itineraryDto";
+import { ItineraryMapper } from "../../../application/mapper/itinerary.mapper";
 import { IItineraryEntity } from "../../../domain/entities/itinerary.entity";
 import { IItineraryRepository } from "../../../domain/repositoryInterfaces/package/itinerary-repository.interface";
 import {
   IItineraryModel,
   itineraryDB,
 } from "../../database/models/itinerary.model";
-import { ItineraryEditDto } from "../../../application/dto/response/itineraryDto";
-import { ItineraryMapper } from "../../../application/mapper/itinerary.mapper";
 import { BaseRepository } from "../baseRepository";
 
 @injectable()
@@ -19,7 +20,7 @@ export class ItineraryRepository
     super(itineraryDB, ItineraryMapper.toEntity);
   }
 
-  async save(data: IItineraryEntity, session?: any): Promise<IItineraryEntity> {
+  async save(data: IItineraryEntity, session?: ClientSession): Promise<IItineraryEntity> {
     const options = session ? { session } : {};
     const modelData = await itineraryDB
       .create([data], options)

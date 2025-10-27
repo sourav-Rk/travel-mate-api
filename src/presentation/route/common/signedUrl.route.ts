@@ -1,8 +1,8 @@
 import { Router } from "express";
 
-import { authorizeRole, verifyAuth } from "../../middlewares/auth.middleware";
-import { asyncHandler } from "../../../shared/async-handler";
 import { signedUrlController } from "../../../infrastructure/dependencyInjection/resolve";
+import { asyncHandler } from "../../../shared/async-handler";
+import { authorizeRole, verifyAuth } from "../../middlewares/auth.middleware";
 
 export class SignedUrlRoute {
   public router = Router();

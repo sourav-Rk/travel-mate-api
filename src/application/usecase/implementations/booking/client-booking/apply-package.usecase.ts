@@ -1,25 +1,27 @@
 import { inject, injectable } from "tsyringe";
-import { IApplyPackageUsecase } from "../../../interfaces/booking/client-booking/apply-package-usecase.interface";
-import { IPackageRepository } from "../../../../../domain/repositoryInterfaces/package/package-repository.interface";
-import {
-  ISuccessResponseHandler,
-  successResponseHandler,
-} from "../../../../../shared/utils/successResponseHandler";
+
+import { IPackageEntity } from "../../../../../domain/entities/package.entity";
+import { CustomError } from "../../../../../domain/errors/customError";
+import { NotFoundError } from "../../../../../domain/errors/notFoundError";
 import { ValidationError } from "../../../../../domain/errors/validationError";
+import { IBookingRepository } from "../../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
+import { IClientRepository } from "../../../../../domain/repositoryInterfaces/client/client.repository.interface";
+import { INotificationRepository } from "../../../../../domain/repositoryInterfaces/notification/notification-repository.interface";
+import { IPackageRepository } from "../../../../../domain/repositoryInterfaces/package/package-repository.interface";
+import { IWishListRepository } from "../../../../../domain/repositoryInterfaces/wishlist/wishlist-repository.interface";
+import { IPushNotificationService } from "../../../../../domain/service-interfaces/push-notifications.interface";
 import {
   BOOKINGSTATUS,
   ERROR_MESSAGE,
   HTTP_STATUS,
   SUCCESS_MESSAGE,
 } from "../../../../../shared/constants";
-import { IBookingRepository } from "../../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
-import { IClientRepository } from "../../../../../domain/repositoryInterfaces/client/client.repository.interface";
-import { NotFoundError } from "../../../../../domain/errors/notFoundError";
-import { CustomError } from "../../../../../domain/errors/customError";
-import { INotificationRepository } from "../../../../../domain/repositoryInterfaces/notification/notification-repository.interface";
-import { IPushNotificationService } from "../../../../../domain/service-interfaces/push-notifications.interface";
-import { IWishListRepository } from "../../../../../domain/repositoryInterfaces/wishlist/wishlist-repository.interface";
-import { bookingDB } from "../../../../../infrastructure/database/models/booking.model";
+import {
+  ISuccessResponseHandler,
+  successResponseHandler,
+} from "../../../../../shared/utils/successResponseHandler";
+import { PackageStatus } from "../../../../dto/request/package.dto";
+import { IApplyPackageUsecase } from "../../../interfaces/booking/client-booking/apply-package-usecase.interface";
 
 @injectable()
 export class ApplyPackageUsecase implements IApplyPackageUsecase {
@@ -66,10 +68,9 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
       throw new NotFoundError(ERROR_MESSAGE.PACKAGE_NOT_FOUND);
     }
 
-    console.log(existingPackage, "1 --existingpackage");
 
     //checking status of the package
-    if (existingPackage.status !== "active") {
+    if (existingPackage.status !== PackageStatus.ACTIVE) {
       throw new ValidationError(
         `${ERROR_MESSAGE.TRIP_STATUS} ${existingPackage.status}`
       );
@@ -98,19 +99,18 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
       throw new ValidationError(ERROR_MESSAGE.ALREADY_APPLIED_PACKAGE);
     }
 
-    console.log(existingForThisPackage, "2 -> existing for this package");
 
     //checking conflicting trips
     const userActiveBookings =
       await this._bookingRepository.getAllConfirmedBookingsByUserIdWithPackageDetails(
         userId,
-        "applied"
+        BOOKINGSTATUS.APPLIED
       );
 
-    console.log(userActiveBookings, "3-->acitive bookings");
+
     if (userActiveBookings?.length > 0) {
       for (const booking of userActiveBookings) {
-        const pkg: any = booking.packageId;
+        const pkg: IPackageEntity = booking.packageId;
         if (!pkg?.startDate || !pkg.endDate) continue;
 
         const overlap =
@@ -137,7 +137,6 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
       seatOccupyingStatuses
     );
 
-    console.log(activeCount, "4 --> active count");
 
     let statusToCreate = BOOKINGSTATUS.APPLIED;
     let isWaitlisted = false;
@@ -161,11 +160,9 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
     const wishlist = await this._wishlistRepository.findByUserId(userId);
 
     if (wishlist) {
-      console.log(wishlist, "-->wishlist");
       const packageExistingInWishlist = wishlist.packages.find(
         (id) => id.toString() === packageId
       );
-      console.log(packageExistingInWishlist, "5-->wisling");
       if (packageExistingInWishlist) {
         await this._wishlistRepository.removeFromWishlist(userId, packageId);
       }

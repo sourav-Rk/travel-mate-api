@@ -1,4 +1,5 @@
-import mongoose, { Document, ObjectId, Types } from "mongoose";
+import mongoose, { Document, Types } from "mongoose";
+
 import { IMessageEntity } from "../../../domain/entities/message.entity";
 import { messageSchema } from "../schemas/message.schema";
 

@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import { IGetMessagesUsecase } from "../../interfaces/chat/get-message-usecase.interface";
-import { IMessageRepository } from "../../../../domain/repositoryInterfaces/message/message-repository.interface";
-import { PaginatedMessagesDto } from "../../../dto/response/messageDto";
-import { ERROR_MESSAGE } from "../../../../shared/constants";
-import { ValidationError } from "../../../../domain/errors/validationError";
+
 import { IMessageEntity } from "../../../../domain/entities/message.entity";
+import { ValidationError } from "../../../../domain/errors/validationError";
+import { IMessageRepository } from "../../../../domain/repositoryInterfaces/message/message-repository.interface";
+import { ERROR_MESSAGE } from "../../../../shared/constants";
+import { IGetMessagesUsecase } from "../../interfaces/chat/get-message-usecase.interface";
 
 @injectable()
 export class GetMessagesUsecase implements IGetMessagesUsecase {

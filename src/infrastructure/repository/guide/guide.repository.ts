@@ -1,10 +1,11 @@
+import { FilterQuery } from "mongoose";
 import { injectable } from "tsyringe";
 
+import { GuideMapper } from "../../../application/mapper/guide.mapper";
 import { IGuideEntity } from "../../../domain/entities/guide.entity";
 import { IGuideRepository } from "../../../domain/repositoryInterfaces/guide/guide-repository.interface";
 import { guideDB, IGuideModel } from "../../database/models/guide.model";
 import { BaseRepository } from "../baseRepository";
-import { GuideMapper } from "../../../application/mapper/guide.mapper";
 
 @injectable()
 export class GuideRepository
@@ -20,13 +21,13 @@ export class GuideRepository
     validPageSize: number,
     searchTerm: string,
     status: string,
-    agencyId: any,
+    agencyId: string,
     languages?: string[],
     minExperience?: number,
     maxExperience?: number,
     gender?: string
   ): Promise<{ user: IGuideEntity[] | []; total: number }> {
-    const filter: any = { agencyId };
+    const filter: FilterQuery<IGuideModel> = { agencyId };
 
     if (searchTerm) {
       filter.$or = [

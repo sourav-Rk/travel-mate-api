@@ -1,9 +1,10 @@
 import { inject, injectable } from "tsyringe";
 
+import { IUserEntity } from "../../../../domain/entities/user.entity";
+import { CustomError } from "../../../../domain/errors/customError";
 import { IOtpService } from "../../../../domain/service-interfaces/otp-service.interface";
 import { IPhoneExistenceService } from "../../../../domain/service-interfaces/phone-existence-service.interface";
 import { IUserExistenceService } from "../../../../domain/service-interfaces/user-existence-service.interface";
-import { ISendEmailUsecase } from "../../interfaces/auth/send-email-usecase.interface";
 import {
   EmailOtpPurpose,
   ERROR_MESSAGE,
@@ -13,7 +14,7 @@ import {
 } from "../../../../shared/constants";
 import { eventBus } from "../../../../shared/eventBus";
 import { mailContentProvider } from "../../../../shared/mailContentProvider";
-import { CustomError } from "../../../../domain/errors/customError";
+import { ISendEmailUsecase } from "../../interfaces/auth/send-email-usecase.interface";
 
 @injectable()
 export class SendEmailUsecase implements ISendEmailUsecase {
@@ -31,7 +32,7 @@ export class SendEmailUsecase implements ISendEmailUsecase {
   async execute(
     email: string,
     phone: string,
-    formData: any,
+    formData: IUserEntity,
     purpose: EmailOtpPurpose
   ): Promise<void> {
     const emailExists = await this.userExistenceService.emailExists(email);

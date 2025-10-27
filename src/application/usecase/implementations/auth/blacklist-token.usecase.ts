@@ -3,6 +3,7 @@ import { inject, injectable } from "tsyringe";
 
 import { IRedisTokenRepository } from "../../../../domain/repositoryInterfaces/redis/redis-token-repository.interface";
 import { ITokenService } from "../../../../domain/service-interfaces/token-service.interface";
+import { ERROR_MESSAGE } from "../../../../shared/constants";
 import { IBlackListTokenUsecase } from "../../interfaces/auth/blacklist-token-usecase.interface";
 
 @injectable()
@@ -20,7 +21,7 @@ export class BlackListTokenUsecase implements IBlackListTokenUsecase {
       this.TokenService.verifyAccessToken(token);
 
     if (!decoded || typeof decoded === "string" || !decoded.exp) {
-      throw new Error("Invalid Token : Missing expiration time");
+      throw new Error(ERROR_MESSAGE.INVALID_TOKEN_MISSING_EXPIRATION_TIME);
     }
 
     const expiresIn = decoded.exp - Math.floor(Date.now() / 1000);

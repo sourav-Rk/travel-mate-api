@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import { IWishlistModel } from "../models/wishlist.model";
 
 export const wishlistSchema = new mongoose.Schema<IWishlistModel>(

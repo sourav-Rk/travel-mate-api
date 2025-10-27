@@ -1,9 +1,10 @@
 import { injectable } from "tsyringe";
-import { BaseRepository } from "../baseRepository";
+
+import { WalletMapper } from "../../../application/mapper/wallet.mapper";
+import { IWalletEntity } from "../../../domain/entities/wallet.entity";
 import { IWalletRepository } from "../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
 import { IWalletModel, walletDB } from "../../database/models/wallet.model";
-import { IWalletEntity } from "../../../domain/entities/wallet.entity";
-import { WalletMapper } from "../../../application/mapper/wallet.mapper";
+import { BaseRepository } from "../baseRepository";
 
 @injectable()
 export class WalletRepository

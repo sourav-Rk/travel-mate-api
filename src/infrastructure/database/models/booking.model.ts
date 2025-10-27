@@ -1,4 +1,5 @@
 import mongoose, { Document } from "mongoose";
+
 import { IBookingEntity } from "../../../domain/entities/booking.entity";
 import { bookingSchema } from "../schemas/booking.schema";
 

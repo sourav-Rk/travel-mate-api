@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
-import { IWalletTransactionsModel } from "../models/walletTransactions.model";
+
 import { TRANSACTION_TYPE } from "../../../shared/constants";
+import { IWalletTransactionsModel } from "../models/walletTransactions.model";
 
 export const walletTransactionsSchema = new mongoose.Schema<IWalletTransactionsModel>(
   {

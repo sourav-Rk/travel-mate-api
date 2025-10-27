@@ -1,4 +1,5 @@
 import { Schema } from "mongoose";
+
 import { IMessageModel } from "../models/message.model";
 
 export const messageSchema = new Schema<IMessageModel>(

@@ -1,10 +1,25 @@
 import { injectable } from "tsyringe";
+
 import {
-  authorizeRole,
-  decodeToken,
-  verifyAuth,
-} from "../../middlewares/auth.middleware";
-import { asyncHandler } from "../../../shared/async-handler";
+  AddAddressReqDTO,
+  UpdateAddressReqDTO,
+} from "../../../application/dto/request/address.dto";
+import { UpdateVendorStatusReqDTO } from "../../../application/dto/request/admin.dto";
+import {
+  OtpReqDTO,
+  ResendOtpReqDTO,
+} from "../../../application/dto/request/auth.dto";
+import { GetBookingsVendorReqDTO } from "../../../application/dto/request/booking.dto";
+import { GetMessagesReqDto } from "../../../application/dto/request/chat.dto";
+import { AddGuideReqDTO } from "../../../application/dto/request/guide.dto";
+import { AddKycReqDTO } from "../../../application/dto/request/kyc.dto";
+import { MarkReadNotificationReqDTO } from "../../../application/dto/request/notification.dto";
+import { GetPackagesVendorReqDTO } from "../../../application/dto/request/package.dto";
+import {
+  ChangeEmailReqDto,
+  UpdatePasswordVendorDTO,
+  VendorProfileReqDTO,
+} from "../../../application/dto/request/vendor.dto";
 import {
   activityController,
   addressController,
@@ -23,31 +38,16 @@ import {
   vendorProfileController,
   walletController,
 } from "../../../infrastructure/dependencyInjection/resolve";
+import { asyncHandler } from "../../../shared/async-handler";
+import {
+  authorizeRole,
+  verifyAuth,
+} from "../../middlewares/auth.middleware";
+import { validationMiddleware } from "../../middlewares/validation.middleware";
 import { BaseRoute } from "../base.route";
 import { CommonUploadRoutes } from "../common/common-upload.route";
 import { SignedUrlRoute } from "../common/signedUrl.route";
 import { FcmTokenRoutes } from "../fcmToken/fcmToken.route";
-import { validationMiddleware } from "../../middlewares/validation.middleware";
-import { GetBookingsVendorReqDTO } from "../../../application/dto/request/booking.dto";
-import { GetPackagesVendorReqDTO } from "../../../application/dto/request/package.dto";
-import {
-  ChangeEmailReqDto,
-  UpdatePasswordVendorDTO,
-  VendorProfileReqDTO,
-} from "../../../application/dto/request/vendor.dto";
-import {
-  OtpReqDTO,
-  ResendOtpReqDTO,
-} from "../../../application/dto/request/auth.dto";
-import {
-  AddAddressReqDTO,
-  UpdateAddressReqDTO,
-} from "../../../application/dto/request/address.dto";
-import { AddKycReqDTO } from "../../../application/dto/request/kyc.dto";
-import { AddGuideReqDTO } from "../../../application/dto/request/guide.dto";
-import { UpdateVendorStatusReqDTO } from "../../../application/dto/request/admin.dto";
-import { MarkReadNotificationReqDTO } from "../../../application/dto/request/notification.dto";
-import { GetMessagesReqDto } from "../../../application/dto/request/chat.dto";
 
 @injectable()
 export class VendorRoute extends BaseRoute {

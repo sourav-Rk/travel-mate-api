@@ -19,36 +19,35 @@ export class GuideInstructionRepository
     packageIds: string[]
   ): Promise<IGuideInstructionEntity[] | []> {
     const instructions = await guideInstructionDB.aggregate([
-      // Match instructions for the given packages
+ 
       {
         $match: {
           packageId: { $in: packageIds }
         }
       },
-      // Lookup package details
+ 
       {
         $lookup: {
-          from: "packages", // Your packages collection name
-          localField: "packageId", // Field in instructions collection
-          foreignField: "packageId", // Field in packages collection (assuming custom string ID)
+          from: "packages",
+          localField: "packageId", 
+          foreignField: "packageId", 
           as: "packageDetails"
         }
       },
-      // Unwind package details (since lookup returns array)
+      
       {
         $unwind: {
           path: "$packageDetails",
-          preserveNullAndEmptyArrays: true // Keep instructions even if package not found
+          preserveNullAndEmptyArrays: true 
         }
       },
-      // Sort by creation date (newest first)
+     
       {
         $sort: { createdAt: -1 }
       },
-      // Project only the fields we need
+      
       {
         $project: {
-          // Instruction fields
           _id: 1,
           guideId: 1,
           packageId: 1,
@@ -62,7 +61,7 @@ export class GuideInstructionRepository
           readBy: 1,
           createdAt: 1,
           updatedAt: 1,
-          // Package details
+         
           "packageDetails.packageName": 1,
           "packageDetails.title": 1,
           "packageDetails.startDate": 1,

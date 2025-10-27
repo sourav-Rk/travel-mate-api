@@ -1,9 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import { IMarkReadNotificationUsecase } from "../../interfaces/notification/mark-read-notification-usecase.interface";
-import { ValidationError } from "../../../../domain/errors/validationError";
-import { ERROR_MESSAGE } from "../../../../shared/constants";
-import { INotificationRepository } from "../../../../domain/repositoryInterfaces/notification/notification-repository.interface";
+
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { ValidationError } from "../../../../domain/errors/validationError";
+import { INotificationRepository } from "../../../../domain/repositoryInterfaces/notification/notification-repository.interface";
+import { ERROR_MESSAGE } from "../../../../shared/constants";
+import { IMarkReadNotificationUsecase } from "../../interfaces/notification/mark-read-notification-usecase.interface";
 
 @injectable()
 export class MarkReadNotification implements IMarkReadNotificationUsecase {

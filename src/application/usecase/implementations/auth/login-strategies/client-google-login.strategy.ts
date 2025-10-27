@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
 
 import { IUserEntity } from "../../../../../domain/entities/user.entity";
+import { CustomError } from "../../../../../domain/errors/customError";
 import { IClientRepository } from "../../../../../domain/repositoryInterfaces/client/client.repository.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../../shared/constants";
 import { LoginUserDTO } from "../../../../dto/response/user.dto";
-import { CustomError } from "../../../../../domain/errors/customError";
 
 import { ILoginStrategy } from "./login-strategy.interface";
 

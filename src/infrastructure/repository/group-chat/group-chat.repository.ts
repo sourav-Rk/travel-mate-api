@@ -1,14 +1,15 @@
+import { FilterQuery, Types } from "mongoose";
 import { injectable } from "tsyringe";
-import { BaseRepository } from "../baseRepository";
+
+import { GroupChatDetailsQueryDto } from "../../../application/dto/response/groupChatDto";
+import { GroupChatMapper } from "../../../application/mapper/group-chat.mapper";
+import { IGroupChatEntity } from "../../../domain/entities/group-chat.entity";
+import { IGroupChatRepository } from "../../../domain/repositoryInterfaces/group-chat/group-chat-repository.interface";
 import {
   groupChatDB,
   IGroupChatModel,
 } from "../../database/models/group-chat.model";
-import { IGroupChatEntity } from "../../../domain/entities/group-chat.entity";
-import { IGroupChatRepository } from "../../../domain/repositoryInterfaces/group-chat/group-chat-repository.interface";
-import { GroupChatMapper } from "../../../application/mapper/group-chat.mapper";
-import { FilterQuery, Types } from "mongoose";
-import { GroupChatDetailsQueryDto } from "../../../application/dto/response/groupChatDto";
+import { BaseRepository } from "../baseRepository";
 
 @injectable()
 export class GroupChatRepository
@@ -43,7 +44,7 @@ export class GroupChatRepository
 
   async findByUserId(userId: string,searchTerm?:string): Promise<IGroupChatEntity[]> {
 
-    let filter :FilterQuery<IGroupChatModel>  = {"members.userId":userId};
+    const filter :FilterQuery<IGroupChatModel>  = {"members.userId":userId};
 
     if(searchTerm){
         filter.$or = [
