@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
 
 import { IUserEntity } from "../../../../domain/entities/user.entity";
-import { ILoginUsecase } from "../../interfaces/auth/loginUsecase.interface";
-import { HTTP_STATUS } from "../../../../shared/constants";
-import { LoginUserDTO } from "../../../dto/response/user.dto";
 import { CustomError } from "../../../../domain/errors/customError";
+import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
+import { LoginUserDTO } from "../../../dto/response/user.dto";
+import { ILoginUsecase } from "../../interfaces/auth/loginUsecase.interface";
 
 import { ILoginStrategy } from "./login-strategies/login-strategy.interface";
 
@@ -35,7 +35,7 @@ export class LoginUsecase implements ILoginUsecase {
   async execute(user: LoginUserDTO): Promise<Partial<IUserEntity>> {
     const strategy = this._strategies[user.role];
     if (!strategy) {
-      throw new CustomError(HTTP_STATUS.FORBIDDEN, "invalid user role");
+      throw new CustomError(HTTP_STATUS.FORBIDDEN,ERROR_MESSAGE.INVALID_ROLE);
     }
 
     return await strategy.login(user);

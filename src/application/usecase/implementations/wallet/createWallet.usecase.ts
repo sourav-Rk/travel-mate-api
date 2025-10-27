@@ -1,8 +1,9 @@
 import { inject, injectable } from "tsyringe";
-import { ICreateWalletUsecase } from "../../interfaces/wallet/createWallet-usecase.interface";
-import { IWalletRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
+
 import { IWalletEntity } from "../../../../domain/entities/wallet.entity";
+import { IWalletRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
 import { TRole } from "../../../../shared/constants";
+import { ICreateWalletUsecase } from "../../interfaces/wallet/createWallet-usecase.interface";
 
 @injectable()
 export class CreateWalletUsecase implements ICreateWalletUsecase {

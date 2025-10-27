@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
 
+import { CustomError } from "../../../../domain/errors/customError";
 import { IClientRepository } from "../../../../domain/repositoryInterfaces/client/client.repository.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
-import { CustomError } from "../../../../domain/errors/customError";
-import { IGetClientDetailsVendorUsecase } from "../../interfaces/client/get-client-details-vendor-usecase.interface";
-import { UserMapper } from "../../../mapper/user.mapper";
 import { ClientDetailsForVendorDto } from "../../../dto/response/user.dto";
+import { UserMapper } from "../../../mapper/user.mapper";
+import { IGetClientDetailsVendorUsecase } from "../../interfaces/client/get-client-details-vendor-usecase.interface";
 
 @injectable()
 export class GetClientDetailsVendorUsecase

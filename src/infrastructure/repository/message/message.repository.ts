@@ -1,10 +1,11 @@
+import { FilterQuery } from "mongoose";
 import { injectable } from "tsyringe";
-import { BaseRepository } from "../baseRepository";
-import { IMessageModel, messageDB } from "../../database/models/message.model";
+
+import { MessageMapper } from "../../../application/mapper/message.mapper";
 import { IMessageEntity } from "../../../domain/entities/message.entity";
 import { IMessageRepository } from "../../../domain/repositoryInterfaces/message/message-repository.interface";
-import { MessageMapper } from "../../../application/mapper/message.mapper";
-import { FilterQuery } from "mongoose";
+import { IMessageModel, messageDB } from "../../database/models/message.model";
+import { BaseRepository } from "../baseRepository";
 
 @injectable()
 export class MessageRepository

@@ -1,11 +1,12 @@
-import { inject, injectable } from "tsyringe";
-import { IGroupChatController } from "../../interfaces/controllers/group-chat/group-chat-controller.interface";
-import { IGetGroupsUsecase } from "../../../application/usecase/interfaces/group-chat/get-groups-usecase.interface";
 import { Request, Response } from "express";
-import { CustomRequest } from "../../middlewares/auth.middleware";
+import { inject, injectable } from "tsyringe";
+
+import { IGetGroupDetailsUsecase } from "../../../application/usecase/interfaces/group-chat/get-group-details-usecase.interface";
+import { IGetGroupsUsecase } from "../../../application/usecase/interfaces/group-chat/get-groups-usecase.interface";
 import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
-import { IGetGroupDetailsUsecase } from "../../../application/usecase/interfaces/group-chat/get-group-details-usecase.interface";
+import { IGroupChatController } from "../../interfaces/controllers/group-chat/group-chat-controller.interface";
+import { CustomRequest } from "../../middlewares/auth.middleware";
 
 @injectable()
 export class GroupChatController implements IGroupChatController {

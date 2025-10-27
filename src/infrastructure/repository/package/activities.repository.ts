@@ -1,15 +1,15 @@
+import { ClientSession } from "mongoose";
 import { injectable } from "tsyringe";
 
+import { ActivityDto } from "../../../application/dto/response/packageDto";
+import { ActivityMapper } from "../../../application/mapper/activity.mapper";
 import { IActivitiesEntity } from "../../../domain/entities/activites.entity";
 import { IActivitiesRepository } from "../../../domain/repositoryInterfaces/package/activities-repository.interface";
 import {
   activitiesDB,
   IActivitiesModel,
 } from "../../database/models/acitivities.model";
-import { ActivityDto } from "../../../application/dto/response/packageDto";
-import { ActivityMapper } from "../../../application/mapper/activity.mapper";
 import { BaseRepository } from "../baseRepository";
-import { Document } from "mongoose";
 
 @injectable()
 export class ActivitiesRepository
@@ -22,7 +22,7 @@ export class ActivitiesRepository
 
   async save(
     data: IActivitiesEntity,
-    session?: any
+    session?: ClientSession
   ): Promise<IActivitiesEntity> {
     const options = session ? { session } : {};
     const modelData = await activitiesDB
@@ -41,7 +41,7 @@ export class ActivitiesRepository
 
   async saveMany(
     data: ActivityDto[],
-    session?: any
+    session?: ClientSession
   ): Promise<IActivitiesEntity[]> {
     const options = session ? { session, ordered: true } : {};
     console.log(data, "--->datas");

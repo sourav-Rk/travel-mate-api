@@ -1,16 +1,22 @@
-import mongoose from "mongoose";
+import { ClientSession, FilterQuery } from "mongoose";
 import { injectable } from "tsyringe";
 
-import { IPackageEntity } from "../../../domain/entities/package.entity";
-import { IPackageRepository } from "../../../domain/repositoryInterfaces/package/package-repository.interface";
-import { IPackageModel, packageDB } from "../../database/models/package.model";
-import { PackageStatus, TRole } from "../../../shared/constants";
 import {
   IPackage,
   PaginatedPackagesRepo,
 } from "../../../application/dto/response/packageDto";
 import { PackageMapper } from "../../../application/mapper/package.mapper";
+import { IPackageEntity } from "../../../domain/entities/package.entity";
+import { IPackageRepository } from "../../../domain/repositoryInterfaces/package/package-repository.interface";
+import { PackageStatus, TRole } from "../../../shared/constants";
+import { IPackageModel, packageDB } from "../../database/models/package.model";
 import { BaseRepository } from "../baseRepository";
+
+interface ISortField {
+  price?: 1 | -1;
+  "duration.days"?: 1 | -1;
+  createdAt?: 1 | -1;
+}
 
 @injectable()
 export class PackageRepository
@@ -43,7 +49,7 @@ export class PackageRepository
     return await packageDB.find({ guideId });
   }
 
-  async save(data: IPackageEntity, session?: any): Promise<IPackageEntity> {
+  async save(data: IPackageEntity, session?: ClientSession): Promise<IPackageEntity> {
     const options = session ? { session } : {};
     const modelData = await packageDB
       .create([data], options)
@@ -52,9 +58,9 @@ export class PackageRepository
   }
 
   async update(
-    id: any,
+    id: string,
     data: Partial<IPackageEntity>,
-    session?: any
+    session?: ClientSession
   ): Promise<IPackageEntity> {
     const options = session
       ? { session, new: true, runValidators: true }
@@ -89,7 +95,7 @@ export class PackageRepository
   }
 
   async find(criteria: {
-    userId: any;
+    userId: string;
     userType: TRole;
     searchTerm: string;
     status: string;
@@ -107,7 +113,7 @@ export class PackageRepository
       pageSize,
     } = criteria;
 
-    const filter: any = {};
+    const filter: FilterQuery<IPackageModel> = {};
 
     if (userType === "vendor") {
       filter.agencyId = userId;
@@ -150,7 +156,7 @@ export class PackageRepository
     return { packages: packageDetails, total };
   }
 
-  async getPackageDetails(id: any): Promise<IPackage> {
+  async getPackageDetails(id: string): Promise<IPackage> {
     const packageData = await packageDB.aggregate([
       { $match: { packageId: id } },
 
@@ -201,7 +207,7 @@ export class PackageRepository
     pageSize: number,
     sortBy: string
   ): Promise<PaginatedPackagesRepo> {
-    const filter: any = {
+    const filter: FilterQuery<IPackageModel> = {
       status: "active",
       isBlocked: false,
       applicationDeadline: { $gte: new Date() },
@@ -234,7 +240,8 @@ export class PackageRepository
     const limit = pageSize;
 
     //sorting
-    const sortField: any = {};
+    const sortField: Record<string, 1 | -1> = {};
+
     if (sortBy === "price-high") sortField.price = -1;
     else if (sortBy === "price-low") sortField.price = 1;
     else if (sortBy === "days-long") sortField["duration.days"] = -1;
@@ -280,7 +287,9 @@ export class PackageRepository
     pageNumber: number,
     pageSize: number
   ): Promise<PaginatedPackagesRepo> {
-    const filter: any = { packageId: { $in: packageIds } };
+    const filter: FilterQuery<IPackageModel> = {
+      packageId: { $in: packageIds },
+    };
 
     if (searchTerm) {
       filter.$or = [
@@ -308,6 +317,6 @@ export class PackageRepository
   }
 
   async findByAgencyId(vendorId: string): Promise<IPackageEntity[] | []> {
-     return await packageDB.find({agencyId : vendorId})
+    return await packageDB.find({ agencyId: vendorId });
   }
 }

@@ -1,4 +1,5 @@
 import mongoose, { Document, ObjectId } from "mongoose";
+
 import { INotificationEntity } from "../../../domain/entities/notification.entity";
 import { notificationSchema } from "../schemas/notification.schema";
 

@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 
-import { IActivityController } from "../../interfaces/controllers/activity/activity-controller.interface";
 import { ICreateActivityUsecase } from "../../../application/usecase/interfaces/activity/createActivity-usecase.interface";
 import { IDeleteActivityUsecase } from "../../../application/usecase/interfaces/activity/deleteActivity-usecase.interface";
 import { IUpdateActivityUsecase } from "../../../application/usecase/interfaces/activity/updateActivity-usecase.interface";
+import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
+import { IActivityController } from "../../interfaces/controllers/activity/activity-controller.interface";
 
 @injectable()
 export class ActivityController implements IActivityController {
@@ -27,18 +28,22 @@ export class ActivityController implements IActivityController {
       dayNumber,
       activityData
     );
-    res
-      .status(HTTP_STATUS.CREATED)
-      .json({ success: true, message: SUCCESS_MESSAGE.ACTIVITY_ADDED });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.CREATED,
+      SUCCESS_MESSAGE.ACTIVITY_ADDED
+    );
   }
 
   async updateActivity(req: Request, res: Response): Promise<void> {
     const { activityId } = req.params;
     const activityData = req.body;
     await this._updateActivityUsecase.execute(activityId, activityData);
-    res
-      .status(HTTP_STATUS.OK)
-      .json({ success: true, message: SUCCESS_MESSAGE.ACTIVITY_UPDATED });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.ACTIVITY_UPDATED
+    );
   }
 
   async deleteActivity(req: Request, res: Response): Promise<void> {
@@ -49,8 +54,11 @@ export class ActivityController implements IActivityController {
       dayNumber,
       activityId
     );
-    res
-      .status(HTTP_STATUS.OK)
-      .json({ success: true, message: SUCCESS_MESSAGE.ACTIVITY_DELETED });
+
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.ACTIVITY_DELETED
+    );
   }
 }

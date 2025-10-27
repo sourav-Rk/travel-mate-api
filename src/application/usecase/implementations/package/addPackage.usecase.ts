@@ -1,16 +1,17 @@
 import { inject, injectable } from "tsyringe";
 
-import { IDBSession } from "../../../../infrastructure/interface/session.interface";
 import { IActivitiesEntity } from "../../../../domain/entities/activites.entity";
 import { IActivitiesRepository } from "../../../../domain/repositoryInterfaces/package/activities-repository.interface";
 import { IItineraryRepository } from "../../../../domain/repositoryInterfaces/package/itinerary-repository.interface";
 import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
-import { IAddPackageUsecase } from "../../interfaces/package/addPackage-usecase.interface";
+import { IDBSession } from "../../../../infrastructure/interface/session.interface";
+import { ERROR_MESSAGE } from "../../../../shared/constants";
 import {
   PackageBasicDetailsDto,
   ItineraryDto,
   ActivityDto,
 } from "../../../dto/response/packageDto";
+import { IAddPackageUsecase } from "../../interfaces/package/addPackage-usecase.interface";
 
 @injectable()
 export class AddPackageUsecase implements IAddPackageUsecase {
@@ -65,10 +66,9 @@ export class AddPackageUsecase implements IAddPackageUsecase {
           session
         );
 
-        console.log(savedPackage, "saved pacakge");
 
         if (!savedPackage._id) {
-          throw new Error("Package id is missing after save");
+          throw new Error(ERROR_MESSAGE.PACKAGE_ID_MISSING_AFTER_SAVE);
         }
 
         const processedDays = [];
@@ -92,12 +92,6 @@ export class AddPackageUsecase implements IAddPackageUsecase {
               session
             );
           }
-
-          console.log(savedActivities, "------>savedActivities");
-          console.log(
-            savedActivities.map((activity) => activity._id),
-            "----->id"
-          );
 
           processedDays.push({
             dayNumber: day.dayNumber,

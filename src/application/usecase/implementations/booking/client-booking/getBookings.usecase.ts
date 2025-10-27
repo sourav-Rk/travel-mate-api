@@ -1,15 +1,15 @@
 import { inject, injectable } from "tsyringe";
-import { IGetBookingsUsecase } from "../../../interfaces/booking/client-booking/getBookings-usecase.interface";
-import { IBookingRepository } from "../../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
-import { BOOKINGSTATUS, ERROR_MESSAGE } from "../../../../../shared/constants";
-import { ValidationError } from "../../../../../domain/errors/validationError";
-import { IClientRepository } from "../../../../../domain/repositoryInterfaces/client/client.repository.interface";
+
 import { NotFoundError } from "../../../../../domain/errors/notFoundError";
+import { ValidationError } from "../../../../../domain/errors/validationError";
+import { IBookingRepository } from "../../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
+import { IClientRepository } from "../../../../../domain/repositoryInterfaces/client/client.repository.interface";
+import { BOOKINGSTATUS, ERROR_MESSAGE } from "../../../../../shared/constants";
 import {
   BookingListDTO,
-  BookingListWithPackageDetailsDto,
 } from "../../../../dto/response/bookingDto";
 import { BookingMapper } from "../../../../mapper/booking.mapper";
+import { IGetBookingsUsecase } from "../../../interfaces/booking/client-booking/getBookings-usecase.interface";
 
 @injectable()
 export class GetBookingsUsecase implements IGetBookingsUsecase {

@@ -1,11 +1,13 @@
-import { inject, injectable } from "tsyringe";
-import { IAssignedTripsUsecase } from "../../../application/usecase/interfaces/guideTrips/assignedTrips-usecase.interface";
 import { Request, Response } from "express";
+import { inject, injectable } from "tsyringe";
+
+import { IAssignedTripsUsecase } from "../../../application/usecase/interfaces/guideTrips/assignedTrips-usecase.interface";
+import { IUpdatePackageStatusUsecaseGuide } from "../../../application/usecase/interfaces/guideTrips/update-package-status-usecase.interface";
+import { IViewPackageDetailsUsecase } from "../../../application/usecase/interfaces/guideTrips/viewPackageDetails-usecase.interface";
+import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
+import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
 import { IGuidePackageController } from "../../interfaces/controllers/package/guide-package-controller.interface";
 import { CustomRequest } from "../../middlewares/auth.middleware";
-import { HTTP_STATUS } from "../../../shared/constants";
-import { IViewPackageDetailsUsecase } from "../../../application/usecase/interfaces/guideTrips/viewPackageDetails-usecase.interface";
-import { IUpdatePackageStatusUsecaseGuide } from "../../../application/usecase/interfaces/guideTrips/update-package-status-usecase.interface";
 
 @injectable()
 export class GuidePackageController implements IGuidePackageController {
@@ -25,8 +27,6 @@ export class GuidePackageController implements IGuidePackageController {
 
     const { searchTerm, status, page, limit } = req.query;
 
-    console.log(req.query);
-
     const pageNumber = Number(page);
     const pageSize = Number(limit);
 
@@ -38,18 +38,26 @@ export class GuidePackageController implements IGuidePackageController {
       pageSize
     );
 
-    res.status(HTTP_STATUS.OK).json({
-      success: true,
+    ResponseHelper.paginated(
+      res,
       packages,
-      totalPages: total,
-      currentPage: pageNumber,
-    });
+      total,
+      pageNumber,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      "packages"
+    );
   }
 
   async getPackageDetails(req: Request, res: Response): Promise<void> {
     const { packageId } = req.params;
     const packages = await this._viewPackageDetails.execute(packageId);
-    res.status(HTTP_STATUS.OK).json({ success: true, packages });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      packages,
+      "packages"
+    );
   }
 
   async updatePackageStatus(req: Request, res: Response): Promise<void> {
@@ -59,6 +67,11 @@ export class GuidePackageController implements IGuidePackageController {
       guideId,
       packageId,
       status
+    );
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.STATUS_UPDATED_SUCCESS
     );
   }
 }

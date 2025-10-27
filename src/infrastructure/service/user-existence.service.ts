@@ -1,5 +1,6 @@
 import { inject, injectable } from "tsyringe";
 
+import { IUserEntity } from "../../domain/entities/user.entity";
 import { IAdminRepository } from "../../domain/repositoryInterfaces/admin/admin-repository.interface";
 import { IClientRepository } from "../../domain/repositoryInterfaces/client/client.repository.interface";
 import { IGuideRepository } from "../../domain/repositoryInterfaces/guide/guide-repository.interface";
@@ -35,7 +36,7 @@ export class UserExistenceServive implements IUserExistenceService {
 
   async getUserAndRoleByEmail(
     email: string
-  ): Promise<{ user: any; role: string } | null> {
+  ): Promise<{ user: IUserEntity|null; role: string } | null> {
     const [client, vendor, admin, guide] = await Promise.all([
       this._clientRepository.findByEmail(email),
       this._vendorRepository.findByEmail(email),

@@ -1,13 +1,14 @@
 import { inject, injectable } from "tsyringe";
-import { IPayFullAmountUsecase } from "../../interfaces/payment/pay-fullAmount-usecase.interface";
-import { IPaymentService } from "../../../../domain/service-interfaces/payment-service.interface";
-import { ValidationError } from "../../../../domain/errors/validationError";
-import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
-import { IBookingRepository } from "../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
-import { NotFoundError } from "../../../../domain/errors/notFoundError";
+
 import { CustomError } from "../../../../domain/errors/customError";
+import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { ValidationError } from "../../../../domain/errors/validationError";
+import { IBookingRepository } from "../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
 import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
+import { IPaymentService } from "../../../../domain/service-interfaces/payment-service.interface";
 import { config } from "../../../../shared/config";
+import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
+import { IPayFullAmountUsecase } from "../../interfaces/payment/pay-fullAmount-usecase.interface";
 
 @injectable()
 export class PayFullAmountUsecase implements IPayFullAmountUsecase {
@@ -64,7 +65,7 @@ export class PayFullAmountUsecase implements IPayFullAmountUsecase {
 
     const currency = config.stripe.currency;
     const cancel_url = config.stripe.cancel_url;
-    let success_url = `${config.client.uri}/pvt/bookings/${booking._id}/${packageId}`;
+    const success_url = `${config.client.uri}/pvt/bookings/${booking._id}/${packageId}`;
 
     //create the session
     const session = await this._paymentService.createCheckoutSession(

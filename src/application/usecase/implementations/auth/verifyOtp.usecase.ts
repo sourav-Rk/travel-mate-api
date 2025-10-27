@@ -1,13 +1,13 @@
 import { inject, injectable } from "tsyringe";
 
-import { IOtpService } from "../../../../domain/service-interfaces/otp-service.interface";
-import { IVerifyOtpUsecase } from "../../interfaces/auth/verifyOtpUsecase";
-import { HTTP_STATUS } from "../../../../shared/constants";
 import { ValidationError } from "../../../../domain/errors/validationError";
+import { IOtpService } from "../../../../domain/service-interfaces/otp-service.interface";
+import { ERROR_MESSAGE, HTTP_STATUS, SUCCESS_MESSAGE } from "../../../../shared/constants";
 import {
   ISuccessResponseHandler,
   successResponseHandler,
 } from "../../../../shared/utils/successResponseHandler";
+import { IVerifyOtpUsecase } from "../../interfaces/auth/verifyOtpUsecase";
 
 @injectable()
 export class VerifyOtpUsecase implements IVerifyOtpUsecase {
@@ -20,13 +20,13 @@ export class VerifyOtpUsecase implements IVerifyOtpUsecase {
     const isOtpValid = await this._IOtpService.verifyOtp({ email, otp });
 
     if (!isOtpValid) {
-      throw new ValidationError("invalid otp");
+      throw new ValidationError(ERROR_MESSAGE.INVALID_OTP);
     }
 
     return successResponseHandler(
       true,
       HTTP_STATUS.OK,
-      "Otp verified successfully"
+      SUCCESS_MESSAGE.OTP_VERIFIED
     );
   }
 }

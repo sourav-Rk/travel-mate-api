@@ -1,4 +1,4 @@
-import { BOOKINGSTATUS, PackageStatus } from "../../../../shared/constants";
+import { PackageStatus } from "../../../../shared/constants";
 
 export interface IUpdatePackageStatusUsecaseGuide {
   execute(

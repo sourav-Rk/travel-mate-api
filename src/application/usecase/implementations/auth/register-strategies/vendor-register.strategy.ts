@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
 
 import { IUserEntity } from "../../../../../domain/entities/user.entity";
+import { CustomError } from "../../../../../domain/errors/customError";
 import { IVendorRepository } from "../../../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../../shared/constants";
-import { UserDto, VendorDto } from "../../../../dto/response/user.dto"
 import { hashPassword } from "../../../../../shared/utils/bcryptHelper";
-import { CustomError } from "../../../../../domain/errors/customError";
+import { UserDto, VendorDto } from "../../../../dto/response/user.dto"
 
 import { IRegisterStrategy } from "./register-strategy.interface";
 
@@ -61,7 +61,7 @@ export class VendorRegisteryStrategy implements IRegisterStrategy {
     } else {
       throw new CustomError(
         HTTP_STATUS.BAD_REQUEST,
-        "invalid role for vendor registration"
+        ERROR_MESSAGE.INVALID_ROLE_FOR_REGISTRATION
       );
     }
   }

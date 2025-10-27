@@ -1,15 +1,15 @@
 import { inject, injectable } from "tsyringe";
 
+import { CustomError } from "../../../../domain/errors/customError";
+import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { ValidationError } from "../../../../domain/errors/validationError";
 import { IGuideRepository } from "../../../../domain/repositoryInterfaces/guide/guide-repository.interface";
-import { IUpdateGuidePasswordUsecase } from "../../interfaces/guide/updateGuidePassword-usecase.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import {
   comparePassword,
   hashPassword,
 } from "../../../../shared/utils/bcryptHelper";
-import { CustomError } from "../../../../domain/errors/customError";
-import { NotFoundError } from "../../../../domain/errors/notFoundError";
-import { ValidationError } from "../../../../domain/errors/validationError";
+import { IUpdateGuidePasswordUsecase } from "../../interfaces/guide/updateGuidePassword-usecase.interface";
 
 @injectable()
 export class UpdateGuidePasswordUsecase implements IUpdateGuidePasswordUsecase {
@@ -19,18 +19,18 @@ export class UpdateGuidePasswordUsecase implements IUpdateGuidePasswordUsecase {
   ) {}
 
   async execute(
-    id: any,
+    id: string,
     currentPassword: string,
     newPassword: string
   ): Promise<void> {
     if (!id || !currentPassword || !newPassword) {
-      throw new ValidationError("required fields are missing");
+      throw new ValidationError(ERROR_MESSAGE.REQUIRED_FIELDS_MISSING);
     }
 
     const guide = await this._guideRepository.findById(id);
 
     if (!guide) {
-      throw new NotFoundError("Guide not found");
+      throw new NotFoundError(ERROR_MESSAGE.GUIDE_NOT_FOUND);
     }
 
     const isPasswordMatch = await comparePassword(

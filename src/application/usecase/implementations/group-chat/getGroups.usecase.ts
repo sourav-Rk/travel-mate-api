@@ -1,7 +1,8 @@
 import { inject, injectable } from "tsyringe";
-import { IGetGroupsUsecase } from "../../interfaces/group-chat/get-groups-usecase.interface";
-import { IGroupChatRepository } from "../../../../domain/repositoryInterfaces/group-chat/group-chat-repository.interface";
+
 import { IGroupChatEntity } from "../../../../domain/entities/group-chat.entity";
+import { IGroupChatRepository } from "../../../../domain/repositoryInterfaces/group-chat/group-chat-repository.interface";
+import { IGetGroupsUsecase } from "../../interfaces/group-chat/get-groups-usecase.interface";
 
 @injectable()
 export class GetGroupsUsecase implements IGetGroupsUsecase {

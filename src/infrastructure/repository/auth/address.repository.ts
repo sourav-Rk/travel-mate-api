@@ -1,9 +1,9 @@
 import { injectable } from "tsyringe";
 
+import { AddressMapper } from "../../../application/mapper/address.mapper";
 import { IAddressEntity } from "../../../domain/entities/address.entity";
 import { IAddressRepository } from "../../../domain/repositoryInterfaces/auth/address-repository.interface";
 import { addressDB } from "../../database/models/address.model";
-import { AddressMapper } from "../../../application/mapper/address.mapper";
 
 @injectable()
 export class AddressRepository implements IAddressRepository {

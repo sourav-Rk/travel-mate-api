@@ -1,4 +1,5 @@
 import mongoose, { Document } from "mongoose";
+
 import { IGuideInstructionEntity } from "../../../domain/entities/guide-instruction.entity";
 import { guideInstructionSchema } from "../schemas/guide-instructions.schema";
 

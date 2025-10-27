@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
 
 import { IUserEntity } from "../../../../../domain/entities/user.entity";
+import { CustomError } from "../../../../../domain/errors/customError";
 import { IClientRepository } from "../../../../../domain/repositoryInterfaces/client/client.repository.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../../shared/constants";
-import { ClientDto, UserDto } from "../../../../dto/response/user.dto";
 import { hashPassword } from "../../../../../shared/utils/bcryptHelper";
-import { CustomError } from "../../../../../domain/errors/customError";
+import { ClientDto, UserDto } from "../../../../dto/response/user.dto";
 
 import { IRegisterStrategy } from "./register-strategy.interface";
 
@@ -56,7 +56,7 @@ export class ClientRegisterStrategy implements IRegisterStrategy {
     } else {
       throw new CustomError(
         HTTP_STATUS.BAD_REQUEST,
-        "Invalid role for client registration"
+        ERROR_MESSAGE.INVALID_ROLE_FOR_REGISTRATION
       );
     }
   }

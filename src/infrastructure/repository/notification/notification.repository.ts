@@ -1,11 +1,12 @@
 import { injectable } from "tsyringe";
-import { INotificationRepository } from "../../../domain/repositoryInterfaces/notification/notification-repository.interface";
+
+import { NotificationMapper } from "../../../application/mapper/notification.mapper";
 import { INotificationEntity } from "../../../domain/entities/notification.entity";
+import { INotificationRepository } from "../../../domain/repositoryInterfaces/notification/notification-repository.interface";
 import {
   INotificationModel,
   notificationDB,
 } from "../../database/models/notification.model";
-import { NotificationMapper } from "../../../application/mapper/notification.mapper";
 import { BaseRepository } from "../baseRepository";
 
 @injectable()

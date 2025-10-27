@@ -1,4 +1,3 @@
-import { PackageListingTableDto } from "../../../dto/response/packageDto";
 import { PaginatedPackages } from "../../../../domain/entities/paginated-packages.entity";
 
 export interface IAssignedTripsUsecase {

@@ -1,4 +1,5 @@
-import mongoose, { Document, Schema, Types } from "mongoose";
+import mongoose, { Document, Types } from "mongoose";
+
 import { IGroupMessageEntity } from "../../../domain/entities/group-message.entity";
 import { groupMessageSchema } from "../schemas/group-message.schema";
 

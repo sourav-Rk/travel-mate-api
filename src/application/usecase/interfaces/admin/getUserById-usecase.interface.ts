@@ -1,5 +1,5 @@
-import { VendorProfileDto } from "../../../dto/response/vendor.dto";
 import { IClientEntity } from "../../../../domain/entities/client.entity";
+import { VendorProfileDto } from "../../../dto/response/vendor.dto";
 
 export interface IGetUserByIdUsecase {
   execute(

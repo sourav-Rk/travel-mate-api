@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 
-import { IAuthController } from "../../interfaces/controllers/auth/auth.controller.interfaces";
-import { IOtpService } from "../../../domain/service-interfaces/otp-service.interface";
+import {
+  LoginUserDTO,
+  UserDto,
+} from "../../../application/dto/response/user.dto";
 import { IBlackListTokenUsecase } from "../../../application/usecase/interfaces/auth/blacklist-token-usecase.interface";
 import { IForgotPasswordResetUsecase } from "../../../application/usecase/interfaces/auth/forgotPassword-reset-usecase.interface";
 import { IForgotPasswordSendMailUsecase } from "../../../application/usecase/interfaces/auth/forgotPassword-sendMail-usecase.interface";
@@ -15,6 +17,9 @@ import { IResendOtpUsecase } from "../../../application/usecase/interfaces/auth/
 import { ISendEmailOtpUsecase } from "../../../application/usecase/interfaces/auth/send-email-otp-usecase.interface";
 import { ISendEmailUsecase } from "../../../application/usecase/interfaces/auth/send-email-usecase.interface";
 import { IVerifyOtpUsecase } from "../../../application/usecase/interfaces/auth/verifyOtpUsecase";
+import { ValidationError } from "../../../domain/errors/validationError";
+import { IOtpService } from "../../../domain/service-interfaces/otp-service.interface";
+import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import {
   COOKIES_NAMES,
   ERROR_MESSAGE,
@@ -22,20 +27,15 @@ import {
   SUCCESS_MESSAGE,
 } from "../../../shared/constants";
 import {
-  LoginUserDTO,
-  UserDto,
-} from "../../../application/dto/response/user.dto";
-import {
   clearCookie,
   setAuthCookies,
   updateCookieWithAccessToken,
 } from "../../../shared/utils/cookieHelper";
+import { IAuthController } from "../../interfaces/controllers/auth/auth.controller.interfaces";
 import { CustomRequest } from "../../middlewares/auth.middleware";
 
 import { userSchemas } from "./validation/user-signup-validation.schema";
-import { ILogoutUsecase } from "../../../application/usecase/interfaces/auth/logout-usecase.interface";
-import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
-import { ICreateWalletUsecase } from "../../../application/usecase/interfaces/wallet/createWallet-usecase.interface";
+
 
 @injectable()
 export class AuthController implements IAuthController {
@@ -77,40 +77,41 @@ export class AuthController implements IAuthController {
     private _forgotPasswordSendMailUsecase: IForgotPasswordSendMailUsecase,
 
     @inject("IForgotPasswordResetUsecase")
-    private _forgotPasswordResetUsecase: IForgotPasswordResetUsecase,
+    private _forgotPasswordResetUsecase: IForgotPasswordResetUsecase
   ) {}
 
   async signup(req: Request, res: Response): Promise<void> {
     const { email } = req.body;
     const formData = (await this._otpService.getFormData(email)) as UserDto;
     if (!formData) {
-      res.status(HTTP_STATUS.BAD_REQUEST).json({
-        success: false,
-        message: ERROR_MESSAGE.RESTART_SIGNUP,
-      });
+      ResponseHelper.error(
+        res,
+        ERROR_MESSAGE.RESTART_SIGNUP,
+        HTTP_STATUS.BAD_REQUEST
+      );
       return;
     }
 
     const schema = userSchemas[formData.role];
     if (!schema) {
-      res.status(HTTP_STATUS.BAD_REQUEST).json({
-        success: false,
-        message: ERROR_MESSAGE.INVALID_CREDENTIALS,
-      });
+      ResponseHelper.error(
+        res,
+        ERROR_MESSAGE.INVALID_CREDENTIALS,
+        HTTP_STATUS.BAD_REQUEST
+      );
       return;
     }
     const validateData = schema.parse(formData);
     const response = await this._RegisterUserUsecase.execute(validateData);
-  
 
-    res.status(response.statusCode).json(response.content);
+    ResponseHelper.success(res, response.statusCode, response.content.message);
   }
 
   async googleSignup(req: Request, res: Response): Promise<void> {
     const { credential, client_id, role } = req.body;
     const user = await this._googleUsecase.execute(credential, client_id, role);
     if (!user._id || !user.email || !user.role)
-      throw new Error("User id, email or role is missing");
+      throw new ValidationError(ERROR_MESSAGE.USER_ID_OR_EMAIL_OR_ROLE_MISSING);
 
     const userId = user._id.toString();
 
@@ -187,7 +188,7 @@ export class AuthController implements IAuthController {
     const user = await this._loginUsecase.execute(data);
 
     if (!user._id || !user.email || !user.role) {
-      throw new Error("User id , email or role  is missing");
+      throw new ValidationError(ERROR_MESSAGE.USER_ID_OR_EMAIL_OR_ROLE_MISSING);
     }
 
     const userId = user._id.toString();
@@ -223,7 +224,6 @@ export class AuthController implements IAuthController {
   }
 
   async forgotPasswordSendMail(req: Request, res: Response): Promise<void> {
-    console.log(req.body);
     const { email } = req.body;
     await this._forgotPasswordSendMailUsecase.execute(email);
     ResponseHelper.success(
@@ -234,7 +234,6 @@ export class AuthController implements IAuthController {
   }
 
   async forgotPasswordReset(req: Request, res: Response): Promise<void> {
-    console.log(req.body);
     const { token, password, confirmPassword } = req.body;
     await this._forgotPasswordResetUsecase.execute(
       token,
@@ -260,11 +259,14 @@ export class AuthController implements IAuthController {
 
   async refreshToken(req: Request, res: Response): Promise<void> {
     try {
-      console.log("hit refresh token controller");
       const refreshToken = req.cookies[COOKIES_NAMES.REFRESH_TOKEN];
 
       if (!refreshToken) {
-        ResponseHelper.error(res,ERROR_MESSAGE.TOKEN_MISSING,HTTP_STATUS.UNAUTHORIZED);
+        ResponseHelper.error(
+          res,
+          ERROR_MESSAGE.TOKEN_MISSING,
+          HTTP_STATUS.UNAUTHORIZED
+        );
       }
 
       const newToken = await this._refreshTokenUsecase.execute(refreshToken);
@@ -273,15 +275,19 @@ export class AuthController implements IAuthController {
         newToken.accessToken,
         COOKIES_NAMES.ACCESS_TOKEN
       );
-      console.log("success refresh token controller");
-      ResponseHelper.success(res,HTTP_STATUS.OK,SUCCESS_MESSAGE.OPERATION_SUCCESS);
+      ResponseHelper.success(
+        res,
+        HTTP_STATUS.OK,
+        SUCCESS_MESSAGE.OPERATION_SUCCESS
+      );
     } catch (error) {
       console.log(error);
       clearCookie(res, COOKIES_NAMES.ACCESS_TOKEN, COOKIES_NAMES.REFRESH_TOKEN);
-      res
-        .status(HTTP_STATUS.UNAUTHORIZED)
-        .json({ message: ERROR_MESSAGE.INVALID_TOKEN });
-        ResponseHelper.error(res,ERROR_MESSAGE.INVALID_TOKEN,HTTP_STATUS.UNAUTHORIZED)
+      ResponseHelper.error(
+        res,
+        ERROR_MESSAGE.INVALID_TOKEN,
+        HTTP_STATUS.UNAUTHORIZED
+      );
     }
   }
 }

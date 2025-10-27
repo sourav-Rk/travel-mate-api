@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import { INotificationModel } from "../models/notification.model";
 
 export const notificationSchema = new mongoose.Schema<INotificationModel>({

@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
+
 import { IFCMTokenRepository } from "../../domain/repositoryInterfaces/fcmToken/fcmTokenRepository.interface";
 import { IPushNotificationService } from "../../domain/service-interfaces/push-notifications.interface";
 import { FirebaseAdminConfig } from "../config/firebase/firebaseAdmin.config";
-import { logger } from "../config/logger/winston.logger.config";
 
 @injectable()
 export class PushNotificationService implements IPushNotificationService {

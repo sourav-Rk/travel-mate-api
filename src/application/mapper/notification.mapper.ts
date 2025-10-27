@@ -11,7 +11,7 @@ export class NotificationMapper {
       type: doc.type,
       isRead: doc.isRead,
       createdAt: doc.createdAt,
-      metadata: doc.metadata ?? "",
+      metadata: typeof doc.metadata === "string" ? undefined : doc.metadata,
     };
   }
 }

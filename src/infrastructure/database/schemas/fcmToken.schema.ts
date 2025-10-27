@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import { IFcmTokenModel } from "../models/fcmToken.model";
 
 export const fcmTokenSchema = new mongoose.Schema<IFcmTokenModel>(

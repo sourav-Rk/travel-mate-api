@@ -1,14 +1,15 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 
-import { IItineraryController } from "../../interfaces/controllers/itinerary/itinerary-controller.interface";
 import { IUpdateItineraryUsecase } from "../../../application/usecase/interfaces/itinerary/updateItinerary-usecase.interface";
+import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import {
   ERROR_MESSAGE,
   HTTP_STATUS,
   SUCCESS_MESSAGE,
 } from "../../../shared/constants";
 import { itinerarySchema } from "../../../shared/validations/package.validation";
+import { IItineraryController } from "../../interfaces/controllers/itinerary/itinerary-controller.interface";
 
 @injectable()
 export class ItineraryController implements IItineraryController {
@@ -23,16 +24,19 @@ export class ItineraryController implements IItineraryController {
     const parsedResult = itinerarySchema.safeParse(itineraryData);
     if (!parsedResult.success) {
       console.log(parsedResult.error.format());
-      res
-        .status(HTTP_STATUS.BAD_REQUEST)
-        .json({ success: false, message: ERROR_MESSAGE.VALIDATION_FAILED });
+      ResponseHelper.error(
+        res,
+        ERROR_MESSAGE.VALIDATION_FAILED,
+        HTTP_STATUS.BAD_REQUEST
+      );
       return;
     }
 
     await this._updateItineraryUsecase.execute(id, itineraryData);
-    res.status(HTTP_STATUS.OK).json({
-      success: true,
-      message: SUCCESS_MESSAGE.ITINERARY_UPDATED_SUCCESS,
-    });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.ITINERARY_UPDATED_SUCCESS
+    );
   }
 }

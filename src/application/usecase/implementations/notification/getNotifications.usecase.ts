@@ -1,9 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import { IGetNotificationsUsecase } from "../../interfaces/notification/get-notifications-usecase.interface";
-import { INotificationRepository } from "../../../../domain/repositoryInterfaces/notification/notification-repository.interface";
+
 import { INotificationEntity } from "../../../../domain/entities/notification.entity";
 import { ValidationError } from "../../../../domain/errors/validationError";
+import { INotificationRepository } from "../../../../domain/repositoryInterfaces/notification/notification-repository.interface";
 import { ERROR_MESSAGE } from "../../../../shared/constants";
+import { IGetNotificationsUsecase } from "../../interfaces/notification/get-notifications-usecase.interface";
 
 @injectable()
 export class GetNotificationsUsecase implements IGetNotificationsUsecase {

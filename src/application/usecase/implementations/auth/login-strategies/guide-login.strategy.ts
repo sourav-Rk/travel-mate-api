@@ -1,12 +1,12 @@
 import { inject, injectable } from "tsyringe";
 
 import { IUserEntity } from "../../../../../domain/entities/user.entity";
-import { IGuideRepository } from "../../../../../domain/repositoryInterfaces/guide/guide-repository.interface";
-import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../../shared/constants";
-import { LoginUserDTO } from "../../../../dto/response/user.dto";
-import { comparePassword } from "../../../../../shared/utils/bcryptHelper";
 import { CustomError } from "../../../../../domain/errors/customError";
 import { NotFoundError } from "../../../../../domain/errors/notFoundError";
+import { IGuideRepository } from "../../../../../domain/repositoryInterfaces/guide/guide-repository.interface";
+import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../../shared/constants";
+import { comparePassword } from "../../../../../shared/utils/bcryptHelper";
+import { LoginUserDTO } from "../../../../dto/response/user.dto";
 
 import { ILoginStrategy } from "./login-strategy.interface";
 
@@ -20,7 +20,6 @@ export class GuideLoginStrategy implements ILoginStrategy {
   async login(user: LoginUserDTO): Promise<Partial<IUserEntity>> {
     const guide = await this._guideRepository.findByEmail(user.email);
 
-    console.log(guide, "-->guide");
 
     if (!guide) {
       throw new NotFoundError(ERROR_MESSAGE.EMAIL_NOT_FOUND);

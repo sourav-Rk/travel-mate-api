@@ -1,11 +1,13 @@
 import { inject, injectable } from "tsyringe";
-import { IReviewStrategy } from "./review-strategy.interface";
+
+import { NotFoundError } from "../../../../../domain/errors/notFoundError";
+import { ValidationError } from "../../../../../domain/errors/validationError";
+import { IClientRepository } from "../../../../../domain/repositoryInterfaces/client/client.repository.interface";
 import { IGuideRepository } from "../../../../../domain/repositoryInterfaces/guide/guide-repository.interface";
 import { IReviewRepository } from "../../../../../domain/repositoryInterfaces/review/review-repository.interface";
 import { ERROR_MESSAGE, REVIEWTARGET } from "../../../../../shared/constants";
-import { IClientRepository } from "../../../../../domain/repositoryInterfaces/client/client.repository.interface";
-import { ValidationError } from "../../../../../domain/errors/validationError";
-import { NotFoundError } from "../../../../../domain/errors/notFoundError";
+
+import { IReviewStrategy } from "./review-strategy.interface";
 
 @injectable()
 export class AddGuideReviewStrategy implements IReviewStrategy {
@@ -35,7 +37,6 @@ export class AddGuideReviewStrategy implements IReviewStrategy {
 
     const guideExist = await this._guideRepository.findById(guideId!);
 
-    console.log(guideExist, "-->guuide");
     if (!guideExist) {
       throw new NotFoundError(ERROR_MESSAGE.GUIDE_NOT_FOUND);
     }

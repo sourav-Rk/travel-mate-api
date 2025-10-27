@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
 
 import { IActivitiesEntity } from "../../../../domain/entities/activites.entity";
-import { IActivitiesRepository } from "../../../../domain/repositoryInterfaces/package/activities-repository.interface";
-import { IUpdateActivityUsecase } from "../../interfaces/activity/updateActivity-usecase.interface";
-import { ERROR_MESSAGE } from "../../../../shared/constants";
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { ValidationError } from "../../../../domain/errors/validationError";
+import { IActivitiesRepository } from "../../../../domain/repositoryInterfaces/package/activities-repository.interface";
+import { ERROR_MESSAGE } from "../../../../shared/constants";
+import { IUpdateActivityUsecase } from "../../interfaces/activity/updateActivity-usecase.interface";
 
 @injectable()
 export class UpdateActivityUsecase implements IUpdateActivityUsecase {

@@ -1,10 +1,13 @@
-import { PackageStatus, TRole } from "../../../shared/constants";
+import { ClientSession } from "mongoose";
+
 import {
   IPackage,
   PaginatedPackagesRepo,
 } from "../../../application/dto/response/packageDto";
+import { PackageStatus, TRole } from "../../../shared/constants";
 import { IPackageEntity } from "../../entities/package.entity";
 import { IBaseRepository } from "../baseRepository.interface";
+
 
 export interface IPackageRepository extends IBaseRepository<IPackageEntity> {
   findByPackageId(packageId: string): Promise<IPackageEntity | null>;
@@ -12,18 +15,18 @@ export interface IPackageRepository extends IBaseRepository<IPackageEntity> {
   findByPackagesByTodayDate(startDate: Date): Promise<IPackageEntity[]>;
   findByGuideId(guideId: string): Promise<IPackageEntity[] | []>;
   findByPackagesApplicationDeadline(deadline: Date): Promise<IPackageEntity[]>;
-  save(data: IPackageEntity, session?: any): Promise<IPackageEntity>;
+  save(data: IPackageEntity, session?: ClientSession): Promise<IPackageEntity>;
   update(
-    id: any,
+    id: string,
     data: Partial<IPackageEntity>,
-    session?: any
+    session?: ClientSession
   ): Promise<IPackageEntity>;
   updatePackageStatus(
     packageId: string,
     status: PackageStatus
   ): Promise<IPackageEntity | null>;
   find(criteria: {
-    userId: any;
+    userId: string;
     userType: TRole;
     searchTerm: string;
     status: string;
@@ -31,7 +34,7 @@ export interface IPackageRepository extends IBaseRepository<IPackageEntity> {
     pageNumber: number;
     pageSize: number;
   }): Promise<PaginatedPackagesRepo>;
-  getPackageDetails(id: any): Promise<IPackage>;
+  getPackageDetails(id: string): Promise<IPackage>;
   updateBlock(
     packageId: string,
     isBlocked: boolean

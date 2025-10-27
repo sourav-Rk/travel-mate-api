@@ -71,8 +71,13 @@ export interface IDuration {
 export interface IActivity {
   _id: Types.ObjectId;
   name: string;
-  description?: string;
-  [key: string]: any;
+  dayNumber: number;
+  description: string;
+  duration: string;
+  category: string;
+  priceIncluded: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface IDay extends DayDto {

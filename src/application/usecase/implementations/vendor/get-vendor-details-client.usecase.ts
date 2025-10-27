@@ -1,12 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import { IGetVendorDetailsClientUsecase } from "../../interfaces/vendor/get-vendor-details-client-usecase.interface";
-import { IVendorRepository } from "../../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
-import { IVendorEntity } from "../../../../domain/entities/vendor.entity";
-import { VendorDetailsForClientDto } from "../../../dto/response/vendor.dto";
+
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { IVendorRepository } from "../../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
 import { ERROR_MESSAGE } from "../../../../shared/constants";
+import { VendorDetailsForClientDto } from "../../../dto/response/vendor.dto";
 import { VendorMapper } from "../../../mapper/vendor.mapper";
-import { IVendorModel } from "../../../../infrastructure/database/models/vendor.model";
+import { IGetVendorDetailsClientUsecase } from "../../interfaces/vendor/get-vendor-details-client-usecase.interface";
 
 @injectable()
 export class GetVendorDetailsClientUsecase

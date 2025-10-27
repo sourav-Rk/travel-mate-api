@@ -1,6 +1,4 @@
 import { IBookingEntity } from "../../domain/entities/booking.entity";
-import { IClientEntity } from "../../domain/entities/client.entity";
-import { IPackageEntity } from "../../domain/entities/package.entity";
 import { IBookingModel } from "../../infrastructure/database/models/booking.model";
 import { BOOKINGSTATUS } from "../../shared/constants";
 import {

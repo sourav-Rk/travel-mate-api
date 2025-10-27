@@ -1,9 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import { IViewPackageDetailsUsecase } from "../../interfaces/guideTrips/viewPackageDetails-usecase.interface";
-import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
+
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
 import { ERROR_MESSAGE } from "../../../../shared/constants";
 import { IPackage } from "../../../dto/response/packageDto";
+import { IViewPackageDetailsUsecase } from "../../interfaces/guideTrips/viewPackageDetails-usecase.interface";
 
 @injectable()
 export class ViewPackageDetailsGuideUsecase

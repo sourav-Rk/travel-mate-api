@@ -1,19 +1,20 @@
-import { inject, injectable } from "tsyringe";
-import { IVendorBookingController } from "../../interfaces/controllers/booking/vendor-booking-controller.interface";
 import { Request, Response } from "express";
-import { CustomRequest } from "../../middlewares/auth.middleware";
+import { inject, injectable } from "tsyringe";
+
+import { IGetBookingDetailsVendorUsecase } from "../../../application/usecase/interfaces/booking/vendor-bookings/get-booking-details-usecase.interface";
 import { IGetBookingsVendorUsecase } from "../../../application/usecase/interfaces/booking/vendor-bookings/get-bookings-usecase.interface";
+import { ISendPaymentAlertUsecase } from "../../../application/usecase/interfaces/booking/vendor-bookings/send-payment-alert-usecase.interface";
+import { IGetCancellationRequests } from "../../../application/usecase/interfaces/booking-cancell/get-cancellation-requests-usecase.interface";
+import { IGetCancelledBookingDetailsUsecase } from "../../../application/usecase/interfaces/booking-cancell/get-cancelled-bookingDetails-usecase.interface";
+import { IVendorApproveCancellationUsecase } from "../../../application/usecase/interfaces/booking-cancell/vendor-approve-cancellation.-usecase.interface";
+import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import {
   BOOKINGSTATUS,
   HTTP_STATUS,
   SUCCESS_MESSAGE,
 } from "../../../shared/constants";
-import { ISendPaymentAlertUsecase } from "../../../application/usecase/interfaces/booking/vendor-bookings/send-payment-alert-usecase.interface";
-import { IGetBookingDetailsVendorUsecase } from "../../../application/usecase/interfaces/booking/vendor-bookings/get-booking-details-usecase.interface";
-import { IVendorApproveCancellationUsecase } from "../../../application/usecase/interfaces/booking-cancell/vendor-approve-cancellation.-usecase.interface";
-import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
-import { IGetCancellationRequests } from "../../../application/usecase/interfaces/booking-cancell/get-cancellation-requests-usecase.interface";
-import { IGetCancelledBookingDetailsUsecase } from "../../../application/usecase/interfaces/booking-cancell/get-cancelled-bookingDetails-usecase.interface";
+import { IVendorBookingController } from "../../interfaces/controllers/booking/vendor-booking-controller.interface";
+import { CustomRequest } from "../../middlewares/auth.middleware";
 
 @injectable()
 export class VendorBookingController implements IVendorBookingController {
@@ -68,22 +69,25 @@ export class VendorBookingController implements IVendorBookingController {
     const bookingDetails = await this._getBookingDetailsVendorUsecase.execute(
       bookingId
     );
-    res.status(HTTP_STATUS.OK).json({ success: true, bookingDetails });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      bookingDetails,
+      "bookingDetails"
+    );
   }
 
   async sendPaymentAlert(req: Request, res: Response): Promise<void> {
     const vendorId = (req as CustomRequest).user.id;
     const { packageId } = req.params;
     await this._sendPaymentAlertUsecase.execute(vendorId, packageId);
-    res
-      .status(HTTP_STATUS.OK)
-      .json({ success: true, message: SUCCESS_MESSAGE });
+    ResponseHelper.success(res, HTTP_STATUS.OK, SUCCESS_MESSAGE.PAYMENT_ALERT);
   }
 
   async verifyBookingCancellation(req: Request, res: Response): Promise<void> {
     const { bookingId } = req.params;
     const userId = (req as CustomRequest).user.id;
-    console.log(bookingId, "booing id in controller");
     await this._vendorApproveCancellationUsecase.execute(userId, bookingId);
     ResponseHelper.success(
       res,

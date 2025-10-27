@@ -1,13 +1,14 @@
-import { inject, injectable } from "tsyringe";
 import { Server, Socket } from "socket.io";
-import { ISendGroupMessageUsecase } from "../../application/usecase/interfaces/group-chat/send-group-message-usecase.interface";
+import { inject, injectable } from "tsyringe";
+
 import { IGetGroupChatByPackageUsecase } from "../../application/usecase/interfaces/group-chat/get-group-chat-by-package-usecase.interface";
 import { IGetGroupMessagesUsecase } from "../../application/usecase/interfaces/group-chat/get-group-messages-usecase.interface";
-import { IGroupChatSocketHandler } from "../interfaces/socket/group-chat-socket-handler.interface";
+import { ISendGroupMessageUsecase } from "../../application/usecase/interfaces/group-chat/send-group-message-usecase.interface";
+import { IGroupMessageEntity } from "../../domain/entities/group-message.entity";
 import { ERROR_MESSAGE } from "../../shared/constants";
 import { GROUP_CHAT_SOCKET_EVENTS } from "../../shared/socket-events-constants";
-import { IGroupMessageEntity } from "../../domain/entities/group-message.entity";
 import { getErrorMessage } from "../../shared/utils/error-handler";
+import { IGroupChatSocketHandler } from "../interfaces/socket/group-chat-socket-handler.interface";
 
 @injectable()
 export class GroupChatSocketHandler implements IGroupChatSocketHandler {
@@ -47,7 +48,7 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
         try {
           const { packageId } = data;
 
-          let groupChat = await this._getGroupChatByPackageUsecase.execute(
+          const groupChat = await this._getGroupChatByPackageUsecase.execute(
             packageId
           );
 

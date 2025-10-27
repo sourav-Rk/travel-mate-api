@@ -1,7 +1,12 @@
 import { inject, injectable } from "tsyringe";
-import { ICancellBookingUsecase } from "../../interfaces/booking-cancell/cancell-booking-usecase.interface";
-import { IBookingRepository } from "../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
+
+import { IBookingEntity } from "../../../../domain/entities/booking.entity";
+import { CustomError } from "../../../../domain/errors/customError";
+import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { ValidationError } from "../../../../domain/errors/validationError";
+import { IBookingRepository } from "../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
+import { IClientRepository } from "../../../../domain/repositoryInterfaces/client/client.repository.interface";
+import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
 import {
   BOOKINGSTATUS,
   CANCELLATION_POLICIES,
@@ -10,11 +15,7 @@ import {
   ERROR_MESSAGE,
   HTTP_STATUS,
 } from "../../../../shared/constants";
-import { NotFoundError } from "../../../../domain/errors/notFoundError";
-import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
-import { CustomError } from "../../../../domain/errors/customError";
-import { IBookingEntity } from "../../../../domain/entities/booking.entity";
-import { IClientRepository } from "../../../../domain/repositoryInterfaces/client/client.repository.interface";
+import { ICancellBookingUsecase } from "../../interfaces/booking-cancell/cancell-booking-usecase.interface";
 
 @injectable()
 export class CancellBookingUsecase implements ICancellBookingUsecase {
@@ -43,7 +44,9 @@ export class CancellBookingUsecase implements ICancellBookingUsecase {
     }
 
     if (!cancellationReason || cancellationReason.trim().length === 0) {
-      throw new ValidationError("Cancellation reason is required");
+      throw new ValidationError(
+        ERROR_MESSAGE.BOOKING_CANCELLATION.CANCELLATION_REASON_REQUIRED
+      );
     }
 
     const client = await this._clientRepository.findById(userId);
@@ -67,9 +70,6 @@ export class CancellBookingUsecase implements ICancellBookingUsecase {
     if (!packageDetails) {
       throw new NotFoundError(ERROR_MESSAGE.PACKAGE_NOT_FOUND);
     }
-   
-
-    console.log(booking.status,"-->booking status before cancell")
 
     // Check if cancellation is already requested
     if (booking.status === BOOKINGSTATUS.CANCELLATION_REQUESTED) {
@@ -84,8 +84,6 @@ export class CancellBookingUsecase implements ICancellBookingUsecase {
 
     const diffTime = tripStartDate.getTime() - todayDate.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    console.log(diffDays,"day difference")
 
     // Check cancellation eligibility
     const { isEligible, policy } = this.checkCancellationEligibility(
@@ -117,7 +115,7 @@ export class CancellBookingUsecase implements ICancellBookingUsecase {
       }
     );
 
-    console.log(updatedBooking)
+    console.log(updatedBooking);
 
     return {
       success: true,
@@ -190,9 +188,6 @@ export class CancellBookingUsecase implements ICancellBookingUsecase {
       };
     }
 
-
-    console.log(policy,"-->policy")
-    
     return { isEligible: true, policy };
   }
 
@@ -206,13 +201,13 @@ export class CancellBookingUsecase implements ICancellBookingUsecase {
 
     if (booking.status === BOOKINGSTATUS.CONFIRMED) {
       const advanceAmount = booking.advancePayment?.amount || 0;
-      console.log((advanceAmount * policy.advanceRefundPercentage) / 100)
+      console.log((advanceAmount * policy.advanceRefundPercentage) / 100);
       return (advanceAmount * policy.advanceRefundPercentage) / 100;
     } else if (booking.status === BOOKINGSTATUS.FULLY_PAID) {
       const totalPaid =
         (booking.advancePayment?.amount || 0) +
         (booking.fullPayment?.amount || 0);
-        console.log((totalPaid * policy.refundPercentage) / 100)
+      console.log((totalPaid * policy.refundPercentage) / 100);
       return (totalPaid * policy.refundPercentage) / 100;
     }
 

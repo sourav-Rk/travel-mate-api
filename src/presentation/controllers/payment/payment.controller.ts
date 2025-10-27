@@ -1,11 +1,13 @@
-import { inject, injectable } from "tsyringe";
-import { IPaymentController } from "../../interfaces/controllers/payment/payment-controller.interface";
 import { Request, Response } from "express";
-import { IPayAdvanceAmountUsecase } from "../../../application/usecase/interfaces/payment/pay-advance-amount-usecase.interface";
-import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
+import { inject, injectable } from "tsyringe";
+
 import { IHandleStripeWebHookUsecase } from "../../../application/usecase/interfaces/payment/handleStripeWebhook-usecase.interface";
-import { config } from "../../../shared/config";
+import { IPayAdvanceAmountUsecase } from "../../../application/usecase/interfaces/payment/pay-advance-amount-usecase.interface";
 import { IPayFullAmountUsecase } from "../../../application/usecase/interfaces/payment/pay-fullAmount-usecase.interface";
+import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
+import { config } from "../../../shared/config";
+import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
+import { IPaymentController } from "../../interfaces/controllers/payment/payment-controller.interface";
 
 @injectable()
 export class PaymentController implements IPaymentController {
@@ -26,26 +28,26 @@ export class PaymentController implements IPaymentController {
       bookingId,
       amount
     );
-    res.status(HTTP_STATUS.OK).json({
-      success: true,
-      message: SUCCESS_MESSAGE.CHECKOUT_SESSION_CREATED,
-      data: { url: result.url, sessionId: result.sessionId },
-    });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.CHECKOUT_SESSION_CREATED,
+      { url: result.url, sessionId: result.sessionId }
+    );
   }
 
   async payFullAmount(req: Request, res: Response): Promise<void> {
-    console.log(req.body);
     const { bookingId, amount } = req.body;
     const result = await this._payFullAmountUsecase.execute(bookingId, amount);
-    res.status(HTTP_STATUS.OK).json({
-      success: true,
-      message: SUCCESS_MESSAGE.CHECKOUT_SESSION_CREATED,
-      data: { url: result.url, sessionId: result.sessionId },
-    });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.CHECKOUT_SESSION_CREATED,
+      { url: result.url, sessionId: result.sessionId }
+    );
   }
 
   async handleWebhook(req: Request, res: Response): Promise<void> {
-    console.log(req.body, "web hook controller");
     const payload = req.body;
     const signature = req.headers["stripe-signature"] as string;
     const endpointSecret = config.stripe.webhook_secret;
@@ -54,8 +56,10 @@ export class PaymentController implements IPaymentController {
       signature,
       endpointSecret
     );
-    res
-      .status(HTTP_STATUS.OK)
-      .json({ success: true, message: SUCCESS_MESSAGE.WEBHOOK_PROCESSED });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.WEBHOOK_PROCESSED
+    );
   }
 }

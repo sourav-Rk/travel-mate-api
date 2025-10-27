@@ -1,16 +1,16 @@
-import { Response, NextFunction, RequestHandler } from "express";
+import { Response, NextFunction } from "express";
 import { inject, injectable } from "tsyringe";
 
-import { IBlockedMiddleware } from "../interfaces/middleware/blocked-middleware.interface";
+import { IBlackListTokenUsecase } from "../../application/usecase/interfaces/auth/blacklist-token-usecase.interface";
 import { IClientRepository } from "../../domain/repositoryInterfaces/client/client.repository.interface";
 import { IVendorRepository } from "../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
-import { IBlackListTokenUsecase } from "../../application/usecase/interfaces/auth/blacklist-token-usecase.interface";
 import {
   COOKIES_NAMES,
   ERROR_MESSAGE,
   HTTP_STATUS,
 } from "../../shared/constants";
 import { clearCookie } from "../../shared/utils/cookieHelper";
+import { IBlockedMiddleware } from "../interfaces/middleware/blocked-middleware.interface";
 
 import { CustomRequest } from "./auth.middleware";
 

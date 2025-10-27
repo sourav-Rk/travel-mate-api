@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 
+import { CustomError } from "../../../../domain/errors/customError";
 import { IOtpService } from "../../../../domain/service-interfaces/otp-service.interface";
 import { IUserExistenceService } from "../../../../domain/service-interfaces/user-existence-service.interface";
-import { IVerifyExistingEmail } from "../../interfaces/auth/verify-existing-email-usecase.interface";
 import {
   ERROR_MESSAGE,
   EVENT_EMMITER_TYPE,
@@ -11,7 +11,7 @@ import {
 } from "../../../../shared/constants";
 import { eventBus } from "../../../../shared/eventBus";
 import { mailContentProvider } from "../../../../shared/mailContentProvider";
-import { CustomError } from "../../../../domain/errors/customError";
+import { IVerifyExistingEmail } from "../../interfaces/auth/verify-existing-email-usecase.interface";
 
 @injectable()
 export class VerifyExistingEmail implements IVerifyExistingEmail {

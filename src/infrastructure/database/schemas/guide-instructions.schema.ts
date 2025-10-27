@@ -1,6 +1,7 @@
-import mongoose, { Schema } from "mongoose";
-import { IGuideInstructionModel } from "../models/guide-instruction.model";
+import { Schema } from "mongoose";
+
 import { INSTRUCTION_PRIORITY } from "../../../shared/constants";
+import { IGuideInstructionModel } from "../models/guide-instruction.model";
 
 const priorityValues: INSTRUCTION_PRIORITY[] = [
   "LOW",

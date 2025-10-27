@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 
-import { IGuideController } from "../../interfaces/controllers/guide/guide.controller.interface";
+import { UserDto } from "../../../application/dto/response/user.dto";
 import { IResetPasswordUsecase } from "../../../application/usecase/interfaces/guide/reset-password-usecase.interface";
 import { IAddGuideUsecase } from "../../../application/usecase/interfaces/vendor/add-guide-usecase.interface";
 import { IGetGuideDetailsUsecase } from "../../../application/usecase/interfaces/vendor/get-guide-details-usecase.interface";
 import { IGetAllGuidesUsecase } from "../../../application/usecase/interfaces/vendor/getAllGuides-usecase.interface";
+import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
-import { UserDto } from "../../../application/dto/response/user.dto";
+import { IGuideController } from "../../interfaces/controllers/guide/guide.controller.interface";
 import { CustomRequest } from "../../middlewares/auth.middleware";
 
 @injectable()
@@ -29,9 +30,11 @@ export class GuideController implements IGuideController {
   async resetPassword(req: Request, res: Response): Promise<void> {
     const { id, password, token } = req.body;
     await this._resetPasswordResetUsecase.execute(id, password, token);
-    res
-      .status(HTTP_STATUS.OK)
-      .json({ success: true, message: SUCCESS_MESSAGE.PASSWORD_UPDATE_GUIDE });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.PASSWORD_UPDATE_GUIDE
+    );
   }
 
   async addGuide(req: Request, res: Response): Promise<void> {
@@ -39,9 +42,11 @@ export class GuideController implements IGuideController {
     const guideData = req.body as UserDto;
     console.log(req.body);
     await this._addGuideUsecase.execute(guideData, String(agencyId));
-    res
-      .status(HTTP_STATUS.CREATED)
-      .json({ success: true, message: SUCCESS_MESSAGE.ADD_GUIDE_SUCCESSFULLY });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.CREATED,
+      SUCCESS_MESSAGE.ADD_GUIDE_SUCCESSFULLY
+    );
   }
 
   async getAllGuides(req: Request, res: Response): Promise<void> {
@@ -95,22 +100,27 @@ export class GuideController implements IGuideController {
       maxExperience ? Number(maxExperience) : undefined,
       gender as string
     );
-    res.status(HTTP_STATUS.OK).json({
-      success: true,
-      users: user,
-      totalPages: total,
-      currentPage: pageNumber,
-    });
+
+    ResponseHelper.paginated(
+      res,
+      user,
+      total,
+      pageNumber,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      "users"
+    );
   }
 
   async getGuideDetails(req: Request, res: Response): Promise<void> {
     const agencyId = (req as CustomRequest).user.id;
     const { id } = req.query;
-    const guide = await this._getGuideDetailsUsecase.execute(agencyId, id);
-    res.status(HTTP_STATUS.OK).json({ success: true, user: guide });
-  }
-
-  async assignGuide(req: Request, res: Response): Promise<void> {
-    const { packageId } = req.params;
+    const guide = await this._getGuideDetailsUsecase.execute(agencyId, String(id));
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      guide,
+      "user"
+    );
   }
 }

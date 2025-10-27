@@ -1,8 +1,9 @@
 import { inject, injectable } from "tsyringe";
-import { IMarkReadUsecase } from "../../interfaces/chat/mark-read-usecase.interface";
-import { IMessageRepository } from "../../../../domain/repositoryInterfaces/message/message-repository.interface";
+
 import { CustomError } from "../../../../domain/errors/customError";
+import { IMessageRepository } from "../../../../domain/repositoryInterfaces/message/message-repository.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
+import { IMarkReadUsecase } from "../../interfaces/chat/mark-read-usecase.interface";
 
 @injectable()
 export class MarkReadUsecase implements IMarkReadUsecase {

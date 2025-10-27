@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import { IBookingModel } from "../models/booking.model";
-import { BOOKINGSTATUS } from "../../../shared/constants";
 import { v4 as uuidv4 } from "uuid";
-import { string } from "zod";
+
+import { BOOKINGSTATUS } from "../../../shared/constants";
+import { IBookingModel } from "../models/booking.model";
 
 const paymentFields = {
   amount: {

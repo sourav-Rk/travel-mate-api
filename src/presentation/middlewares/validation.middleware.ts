@@ -1,6 +1,7 @@
 import { plainToInstance } from "class-transformer";
 import { validate, ValidationError } from "class-validator";
 import { NextFunction, Request, Response } from "express";
+
 import { HTTP_STATUS } from "../../shared/constants";
 
 function flattenValidationErrors(
@@ -24,7 +25,10 @@ function flattenValidationErrors(
   });
 }
 
-export const validationMiddleware = (dtoClass: any) => {
+type ClassConstructor<T = object> = new (...args: unknown[]) => T;
+
+
+export const validationMiddleware = <T extends object>(dtoClass: ClassConstructor<T>) => {
   return async (
     req: Request,
     res: Response,
@@ -32,15 +36,15 @@ export const validationMiddleware = (dtoClass: any) => {
   ): Promise<void> => {
     try {
       // Merge body, params, query for validation
-      let data: Record<string, any> = {};
+      const data: Record<string, unknown> = {};
       if (req.body && Object.keys(req.body).length > 0)
-        data = { ...data, ...req.body };
+        Object.assign(data, req.body);
       if (req.params && Object.keys(req.params).length > 0)
-        data = { ...data, ...req.params };
+        Object.assign(data, req.params);
       if (req.query && Object.keys(req.query).length > 0)
-        data = { ...data, ...req.query };
+        Object.assign(data, req.query);
 
-      const dtoObj = plainToInstance(dtoClass, data) as object;
+      const dtoObj = plainToInstance(dtoClass, data);
       const errors = await validate(dtoObj, {
         whitelist: true,
         forbidNonWhitelisted: true,
@@ -63,8 +67,6 @@ export const validationMiddleware = (dtoClass: any) => {
         return;
       }
 
-      // Optional: attach validated data for controller use
-      (req as any).validatedData = dtoObj;
 
       next();
     } catch (error) {

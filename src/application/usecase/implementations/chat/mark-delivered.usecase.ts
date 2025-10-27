@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
-import { IMessageRepository } from "../../../../domain/repositoryInterfaces/message/message-repository.interface";
+
 import { CustomError } from "../../../../domain/errors/customError";
+import { IMessageRepository } from "../../../../domain/repositoryInterfaces/message/message-repository.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import { IMarkAsDeliveredUsecase } from "../../interfaces/chat/mark-delivered-usecase.interface";
 

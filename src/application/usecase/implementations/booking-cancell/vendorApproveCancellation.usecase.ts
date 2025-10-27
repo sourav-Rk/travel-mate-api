@@ -1,6 +1,15 @@
 import { inject, injectable } from "tsyringe";
-import { IVendorApproveCancellationUsecase } from "../../interfaces/booking-cancell/vendor-approve-cancellation.-usecase.interface";
+
+import { IBookingEntity } from "../../../../domain/entities/booking.entity";
+import { CustomError } from "../../../../domain/errors/customError";
+import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { ValidationError } from "../../../../domain/errors/validationError";
 import { IBookingRepository } from "../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
+import { IVendorRepository } from "../../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
+import { IWalletRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
+import { IWalletTransactionsRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-transactions-repository.interface";
+import { IAdminPaymentService } from "../../../../domain/service-interfaces/admin-payment-service.interface";
+import { IVendorPaymentService } from "../../../../domain/service-interfaces/vendor-payment-service.interface";
 import {
   BOOKINGSTATUS,
   ERROR_MESSAGE,
@@ -8,16 +17,7 @@ import {
   TRANSACTION_DESCRIPTIONS,
   TRANSACTION_TYPE,
 } from "../../../../shared/constants";
-import { ValidationError } from "../../../../domain/errors/validationError";
-import { NotFoundError } from "../../../../domain/errors/notFoundError";
-import { CustomError } from "../../../../domain/errors/customError";
-import { IBookingEntity } from "../../../../domain/entities/booking.entity";
-import { IWalletRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
-import { IWalletTransactionsRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-transactions-repository.interface";
-import { IAdminPaymentService } from "../../../../domain/service-interfaces/admin-payment-service.interface";
-import { IVendorPaymentService } from "../../../../domain/service-interfaces/vendor-payment-service.interface";
-import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
-import { IVendorRepository } from "../../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
+import { IVendorApproveCancellationUsecase } from "../../interfaces/booking-cancell/vendor-approve-cancellation.-usecase.interface";
 
 @injectable()
 export class VendorApproveCancellationUsecase
@@ -96,8 +96,6 @@ export class VendorApproveCancellationUsecase
     const userWallet = await this._walletRepository.findByUserId(
       booking.userId
     );
-
-    console.log(userWallet, "before");
 
     if (!userWallet) {
       throw new NotFoundError(ERROR_MESSAGE.WALLET_NOT_FOUND);

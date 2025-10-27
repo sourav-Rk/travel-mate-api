@@ -1,9 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import { IGuideInstructionRepository } from "../../../../domain/repositoryInterfaces/guide-instruction/guide-instruction-repository.interface";
+
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { ValidationError } from "../../../../domain/errors/validationError";
-import { IMarkInstructionReadUseCase } from "../../interfaces/guide-instruction/mark-instruction-read-usecase.interface";
+import { IGuideInstructionRepository } from "../../../../domain/repositoryInterfaces/guide-instruction/guide-instruction-repository.interface";
 import { ERROR_MESSAGE } from "../../../../shared/constants";
+import { IMarkInstructionReadUseCase } from "../../interfaces/guide-instruction/mark-instruction-read-usecase.interface";
 
 @injectable()
 export class MarkInstructionReadUseCase implements IMarkInstructionReadUseCase {

@@ -1,6 +1,6 @@
 import { IGuideInstructionEntity } from "../../domain/entities/guide-instruction.entity";
 import { IGuideInstructionModel } from "../../infrastructure/database/models/guide-instruction.model";
-import { GuideInstructionWithPackageDto } from "../dto/response/guide-instructionDto";
+import { GuideInstructionWithPackageDto, IGuideInstructionAggregationResult } from "../dto/response/guide-instructionDto";
 
 export class GuideInstructionMapper {
   static toEntity(doc: IGuideInstructionModel): IGuideInstructionEntity {
@@ -19,9 +19,8 @@ export class GuideInstructionMapper {
     };
   }
 
-  static mapToInstructionWithPackageDto(doc: any): GuideInstructionWithPackageDto {
+  static mapToInstructionWithPackageDto(doc: IGuideInstructionAggregationResult): GuideInstructionWithPackageDto {
   return {
-    // Instruction fields
     _id: doc._id?.toString(),
     guideId: doc.guideId?.toString(),
     packageId: doc.packageId,
@@ -34,8 +33,7 @@ export class GuideInstructionMapper {
     readBy: doc.readBy || [],
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
-    
-    // Package details
+
     packageDetails: doc.packageDetails ? {
       packageName: doc.packageDetails.packageName,
       title: doc.packageDetails.title,

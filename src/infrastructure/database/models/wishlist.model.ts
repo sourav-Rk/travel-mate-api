@@ -1,4 +1,5 @@
 import mongoose, { Document } from "mongoose";
+
 import { IWishlistEntity } from "../../../domain/entities/wishlist.entity";
 import { wishlistSchema } from "../schemas/wishlist.schema";
 

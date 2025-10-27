@@ -1,12 +1,13 @@
+import { Types } from "mongoose";
 import { injectable } from "tsyringe";
-import { BaseRepository } from "../baseRepository";
+
+import { IGroupMessageEntity } from "../../../domain/entities/group-message.entity";
+import { IGroupMessageRepository } from "../../../domain/repositoryInterfaces/group-chat/group-message-repository.interface";
 import {
   groupMessageDB,
   IGroupMessageModel,
 } from "../../database/models/group-message.model";
-import { IGroupMessageEntity } from "../../../domain/entities/group-message.entity";
-import { IGroupMessageRepository } from "../../../domain/repositoryInterfaces/group-chat/group-message-repository.interface";
-import { Types } from "mongoose";
+import { BaseRepository } from "../baseRepository";
 
 @injectable()
 export class GroupMessageRepository

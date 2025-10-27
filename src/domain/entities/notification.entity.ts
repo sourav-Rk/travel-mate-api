@@ -1,10 +1,12 @@
+import { MetadataValue } from "../../shared/constants";
+
 export interface INotificationEntity {
-  _id ?: string;
+  _id?: string;
   userId: string;
   title: string;
   message: string;
   type: string;
   isRead: boolean;
-  metadata?: any;
+  metadata?: Record<string, MetadataValue>;
   createdAt?: Date;
 }

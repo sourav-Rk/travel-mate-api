@@ -1,13 +1,13 @@
 import { inject, injectable } from "tsyringe";
 
+import { CustomError } from "../../../../domain/errors/customError";
 import { IClientRepository } from "../../../../domain/repositoryInterfaces/client/client.repository.interface";
-import { IUpdateClientPasswordUsecase } from "../../interfaces/client/update-client-password-usecase.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import {
   comparePassword,
   hashPassword,
 } from "../../../../shared/utils/bcryptHelper";
-import { CustomError } from "../../../../domain/errors/customError";
+import { IUpdateClientPasswordUsecase } from "../../interfaces/client/update-client-password-usecase.interface";
 
 @injectable()
 export class UpdateClientPasswordUsecase
@@ -19,14 +19,14 @@ export class UpdateClientPasswordUsecase
   ) {}
 
   async execute(
-    id: any,
+    id: string,
     currentPassword: string,
     newPassword: string
   ): Promise<void> {
     const user = await this._clientRepository.findById(id);
 
     if (!user) {
-      throw new CustomError(HTTP_STATUS.NOT_FOUND, "User not found");
+      throw new CustomError(HTTP_STATUS.NOT_FOUND, ERROR_MESSAGE.USER_NOT_FOUND);
     }
 
     const isPasswordMatch = await comparePassword(

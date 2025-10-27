@@ -1,12 +1,11 @@
-import { profile } from "console";
 import { IGuideEntity } from "../../domain/entities/guide.entity";
+import { IGuideModel } from "../../infrastructure/database/models/guide.model";
 import {
   GuideDetailsForClientDto,
   GuideListDto,
   GuideProfileDto,
 } from "../dto/response/guideDto";
 import { GuideDto } from "../dto/response/user.dto";
-import { IGuideModel } from "../../infrastructure/database/models/guide.model";
 
 export class GuideMapper {
   static toEntity(doc: IGuideModel): IGuideEntity {

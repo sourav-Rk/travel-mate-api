@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 
-import { ICommonController } from "../../interfaces/controllers/common.controller.interface";
-import { IUploadImageUsecase } from "../../../application/usecase/interfaces/common/upload-image.usecase";
-import { HTTP_STATUS } from "../../../shared/constants";
 import { ImageMulterResponseDto } from "../../../application/dto/response/imageMulterDto";
+import { IUploadImageUsecase } from "../../../application/usecase/interfaces/common/upload-image.usecase";
+import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
+import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
+import { ICommonController } from "../../interfaces/controllers/common.controller.interface";
 
 export interface MulterRequest extends Request {
   files: Express.Multer.File[];
@@ -22,17 +23,16 @@ export class CommonController implements ICommonController {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    console.log("in common controller");
     try {
-      console.log(req.files, "------files->");
       const files: Express.Multer.File[] = req.files;
       const uploadedFiles: ImageMulterResponseDto =
         this.uploadImageUsecase.execute(files);
-      res.status(HTTP_STATUS.OK).json({
-        success: true,
-        message: "Image uploaded successfully",
-        data: uploadedFiles,
-      });
+      ResponseHelper.success(
+        res,
+        HTTP_STATUS.OK,
+        SUCCESS_MESSAGE.IMAGE_UPLOADED_SUCCESSFULLY,
+        uploadedFiles
+      );
     } catch (error) {
       console.log(error);
       next(error);

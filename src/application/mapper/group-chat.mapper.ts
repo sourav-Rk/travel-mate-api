@@ -3,7 +3,6 @@ import { IGroupChatModel } from "../../infrastructure/database/models/group-chat
 import {
   GroupChatDetailsDto,
   GroupChatDetailsQueryDto,
-  GroupChatDTO,
 } from "../dto/response/groupChatDto";
 
 export class GroupChatMapper {

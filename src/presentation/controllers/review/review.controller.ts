@@ -1,11 +1,13 @@
-import { inject, injectable } from "tsyringe";
-import { IReviewController } from "../../interfaces/controllers/review/review-controller.interface";
-import { IAddReviewUsecase } from "../../../application/usecase/interfaces/review/add-review-usecase.interface";
 import { Request, Response } from "express";
-import { CustomRequest } from "../../middlewares/auth.middleware";
-import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
-import { IGetPackageReviewsUsecase } from "../../../application/usecase/interfaces/review/getPackageReviews-usecase.interface";
+import { inject, injectable } from "tsyringe";
+
+import { IAddReviewUsecase } from "../../../application/usecase/interfaces/review/add-review-usecase.interface";
 import { IGetGuideReviewUsecase } from "../../../application/usecase/interfaces/review/get-guide-reviews.usecase";
+import { IGetPackageReviewsUsecase } from "../../../application/usecase/interfaces/review/getPackageReviews-usecase.interface";
+import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
+import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
+import { IReviewController } from "../../interfaces/controllers/review/review-controller.interface";
+import { CustomRequest } from "../../middlewares/auth.middleware";
 
 @injectable()
 export class ReviewController implements IReviewController {
@@ -31,15 +33,23 @@ export class ReviewController implements IReviewController {
       packageId,
       guideId
     );
-    res
-      .status(HTTP_STATUS.CREATED)
-      .json({ success: true, message: SUCCESS_MESSAGE.ADDED_REVIEW });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.CREATED,
+      SUCCESS_MESSAGE.ADDED_REVIEW
+    );
   }
 
   async getReviews(req: Request, res: Response): Promise<void> {
     const { packageId } = req.params;
     const reviews = await this._getPackageReviewUsecase.execute(packageId);
-    res.status(HTTP_STATUS.OK).json({ success: true, reviews });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      reviews,
+      "reviews"
+    );
   }
 
   async getGuideReviews(req: Request, res: Response): Promise<void> {
@@ -48,6 +58,12 @@ export class ReviewController implements IReviewController {
       packageId,
       guideId
     );
-    res.status(HTTP_STATUS.OK).json({ success: true, reviews });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      reviews,
+      "reviews"
+    );
   }
 }

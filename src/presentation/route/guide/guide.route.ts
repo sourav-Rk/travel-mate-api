@@ -1,12 +1,17 @@
 import { injectable } from "tsyringe";
+
+import { GetBookingOfThePackageGuideReqDTO } from "../../../application/dto/request/booking.dto";
+import { GetMessagesReqDto } from "../../../application/dto/request/chat.dto";
+import { CreateInstructionDto } from "../../../application/dto/request/guide-instruction.dto";
 import {
-  authorizeRole,
-  verifyAuth,
-  verifyResetToken,
-} from "../../middlewares/auth.middleware";
-import { asyncHandler } from "../../../shared/async-handler";
+  ResetPasswordGuideDTO,
+  UpdatePasswordGuideReqDTO,
+} from "../../../application/dto/request/guide.dto";
 import {
-  blockMiddleware,
+  GetAssignedPackagesReqDTO,
+  UpdatePackageStatusReqDTO,
+} from "../../../application/dto/request/package.dto";
+import {
   chatController,
   groupChatController,
   guideBookingController,
@@ -16,19 +21,14 @@ import {
   guidePackageController,
   guideProfileController,
 } from "../../../infrastructure/dependencyInjection/resolve";
-import { BaseRoute } from "../base.route";
+import { asyncHandler } from "../../../shared/async-handler";
+import {
+  authorizeRole,
+  verifyAuth,
+  verifyResetToken,
+} from "../../middlewares/auth.middleware";
 import { validationMiddleware } from "../../middlewares/validation.middleware";
-import {
-  ResetPasswordGuideDTO,
-  UpdatePasswordGuideReqDTO,
-} from "../../../application/dto/request/guide.dto";
-import {
-  GetAssignedPackagesReqDTO,
-  UpdatePackageStatusReqDTO,
-} from "../../../application/dto/request/package.dto";
-import { GetBookingOfThePackageGuideReqDTO } from "../../../application/dto/request/booking.dto";
-import { GetMessagesReqDto } from "../../../application/dto/request/chat.dto";
-import { CreateInstructionDto } from "../../../application/dto/request/guide-instruction.dto";
+import { BaseRoute } from "../base.route";
 
 @injectable()
 export class GuideRoute extends BaseRoute {

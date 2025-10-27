@@ -1,14 +1,15 @@
 import { inject, injectable } from "tsyringe";
-import { ISendPaymentAlertUsecase } from "../../../interfaces/booking/vendor-bookings/send-payment-alert-usecase.interface";
-import { IVendorRepository } from "../../../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
-import { ValidationError } from "../../../../../domain/errors/validationError";
-import { BOOKINGSTATUS, ERROR_MESSAGE } from "../../../../../shared/constants";
-import { NotFoundError } from "../../../../../domain/errors/notFoundError";
-import { IPackageRepository } from "../../../../../domain/repositoryInterfaces/package/package-repository.interface";
-import { IBookingRepository } from "../../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
+
 import { INotificationEntity } from "../../../../../domain/entities/notification.entity";
+import { NotFoundError } from "../../../../../domain/errors/notFoundError";
+import { ValidationError } from "../../../../../domain/errors/validationError";
+import { IBookingRepository } from "../../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
 import { INotificationRepository } from "../../../../../domain/repositoryInterfaces/notification/notification-repository.interface";
+import { IPackageRepository } from "../../../../../domain/repositoryInterfaces/package/package-repository.interface";
+import { IVendorRepository } from "../../../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
 import { IPushNotificationService } from "../../../../../domain/service-interfaces/push-notifications.interface";
+import { BOOKINGSTATUS, ERROR_MESSAGE } from "../../../../../shared/constants";
+import { ISendPaymentAlertUsecase } from "../../../interfaces/booking/vendor-bookings/send-payment-alert-usecase.interface";
 
 @injectable()
 export class SendPaymentAlertUsecase implements ISendPaymentAlertUsecase {
@@ -92,7 +93,7 @@ export class SendPaymentAlertUsecase implements ISendPaymentAlertUsecase {
         );
       }
     }
-    await this._packageRepository.update(packageExist._id, {
+    await this._packageRepository.update(packageExist._id!, {
       paymentAlertSentAt: new Date(),
     });
   }

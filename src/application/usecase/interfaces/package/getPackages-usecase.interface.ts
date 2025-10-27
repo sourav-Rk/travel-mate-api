@@ -1,9 +1,9 @@
-import { TRole } from "../../../../shared/constants";
 import { PaginatedPackages } from "../../../../domain/entities/paginated-packages.entity";
+import { TRole } from "../../../../shared/constants";
 
 export interface IGetPackagesUsecase {
   execute(
-    userId: any,
+    userId: string,
     searchTerm: string,
     satus: string,
     category: string,

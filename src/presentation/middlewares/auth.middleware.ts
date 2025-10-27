@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import { JwtPayload } from "jsonwebtoken";
 
+import { CustomError } from "../../domain/errors/customError";
 import redisClient from "../../infrastructure/config/redis/redisClient.config";
+import { TokenService } from "../../infrastructure/service/token.service";
 import {
   COOKIES_NAMES,
   ERROR_MESSAGE,
   HTTP_STATUS,
 } from "../../shared/constants";
-import { CustomError } from "../../domain/errors/customError";
-import { TokenService } from "../../infrastructure/service/token.service";
 
 const tokenService = new TokenService();
 
@@ -80,8 +80,8 @@ export const verifyAuth = async (
       refreshToken: req.cookies[COOKIES_NAMES.REFRESH_TOKEN],
     };
     next();
-  } catch (error: any) {
-    if (error.name === "TokenExpiredError") {
+  } catch (error: unknown) {
+    if (error instanceof Error && error.name === "TokenExpiredError") {
       res
         .status(HTTP_STATUS.UNAUTHORIZED)
         .json({ message: ERROR_MESSAGE.TOKEN_EXPIRED_ACCESS });

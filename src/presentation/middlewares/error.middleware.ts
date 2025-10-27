@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 
-import { IErrorMiddleware } from "../interfaces/middleware/error-middleware.interface";
-import { HTTP_STATUS, ERROR_MESSAGE } from "../../shared/constants";
 import { CustomError } from "../../domain/errors/customError";
 import { NotFoundError } from "../../domain/errors/notFoundError";
 import { ValidationError } from "../../domain/errors/validationError";
+import { HTTP_STATUS, ERROR_MESSAGE } from "../../shared/constants";
+import { IErrorMiddleware } from "../interfaces/middleware/error-middleware.interface";
 
 export class ErrorMiddleware implements IErrorMiddleware {
   public handleError(
-    err: any,
+    err: Error,
     req: Request,
     res: Response,
     next: NextFunction

@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
-import { IUpdatePackageStatusToOngoingUsecase } from "../../interfaces/package/updatePackageStausToOngoing-usecase";
+
 import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
-import { BOOKINGSTATUS } from "../../../../shared/constants";
+import { IUpdatePackageStatusToOngoingUsecase } from "../../interfaces/package/updatePackageStausToOngoing-usecase";
 
 @injectable()
 export class UpdatePackageStatusToOngoing

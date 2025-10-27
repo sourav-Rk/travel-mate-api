@@ -1,6 +1,7 @@
 import { container } from "tsyringe";
-import { ICron } from "../interface/cron.interface";
+
 import { PackageStatusCron } from "../cron/packageStatusCron";
+import { ICron } from "../interface/cron.interface";
 
 export class SchedulerRegistory {
   static registerSchedulers(): void {

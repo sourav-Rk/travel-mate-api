@@ -1,13 +1,13 @@
 import { inject, injectable } from "tsyringe";
 
 import { IClientEntity } from "../../../../domain/entities/client.entity";
+import { CustomError } from "../../../../domain/errors/customError";
+import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { IClientRepository } from "../../../../domain/repositoryInterfaces/client/client.repository.interface";
 import { IPhoneExistenceService } from "../../../../domain/service-interfaces/phone-existence-service.interface";
 import { IUserExistenceService } from "../../../../domain/service-interfaces/user-existence-service.interface";
-import { IUpdateClientDetailsUsecase } from "../../interfaces/client/updateClientDetails-usecase.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
-import { CustomError } from "../../../../domain/errors/customError";
-import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { IUpdateClientDetailsUsecase } from "../../interfaces/client/updateClientDetails-usecase.interface";
 
 @injectable()
 export class UpdateClientDetailsUsecase implements IUpdateClientDetailsUsecase {
@@ -22,11 +22,11 @@ export class UpdateClientDetailsUsecase implements IUpdateClientDetailsUsecase {
     private _phoneExistenceService: IPhoneExistenceService
   ) {}
 
-  async execute(userId: any, data: Partial<IClientEntity>): Promise<void> {
+  async execute(userId: string, data: Partial<IClientEntity>): Promise<void> {
     if (!userId || !data) {
       throw new CustomError(
         HTTP_STATUS.BAD_REQUEST,
-        "User id or required data  is missing"
+        ERROR_MESSAGE.USER_ID_REQUIRED
       );
     }
 

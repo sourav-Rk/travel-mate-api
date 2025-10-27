@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
-import { ISaveFcmTokenUsecase } from "../../interfaces/fcmToken/saveFcmToken-usecase.interface";
+
 import { IFCMTokenRepository } from "../../../../domain/repositoryInterfaces/fcmToken/fcmTokenRepository.interface";
+import { ISaveFcmTokenUsecase } from "../../interfaces/fcmToken/saveFcmToken-usecase.interface";
 
 @injectable()
 export class SaveFcmTokenUsecase implements ISaveFcmTokenUsecase {

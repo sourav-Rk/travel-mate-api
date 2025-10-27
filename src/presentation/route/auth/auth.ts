@@ -1,13 +1,14 @@
-import { asyncHandler } from "../../../shared/async-handler";
+import { injectable } from "tsyringe";
+
+import { ForgotPasswordResetReqDTO, GoogleSignupReqDTO, LoginReqDTO, OtpReqDTO, ResendOtpReqDTO } from "../../../application/dto/request/auth.dto";
 import {
   authController,
   blockMiddleware,
 } from "../../../infrastructure/dependencyInjection/resolve";
-import { BaseRoute } from "../base.route";
-import { injectable } from "tsyringe";
+import { asyncHandler } from "../../../shared/async-handler";
 import { verifyAuth } from "../../middlewares/auth.middleware";
 import { validationMiddleware } from "../../middlewares/validation.middleware";
-import { ForgotPasswordResetReqDTO, GoogleSignupReqDTO, LoginReqDTO, OtpReqDTO, ResendOtpReqDTO } from "../../../application/dto/request/auth.dto";
+import { BaseRoute } from "../base.route";
 
 @injectable()
 export class AuthRoutes extends BaseRoute {

@@ -1,14 +1,16 @@
+import { FilterQuery } from "mongoose";
 import { injectable } from "tsyringe";
-import { BaseRepository } from "../baseRepository";
+
+import { PaginatedWalletTransactions } from "../../../application/dto/response/walletDto";
+import { WalletTransactionsMapper } from "../../../application/mapper/wallet-transactions.mapper";
+import { IWalletTransactionEntity } from "../../../domain/entities/walletTransactions.entity";
+import { IWalletTransactionsRepository } from "../../../domain/repositoryInterfaces/wallet/wallet-transactions-repository.interface";
+import { TRANSACTION_TYPE_FILTER } from "../../../shared/constants";
 import {
   IWalletTransactionsModel,
   walletTransactionsDB,
 } from "../../database/models/walletTransactions.model";
-import { IWalletTransactionEntity } from "../../../domain/entities/walletTransactions.entity";
-import { IWalletTransactionsRepository } from "../../../domain/repositoryInterfaces/wallet/wallet-transactions-repository.interface";
-import { WalletTransactionsMapper } from "../../../application/mapper/wallet-transactions.mapper";
-import { PaginatedWalletTransactions } from "../../../application/dto/response/walletDto";
-import { TRANSACTION_TYPE_FILTER } from "../../../shared/constants";
+import { BaseRepository } from "../baseRepository";
 
 @injectable()
 export class WalletTransactionsRepository
@@ -28,13 +30,13 @@ export class WalletTransactionsRepository
     sortby: "newest" | "oldest"
   ): Promise<PaginatedWalletTransactions> {
     const skip = (page - 1) * limit;
-    const filter: any = { walletId };
+    const filter:FilterQuery<IWalletTransactionsModel> = { walletId };
 
     if (type && type !== "all") {
       filter.type = type;
     }
 
-    const sortBy: any = {};
+    const sortBy: { [key: string]: 1 | -1 } = {};
 
     if (sortby === "oldest") {
       sortBy.createdAt = 1;

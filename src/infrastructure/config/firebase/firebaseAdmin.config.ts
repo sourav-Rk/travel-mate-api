@@ -1,4 +1,5 @@
 import admin from "firebase-admin";
+
 import { config } from "../../../shared/config";
 
 const serviceAccountKeyJson = config.firebase.service_account_key_json;

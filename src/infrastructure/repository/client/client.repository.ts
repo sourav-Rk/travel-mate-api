@@ -1,11 +1,12 @@
+import { FilterQuery } from "mongoose";
 import { injectable } from "tsyringe";
 
-import { IClientEntity } from "../../../domain/entities/client.entity";
-import { IClientRepository } from "../../../domain/repositoryInterfaces/client/client.repository.interface";
-import { clientDB, IClientModel } from "../../database/models/client.model";
-import { TRole } from "../../../shared/constants";
-import { NotFoundError } from "../../../domain/errors/notFoundError";
 import { UserMapper } from "../../../application/mapper/user.mapper";
+import { IClientEntity } from "../../../domain/entities/client.entity";
+import { NotFoundError } from "../../../domain/errors/notFoundError";
+import { IClientRepository } from "../../../domain/repositoryInterfaces/client/client.repository.interface";
+import { TRole } from "../../../shared/constants";
+import { clientDB, IClientModel } from "../../database/models/client.model";
 import { BaseRepository } from "../baseRepository";
 
 @injectable()
@@ -26,7 +27,7 @@ export class ClientRepository
   }
 
   async findByIdAndUpdatePassword(
-    id: any,
+    id: string,
     password: string
   ): Promise<IClientEntity | null> {
     return await clientDB.findByIdAndUpdate(id, { password });
@@ -48,13 +49,6 @@ export class ClientRepository
     return updated.isBlocked;
   }
 
-  // async updateClientProfileById(
-  //   id: string,
-  //   data: Partial<IClientEntity>
-  // ): Promise<void> {
-  //   await clientDB.findByIdAndUpdate(id, { $set: data });
-  // }
-
   async find(
     searchTerm: string,
     status: string,
@@ -62,7 +56,7 @@ export class ClientRepository
     validPageNumber: number,
     validPageSize: number
   ): Promise<{ user: IClientEntity[] | []; total: number }> {
-    const filter: any = {};
+    const filter: FilterQuery<IClientModel> = {};
 
     if (searchTerm) {
       filter.$or = [

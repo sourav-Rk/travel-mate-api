@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+
 import { IChatroomModel } from "../models/chatroom.model";
 
 export const chatRoomSchema = new mongoose.Schema<IChatroomModel>(

@@ -2,10 +2,10 @@ import jwt, { Secret, JwtPayload } from "jsonwebtoken";
 import ms from "ms";
 import { injectable } from "tsyringe";
 
+import { CustomError } from "../../domain/errors/customError";
 import { ITokenService } from "../../domain/service-interfaces/token-service.interface";
 import { config } from "../../shared/config";
 import { HTTP_STATUS } from "../../shared/constants";
-import { CustomError } from "../../domain/errors/customError";
 
 export interface JwtPayloadData {
   id: string;
@@ -52,14 +52,11 @@ export class TokenService implements ITokenService {
     });
   }
 
-  // verifyAccessToken(token: string): JwtPayload  {
-  //     return jwt.verify(token, this._accessSecretKey) as JwtPayload;
-  // }
-
   verifyAccessToken(token: string): JwtPayload | null {
     try {
       return jwt.verify(token, this._accessSecretKey) as JwtPayload;
     } catch (error) {
+      console.log(error)
       return null;
     }
   }

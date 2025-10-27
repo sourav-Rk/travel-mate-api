@@ -1,5 +1,4 @@
 import { PaginatedPackagesUserSideListing } from "../../../../dto/response/packageDto";
-import { PaginatedPackages } from "../../../../../domain/entities/paginated-packages.entity";
 
 export interface IGetAvailablePackagesUsecase {
   execute(

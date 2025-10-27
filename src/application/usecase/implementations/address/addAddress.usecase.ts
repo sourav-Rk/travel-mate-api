@@ -1,13 +1,13 @@
 import { inject, injectable } from "tsyringe";
 
 import { IAddressRepository } from "../../../../domain/repositoryInterfaces/auth/address-repository.interface";
-import { IAddAddressUsecase } from "../../interfaces/auth/add-address-usecase.interface";
-import { HTTP_STATUS } from "../../../../shared/constants";
-import { AddressDto } from "../../../dto/response/authDto";
+import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../../shared/constants";
 import {
   ISuccessResponseHandler,
   successResponseHandler,
 } from "../../../../shared/utils/successResponseHandler";
+import { AddressDto } from "../../../dto/response/authDto";
+import { IAddAddressUsecase } from "../../interfaces/auth/add-address-usecase.interface";
 
 @injectable()
 export class AddAddressUsecase implements IAddAddressUsecase {
@@ -22,7 +22,7 @@ export class AddAddressUsecase implements IAddAddressUsecase {
     return successResponseHandler(
       true,
       HTTP_STATUS.CREATED,
-      "address added successfully"
+      SUCCESS_MESSAGE.ADDRESS.ADDRESS_ADDED_SUCCESSFULLY
     );
   }
 }

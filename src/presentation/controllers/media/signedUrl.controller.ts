@@ -1,9 +1,14 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 
-import { ISignedUrlController } from "../../interfaces/controllers/signedUrl.controller.interface";
 import { IGenerateSignedUrlUsecase } from "../../../application/usecase/interfaces/common/generate-signedurl-usecase.interface";
-import { HTTP_STATUS } from "../../../shared/constants";
+import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
+import {
+  ERROR_MESSAGE,
+  HTTP_STATUS,
+  SUCCESS_MESSAGE,
+} from "../../../shared/constants";
+import { ISignedUrlController } from "../../interfaces/controllers/signedUrl.controller.interface";
 
 @injectable()
 export class SignedUrlController implements ISignedUrlController {
@@ -20,16 +25,22 @@ export class SignedUrlController implements ISignedUrlController {
     } else if (Array.isArray(data)) {
       publicIds = data;
     } else {
-      res.status(HTTP_STATUS.BAD_REQUEST).json({
-        success: false,
-        message: "Data must be a string or array of strings",
-      });
+      ResponseHelper.error(
+        res,
+        ERROR_MESSAGE.DATA_MUST_BE_STRING_OR_ARARY_OF_STRINGS
+      );
       return;
     }
     const response = await this._generateSignedUrlUsecase.executeMultiple(
       publicIds,
       expiresIn
     );
-    res.status(HTTP_STATUS.OK).json({ success: true, urls: response });
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      response,
+      "urls"
+    );
   }
 }

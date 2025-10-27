@@ -2,6 +2,7 @@ import { IVendorEntity } from "../../domain/entities/vendor.entity";
 import { IVendorModel } from "../../infrastructure/database/models/vendor.model";
 import { VendorDto } from "../dto/response/user.dto";
 import {
+  IVendorWithAddressAndKycAggregationResult,
   VendorDetailsForClientDto,
   VendorProfileDto,
 } from "../dto/response/vendor.dto";
@@ -43,13 +44,13 @@ export class VendorMapper {
     };
   }
 
-  static mapVendorToFullInfoDto(doc: any): VendorProfileDto {
+  static mapVendorToFullInfoDto(doc: IVendorWithAddressAndKycAggregationResult): VendorProfileDto {
     return {
       _id: doc._id.toString(),
       firstName: doc.firstName,
       lastName: doc.lastName,
       email: doc.email,
-      phone: doc.phone,
+      phone: doc.phone??"N/A",
       role: "vendor",
       isBlocked: doc.isBlocked ?? false,
       agencyName: doc.agencyName,
