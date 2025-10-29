@@ -72,7 +72,6 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
       throw new NotFoundError(ERROR_MESSAGE.PACKAGE_NOT_FOUND);
     }
 
-
     //checking status of the package
     if (existingPackage.status !== PackageStatus.ACTIVE) {
       throw new ValidationError(
@@ -103,14 +102,12 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
       throw new ValidationError(ERROR_MESSAGE.ALREADY_APPLIED_PACKAGE);
     }
 
-
     //checking conflicting trips
     const userActiveBookings =
       await this._bookingRepository.getAllConfirmedBookingsByUserIdWithPackageDetails(
         userId,
         BOOKINGSTATUS.APPLIED
       );
-
 
     if (userActiveBookings?.length > 0) {
       for (const booking of userActiveBookings) {
@@ -141,7 +138,6 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
       seatOccupyingStatuses
     );
 
-
     let statusToCreate = BOOKINGSTATUS.APPLIED;
     let isWaitlisted = false;
 
@@ -159,6 +155,24 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
       status: statusToCreate,
       isWaitlisted,
     });
+
+    if (booking.status === BOOKINGSTATUS.ADVANCE_PENDING) {
+      const advanceAmount = Math.floor(existingPackage.price * 0.3);
+      const dueDate = new Date();
+      const deadlineDays = existingPackage.advancePaymentDeadlineDays ?? 5;
+      dueDate.setDate(dueDate.getDate() + deadlineDays);
+
+      booking.advancePayment = {
+        amount: advanceAmount,
+        paid: false,
+        dueDate,
+        paidAt: null,
+      };
+      await this._bookingRepository.updateBooking(
+        String(booking._id),
+        booking
+      )
+    }
 
     //remove from wishlist if it is already present
     const wishlist = await this._wishlistRepository.findByUserId(userId);
@@ -187,28 +201,25 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
       const vendor = existingPackage.agencyId;
       const message = `Minimum number of people (${existingPackage.minGroupSize}) have applied for ${existingPackage.packageName}.`;
 
-      await this._realTimeNotificationService.sendNotificationToUser(
-        vendor,
-        {
-          title: "Minimum no of people reached",
-          message,
-          type: "booking",
-          metadata: {
-            packageId: packageId,
-            packageName: existingPackage.packageName,
-            minGroupSize: existingPackage.minGroupSize,
-            appliedCount: appliedCount
-          }
-        }
-      );
+      await this._realTimeNotificationService.sendNotificationToUser(vendor, {
+        title: "Minimum no of people reached",
+        message,
+        type: "booking",
+        metadata: {
+          packageId: packageId,
+          packageName: existingPackage.packageName,
+          minGroupSize: existingPackage.minGroupSize,
+          appliedCount: appliedCount,
+        },
+      });
     }
 
-
-    let notificationType: 'applied' | 'advance_pending' | 'waitlisted' = 'applied';
+    let notificationType: "applied" | "advance_pending" | "waitlisted" =
+      "applied";
     if (statusToCreate === BOOKINGSTATUS.ADVANCE_PENDING) {
-      notificationType = 'advance_pending';
+      notificationType = "advance_pending";
     } else if (statusToCreate === BOOKINGSTATUS.WAITLISTED) {
-      notificationType = 'waitlisted';
+      notificationType = "waitlisted";
     }
 
     await this._realTimeNotificationService.sendBookingNotification(
@@ -217,7 +228,7 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
         bookingId: booking.bookingId,
         packageName: existingPackage.packageName,
         status: statusToCreate,
-        amount: existingPackage.price
+        amount: existingPackage.price,
       },
       notificationType
     );

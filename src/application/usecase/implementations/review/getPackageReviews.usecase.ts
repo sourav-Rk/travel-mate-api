@@ -5,7 +5,11 @@ import { ValidationError } from "../../../../domain/errors/validationError";
 import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
 import { IReviewRepository } from "../../../../domain/repositoryInterfaces/review/review-repository.interface";
 import { ERROR_MESSAGE } from "../../../../shared/constants";
-import { ReviewListDto } from "../../../dto/response/reviewDto";
+import {
+  PackageReviewListWithUserDetailsAndAverageRatingDto,
+  ReviewAggregateResult,
+  ReviewListDto,
+} from "../../../dto/response/reviewDto";
 import { ReviewMapper } from "../../../mapper/review.mapper";
 import { IGetPackageReviewsUsecase } from "../../interfaces/review/getPackageReviews-usecase.interface";
 
@@ -19,7 +23,9 @@ export class GetPackageReviewsUsecase implements IGetPackageReviewsUsecase {
     private _packageRepository: IPackageRepository
   ) {}
 
-  async execute(packageId: string): Promise<ReviewListDto[] | []> {
+  async execute(
+    packageId: string
+  ): Promise<PackageReviewListWithUserDetailsAndAverageRatingDto> {
     if (!packageId) {
       throw new ValidationError(ERROR_MESSAGE.ID_REQUIRED);
     }
@@ -32,10 +38,24 @@ export class GetPackageReviewsUsecase implements IGetPackageReviewsUsecase {
       throw new NotFoundError(ERROR_MESSAGE.PACKAGE_NOT_FOUND);
     }
 
-    const reviews = await this._reviewRepository.findByPackageId(packageId);
+    const aggregationResult = await this._reviewRepository.findByPackageId(
+      packageId
+    );
 
-    return reviews
-      ? reviews.map((doc) => ReviewMapper.mapToReviewListDto(doc))
-      : [];
+    if (!aggregationResult) {
+      return { reviews: [], averageRating: 0, totalReviews: 0 };
+    }
+
+    const { reviews, averageRating, totalReviews } = aggregationResult;
+
+    const mappedReviews = reviews.map((doc) =>
+      ReviewMapper.mapToReviewListDto(doc)
+    );
+
+    return {
+      reviews: mappedReviews,
+      averageRating,
+      totalReviews,
+    };
   }
 }

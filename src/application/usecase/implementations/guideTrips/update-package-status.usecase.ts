@@ -90,5 +90,7 @@ export class UpdatePackageStatusUsecaseGuide
     await Promise.all(updatePromises.filter((p) => p !== null));
 
     await this._packageRepository.update(packageExist._id!, { status });
+
+    await this._guideRepository.updateById(guideId,{isAvailable : true});
   }
 }

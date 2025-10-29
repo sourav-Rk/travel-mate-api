@@ -33,16 +33,14 @@ import {
   kycController,
   notificationController,
   packageConroller,
+  reviewController,
   vendorBookingController,
   vendorController,
   vendorProfileController,
   walletController,
 } from "../../../infrastructure/dependencyInjection/resolve";
 import { asyncHandler } from "../../../shared/async-handler";
-import {
-  authorizeRole,
-  verifyAuth,
-} from "../../middlewares/auth.middleware";
+import { authorizeRole, verifyAuth } from "../../middlewares/auth.middleware";
 import { validationMiddleware } from "../../middlewares/validation.middleware";
 import { BaseRoute } from "../base.route";
 import { CommonUploadRoutes } from "../common/common-upload.route";
@@ -392,6 +390,12 @@ export class VendorRoute extends BaseRoute {
       asyncHandler(
         groupChatController.getGroupDetails.bind(groupChatController)
       )
+    );
+
+    //--------------Review routes-------------------
+    this.router.get(
+      "/reviews/packages/:packageId",
+      asyncHandler(reviewController.getReviews.bind(reviewController))
     );
   }
 }

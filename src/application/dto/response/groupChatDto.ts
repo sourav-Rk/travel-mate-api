@@ -1,8 +1,9 @@
 import { Expose, Transform, Type } from "class-transformer";
+import { USER_TYPES } from "../request/admin.dto";
 
 export interface GroupChatMember {
   userId: string;
-  userType: "client" | "guide" | "vendor";
+  userType: USER_TYPES;
 }
 
 export interface GroupChatDTO {
