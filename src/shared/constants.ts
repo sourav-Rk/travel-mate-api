@@ -398,3 +398,42 @@ export type CHAT_CONTEXT_TYPE =
 export type CHAT_USERS = "client" | "guide" | "vendor";
 
 export type MetadataValue = string | number | boolean | Date | null | undefined;
+
+export const NOTIFICATION_TYPE = {
+  INFO: "info",
+  BOOKING: "booking",
+  MESSAGE: "message",
+  PAYMENT: "payment",
+  SUCCESS: "success",
+  ERROR: "error",
+} as const;
+
+export const NOTIFICATIONS = {
+  TTILE: {
+    BOOKING_CANCELLATION_REQUEST: "Booking Cancellation Request",
+    BOOKING_CANCELLATION_APPROVED: "Booking Cancellation Approved",
+    CANCELLATION_REQUESTED: "Cancellation Requested",
+  },
+  MESSAGES: {
+    NOTIFY_BOOKING_CANCELLATION_VENDOR: (
+      refundAmount: number,
+      clientName: string,
+      bookingId: string,
+      cancellationReason: string
+    ) => `Client ${clientName} has requested to cancel booking ${bookingId}. 
+            Reason: ${cancellationReason}.
+            A refund of ₹${refundAmount} will be processed. `,
+    NOTIFY_APPROVE_CANCELLATION_CLIENT: (
+      refundAmount: number,
+      bookingId: string,
+      vendorName: string
+    ) =>
+      `Your cancellation request for booking ${bookingId} has been approved by ${vendorName}. ₹${refundAmount} has been refunded to your wallet.`,
+    NOTIFY_CANCELLATION_REQUESTED_TO_VENDOR: (
+      name: string,
+      bookingId: string,
+      packageName: string
+    ) =>
+      `${name} has requested cancellation for the booking ${bookingId}-${packageName}`,
+  },
+};

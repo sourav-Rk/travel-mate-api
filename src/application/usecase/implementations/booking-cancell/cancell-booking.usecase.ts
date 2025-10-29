@@ -14,8 +14,11 @@ import {
   CancellationPolicy,
   ERROR_MESSAGE,
   HTTP_STATUS,
+  NOTIFICATION_TYPE,
+  NOTIFICATIONS,
 } from "../../../../shared/constants";
 import { ICancellBookingUsecase } from "../../interfaces/booking-cancell/cancell-booking-usecase.interface";
+import { IRealTimeNotificationService } from "../../../../domain/service-interfaces/real-time-notification-service.interface";
 
 @injectable()
 export class CancellBookingUsecase implements ICancellBookingUsecase {
@@ -27,7 +30,10 @@ export class CancellBookingUsecase implements ICancellBookingUsecase {
     private _packageRepository: IPackageRepository,
 
     @inject("IClientRepository")
-    private _clientRepository: IClientRepository
+    private _clientRepository: IClientRepository,
+
+    @inject("IRealTimeNotificationService")
+    private _realTimeNotificationService: IRealTimeNotificationService
   ) {}
 
   async execute(
@@ -116,6 +122,30 @@ export class CancellBookingUsecase implements ICancellBookingUsecase {
     );
 
     console.log(updatedBooking);
+
+    await this._realTimeNotificationService.sendBookingNotification(
+      userId,
+      {
+        bookingId: booking.bookingId,
+        packageName: packageDetails.packageName,
+        status: booking.status,
+        amount: packageDetails.price,
+      },
+      BOOKINGSTATUS.CANCELLATION_REQUESTED
+    );
+
+    await this._realTimeNotificationService.sendNotificationToUser(
+      packageDetails.agencyId,
+      {
+        message: NOTIFICATIONS.MESSAGES.NOTIFY_CANCELLATION_REQUESTED_TO_VENDOR(
+          client.firstName,
+          booking.bookingId,
+          packageDetails.packageName
+        ),
+        title: NOTIFICATIONS.TTILE.CANCELLATION_REQUESTED,
+        type: NOTIFICATION_TYPE.INFO,
+      }
+    );
 
     return {
       success: true,

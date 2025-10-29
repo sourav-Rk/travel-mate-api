@@ -14,10 +14,14 @@ import {
   BOOKINGSTATUS,
   ERROR_MESSAGE,
   HTTP_STATUS,
+  NOTIFICATION_TYPE,
+  NOTIFICATIONS,
   TRANSACTION_DESCRIPTIONS,
   TRANSACTION_TYPE,
 } from "../../../../shared/constants";
 import { IVendorApproveCancellationUsecase } from "../../interfaces/booking-cancell/vendor-approve-cancellation.-usecase.interface";
+import { RealTimeNotificationService } from "../../../../infrastructure/service/real-time-notification.service";
+import { IRealTimeNotificationService } from "../../../../domain/service-interfaces/real-time-notification-service.interface";
 
 @injectable()
 export class VendorApproveCancellationUsecase
@@ -40,7 +44,10 @@ export class VendorApproveCancellationUsecase
     private _vendorPaymentService: IVendorPaymentService,
 
     @inject("IVendorRepository")
-    private _vendorRepository: IVendorRepository
+    private _vendorRepository: IVendorRepository,
+
+    @inject("IRealTimeNotificationService")
+    private _realTimeNotificationService: IRealTimeNotificationService
   ) {}
 
   async execute(vendorId: string, bookingId: string): Promise<void> {
@@ -75,7 +82,6 @@ export class VendorApproveCancellationUsecase
       );
     }
 
-    // Create the update object with proper typing
     const updateData: Partial<IBookingEntity> = {
       status: BOOKINGSTATUS.CANCELLED,
       cancelledAt: new Date(),
@@ -126,6 +132,19 @@ export class VendorApproveCancellationUsecase
       booking.refundAmount!,
       booking.bookingId,
       booking.cancellationRequest.reason
+    );
+
+    await this._realTimeNotificationService.sendNotificationToUser(
+      booking.userId,
+      {
+        message: NOTIFICATIONS.MESSAGES.NOTIFY_APPROVE_CANCELLATION_CLIENT(
+          booking.refundAmount!,
+          booking.bookingId,
+          vendor.agencyName
+        ),
+        title: NOTIFICATIONS.TTILE.BOOKING_CANCELLATION_APPROVED,
+        type: NOTIFICATION_TYPE.PAYMENT,
+      }
     );
   }
 }

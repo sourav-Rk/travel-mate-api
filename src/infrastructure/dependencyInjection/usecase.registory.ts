@@ -84,7 +84,6 @@ import { UpdateItineraryUsecase } from "../../application/usecase/implementation
 import { GetNotificationsUsecase } from "../../application/usecase/implementations/notification/getNotifications.usecase";
 import { MarkAsReadAllUsecase } from "../../application/usecase/implementations/notification/mark-as-read-all.usecase";
 import { MarkReadNotification } from "../../application/usecase/implementations/notification/mark-read-notification.usecase";
-import { NotificationUsecase } from "../../application/usecase/implementations/notification/notification.usecase";
 import { AddPackageUsecase } from "../../application/usecase/implementations/package/addPackage.usecase";
 import { AssignGuideToTripUsecase } from "../../application/usecase/implementations/package/assign-guide-to-trip.usecase";
 import { GetAvailbalePackagesUsecase } from "../../application/usecase/implementations/package/client-package/getAvailable-packages.usecase";
@@ -196,7 +195,6 @@ import { IUpdateItineraryUsecase } from "../../application/usecase/interfaces/it
 import { IGetNotificationsUsecase } from "../../application/usecase/interfaces/notification/get-notifications-usecase.interface";
 import { IMarkAsAllReadUsecase } from "../../application/usecase/interfaces/notification/mark-as-read-all-usecase.interface";
 import { IMarkReadNotificationUsecase } from "../../application/usecase/interfaces/notification/mark-read-notification-usecase.interface";
-import { INotificationUsecase } from "../../application/usecase/interfaces/notification/notification-usecase.interface";
 import { IAddPackageUsecase } from "../../application/usecase/interfaces/package/addPackage-usecase.interface";
 import { IAssignGuideToTripUsecase } from "../../application/usecase/interfaces/package/assign-guide-to-trip-usecase.interface";
 import { IGetTrendingPackagesUsecase } from "../../application/usecase/interfaces/package/client-package/get-trending-packages.usecase";
@@ -674,11 +672,6 @@ export class UsecaseRegistory {
 
     container.register<IGetGuideReviewUsecase>("IGetGuideReviewUsecase", {
       useClass: GetGuideReviewsUsecase,
-    });
-
-    //notification usecase
-    container.register<INotificationUsecase>("INotificationUsecase", {
-      useClass: NotificationUsecase,
     });
 
     container.register<IGetNotificationsUsecase>("IGetNotificationsUsecase", {

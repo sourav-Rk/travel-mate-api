@@ -1,9 +1,5 @@
 import { Server, Socket } from "socket.io";
 
-export interface IGroupChatSocketHandler {
+export interface INotificationSocketHandler {
   register(io: Server, socket: Socket): void;
 }
-
-
-
-

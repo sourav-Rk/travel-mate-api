@@ -4,8 +4,10 @@ import { IMessageEntity } from "../../../../domain/entities/message.entity";
 import { CustomError } from "../../../../domain/errors/customError";
 import { IChatRoomRepository } from "../../../../domain/repositoryInterfaces/chatroom/chatroom-repository.interface";
 import { IMessageRepository } from "../../../../domain/repositoryInterfaces/message/message-repository.interface";
+import { RealTimeNotificationService } from "../../../../infrastructure/service/real-time-notification.service";
 import { CHAT_CONTEXT_TYPE, CHAT_USERS, ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import { ISendMessageUseCase } from "../../interfaces/chat/send-message-usecase.interface";
+import { IRealTimeNotificationService } from "../../../../domain/service-interfaces/real-time-notification-service.interface";
 
 @injectable()
 export class SendMessageUsecase implements ISendMessageUseCase {
@@ -14,7 +16,10 @@ export class SendMessageUsecase implements ISendMessageUseCase {
     private _messageRepository: IMessageRepository,
 
     @inject("IChatRoomRepository")
-    private _chatroomRepository: IChatRoomRepository
+    private _chatroomRepository: IChatRoomRepository,
+
+    @inject("IRealTimeNotificationService")
+    private _realTimeNotificationService: IRealTimeNotificationService
   ) {}
 
   async execute(data: {
@@ -74,6 +79,16 @@ export class SendMessageUsecase implements ISendMessageUseCase {
       lastMessage: data.message,
       lastMessageAt: new Date(),
     });
+
+    await this._realTimeNotificationService.sendMessageNotification(
+      data.receiverId,
+      {
+        senderName: `User`,
+        chatRoomId: chatRoom._id.toString(),
+        messagePreview: data.message.length > 50 ? data.message.substring(0, 50) + '...' : data.message,
+        senderId: data.senderId
+      }
+    );
 
     return newMessage;
   }

@@ -1,6 +1,5 @@
 export const GROUP_CHAT_SOCKET_EVENTS = {
   CLIENT: {
-
     JOIN_GROUP_CHAT: "join_group_chat",
     LEAVE_GROUP_CHAT: "leave_group_chat",
 
@@ -14,7 +13,6 @@ export const GROUP_CHAT_SOCKET_EVENTS = {
   },
 
   SERVER: {
-
     GROUP_CHAT_JOINED: "group_chat_joined",
     GROUP_CHAT_ERROR: "group_chat_error",
 
@@ -34,8 +32,6 @@ export const GROUP_CHAT_SOCKET_EVENTS = {
     ERROR: "error",
   },
 } as const;
-
-
 
 export const CHAT_SOCKET_EVENTS = {
   CLIENT: {
@@ -64,5 +60,11 @@ export const CHAT_SOCKET_EVENTS = {
   SYSTEM: {
     CONNECT: "connect",
     DISCONNECT: "disconnect",
+  },
+} as const;
+
+export const NOTIFICATION_SOCKET_EVENTS = {
+  SERVER: {
+    NEW_NOTIFICATION: "new_notification",
   },
 } as const;

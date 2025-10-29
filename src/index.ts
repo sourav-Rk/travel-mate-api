@@ -12,6 +12,8 @@ import {
   chatSocketHandler,
   groupChatSocketHandler,
   cronScheduler,
+  notificationSocketHandler,
+  realTimeNotificationService,
 } from "./infrastructure/dependencyInjection/resolve";
 import { config } from "./shared/config";
 
@@ -40,7 +42,9 @@ try {
     },
   });
 
-  configureSocket(io, chatSocketHandler, groupChatSocketHandler, tokenService);
+  global.io = io;
+
+  configureSocket(io, chatSocketHandler, groupChatSocketHandler, notificationSocketHandler, tokenService, realTimeNotificationService);
 
   httpServer.listen(config.server.PORT, () =>
     console.log(`server running at port ${config.server.PORT} `)
