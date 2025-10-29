@@ -19,4 +19,6 @@ export interface IGuideRepository extends IBaseRepository<IGuideEntity> {
     id: string,
     password: string
   ): Promise<IGuideEntity | null>;
+  pushAssignedTrip(guideId: string, packageId: string): Promise<void>;
+
 }

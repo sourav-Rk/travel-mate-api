@@ -1,6 +1,9 @@
 import { injectable } from "tsyringe";
 
-import { ReviewListWithUserDetailsDto } from "../../../application/dto/response/reviewDto";
+import {
+  ReviewAggregateResult,
+  ReviewListWithUserDetailsDto,
+} from "../../../application/dto/response/reviewDto";
 import { ReviewMapper } from "../../../application/mapper/review.mapper";
 import { IReviewEntity } from "../../../domain/entities/review.entity";
 import { IReviewRepository } from "../../../domain/repositoryInterfaces/review/review-repository.interface";
@@ -25,12 +28,53 @@ export class ReviewRepository
 
   async findByPackageId(
     packageId: string
-  ): Promise<ReviewListWithUserDetailsDto[] | null> {
-    const modelData = await reviewDB
-      .find({ packageId, targetType: "package" })
-      .populate("userId")
-      .lean<ReviewListWithUserDetailsDto[]>();
-    return modelData;
+  ): Promise<ReviewAggregateResult | null> {
+    const aggregation = await reviewDB.aggregate([
+      { $match: { packageId, targetType: "package" } },
+      {
+        $lookup: {
+          from: "clients",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userDetails",
+        },
+      },
+      { $unwind: "$userDetails" },
+      {
+        $project: {
+          _id: 1,
+          rating: 1,
+          comment: 1,
+          createdAt: 1,
+          "userDetails._id": 1,
+          "userDetails.firstName": 1,
+          "userDetails.lastName": 1,
+          "userDetails.profileImage": 1,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          reviews: { $push: "$$ROOT" },
+          averageRating: { $avg: "$rating" },
+          totalReviews: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          reviews: 1,
+          averageRating: { $ifNull: ["$averageRating", 0] },
+          totalReviews: 1,
+        },
+      },
+    ]);
+
+    if (aggregation.length === 0) {
+      return { reviews: [], averageRating: 0, totalReviews: 0 };
+    }
+
+    return aggregation[0];
   }
 
   async findByGuideIdAndUserId(
@@ -43,12 +87,54 @@ export class ReviewRepository
   async findByPackageIdAndGuideId(
     packageId: string,
     guideId: string
-  ): Promise<ReviewListWithUserDetailsDto[] | null> {
-    const modelData = await reviewDB
-      .find({ packageId, guideId, targetType: "guide" })
-      .populate("userId")
-      .lean<ReviewListWithUserDetailsDto[]>();
+  ): Promise<ReviewAggregateResult | null> {
 
-    return modelData;
+     const aggregation = await reviewDB.aggregate([
+      { $match: { packageId,guideId, targetType: "guide" } },
+      {
+        $lookup: {
+          from: "clients",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userDetails",
+        },
+      },
+      { $unwind: "$userDetails" },
+      {
+        $project: {
+          _id: 1,
+          rating: 1,
+          comment: 1,
+          createdAt: 1,
+          "userDetails._id": 1,
+          "userDetails.firstName": 1,
+          "userDetails.lastName": 1,
+          "userDetails.profileImage": 1,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          reviews: { $push: "$$ROOT" },
+          averageRating: { $avg: "$rating" },
+          totalReviews: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          reviews: 1,
+          averageRating: { $ifNull: ["$averageRating", 0] },
+          totalReviews: 1,
+        },
+      },
+    ]);
+
+    if (aggregation.length === 0) {
+      return { reviews: [], averageRating: 0, totalReviews: 0 };
+    }
+
+    return aggregation[0];
+
   }
 }

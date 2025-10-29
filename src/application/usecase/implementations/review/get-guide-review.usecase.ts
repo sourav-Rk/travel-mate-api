@@ -5,7 +5,7 @@ import { ValidationError } from "../../../../domain/errors/validationError";
 import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
 import { IReviewRepository } from "../../../../domain/repositoryInterfaces/review/review-repository.interface";
 import { ERROR_MESSAGE } from "../../../../shared/constants";
-import { ReviewListDto } from "../../../dto/response/reviewDto";
+import { PackageReviewListWithUserDetailsAndAverageRatingDto } from "../../../dto/response/reviewDto";
 import { ReviewMapper } from "../../../mapper/review.mapper";
 import { IGetGuideReviewUsecase } from "../../interfaces/review/get-guide-reviews.usecase";
 
@@ -22,7 +22,7 @@ export class GetGuideReviewsUsecase implements IGetGuideReviewUsecase {
   async execute(
     packageId: string,
     guideId: string
-  ): Promise<ReviewListDto[] | []> {
+  ): Promise<PackageReviewListWithUserDetailsAndAverageRatingDto> {
     if (!packageId) {
       throw new ValidationError(ERROR_MESSAGE.ID_REQUIRED);
     }
@@ -35,13 +35,26 @@ export class GetGuideReviewsUsecase implements IGetGuideReviewUsecase {
       throw new NotFoundError(ERROR_MESSAGE.PACKAGE_NOT_FOUND);
     }
 
-    const reviews = await this._reviewRepository.findByPackageIdAndGuideId(
-      packageId,
-      guideId
+    const aggregationResult =
+      await this._reviewRepository.findByPackageIdAndGuideId(
+        packageId,
+        guideId
+      );
+
+    if (!aggregationResult) {
+      return { reviews: [], averageRating: 0, totalReviews: 0 };
+    }
+
+    const { reviews, averageRating, totalReviews } = aggregationResult;
+
+    const mappedReviews = reviews.map((doc) =>
+      ReviewMapper.mapToReviewListDto(doc)
     );
 
-    return reviews
-      ? reviews.map((doc) => ReviewMapper.mapToReviewListDto(doc))
-      : [];
+    return {
+      reviews: mappedReviews,
+      averageRating,
+      totalReviews,
+    };
   }
 }

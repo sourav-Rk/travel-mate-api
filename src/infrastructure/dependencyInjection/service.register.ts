@@ -22,8 +22,6 @@ import { RevenueDistributionService } from "../service/revenue-distribution.serv
 import { TokenService } from "../service/token.service";
 import { UserExistenceServive } from "../service/user-existence.service";
 import { VendorPaymentService } from "../service/vendor-payment.service";
-import { ISocketService } from "../../domain/service-interfaces/socket-service.interface";
-// import { SocketService } from "../service/socket.service";
 import { RealTimeNotificationService } from "../service/real-time-notification.service";
 import { IRealTimeNotificationService } from "../../domain/service-interfaces/real-time-notification-service.interface";
 

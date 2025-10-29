@@ -23,9 +23,9 @@ export class ReviewMapper {
     return {
       _id: String(doc._id),
       userId: {
-        _id: doc.userId._id,
-        firstName: doc.userId.firstName,
-        lastName: doc.userId.lastName,
+        _id: doc.userDetails._id,
+        firstName: doc.userDetails.firstName,
+        lastName: doc.userDetails.lastName,
       },
       rating: doc.rating,
       comment: doc.comment!,

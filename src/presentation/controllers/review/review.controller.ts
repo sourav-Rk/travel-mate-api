@@ -42,28 +42,37 @@ export class ReviewController implements IReviewController {
 
   async getReviews(req: Request, res: Response): Promise<void> {
     const { packageId } = req.params;
-    const reviews = await this._getPackageReviewUsecase.execute(packageId);
+    const { reviews, averageRating, totalReviews } =
+      await this._getPackageReviewUsecase.execute(packageId);
+    const responseData = {
+      reviews,
+      averageRating,
+      totalReviews,
+    };
     ResponseHelper.success(
       res,
       HTTP_STATUS.OK,
       SUCCESS_MESSAGE.DETAILS_FETCHED,
-      reviews,
-      "reviews"
+      responseData
     );
   }
 
   async getGuideReviews(req: Request, res: Response): Promise<void> {
     const { guideId, packageId } = req.params;
-    const reviews = await this._getGuideReviewUsecase.execute(
+     const { reviews, averageRating, totalReviews }  = await this._getGuideReviewUsecase.execute(
       packageId,
       guideId
     );
+     const responseData = {
+      reviews,
+      averageRating,
+      totalReviews,
+    };
     ResponseHelper.success(
       res,
       HTTP_STATUS.OK,
       SUCCESS_MESSAGE.DETAILS_FETCHED,
-      reviews,
-      "reviews"
+      responseData,
     );
   }
 }

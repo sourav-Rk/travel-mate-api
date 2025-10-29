@@ -7,6 +7,9 @@ import { IGuideRepository } from "../../../../domain/repositoryInterfaces/guide/
 import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import { IAssignGuideToTripUsecase } from "../../interfaces/package/assign-guide-to-trip-usecase.interface";
+import { IGroupChatRepository } from "../../../../domain/repositoryInterfaces/group-chat/group-chat-repository.interface";
+import { GroupChatMember } from "../../../dto/response/groupChatDto";
+import { USER_TYPES } from "../../../dto/request/admin.dto";
 
 @injectable()
 export class AssignGuideToTripUsecase implements IAssignGuideToTripUsecase {
@@ -15,7 +18,10 @@ export class AssignGuideToTripUsecase implements IAssignGuideToTripUsecase {
     private _guideRepository: IGuideRepository,
 
     @inject("IPackageRepository")
-    private _packageRepository: IPackageRepository
+    private _packageRepository: IPackageRepository,
+
+    @inject("IGroupChatRepository")
+    private _groupChatRepository: IGroupChatRepository
   ) {}
 
   async execute(packageId: string, guideId: string): Promise<void> {
@@ -81,9 +87,18 @@ export class AssignGuideToTripUsecase implements IAssignGuideToTripUsecase {
     await this._packageRepository.update(pkg._id!, { guideId });
 
     //add trips to assigned trips
-    await this._guideRepository.updateById(guideId, {
-      isAvailable: false,
-      assignedTrips: [pkg.packageId!],
-    });
+    await this._guideRepository.pushAssignedTrip(guideId, pkg.packageId!);
+
+    const existingGroupChat = await this._groupChatRepository.findByPackage(
+      pkg.packageId!
+    );
+
+    if (existingGroupChat) {
+      const member: GroupChatMember = {
+        userId: guideId,
+        userType: USER_TYPES.GUIDE,
+      };
+      await this._groupChatRepository.addMember(existingGroupChat._id, member);
+    }
   }
 }

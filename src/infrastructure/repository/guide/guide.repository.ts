@@ -125,4 +125,14 @@ export class GuideRepository
       status: "verified",
     });
   }
+
+  async pushAssignedTrip(guideId: string, packageId: string): Promise<void> {
+    await guideDB.updateOne(
+      { _id: guideId },
+      {
+        $addToSet: { assignedTrips: packageId },
+        $set: { isAvailable: false },
+      }
+    );
+  }
 }

@@ -1,4 +1,4 @@
-import { ReviewListWithUserDetailsDto } from "../../../application/dto/response/reviewDto";
+import { ReviewAggregateResult, ReviewListWithUserDetailsDto } from "../../../application/dto/response/reviewDto";
 import { IReviewEntity } from "../../entities/review.entity";
 import { IBaseRepository } from "../baseRepository.interface";
 
@@ -9,7 +9,7 @@ export interface IReviewRepository extends IBaseRepository<IReviewEntity> {
   ): Promise<IReviewEntity | null>;
   findByPackageId(
     packageId: string
-  ): Promise<ReviewListWithUserDetailsDto[] | null>;
+  ): Promise<ReviewAggregateResult| null>;
   findByGuideIdAndUserId(
     userId: string,
     guideId: string
@@ -17,5 +17,6 @@ export interface IReviewRepository extends IBaseRepository<IReviewEntity> {
   findByPackageIdAndGuideId(
     packageId: string,
     guideId: string
-  ): Promise<ReviewListWithUserDetailsDto[] | null>;
+  ): Promise<ReviewAggregateResult | null>;
+
 }
