@@ -69,7 +69,6 @@ export const bookingSchema = new mongoose.Schema<IBookingModel>(
       type: String,
       ref: "packages",
       required: true,
-      index: true,
     },
     status: {
       type: String,

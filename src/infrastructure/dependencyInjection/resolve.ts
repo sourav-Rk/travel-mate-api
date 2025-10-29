@@ -73,7 +73,10 @@ import { CronScheduler } from "../cron/cronScheduler";
 import { ICronScheduler } from "../interface/cronScheduler.interface";
 
 import { DependencyInjection } from ".";
-
+import { INotificationSocketHandler } from "../../presentation/interfaces/socket/notification-socket-handler.interface";
+import { NotificationSocketHandler } from "../../presentation/socket/notificationSocketHandler";
+import { RealTimeNotificationService } from "../service/real-time-notification.service";
+import { IRealTimeNotificationService } from "../../domain/service-interfaces/real-time-notification-service.interface";
 
 DependencyInjection.registerAll();
 
@@ -221,7 +224,7 @@ export const vendorRoutes = container.resolve(VendorRoute);
 //guide route
 export const guideRoutes = container.resolve(GuideRoute);
 
-//chat socker handler
+//chat socket handler
 container.register<IChatSocketHandler>("IChatSocketHandler", {
   useClass: ChatSocketHandler,
 });
@@ -238,3 +241,16 @@ container.register<IGroupChatSocketHandler>("IGroupChatSocketHandler", {
 // group chat socket handler
 export const groupChatSocketHandler =
   container.resolve<IGroupChatSocketHandler>("IGroupChatSocketHandler");
+
+//notification socket handler registration
+container.register<INotificationSocketHandler>("INotificationSocketHandler",{
+  useClass : NotificationSocketHandler
+});  
+
+//notification socket handler
+export const notificationSocketHandler =
+  container.resolve<INotificationSocketHandler>("INotificationSocketHandler");
+
+//real-time notification service
+export const realTimeNotificationService =
+  container.resolve<IRealTimeNotificationService>("IRealTimeNotificationService");

@@ -7,6 +7,7 @@ import { LoginUserDTO } from "../../../dto/response/user.dto";
 import { ILoginUsecase } from "../../interfaces/auth/loginUsecase.interface";
 
 import { ILoginStrategy } from "./login-strategies/login-strategy.interface";
+import { IWalletRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
 
 @injectable()
 export class LoginUsecase implements ILoginUsecase {
@@ -22,7 +23,10 @@ export class LoginUsecase implements ILoginUsecase {
     private vendorLoginStrategy: ILoginStrategy,
 
     @inject("GuideLoginStrategy")
-    private guideLoginStrategy: ILoginStrategy
+    private guideLoginStrategy: ILoginStrategy,
+
+    @inject("IWalletRepository")
+    private _walletRepository : IWalletRepository
   ) {
     this._strategies = {
       client: this.clientLoginStrategy,
@@ -38,6 +42,25 @@ export class LoginUsecase implements ILoginUsecase {
       throw new CustomError(HTTP_STATUS.FORBIDDEN,ERROR_MESSAGE.INVALID_ROLE);
     }
 
-    return await strategy.login(user);
+    const loggedInUser = await strategy.login(user);
+
+    if(user.role === "client" || user.role === "vendor" || user.role === "guide"){
+       const userId = loggedInUser._id?.toString();
+
+       if(userId){
+        const existingWallet = await this._walletRepository.findByUserId(userId);
+
+        if(!existingWallet){
+          await this._walletRepository.save({
+            userId,
+            userType:user.role,
+           balance : 0,
+           currency : 'INR' 
+          })
+        }
+       }
+    }
+
+    return loggedInUser;
   }
 }

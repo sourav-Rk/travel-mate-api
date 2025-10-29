@@ -27,7 +27,9 @@ export class SendPaymentAlertUsecase implements ISendPaymentAlertUsecase {
     private _notificationRepository: INotificationRepository,
 
     @inject("IPushNotificationService")
-    private _pushNotificationService: IPushNotificationService
+    private _pushNotificationService: IPushNotificationService,
+
+  
   ) {}
 
   async execute(vendorId: string, packageId: string): Promise<void> {

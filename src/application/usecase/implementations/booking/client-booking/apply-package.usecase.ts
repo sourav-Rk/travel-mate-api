@@ -22,6 +22,7 @@ import {
 } from "../../../../../shared/utils/successResponseHandler";
 import { PackageStatus } from "../../../../dto/request/package.dto";
 import { IApplyPackageUsecase } from "../../../interfaces/booking/client-booking/apply-package-usecase.interface";
+import { IRealTimeNotificationService } from "../../../../../domain/service-interfaces/real-time-notification-service.interface";
 
 @injectable()
 export class ApplyPackageUsecase implements IApplyPackageUsecase {
@@ -42,7 +43,10 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
     private _notificationRepository: INotificationRepository,
 
     @inject("IPushNotificationService")
-    private _pushNotificationService: IPushNotificationService
+    private _pushNotificationService: IPushNotificationService,
+
+    @inject("IRealTimeNotificationService")
+    private _realTimeNotificationService: IRealTimeNotificationService
   ) {}
 
   async execute(
@@ -183,20 +187,40 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
       const vendor = existingPackage.agencyId;
       const message = `Minimum number of people (${existingPackage.minGroupSize}) have applied for ${existingPackage.packageName}.`;
 
-      const data = {
-        userId: vendor,
-        title: "Minimum no of people reached",
-        message,
-        type: "Booking",
-        isRead: false,
-      };
-      await this._notificationRepository.createNotification(data);
-      await this._pushNotificationService.sendNotification(
+      await this._realTimeNotificationService.sendNotificationToUser(
         vendor,
-        data.title,
-        data.message
+        {
+          title: "Minimum no of people reached",
+          message,
+          type: "booking",
+          metadata: {
+            packageId: packageId,
+            packageName: existingPackage.packageName,
+            minGroupSize: existingPackage.minGroupSize,
+            appliedCount: appliedCount
+          }
+        }
       );
     }
+
+
+    let notificationType: 'applied' | 'advance_pending' | 'waitlisted' = 'applied';
+    if (statusToCreate === BOOKINGSTATUS.ADVANCE_PENDING) {
+      notificationType = 'advance_pending';
+    } else if (statusToCreate === BOOKINGSTATUS.WAITLISTED) {
+      notificationType = 'waitlisted';
+    }
+
+    await this._realTimeNotificationService.sendBookingNotification(
+      userId,
+      {
+        bookingId: booking.bookingId,
+        packageName: existingPackage.packageName,
+        status: statusToCreate,
+        amount: existingPackage.price
+      },
+      notificationType
+    );
 
     let successMessage = SUCCESS_MESSAGE.BOOKING_APPLIED;
     if (statusToCreate === BOOKINGSTATUS.ADVANCE_PENDING) {
