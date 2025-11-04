@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 
 import { ValidationError } from "../../../../domain/errors/validationError";
-import { IOtpService } from "../../../../domain/service-interfaces/otp-service.interface";
+import { IOtpService } from "../../../services/interfaces/otp-service.interface";
 import {
   ERROR_MESSAGE,
   EVENT_EMMITER_TYPE,

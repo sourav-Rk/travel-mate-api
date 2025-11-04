@@ -3,7 +3,7 @@ import { inject, injectable } from "tsyringe";
 
 import { IUserEntity } from "../../../../domain/entities/user.entity";
 import { CustomError } from "../../../../domain/errors/customError";
-import { IUserExistenceService } from "../../../../domain/service-interfaces/user-existence-service.interface";
+import { IUserExistenceService } from "../../../services/interfaces/user-existence-service.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import { IGoogleUsecase } from "../../interfaces/auth/google-usecase.interface";
 
@@ -43,7 +43,10 @@ export class GoogleUsecase implements IGoogleUsecase {
     const loginStrategy = this._loginStrategies[role];
 
     if (!registerStrategy || !loginStrategy) {
-      throw new CustomError(HTTP_STATUS.FORBIDDEN, ERROR_MESSAGE.INVALID_USER_ROLE);
+      throw new CustomError(
+        HTTP_STATUS.FORBIDDEN,
+        ERROR_MESSAGE.INVALID_USER_ROLE
+      );
     }
 
     const ticket = await this._client.verifyIdToken({
@@ -67,7 +70,10 @@ export class GoogleUsecase implements IGoogleUsecase {
     const profileImage = payload.picture;
 
     if (!email)
-      throw new CustomError(HTTP_STATUS.BAD_REQUEST,ERROR_MESSAGE.EMAIL_REQUIRED);
+      throw new CustomError(
+        HTTP_STATUS.BAD_REQUEST,
+        ERROR_MESSAGE.EMAIL_REQUIRED
+      );
 
     const existingUser = await loginStrategy.login({ email, role });
 
@@ -77,7 +83,7 @@ export class GoogleUsecase implements IGoogleUsecase {
           throw new CustomError(
             HTTP_STATUS.CONFLICT,
             ERROR_MESSAGE.EMAIL_ALREADY_REGISTERED_GOOGLE
-            );
+          );
         }
       }
 

@@ -10,7 +10,7 @@ import { IGuideRepository } from "../../../../domain/repositoryInterfaces/guide/
 import { IRedisTokenRepository } from "../../../../domain/repositoryInterfaces/redis/redis-token-repository.interface";
 import { IVendorRepository } from "../../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
 import { ITokenService } from "../../../../domain/service-interfaces/token-service.interface";
-import { IUserExistenceService } from "../../../../domain/service-interfaces/user-existence-service.interface";
+import { IUserExistenceService } from "../../../services/interfaces/user-existence-service.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import { hashPassword } from "../../../../shared/utils/bcryptHelper";
 import { IForgotPasswordResetUsecase } from "../../interfaces/auth/forgotPassword-reset-usecase.interface";
@@ -60,7 +60,9 @@ export class ForgotPasswordResetUsecase implements IForgotPasswordResetUsecase {
     }
 
     if (!password || !confirmPassword) {
-      throw new ValidationError(ERROR_MESSAGE.PASSWORD_AND_CONFIRM_PASSWORD_REQUIRED);
+      throw new ValidationError(
+        ERROR_MESSAGE.PASSWORD_AND_CONFIRM_PASSWORD_REQUIRED
+      );
     }
 
     if (password !== confirmPassword) {
@@ -83,7 +85,10 @@ export class ForgotPasswordResetUsecase implements IForgotPasswordResetUsecase {
       token
     );
     if (blackListToken) {
-      throw new CustomError(HTTP_STATUS.FORBIDDEN, ERROR_MESSAGE.TOKEN_BLACK_LISTED);
+      throw new CustomError(
+        HTTP_STATUS.FORBIDDEN,
+        ERROR_MESSAGE.TOKEN_BLACK_LISTED
+      );
     }
 
     //token expiry calculation
@@ -100,7 +105,10 @@ export class ForgotPasswordResetUsecase implements IForgotPasswordResetUsecase {
     const repository = this._repository[role];
 
     if (!repository) {
-      throw new CustomError(HTTP_STATUS.FORBIDDEN, ERROR_MESSAGE.INVALID_USER_ROLE);
+      throw new CustomError(
+        HTTP_STATUS.FORBIDDEN,
+        ERROR_MESSAGE.INVALID_USER_ROLE
+      );
     }
 
     await Promise.all([

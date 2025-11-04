@@ -1,13 +1,13 @@
 import { inject, injectable } from "tsyringe";
 
-import { NotFoundError } from "../../domain/errors/notFoundError";
-import { IBookingRepository } from "../../domain/repositoryInterfaces/booking/booking-repository.interface";
-import { IPackageRepository } from "../../domain/repositoryInterfaces/package/package-repository.interface";
-import { IWalletRepository } from "../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
-import { IAdminPaymentService } from "../../domain/service-interfaces/admin-payment-service.interface";
-import { IRevenueDistributionService } from "../../domain/service-interfaces/revenue-distribution-service.interface";
-import { IVendorPaymentService } from "../../domain/service-interfaces/vendor-payment-service.interface";
-import { ERROR_MESSAGE } from "../../shared/constants";
+import { NotFoundError } from "../../../domain/errors/notFoundError";
+import { IBookingRepository } from "../../../domain/repositoryInterfaces/booking/booking-repository.interface";
+import { IPackageRepository } from "../../../domain/repositoryInterfaces/package/package-repository.interface";
+import { IWalletRepository } from "../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
+import { IAdminPaymentService } from "../interfaces/admin-payment-service.interface";
+import { IRevenueDistributionService } from "../interfaces/revenue-distribution-service.interface";
+import { IVendorPaymentService } from "../interfaces/vendor-payment-service.interface";
+import { ERROR_MESSAGE } from "../../../shared/constants";
 
 @injectable()
 export class RevenueDistributionService implements IRevenueDistributionService {
@@ -36,7 +36,9 @@ export class RevenueDistributionService implements IRevenueDistributionService {
     const adminCommission = amount * 0.1;
     const vendorAmount = amount * 0.9;
 
-    const booking = await this._bookingRepository.findByCustomBookingId(bookingId);
+    const booking = await this._bookingRepository.findByCustomBookingId(
+      bookingId
+    );
 
     if (!booking) {
       throw new NotFoundError(ERROR_MESSAGE.BOOKING_NOT_FOUND);

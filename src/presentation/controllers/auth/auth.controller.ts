@@ -18,7 +18,7 @@ import { ISendEmailOtpUsecase } from "../../../application/usecase/interfaces/au
 import { ISendEmailUsecase } from "../../../application/usecase/interfaces/auth/send-email-usecase.interface";
 import { IVerifyOtpUsecase } from "../../../application/usecase/interfaces/auth/verifyOtpUsecase";
 import { ValidationError } from "../../../domain/errors/validationError";
-import { IOtpService } from "../../../domain/service-interfaces/otp-service.interface";
+import { IOtpService } from "../../../application/services/interfaces/otp-service.interface";
 import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import {
   COOKIES_NAMES,
@@ -35,7 +35,6 @@ import { IAuthController } from "../../interfaces/controllers/auth/auth.controll
 import { CustomRequest } from "../../middlewares/auth.middleware";
 
 import { userSchemas } from "./validation/user-signup-validation.schema";
-
 
 @injectable()
 export class AuthController implements IAuthController {

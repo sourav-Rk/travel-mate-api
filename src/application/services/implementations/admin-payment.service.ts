@@ -1,18 +1,20 @@
 import { inject, injectable } from "tsyringe";
 
-import { NotFoundError } from "../../domain/errors/notFoundError";
-import { ValidationError } from "../../domain/errors/validationError";
-import { IWalletRepository } from "../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
-import { IWalletTransactionsRepository } from "../../domain/repositoryInterfaces/wallet/wallet-transactions-repository.interface";
-import { IVendorPaymentService } from "../../domain/service-interfaces/vendor-payment-service.interface";
+import { NotFoundError } from "../../../domain/errors/notFoundError";
+import { ValidationError } from "../../../domain/errors/validationError";
+import { IWalletRepository } from "../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
+import { IWalletTransactionsRepository } from "../../../domain/repositoryInterfaces/wallet/wallet-transactions-repository.interface";
+import { IAdminPaymentService } from "../interfaces/admin-payment-service.interface";
+import { config } from "../../../shared/config";
 import {
   ERROR_MESSAGE,
   TRANSACTION_DESCRIPTIONS,
   TRANSACTION_TYPE,
-} from "../../shared/constants";
+} from "../../../shared/constants";
 
 @injectable()
-export class VendorPaymentService implements IVendorPaymentService {
+export class AdminPaymentService implements IAdminPaymentService {
+  private readonly ADMIN_USER_ID = config.admin.adminId;
   constructor(
     @inject("IWalletRepository")
     private _walletRepository: IWalletRepository,
@@ -22,12 +24,13 @@ export class VendorPaymentService implements IVendorPaymentService {
   ) {}
 
   async processPayment(
-    vendorId: string,
     amount: number,
     bookingId: string,
     paymentType: "advance" | "full"
   ): Promise<void> {
-    const wallet = await this._walletRepository.findByUserId(vendorId);
+    const wallet = await this._walletRepository.findByUserId(
+      this.ADMIN_USER_ID!
+    );
 
     if (!wallet) {
       throw new NotFoundError(ERROR_MESSAGE.WALLET_NOT_FOUND);
@@ -39,7 +42,7 @@ export class VendorPaymentService implements IVendorPaymentService {
       balance: newBalance,
     });
 
-    const vendorTransaction = await this._walletTransactionRepository.save({
+    await this._walletTransactionRepository.save({
       walletId: wallet._id,
       type: TRANSACTION_TYPE.CREDIT,
       referenceId: bookingId,
@@ -57,26 +60,27 @@ export class VendorPaymentService implements IVendorPaymentService {
   }
 
   async processCancellationRefund(
-    vendorId: string,
     refundAmount: number,
     bookingId: string,
     cancellationReason: string
   ): Promise<void> {
-    const vendorDeductionAmount = refundAmount * 0.9;
-
     if (refundAmount <= 0) {
       throw new ValidationError(
         ERROR_MESSAGE.REFUND.REFUND_AMOUNT_GREATER_THAN_ZERO
       );
     }
 
-    const wallet = await this._walletRepository.findByUserId(vendorId);
+    const amdinDeductionAmount = refundAmount * 0.1;
+
+    const wallet = await this._walletRepository.findByUserId(
+      this.ADMIN_USER_ID!
+    );
 
     if (!wallet) {
       throw new NotFoundError(ERROR_MESSAGE.WALLET_NOT_FOUND);
     }
 
-    const newBalance = wallet.balance - vendorDeductionAmount;
+    const newBalance = wallet.balance - amdinDeductionAmount;
 
     await this._walletRepository.updateById(wallet._id, {
       balance: newBalance,
@@ -85,10 +89,9 @@ export class VendorPaymentService implements IVendorPaymentService {
     await this._walletTransactionRepository.save({
       walletId: wallet._id,
       type: TRANSACTION_TYPE.DEBIT,
-      amount: vendorDeductionAmount,
+      amount: amdinDeductionAmount,
       referenceId: bookingId,
       description: TRANSACTION_DESCRIPTIONS.CANCELLATION_REFUND(bookingId),
-      metadata: [cancellationReason, bookingId],
     });
   }
 }

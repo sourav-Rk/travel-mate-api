@@ -5,7 +5,7 @@ import { CustomError } from "../../../../domain/errors/customError";
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { ValidationError } from "../../../../domain/errors/validationError";
 import { IVendorRepository } from "../../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
-import { IPhoneExistenceService } from "../../../../domain/service-interfaces/phone-existence-service.interface";
+import { IPhoneExistenceService } from "../../../services/interfaces/phone-existence-service.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import { IUpdateVendorProfileUsecase } from "../../interfaces/vendor/update-vendor-profile-usecase.interface";
 
