@@ -1,6 +1,6 @@
 import { container } from "tsyringe";
 
-import { GroupChatService } from "../../application/services/implementations/group-chat/groupChatService";
+import { GroupChatService } from "../../application/services/implementations/groupChatService";
 import { IGroupChatService } from "../../application/services/interfaces/group-chat-service.interface";
 import { CreateActivityUsecase } from "../../application/usecase/implementations/activity/createActivityUsecase";
 import { DeleteActivityUsecase } from "../../application/usecase/implementations/activity/deleteActivity.usecase";
@@ -340,9 +340,12 @@ export class UsecaseRegistory {
       }
     );
 
-    container.register<IGetClientDetailsVendorUsecase>('IGetClientDetailsVendorUsecase',{
-      useClass : GetClientDetailsVendorUsecase
-    });
+    container.register<IGetClientDetailsVendorUsecase>(
+      "IGetClientDetailsVendorUsecase",
+      {
+        useClass: GetClientDetailsVendorUsecase,
+      }
+    );
 
     //vendor usecases
     container.register<IGetVendorDetailsForStatusUsecase>(
@@ -389,9 +392,12 @@ export class UsecaseRegistory {
       }
     );
 
-    container.register<IGetVendorDetailsClientUsecase>('IGetVendorDetailsClientUsecase',{
-      useClass : GetVendorDetailsClientUsecase
-    });
+    container.register<IGetVendorDetailsClientUsecase>(
+      "IGetVendorDetailsClientUsecase",
+      {
+        useClass: GetVendorDetailsClientUsecase,
+      }
+    );
 
     //admin usecases
     container.register<IUpdateVendorStatusUsecase>(
@@ -608,14 +614,16 @@ export class UsecaseRegistory {
       }
     );
 
+    container.register<IGetCancellationRequests>("IGetCancellationRequests", {
+      useClass: GetCancellationRequests,
+    });
 
-    container.register<IGetCancellationRequests>('IGetCancellationRequests',{
-      useClass : GetCancellationRequests
-    })
-
-    container.register<IGetCancelledBookingDetailsUsecase>('IGetCancelledBookingDetailsUsecase',{
-      useClass : GetCancelledBookingDetailsUsecase
-    }); 
+    container.register<IGetCancelledBookingDetailsUsecase>(
+      "IGetCancelledBookingDetailsUsecase",
+      {
+        useClass: GetCancelledBookingDetailsUsecase,
+      }
+    );
 
     //guide packages usecases
     container.register<IAssignedTripsUsecase>("IAssignedTripsUsecase", {
@@ -766,54 +774,65 @@ export class UsecaseRegistory {
     });
 
     //guide-instruction usecase
-    container.register<ICreateInstructionUsecase>("ICreateInstructionUsecase",{
-      useClass : CreateInstructionUsecase
+    container.register<ICreateInstructionUsecase>("ICreateInstructionUsecase", {
+      useClass: CreateInstructionUsecase,
     });
 
-    container.register<IGetInstructionsClientUsecase>('IGetInstructionsClientUsecase',{
-      useClass : GetInstructionsClientUsecase
-    })
+    container.register<IGetInstructionsClientUsecase>(
+      "IGetInstructionsClientUsecase",
+      {
+        useClass: GetInstructionsClientUsecase,
+      }
+    );
 
-    container.register<IMarkInstructionReadUseCase>('IMarkInstructionReadUseCase',{
-      useClass : MarkInstructionReadUseCase
-    });
+    container.register<IMarkInstructionReadUseCase>(
+      "IMarkInstructionReadUseCase",
+      {
+        useClass: MarkInstructionReadUseCase,
+      }
+    );
 
-    container.register<IMarkAllInstructionsReadUseCase>('IMarkAllInstructionsReadUseCase',{
-      useClass : MarkAllInstructionsReadUseCase
-    });
+    container.register<IMarkAllInstructionsReadUseCase>(
+      "IMarkAllInstructionsReadUseCase",
+      {
+        useClass: MarkAllInstructionsReadUseCase,
+      }
+    );
 
     //group-chat usecases
-    container.register<ICreateGroupChatUsecase>('ICreateGroupChatUsecase',{
-      useClass : CreateGroupChatUsecase 
+    container.register<ICreateGroupChatUsecase>("ICreateGroupChatUsecase", {
+      useClass: CreateGroupChatUsecase,
     });
 
-    container.register<IAddMemberUsecase>('IAddMemberUsecase',{
-      useClass : AddMemberUsecase
+    container.register<IAddMemberUsecase>("IAddMemberUsecase", {
+      useClass: AddMemberUsecase,
     });
 
-    container.register<IGetGroupChatByPackageUsecase>('IGetGroupChatByPackageUsecase',{
-      useClass : GetGroupChatByPackageUsecase
+    container.register<IGetGroupChatByPackageUsecase>(
+      "IGetGroupChatByPackageUsecase",
+      {
+        useClass: GetGroupChatByPackageUsecase,
+      }
+    );
+
+    container.register<IGetGroupMessagesUsecase>("IGetGroupMessagesUsecase", {
+      useClass: GetGroupMessagesUsecase,
     });
 
-    container.register<IGetGroupMessagesUsecase>('IGetGroupMessagesUsecase',{
-      useClass : GetGroupMessagesUsecase
+    container.register<ISendGroupMessageUsecase>("ISendGroupMessageUsecase", {
+      useClass: SendGroupMessageUsecase,
     });
 
-    
-    container.register<ISendGroupMessageUsecase>('ISendGroupMessageUsecase',{
-      useClass : SendGroupMessageUsecase
+    container.register<IGroupChatService>("IGroupChatService", {
+      useClass: GroupChatService,
     });
 
-    container.register<IGroupChatService>('IGroupChatService',{
-      useClass : GroupChatService
+    container.register<IGetGroupsUsecase>("IGetGroupsUsecase", {
+      useClass: GetGroupsUsecase,
     });
 
-    container.register<IGetGroupsUsecase>('IGetGroupsUsecase',{
-      useClass : GetGroupsUsecase
-    });
-
-    container.register<IGetGroupDetailsUsecase>('IGetGroupDetailsUsecase',{
-      useClass : GetGroupDetailsUsecase
+    container.register<IGetGroupDetailsUsecase>("IGetGroupDetailsUsecase", {
+      useClass: GetGroupDetailsUsecase,
     });
 
     //token

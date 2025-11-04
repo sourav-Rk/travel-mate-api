@@ -2,9 +2,9 @@ import { inject, injectable } from "tsyringe";
 
 import { CustomError } from "../../../../domain/errors/customError";
 import { IGuideRepository } from "../../../../domain/repositoryInterfaces/guide/guide-repository.interface";
-import { IPhoneExistenceService } from "../../../../domain/service-interfaces/phone-existence-service.interface";
+import { IPhoneExistenceService } from "../../../services/interfaces/phone-existence-service.interface";
 import { ITokenService } from "../../../../domain/service-interfaces/token-service.interface";
-import { IUserExistenceService } from "../../../../domain/service-interfaces/user-existence-service.interface";
+import { IUserExistenceService } from "../../../services/interfaces/user-existence-service.interface";
 import {
   ERROR_MESSAGE,
   EVENT_EMMITER_TYPE,
@@ -39,7 +39,7 @@ export class AddGuideUsecase implements IAddGuideUsecase {
     );
 
     if (existingEmail)
-      throw new CustomError(HTTP_STATUS.CONFLICT,ERROR_MESSAGE.EMAIL_EXISTS);
+      throw new CustomError(HTTP_STATUS.CONFLICT, ERROR_MESSAGE.EMAIL_EXISTS);
 
     const phoneExists = await this._phoneExistenceService.phoneExists(
       guideData.phone

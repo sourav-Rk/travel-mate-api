@@ -8,8 +8,8 @@ import { IBookingRepository } from "../../../../domain/repositoryInterfaces/book
 import { IVendorRepository } from "../../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
 import { IWalletRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
 import { IWalletTransactionsRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-transactions-repository.interface";
-import { IAdminPaymentService } from "../../../../domain/service-interfaces/admin-payment-service.interface";
-import { IVendorPaymentService } from "../../../../domain/service-interfaces/vendor-payment-service.interface";
+import { IAdminPaymentService } from "../../../services/interfaces/admin-payment-service.interface";
+import { IVendorPaymentService } from "../../../services/interfaces/vendor-payment-service.interface";
 import {
   BOOKINGSTATUS,
   ERROR_MESSAGE,

@@ -2,9 +2,9 @@ import { inject, injectable } from "tsyringe";
 
 import { IUserEntity } from "../../../../domain/entities/user.entity";
 import { CustomError } from "../../../../domain/errors/customError";
-import { IOtpService } from "../../../../domain/service-interfaces/otp-service.interface";
-import { IPhoneExistenceService } from "../../../../domain/service-interfaces/phone-existence-service.interface";
-import { IUserExistenceService } from "../../../../domain/service-interfaces/user-existence-service.interface";
+import { IOtpService } from "../../../services/interfaces/otp-service.interface";
+import { IPhoneExistenceService } from "../../../services/interfaces/phone-existence-service.interface";
+import { IUserExistenceService } from "../../../services/interfaces/user-existence-service.interface";
 import {
   EmailOtpPurpose,
   ERROR_MESSAGE,

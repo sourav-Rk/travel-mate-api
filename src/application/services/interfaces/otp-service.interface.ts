@@ -1,4 +1,4 @@
-import { IUserEntity } from "../entities/user.entity";
+import { IUserEntity } from "../../../domain/entities/user.entity";
 
 export interface IOtpService {
   generateOtp(): string;

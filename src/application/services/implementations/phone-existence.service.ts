@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
 
-import { IAdminRepository } from "../../domain/repositoryInterfaces/admin/admin-repository.interface";
-import { IClientRepository } from "../../domain/repositoryInterfaces/client/client.repository.interface";
-import { IGuideRepository } from "../../domain/repositoryInterfaces/guide/guide-repository.interface";
-import { IVendorRepository } from "../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
-import { IPhoneExistenceService } from "../../domain/service-interfaces/phone-existence-service.interface";
+import { IAdminRepository } from "../../../domain/repositoryInterfaces/admin/admin-repository.interface";
+import { IClientRepository } from "../../../domain/repositoryInterfaces/client/client.repository.interface";
+import { IGuideRepository } from "../../../domain/repositoryInterfaces/guide/guide-repository.interface";
+import { IVendorRepository } from "../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
+import { IPhoneExistenceService } from "../interfaces/phone-existence-service.interface";
 
 @injectable()
 export class PhoneExistenceService implements IPhoneExistenceService {

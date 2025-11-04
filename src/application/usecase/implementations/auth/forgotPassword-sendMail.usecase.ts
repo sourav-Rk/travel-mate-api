@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { ITokenService } from "../../../../domain/service-interfaces/token-service.interface";
-import { IUserExistenceService } from "../../../../domain/service-interfaces/user-existence-service.interface";
+import { IUserExistenceService } from "../../../services/interfaces/user-existence-service.interface";
 import {
   ERROR_MESSAGE,
   EVENT_EMMITER_TYPE,

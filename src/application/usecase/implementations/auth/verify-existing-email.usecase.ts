@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 
 import { CustomError } from "../../../../domain/errors/customError";
-import { IOtpService } from "../../../../domain/service-interfaces/otp-service.interface";
-import { IUserExistenceService } from "../../../../domain/service-interfaces/user-existence-service.interface";
+import { IOtpService } from "../../../services/interfaces/otp-service.interface";
+import { IUserExistenceService } from "../../../services/interfaces/user-existence-service.interface";
 import {
   ERROR_MESSAGE,
   EVENT_EMMITER_TYPE,

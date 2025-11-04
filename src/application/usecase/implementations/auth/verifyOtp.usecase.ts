@@ -1,8 +1,12 @@
 import { inject, injectable } from "tsyringe";
 
 import { ValidationError } from "../../../../domain/errors/validationError";
-import { IOtpService } from "../../../../domain/service-interfaces/otp-service.interface";
-import { ERROR_MESSAGE, HTTP_STATUS, SUCCESS_MESSAGE } from "../../../../shared/constants";
+import { IOtpService } from "../../../services/interfaces/otp-service.interface";
+import {
+  ERROR_MESSAGE,
+  HTTP_STATUS,
+  SUCCESS_MESSAGE,
+} from "../../../../shared/constants";
 import {
   ISuccessResponseHandler,
   successResponseHandler,

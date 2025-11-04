@@ -4,7 +4,7 @@ import { inject, injectable } from "tsyringe";
 import { IBookingRepository } from "../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
 import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
 import { IPaymentService } from "../../../../domain/service-interfaces/payment-service.interface";
-import { IRevenueDistributionService } from "../../../../domain/service-interfaces/revenue-distribution-service.interface";
+import { IRevenueDistributionService } from "../../../services/interfaces/revenue-distribution-service.interface";
 import { BOOKINGSTATUS } from "../../../../shared/constants";
 import { IGroupChatService } from "../../../services/interfaces/group-chat-service.interface";
 import { IHandleStripeWebHookUsecase } from "../../interfaces/payment/handleStripeWebhook-usecase.interface";
@@ -118,7 +118,6 @@ export class HandleStripeWebHookUsecase implements IHandleStripeWebHookUsecase {
             booking.bookingId,
             booking.packageId
           );
-
         }
         break;
       }
