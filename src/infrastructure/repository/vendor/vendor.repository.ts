@@ -146,4 +146,11 @@ export class VendorRepository
 
     return { user: users, total };
   }
+
+  async getTotalAgenciesCount(): Promise<number> {
+    return await vendorDB.countDocuments({
+      role: "vendor",
+      status: "verified",
+    });
+  }
 }

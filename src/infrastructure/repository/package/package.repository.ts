@@ -170,7 +170,7 @@ export class PackageRepository
       },
       { $unwind: "$itineraryDetails" },
 
-      // flatten itinerary days
+      
       { $unwind: "$itineraryDetails.days" },
 
       {
@@ -318,5 +318,14 @@ export class PackageRepository
 
   async findByAgencyId(vendorId: string): Promise<IPackageEntity[] | []> {
     return await packageDB.find({ agencyId: vendorId });
+  }
+
+
+  async countAllPackages(): Promise<number> {
+    return await packageDB.countDocuments({});
+  }
+
+  async countCompletedPackages(): Promise<number> {
+    return await packageDB.countDocuments({ status: "completed" });
   }
 }

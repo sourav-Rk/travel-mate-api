@@ -5,6 +5,8 @@ import {
   GetUserDetailsReqDTO,
   UpdateUserStatusReqDTO,
   UpdateVendorStatusReqDTO,
+  GetDashboardStatsReqDTO,
+  GetAdminSalesReportReqDTO,
 } from "../../../application/dto/request/admin.dto";
 import {
   adminController,
@@ -78,6 +80,20 @@ export class AdminRoute extends BaseRoute {
       asyncHandler(
         walletController.getWalletTransactions.bind(walletController)
       )
+    );
+
+    // Dashboard statistics
+    this.router.get(
+      "/dashboard/stats",
+      validationMiddleware(GetDashboardStatsReqDTO),
+      asyncHandler(adminController.getDashboardStats.bind(adminController))
+    );
+
+    // Sales Report
+    this.router.get(
+      "/sales-report",
+      validationMiddleware(GetAdminSalesReportReqDTO),
+      asyncHandler(adminController.getSalesReport.bind(adminController))
     );
   }
 }
