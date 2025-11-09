@@ -61,4 +61,8 @@ export interface IPackageRepository extends IBaseRepository<IPackageEntity> {
   ): Promise<PaginatedPackagesRepo>;
 
   findByAgencyId(vendorId : string) : Promise<IPackageEntity[] | []>;
+
+  countAllPackages(): Promise<number>;
+  
+  countCompletedPackages(): Promise<number>;
 }

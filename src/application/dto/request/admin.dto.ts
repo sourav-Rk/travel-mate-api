@@ -19,6 +19,14 @@ export enum VENDOR_STATUS {
   VERIFIED = "verified",
 }
 
+export enum DASHBOARD_PERIOD {
+  DAILY = "daily",
+  WEEKLY = "weekly",
+  MONTHLY = "monthly",
+  YEARLY = "yearly",
+  CUSTOM = "custom",
+}
+
 export class GetAllUsersReqDTO {
   @Transform(({ value }) => Number(value))
   @IsNumber({}, { message: "Page must be a number" })
@@ -70,3 +78,43 @@ export class UpdateVendorStatusReqDTO {
 }
 
 export class UpdateUserStatusReqDTO extends GetUserDetailsReqDTO{}
+
+export class GetDashboardStatsReqDTO {
+  @IsOptional()
+  @IsEnum(DASHBOARD_PERIOD, {
+    message: "period must be one of: daily, weekly, monthly, yearly",
+  })
+  period?: DASHBOARD_PERIOD;
+
+  @IsOptional()
+  @IsString({ message: "startDate must be a valid ISO date string" })
+  startDate?: string;
+
+  @IsOptional()
+  @IsString({ message: "endDate must be a valid ISO date string" })
+  endDate?: string;
+}
+
+export class GetAdminSalesReportReqDTO {
+  @IsOptional()
+  @IsEnum(DASHBOARD_PERIOD, {
+    message: "period must be one of: daily, weekly, monthly, yearly, custom",
+  })
+  period?: DASHBOARD_PERIOD = DASHBOARD_PERIOD.MONTHLY;
+
+  @IsOptional()
+  @IsString({ message: "startDate must be a valid ISO date string" })
+  startDate?: string;
+
+  @IsOptional()
+  @IsString({ message: "endDate must be a valid ISO date string" })
+  endDate?: string;
+
+  @IsOptional()
+  @IsString({ message: "vendorId must be a string" })
+  vendorId?: string;
+
+  @IsOptional()
+  @IsString({ message: "packageId must be a string" })
+  packageId?: string;
+}

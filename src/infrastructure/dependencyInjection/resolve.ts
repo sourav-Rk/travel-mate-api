@@ -27,6 +27,7 @@ import { PackageController } from "../../presentation/controllers/package/packag
 import { PaymentController } from "../../presentation/controllers/payment/payment.controller";
 import { ReviewController } from "../../presentation/controllers/review/review.controller";
 import { VendorController } from "../../presentation/controllers/vendor/vendor.controller";
+import { VendorSalesReportController } from "../../presentation/controllers/vendor/vendor-sales-report.controller";
 import { VendorProfileController } from "../../presentation/controllers/vendor/vendor.profile.controller";
 import { WalletController } from "../../presentation/controllers/wallet/wallet.controller";
 import { WishlistController } from "../../presentation/controllers/wishlist/wishlist.controller";
@@ -54,6 +55,7 @@ import { IReviewController } from "../../presentation/interfaces/controllers/rev
 import { ISignedUrlController } from "../../presentation/interfaces/controllers/signedUrl.controller.interface";
 import { IVendorProfileController } from "../../presentation/interfaces/controllers/vendor/vendor-profile.controller.interface";
 import { IVendorController } from "../../presentation/interfaces/controllers/vendor/vendor.controller.interface";
+import { IVendorSalesReportController } from "../../presentation/interfaces/controllers/vendor/vendor-sales-report-controller.interface";
 import { IWishlistController } from "../../presentation/interfaces/controllers/wishlist/wishlist-controller.interface";
 import { IBlockedMiddleware } from "../../presentation/interfaces/middleware/blocked-middleware.interface";
 import { IErrorMiddleware } from "../../presentation/interfaces/middleware/error-middleware.interface";
@@ -103,6 +105,9 @@ export const vendorController =
 
 export const vendorProfileController =
   container.resolve<IVendorProfileController>(VendorProfileController);
+
+export const vendorSalesReportController =
+  container.resolve<IVendorSalesReportController>(VendorSalesReportController);
 
 //admin controller
 export const adminController =

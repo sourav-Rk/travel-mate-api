@@ -25,4 +25,5 @@ export interface IVendorRepository extends IBaseRepository<IVendorEntity> {
     validPageNumber: number,
     validPageSize: number
   ): Promise<{ user: IVendorEntity[] | []; total: number }>;
+  getTotalAgenciesCount(): Promise<number>;
 }

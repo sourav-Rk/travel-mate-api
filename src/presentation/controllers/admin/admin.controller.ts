@@ -5,9 +5,12 @@ import { IGetAllUsersUsecase } from "../../../application/usecase/interfaces/adm
 import { IGetUserByIdUsecase } from "../../../application/usecase/interfaces/admin/getUserById-usecase.interface";
 import { IUpdateUserstatusUsecase } from "../../../application/usecase/interfaces/admin/update-user-status-usecase.interface";
 import { IAdminUpdateVendorStatusUsecase } from "../../../application/usecase/interfaces/admin/update-vendor-usecase.interface";
+import { IGetDashboardStatsUsecase } from "../../../application/usecase/interfaces/admin/get-dashboard-stats-usecase.interface";
+import { IGetAdminSalesReportUsecase } from "../../../application/usecase/interfaces/admin/get-admin-sales-report-usecase.interface";
 import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
 import { IAdminController } from "../../interfaces/controllers/admin/admin.controller.interface";
+import { DASHBOARD_PERIOD } from "../../../application/dto/request/admin.dto";
 
 @injectable()
 export class AdminController implements IAdminController {
@@ -22,7 +25,13 @@ export class AdminController implements IAdminController {
     private _getUserByIdUsecase: IGetUserByIdUsecase,
 
     @inject("IAdminUpdateVendorStatusUsecase")
-    private _adminUpdateVendorStatusUsecase: IAdminUpdateVendorStatusUsecase
+    private _adminUpdateVendorStatusUsecase: IAdminUpdateVendorStatusUsecase,
+
+    @inject("IGetDashboardStatsUsecase")
+    private _getDashboardStatsUsecase: IGetDashboardStatsUsecase,
+
+    @inject("IGetAdminSalesReportUsecase")
+    private _getAdminSalesReportUsecase: IGetAdminSalesReportUsecase
   ) {}
 
   async getAllUsers(req: Request, res: Response): Promise<void> {
@@ -91,6 +100,56 @@ export class AdminController implements IAdminController {
       res,
       HTTP_STATUS.OK,
       SUCCESS_MESSAGE.STATUS_UPDATED_SUCCESS
+    );
+  }
+
+  async getDashboardStats(req: Request, res: Response): Promise<void> {
+    const { period, startDate, endDate } = req.query as {
+      period?: string;
+      startDate?: string;
+      endDate?: string;
+    };
+
+    const dashboardPeriod = (period as DASHBOARD_PERIOD) || DASHBOARD_PERIOD.MONTHLY;
+
+    const stats = await this._getDashboardStatsUsecase.execute(
+      dashboardPeriod,
+      startDate,
+      endDate
+    );
+
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      stats,
+      "dashboardStats"
+    );
+  }
+
+  async getSalesReport(req: Request, res: Response): Promise<void> {
+    const { period, startDate, endDate, vendorId, packageId } = req.query as {
+      period?: string;
+      startDate?: string;
+      endDate?: string;
+      vendorId?: string;
+      packageId?: string;
+    };
+
+    const salesReport = await this._getAdminSalesReportUsecase.execute(
+      (period as DASHBOARD_PERIOD) || DASHBOARD_PERIOD.MONTHLY,
+      startDate,
+      endDate,
+      vendorId,
+      packageId
+    );
+
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.SUCCESS,
+      salesReport,
+      "salesReport"
     );
   }
 }

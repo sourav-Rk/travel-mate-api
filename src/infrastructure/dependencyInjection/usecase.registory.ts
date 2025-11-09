@@ -11,6 +11,8 @@ import { GetAllUsersUsecase } from "../../application/usecase/implementations/ad
 import { GetUserByIdUsecase } from "../../application/usecase/implementations/admin/getUserById.usecase";
 import { UpdateUserStatusUsecase } from "../../application/usecase/implementations/admin/update-user-status.usecase";
 import { AdminUpateVendorStatusUsecase } from "../../application/usecase/implementations/admin/update-vendor-status.usecase";
+import { GetDashboardStatsUsecase } from "../../application/usecase/implementations/admin/get-dashboard-stats.usecase";
+import { GetAdminSalesReportUsecase } from "../../application/usecase/implementations/admin/get-admin-sales-report.usecase";
 import { AddKycUsecase } from "../../application/usecase/implementations/auth/addKyc.usecase";
 import { BlackListTokenUsecase } from "../../application/usecase/implementations/auth/blacklist-token.usecase";
 import { ForgotPasswordResetUsecase } from "../../application/usecase/implementations/auth/forgotPassword-reset.usecase";
@@ -109,6 +111,8 @@ import { IReviewStrategy } from "../../application/usecase/implementations/revie
 import { AddGuideUsecase } from "../../application/usecase/implementations/vendor/add-guide.usecase";
 import { GetGuideDetailsUsecase } from "../../application/usecase/implementations/vendor/get-guide-details.usecase";
 import { GetVendorDetailsClientUsecase } from "../../application/usecase/implementations/vendor/get-vendor-details-client.usecase";
+import { GetVendorDashboardStatsUsecase } from "../../application/usecase/implementations/vendor/get-vendor-dashboard-stats.usecase";
+import { GetVendorSalesReportUsecase } from "../../application/usecase/implementations/vendor/get-vendor-sales-report.usecase";
 import { GetVendorDetailsUsecase } from "../../application/usecase/implementations/vendor/get-vendor-details.usecase";
 import { GetVendorDetailsForStatusUsecase } from "../../application/usecase/implementations/vendor/get-vendor-detailsForStatus.usecase";
 import { GetAllGuideUsecase } from "../../application/usecase/implementations/vendor/getAllGuides.usecase";
@@ -130,6 +134,8 @@ import { IGetAllUsersUsecase } from "../../application/usecase/interfaces/admin/
 import { IGetUserByIdUsecase } from "../../application/usecase/interfaces/admin/getUserById-usecase.interface";
 import { IUpdateUserstatusUsecase } from "../../application/usecase/interfaces/admin/update-user-status-usecase.interface";
 import { IAdminUpdateVendorStatusUsecase } from "../../application/usecase/interfaces/admin/update-vendor-usecase.interface";
+import { IGetDashboardStatsUsecase } from "../../application/usecase/interfaces/admin/get-dashboard-stats-usecase.interface";
+import { IGetAdminSalesReportUsecase } from "../../application/usecase/interfaces/admin/get-admin-sales-report-usecase.interface";
 import { IAddAddressUsecase } from "../../application/usecase/interfaces/auth/add-address-usecase.interface";
 import { IAddKycUsecase } from "../../application/usecase/interfaces/auth/add-kyc-usecase.interface";
 import { IBlackListTokenUsecase } from "../../application/usecase/interfaces/auth/blacklist-token-usecase.interface";
@@ -217,6 +223,8 @@ import { IGetPackageReviewsUsecase } from "../../application/usecase/interfaces/
 import { IAddGuideUsecase } from "../../application/usecase/interfaces/vendor/add-guide-usecase.interface";
 import { IGetGuideDetailsUsecase } from "../../application/usecase/interfaces/vendor/get-guide-details-usecase.interface";
 import { IGetVendorDetailsClientUsecase } from "../../application/usecase/interfaces/vendor/get-vendor-details-client-usecase.interface";
+import { IGetVendorDashboardStatsUsecase } from "../../application/usecase/interfaces/vendor/get-vendor-dashboard-stats-usecase.interface";
+import { IGetVendorSalesReportUsecase } from "../../application/usecase/interfaces/vendor/get-vendor-sales-report-usecase.interface";
 import { IGetVendorDetailsUsecase } from "../../application/usecase/interfaces/vendor/get-vendor-details-usecase.interface";
 import { IGetVendorDetailsForStatusUsecase } from "../../application/usecase/interfaces/vendor/get-vendor-details.usecase.interface";
 import { IGetAllGuidesUsecase } from "../../application/usecase/interfaces/vendor/getAllGuides-usecase.interface";
@@ -399,6 +407,20 @@ export class UsecaseRegistory {
       }
     );
 
+    container.register<IGetVendorDashboardStatsUsecase>(
+      "IGetVendorDashboardStatsUsecase",
+      {
+        useClass: GetVendorDashboardStatsUsecase,
+      }
+    );
+
+    container.register<IGetVendorSalesReportUsecase>(
+      "IGetVendorSalesReportUsecase",
+      {
+        useClass: GetVendorSalesReportUsecase,
+      }
+    );
+
     //admin usecases
     container.register<IUpdateVendorStatusUsecase>(
       "IUpdateVendorStatusUsecase",
@@ -423,6 +445,20 @@ export class UsecaseRegistory {
       "IAdminUpdateVendorStatusUsecase",
       {
         useClass: AdminUpateVendorStatusUsecase,
+      }
+    );
+
+    container.register<IGetDashboardStatsUsecase>(
+      "IGetDashboardStatsUsecase",
+      {
+        useClass: GetDashboardStatsUsecase,
+      }
+    );
+
+    container.register<IGetAdminSalesReportUsecase>(
+      "IGetAdminSalesReportUsecase",
+      {
+        useClass: GetAdminSalesReportUsecase,
       }
     );
 

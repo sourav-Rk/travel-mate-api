@@ -20,6 +20,7 @@ import {
   UpdatePasswordVendorDTO,
   VendorProfileReqDTO,
 } from "../../../application/dto/request/vendor.dto";
+import { GetVendorSalesReportReqDTO } from "../../../application/dto/request/vendor-sales-report.dto";
 import {
   activityController,
   addressController,
@@ -37,6 +38,7 @@ import {
   vendorBookingController,
   vendorController,
   vendorProfileController,
+  vendorSalesReportController,
   walletController,
 } from "../../../infrastructure/dependencyInjection/resolve";
 import { asyncHandler } from "../../../shared/async-handler";
@@ -344,6 +346,27 @@ export class VendorRoute extends BaseRoute {
       "/transactions",
       asyncHandler(
         walletController.getWalletTransactions.bind(walletController)
+      )
+    );
+
+    // -------------------------
+    //  Dashboard Routes
+    // -------------------------
+    this.router.get(
+      "/dashboard/stats",
+      asyncHandler(vendorController.getDashboardStats.bind(vendorController))
+    );
+
+    // -------------------------
+    //  Sales Report Routes
+    // -------------------------
+    this.router.get(
+      "/sales-report",
+      validationMiddleware(GetVendorSalesReportReqDTO),
+      asyncHandler(
+        vendorSalesReportController.getSalesReport.bind(
+          vendorSalesReportController
+        )
       )
     );
 

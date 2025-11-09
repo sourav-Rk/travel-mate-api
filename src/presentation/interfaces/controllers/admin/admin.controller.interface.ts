@@ -5,4 +5,6 @@ export interface IAdminController {
   updateUserStatus(req: Request, res: Response): Promise<void>;
   getUserDetails(req: Request, res: Response): Promise<void>;
   updateVendorStatus(req: Request, res: Response): Promise<void>;
+  getDashboardStats(req: Request, res: Response): Promise<void>;
+  getSalesReport(req: Request, res: Response): Promise<void>;
 }
