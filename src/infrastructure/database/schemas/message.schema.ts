@@ -34,7 +34,29 @@ export const messageSchema = new Schema<IMessageModel>(
     },
     message: {
       type: String,
-      required: true,
+      required: false,
+      default: "",
+    },
+    mediaAttachments: [
+      {
+        url: { type: String, required: true },
+        publicId: { type: String, required: true },
+        type: {
+          type: String,
+          enum: ["image", "video", "file", "voice"],
+          required: true,
+        },
+        fileName: { type: String },
+        fileSize: { type: Number },
+        mimeType: { type: String },
+        thumbnailUrl: { type: String },
+        duration: { type: Number },
+      },
+    ],
+    messageType: {
+      type: String,
+      enum: ["text", "media", "mixed"],
+      default: "text",
     },
     contextType: {
       type: String,

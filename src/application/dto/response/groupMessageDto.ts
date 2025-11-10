@@ -1,11 +1,24 @@
 import { Expose, Transform } from "class-transformer";
 
+export interface MediaAttachment {
+  url: string;
+  publicId: string;
+  type: "image" | "video" | "file" | "voice";
+  fileName?: string;
+  fileSize?: number;
+  mimeType?: string;
+  thumbnailUrl?: string;
+  duration?: number;
+}
+
 export interface GroupMessageDTO {
   _id: string;
   groupChatId: string;
   senderId: string;
   senderType: "client" | "guide" | "vendor";
   message: string;
+  mediaAttachments?: MediaAttachment[];
+  messageType: "text" | "media" | "mixed";
   status: "sent" | "delivered" | "read";
   createdAt: Date;
   updatedAt: Date;
@@ -31,6 +44,21 @@ export class GroupMessageResDTO implements GroupMessageDTO {
   message!: string;
 
   @Expose()
+  mediaAttachments?: Array<{
+    url: string;
+    publicId: string;
+    type: "image" | "video" | "file" | "voice";
+    fileName?: string;
+    fileSize?: number;
+    mimeType?: string;
+    thumbnailUrl?: string;
+    duration?: number;
+  }>;
+
+  @Expose()
+  messageType!: "text" | "media" | "mixed";
+
+  @Expose()
   status!: "sent" | "delivered" | "read";
 
   @Expose()
@@ -45,6 +73,7 @@ export interface SendGroupMessageDTO {
   senderId: string;
   senderType: "client" | "guide" | "vendor";
   message: string;
+  mediaAttachments?: MediaAttachment[];
 }
 
 export interface GetGroupMessagesDTO {

@@ -26,7 +26,7 @@ export class GetDashboardStatsUsecase implements IGetDashboardStatsUsecase {
   ) {}
 
   async execute(
-    period: DASHBOARD_PERIOD = DASHBOARD_PERIOD.MONTHLY,
+    period: Exclude<DASHBOARD_PERIOD, DASHBOARD_PERIOD.CUSTOM> = DASHBOARD_PERIOD.MONTHLY,
     startDate?: string,
     endDate?: string
   ): Promise<DashboardStatsDto> {

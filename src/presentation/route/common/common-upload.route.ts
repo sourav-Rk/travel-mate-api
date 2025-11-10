@@ -10,7 +10,7 @@ interface MulterRequest extends Request {
 export class CommonUploadRoutes {
   public router = Router();
 
-  constructor(private role: "vendor" | "client") {
+  constructor(private role: "vendor" | "client" | "guide") {
     this.configureRoutes();
   }
 
