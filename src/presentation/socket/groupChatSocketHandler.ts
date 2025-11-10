@@ -47,6 +47,7 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
 
         try {
           const { packageId } = data;
+          const senderId = socket.data.userId;
 
           const groupChat = await this._getGroupChatByPackageUsecase.execute(
             packageId
@@ -65,6 +66,19 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
           const roomName = this.getRoomName(groupChat._id.toString());
           socket.join(roomName);
           socket.data.groupChatId = groupChat._id.toString();
+
+          // Log room join for debugging
+          const room = io.sockets.adapter.rooms.get(roomName);
+          const roomSize = room ? room.size : 0;
+          console.log(`✅ User ${senderId} joined room: ${roomName}, Total members: ${roomSize}`);
+
+          // Notify other users in the room that a new user joined
+          socket.to(roomName).emit(GROUP_CHAT_SOCKET_EVENTS.SERVER.USER_JOINED_GROUP, {
+            userId: socket.data.userId,
+            userType: socket.data.role,
+            groupChatId: groupChat._id.toString(),
+            timestamp: new Date(),
+          });
 
           socket.emit(GROUP_CHAT_SOCKET_EVENTS.SERVER.GROUP_CHAT_JOINED, {
             groupChatId: groupChat._id,
@@ -144,10 +158,25 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
 
           const roomName = this.getRoomName(groupChatId);
 
+          // Ensure sender is in the room before broadcasting
+          if (!socket.rooms.has(roomName)) {
+            console.log(`⚠️ Sender not in room ${roomName}, joining now...`);
+            socket.join(roomName);
+            socket.data.groupChatId = groupChatId;
+          }
+
+          // Get room info for debugging
+          const room = io.sockets.adapter.rooms.get(roomName);
+          const roomSize = room ? room.size : 0;
+          console.log(`📢 Broadcasting message to room: ${roomName}, Members: ${roomSize}`);
+
+          // Broadcast to all members in the room (including sender)
           io.to(roomName).emit(
             GROUP_CHAT_SOCKET_EVENTS.SERVER.NEW_GROUP_MESSAGE,
             messageToEmit
           );
+
+          console.log(`✅ Message broadcasted to ${roomSize} members in room ${roomName}`);
 
           ack?.({ success: true, message: messageToEmit });
         } catch (err: unknown) {
@@ -206,8 +235,19 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
 
           if (groupChatId) {
             const roomName = this.getRoomName(groupChatId);
+            
+            // Notify other users in the room that this user left
+            socket.to(roomName).emit(GROUP_CHAT_SOCKET_EVENTS.SERVER.USER_LEFT_GROUP, {
+              userId: socket.data.userId,
+              userType: socket.data.role,
+              groupChatId: groupChatId,
+              timestamp: new Date(),
+            });
+
             socket.leave(roomName);
             socket.data.groupChatId = null;
+            
+            console.log(`👋 User ${socket.data.userId} left room: ${roomName}`);
           }
 
           if (ack) {
