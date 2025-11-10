@@ -14,6 +14,16 @@ export interface IMessageModel
   receiverId: Types.ObjectId;
   deliveredTo?: Types.ObjectId[];
   chatRoomId: Types.ObjectId;
+  mediaAttachments?: Array<{
+    url: string;
+    publicId: string;
+    type: "image" | "video" | "file" | "voice";
+    fileName?: string;
+    fileSize?: number;
+    mimeType?: string;
+    thumbnailUrl?: string;
+    duration?: number;
+  }>;
 }
 
 export const messageDB = mongoose.model<IMessageModel>("messages",messageSchema);

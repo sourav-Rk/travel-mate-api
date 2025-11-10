@@ -29,6 +29,7 @@ import {
 } from "../../middlewares/auth.middleware";
 import { validationMiddleware } from "../../middlewares/validation.middleware";
 import { BaseRoute } from "../base.route";
+import { CommonUploadRoutes } from "../common/common-upload.route";
 
 @injectable()
 export class GuideRoute extends BaseRoute {
@@ -46,6 +47,11 @@ export class GuideRoute extends BaseRoute {
 
     //middleware
     this.router.use(verifyAuth, authorizeRole(["guide"]));
+
+    // -------------------------
+    //  Common Upload Routes
+    // -------------------------
+    this.router.use("/", new CommonUploadRoutes("guide").router);
 
     this.router.get(
       "/details",

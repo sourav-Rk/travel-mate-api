@@ -135,6 +135,8 @@ export class GroupMessageRepository
           senderType: 1,
           senderName: 1,
           message: 1,
+          mediaAttachments: 1,
+          messageType: 1,
           status: 1,
           createdAt: 1,
           updatedAt: 1,

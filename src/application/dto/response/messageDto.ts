@@ -36,6 +36,21 @@ export class MessageResDTO implements IMessageEntity {
   message!: string;
 
   @Expose()
+  mediaAttachments?: Array<{
+    url: string;
+    publicId: string;
+    type: "image" | "video" | "file" | "voice";
+    fileName?: string;
+    fileSize?: number;
+    mimeType?: string;
+    thumbnailUrl?: string;
+    duration?: number;
+  }>;
+
+  @Expose()
+  messageType!: "text" | "media" | "mixed";
+
+  @Expose()
   contextType!: "vendor_client" | "guide_client" | "client_client";
 
   @Expose()

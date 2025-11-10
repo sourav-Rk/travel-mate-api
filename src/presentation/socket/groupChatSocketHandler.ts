@@ -103,12 +103,15 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
         }) => void
       ) => {
         try {
-          const { groupChatId, message } = data;
+          const { groupChatId, message, mediaAttachments } = data;
 
           const senderId = socket.data.userId;
           const senderType = socket.data.role;
 
-          if (!groupChatId || !message || !senderId || !senderType) {
+          const hasText = message && message.trim().length > 0;
+          const hasMedia = mediaAttachments && mediaAttachments.length > 0;
+
+          if (!groupChatId || (!hasText && !hasMedia) || !senderId || !senderType) {
             return ack?.({
               success: false,
               error: ERROR_MESSAGE.GROUP.MISSING_MESSAGE_DATA,
@@ -119,17 +122,34 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
             groupChatId,
             senderId,
             senderType: senderType as "client" | "guide" | "vendor",
-            message,
+            message: message || "",
+            mediaAttachments,
+          });
+
+          // Ensure mediaAttachments and senderName are included when emitting
+          const messageToEmit = {
+            ...groupMessage,
+            mediaAttachments: groupMessage.mediaAttachments || [],
+            messageType: groupMessage.messageType || "text",
+            senderName: (groupMessage as any).senderName || "Unknown",
+          };
+
+          // Log for debugging
+          console.log("📤 Group message saved:", {
+            _id: messageToEmit._id,
+            message: messageToEmit.message,
+            messageType: messageToEmit.messageType,
+            mediaAttachmentsCount: messageToEmit.mediaAttachments?.length || 0,
           });
 
           const roomName = this.getRoomName(groupChatId);
 
           io.to(roomName).emit(
             GROUP_CHAT_SOCKET_EVENTS.SERVER.NEW_GROUP_MESSAGE,
-            groupMessage
+            messageToEmit
           );
 
-          ack?.({ success: true, message: groupMessage });
+          ack?.({ success: true, message: messageToEmit });
         } catch (err: unknown) {
           ack?.({
             success: false,

@@ -135,6 +135,7 @@ export class ChatSocketHandler implements IChatSocketHandler {
             receiverId,
             receiverType,
             message,
+            mediaAttachments,
             contextType,
             contextId,
           } = data;
@@ -142,7 +143,7 @@ export class ChatSocketHandler implements IChatSocketHandler {
           if (
             !senderId ||
             !receiverId ||
-            !message ||
+            (!message && (!mediaAttachments || mediaAttachments.length === 0)) ||
             !senderType ||
             !receiverType ||
             !contextType
@@ -159,9 +160,19 @@ export class ChatSocketHandler implements IChatSocketHandler {
             senderType,
             receiverId,
             receiverType,
-            message,
+            message: message || "",
+            mediaAttachments,
             contextType,
             contextId,
+          });
+
+          // Log for debugging
+          console.log("📤 Message saved:", {
+            _id: newMessage._id,
+            message: newMessage.message,
+            messageType: newMessage.messageType,
+            mediaAttachmentsCount: newMessage.mediaAttachments?.length || 0,
+            mediaAttachments: newMessage.mediaAttachments,
           });
 
           // Check if receiver is online
@@ -179,12 +190,19 @@ export class ChatSocketHandler implements IChatSocketHandler {
             }
           }
 
+          // Ensure mediaAttachments are included when emitting
+          const messageToEmit = {
+            ...newMessage,
+            mediaAttachments: newMessage.mediaAttachments || [],
+            messageType: newMessage.messageType || "text",
+          };
+
           io.to(newMessage.chatRoomId).emit(
             CHAT_SOCKET_EVENTS.SERVER.NEW_MESSAGE,
-            newMessage
+            messageToEmit
           );
 
-          ack?.({ success: true, message: newMessage });
+          ack?.({ success: true, message: messageToEmit });
         } catch (err: unknown) {
           ack?.({
             success: false,
