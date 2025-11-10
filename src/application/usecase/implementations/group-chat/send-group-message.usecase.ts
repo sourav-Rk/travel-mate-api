@@ -78,17 +78,21 @@ export class SendGroupMessageUsecase implements ISendGroupMessageUsecase {
       }
     }
 
-    const groupMessage = await this._groupMessageRepository.save({
+    const messageData = {
       groupChatId: data.groupChatId,
       senderId: data.senderId,
       senderType: data.senderType,
       message: data.message?.trim() || "",
       mediaAttachments: data.mediaAttachments,
       messageType,
-      status: "sent",
+      status: "sent" as const,
       createdAt: new Date(),
       updatedAt: new Date(),
-    });
+    };
+
+
+
+    const groupMessage = await this._groupMessageRepository.save(messageData);
 
     let senderName = "Unknown User";
     try {
@@ -141,9 +145,20 @@ export class SendGroupMessageUsecase implements ISendGroupMessageUsecase {
       updatedAt: new Date(),
     });
 
-    return {
-      ...groupMessage,
+    const messageEntity: IGroupMessageEntity & { senderName: string } = {
+      _id: (groupMessage as any)._id?.toString() || (groupMessage as any)._id,
+      groupChatId: (groupMessage as any).groupChatId?.toString() || (groupMessage as any).groupChatId || data.groupChatId,
+      senderId: (groupMessage as any).senderId?.toString() || (groupMessage as any).senderId || data.senderId,
+      senderType: groupMessage.senderType,
+      message: groupMessage.message || "",
+      mediaAttachments: groupMessage.mediaAttachments || [],
+      messageType: groupMessage.messageType,
+      status: groupMessage.status,
+      createdAt: groupMessage.createdAt || new Date(),
+      updatedAt: groupMessage.updatedAt || new Date(),
       senderName,
-    } as IGroupMessageEntity & { senderName: string };
+    };
+
+    return messageEntity;
   }
 }

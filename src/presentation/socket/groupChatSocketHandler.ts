@@ -140,43 +140,37 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
             mediaAttachments,
           });
 
-          // Ensure mediaAttachments and senderName are included when emitting
+
           const messageToEmit = {
-            ...groupMessage,
+            _id: String(groupMessage._id || ""),
+            groupChatId: String(groupMessage.groupChatId || groupChatId),
+            senderId: String(groupMessage.senderId || senderId),
+            senderType: groupMessage.senderType,
+            senderName: (groupMessage as any).senderName || "Unknown",
+            message: groupMessage.message || "",
             mediaAttachments: groupMessage.mediaAttachments || [],
             messageType: groupMessage.messageType || "text",
-            senderName: (groupMessage as any).senderName || "Unknown",
+            status: groupMessage.status || "sent",
+            createdAt: groupMessage.createdAt || new Date(),
+            updatedAt: groupMessage.updatedAt || new Date(),
           };
 
-          // Log for debugging
-          console.log("📤 Group message saved:", {
-            _id: messageToEmit._id,
-            message: messageToEmit.message,
-            messageType: messageToEmit.messageType,
-            mediaAttachmentsCount: messageToEmit.mediaAttachments?.length || 0,
-          });
 
           const roomName = this.getRoomName(groupChatId);
 
-          // Ensure sender is in the room before broadcasting
           if (!socket.rooms.has(roomName)) {
-            console.log(`⚠️ Sender not in room ${roomName}, joining now...`);
+            console.log(`Sender not in room ${roomName}, joining now..`);
             socket.join(roomName);
             socket.data.groupChatId = groupChatId;
           }
 
-          // Get room info for debugging
           const room = io.sockets.adapter.rooms.get(roomName);
           const roomSize = room ? room.size : 0;
-          console.log(`📢 Broadcasting message to room: ${roomName}, Members: ${roomSize}`);
 
-          // Broadcast to all members in the room (including sender)
           io.to(roomName).emit(
             GROUP_CHAT_SOCKET_EVENTS.SERVER.NEW_GROUP_MESSAGE,
             messageToEmit
           );
-
-          console.log(`✅ Message broadcasted to ${roomSize} members in room ${roomName}`);
 
           ack?.({ success: true, message: messageToEmit });
         } catch (err: unknown) {
