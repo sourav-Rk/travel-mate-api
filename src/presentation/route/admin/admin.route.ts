@@ -8,8 +8,10 @@ import {
   GetDashboardStatsReqDTO,
   GetAdminSalesReportReqDTO,
 } from "../../../application/dto/request/admin.dto";
+import { GetPendingVerificationsReqDTO } from "../../../application/dto/request/local-guide.dto";
 import {
   adminController,
+  localGuideController,
   packageConroller,
   walletController,
 } from "../../../infrastructure/dependencyInjection/resolve";
@@ -94,6 +96,29 @@ export class AdminRoute extends BaseRoute {
       "/sales-report",
       validationMiddleware(GetAdminSalesReportReqDTO),
       asyncHandler(adminController.getSalesReport.bind(adminController))
+    );
+
+    // Local Guide Verification Routes
+    this.router.get(
+      "/local-guides/pending",
+      validationMiddleware(GetPendingVerificationsReqDTO),
+      asyncHandler(
+        localGuideController.getPendingVerifications.bind(localGuideController)
+      )
+    );
+
+    this.router.patch(
+      "/local-guides/verify/:profileId",
+      asyncHandler(
+        localGuideController.verifyGuide.bind(localGuideController)
+      )
+    );
+
+    this.router.patch(
+      "/local-guides/reject/:profileId",
+      asyncHandler(
+        localGuideController.rejectGuide.bind(localGuideController)
+      )
     );
   }
 }

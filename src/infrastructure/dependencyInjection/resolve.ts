@@ -18,6 +18,8 @@ import { GuideController } from "../../presentation/controllers/guide/guide.cont
 import { GuideProfileController } from "../../presentation/controllers/guide/guideProfileController";
 import { GuideInstructionController } from "../../presentation/controllers/guide-instruction/guide-instruction.controller";
 import { ItineraryController } from "../../presentation/controllers/itinerary/itinerary.controller";
+import { LocalGuideController } from "../../presentation/controllers/local-guide/local-guide.controller";
+import { VolunteerPostController } from "../../presentation/controllers/volunteer-post/volunteer-post.controller";
 import { KycController } from "../../presentation/controllers/kyc/kycController";
 import { SignedUrlController } from "../../presentation/controllers/media/signedUrl.controller";
 import { NotificationController } from "../../presentation/controllers/notification/notification.controller";
@@ -57,6 +59,8 @@ import { IVendorProfileController } from "../../presentation/interfaces/controll
 import { IVendorController } from "../../presentation/interfaces/controllers/vendor/vendor.controller.interface";
 import { IVendorSalesReportController } from "../../presentation/interfaces/controllers/vendor/vendor-sales-report-controller.interface";
 import { IWishlistController } from "../../presentation/interfaces/controllers/wishlist/wishlist-controller.interface";
+import { ILocalGuideController } from "../../presentation/interfaces/controllers/local-guide/local-guide.controller.interface";
+import { IVolunteerPostController } from "../../presentation/interfaces/controllers/volunteer-post/volunteer-post.controller.interface";
 import { IBlockedMiddleware } from "../../presentation/interfaces/middleware/blocked-middleware.interface";
 import { IErrorMiddleware } from "../../presentation/interfaces/middleware/error-middleware.interface";
 import { IChatSocketHandler } from "../../presentation/interfaces/socket/chat-socket-handler.interface";
@@ -203,6 +207,14 @@ export const walletController = container.resolve(WalletController);
 export const guideInstructionController = container.resolve(
   GuideInstructionController
 );
+
+//local guide controller
+export const localGuideController =
+  container.resolve<ILocalGuideController>(LocalGuideController);
+
+//volunteer post controller
+export const volunteerPostController =
+  container.resolve<IVolunteerPostController>(VolunteerPostController);
 
 //group chat controller
 export const groupChatController = container.resolve(GroupChatController);

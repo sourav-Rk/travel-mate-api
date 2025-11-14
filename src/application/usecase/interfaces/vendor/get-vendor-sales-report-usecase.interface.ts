@@ -9,9 +9,11 @@ export interface IGetVendorSalesReportUsecase {
     endDate?: string,
     packageId?: string,
     bookingStatus?: string,
-    paymentMode?: string
   ): Promise<VendorSalesReportDto>;
 }
+
+
+
 
 
 

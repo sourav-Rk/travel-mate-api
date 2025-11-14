@@ -139,6 +139,30 @@ export const ERROR_MESSAGE = {
   CHATROOM_NOT_FOUND: "Chatroom not found",
   WALLET_NOT_FOUND: "Wallet not found",
 
+  LOCAL_GUIDE:{
+  LOCAL_GUIDE_PROFILE_NOT_FOUND: "Local guide profile not found",
+  LOCAL_GUIDE_PROFILE_ALREADY_EXISTS: "Local guide profile already exists for this user",
+  LOCAL_GUIDE_ALREADY_VERIFIED: "Local guide is already verified",
+  LOCAL_GUIDE_NOT_VERIFIED: "Local guide is not verified",
+  VERIFICATION_ALREADY_PENDING: "Verification request is already pending",
+  INVALID_COORDINATES: "Invalid coordinates format. Must be [longitude, latitude]",
+  LOCATION_REQUIRED: "Location with precise coordinates is required",
+  ALREADY_REJECTED:"Verification request has already been rejected"
+  },
+
+  VOLUNTEER_POST: {
+    ALREADY_LIKED: "You have already liked this post",
+    NOT_LIKED: "You have not liked this post",
+    POST_NOT_FOUND: "Volunteer post not found",
+    LOCAL_GUIDE_PROFILE_NOT_FOUND: "Local guide profile not found",
+    GUIDE_NOT_VERIFIED: "Local guide must be verified to create posts",
+    INVALID_COORDINATES: "Invalid coordinates format. Must be [longitude, latitude]",
+    PROFILE_HOURLY_RATE_REQUIRED: "Profile hourly rate is required when offering guide service. Please update your profile with an hourly rate.",
+    MAX_IMAGES_EXCEEDED: "Maximum 10 images allowed per post",
+    MAX_TAGS_EXCEEDED: "Maximum 20 tags allowed per post",
+    UNAUTHORIZED_ACCESS: "You are not authorized to perform this action",
+  },
+
   ADDRESS: {
     ADDRESS_NOT_FOUND: "Address not found",
   },
@@ -160,6 +184,7 @@ export const ERROR_MESSAGE = {
     GUIDE_ASSIGNED_CONFLICT: "This guide is not assigned for this trip",
     INSTRUCTION_NOT_FOUND: "Instruction not found",
   },
+
 
   GROUP: {
     ATLEAST_TWO_MEMBERS: "Group chat must have at least 2 members",
@@ -247,6 +272,26 @@ export const SUCCESS_MESSAGE = {
     INSTRUCTION_MARKED_AS_READ: "Instruction marked as read",
     ALL_INSTRUCTIONS_MARKED_AS_READ: "All instructions marked as read",
   },
+
+
+   LOCAL_GUIDE: {
+    VERIFICATION_REQUESTED: "Verification request submitted successfully",
+    VERIFICATION_RESUBMITTED: "Verification request resubmitted successfully. Your request is now pending review",
+    VERIFICATION_APPROVED: "Local guide verification approved",
+    VERIFICATION_REJECTED: "Local guide verification rejected",
+    PROFILE_CREATED: "Local guide profile created successfully",
+    PROFILE_UPDATED: "Local guide profile updated successfully",
+    AVAILABLE : "Successfully set to available",
+    NOT_AVAILABLE : "Successfully set to not available"
+  },
+
+  VOLUNTEER_POST :{
+    POST_CREATED : "Post created successfully",
+    POST_UPDATED : "Post updated successfully",
+    POST_DELETED : "Post deleted successfully",
+    POST_LIKED : "Post liked successfully",
+    POST_UNLIKED : "Post unliked successfully"
+  }
 };
 
 export const ROLES = {
@@ -263,8 +308,28 @@ export const STATUS = {
   REJECTED: "rejected",
 } as const;
 
+export const GUIDE_SPECIALTIES = {
+  FOOD: "food",
+  CULTURE: "culture",
+  HISTORY: "history",
+  ADVENTURE: "adventure",
+  NIGHTLIFE: "nightlife",
+  SHOPPING: "shopping",
+  NATURE: "nature",
+  PHOTOGRAPHY: "photography",
+  FAMILY_FRIENDLY: "family-friendly",
+} as const;
+
+export const VERIFICATION_STATUS = {
+  PENDING: "pending",
+  REVIEWING: "reviewing",
+  VERIFIED: "verified",
+  REJECTED: "rejected",
+} as const;
+
 export type TRole = "admin" | "vendor" | "client" | "guide";
 export type TStatus = "pending" | "verified" | "rejected";
+export type TVerificationStatus = "pending" | "reviewing" | "verified" | "rejected";
 
 export type PackageStatus =
   | "draft"
@@ -396,6 +461,42 @@ export type CHAT_CONTEXT_TYPE =
   | "guide_client"
   | "client_client";
 export type CHAT_USERS = "client" | "guide" | "vendor";
+
+export const POST_CATEGORY = {
+  HIDDEN_SPOTS: "hidden-spots",
+  RESTAURANTS: "restaurants",
+  SAFETY: "safety",
+  CULTURE: "culture",
+  STAYS: "stays",
+  TRANSPORTATION: "transportation",
+  SHOPPING: "shopping",
+  ENTERTAINMENT: "entertainment",
+  NATURE: "nature",
+  HISTORY: "history",
+  OTHER: "other",
+} as const;
+
+export const POST_STATUS = {
+  DRAFT: "draft",
+  PUBLISHED: "published",
+  ARCHIVED: "archived",
+  HIDDEN: "hidden",
+} as const;
+
+
+export type TPostStatus = "draft" | "published" | "archived" | "hidden";
+export type TPostCategory =
+  | "hidden-spots"
+  | "restaurants"
+  | "safety"
+  | "culture"
+  | "stays"
+  | "transportation"
+  | "shopping"
+  | "entertainment"
+  | "nature"
+  | "history"
+  | "other";
 
 export type MetadataValue = string | number | boolean | Date | null | undefined;
 

@@ -19,21 +19,32 @@ import {
   groupChatController,
   guideInstructionController,
   guideProfileController,
+  localGuideController,
   notificationController,
   paymentController,
   reviewController,
   vendorProfileController,
+  volunteerPostController,
   walletController,
   wishlistController,
 } from "../../../infrastructure/dependencyInjection/resolve";
+import {
+  RequestLocalGuideVerificationReqDTO,
+  UpdateLocalGuideAvailabilityReqDTO,
+  UpdateLocalGuideProfileReqDTO,
+} from "../../../application/dto/request/local-guide.dto";
+import {
+  CreateVolunteerPostReqDTO,
+  GetVolunteerPostsReqDTO,
+  GetVolunteerPostsByLocationReqDTO,
+  SearchVolunteerPostsReqDTO,
+} from "../../../application/dto/request/volunteer-post.dto";
 import { asyncHandler } from "../../../shared/async-handler";
 import { authorizeRole, verifyAuth } from "../../middlewares/auth.middleware";
 import { validationMiddleware } from "../../middlewares/validation.middleware";
 import { BaseRoute } from "../base.route";
 import { CommonUploadRoutes } from "../common/common-upload.route";
 import { FcmTokenRoutes } from "../fcmToken/fcmToken.route";
-
-
 
 @injectable()
 export class ClientRoute extends BaseRoute {
@@ -345,6 +356,112 @@ export class ClientRoute extends BaseRoute {
       "/group-details/:groupId",
       asyncHandler(
         groupChatController.getGroupDetails.bind(groupChatController)
+      )
+    );
+
+    //--------------Local Guide Routes-------------------
+    this.router.post(
+      "/local-guide/request-verification",
+      verifyAuth,
+      authorizeRole(["client"]),
+      validationMiddleware(RequestLocalGuideVerificationReqDTO),
+      asyncHandler(
+        localGuideController.requestVerification.bind(localGuideController)
+      )
+    );
+
+    this.router.get(
+      "/local-guide/profile",
+      verifyAuth,
+      authorizeRole(["client"]),
+      asyncHandler(
+        localGuideController.getLocalGuideProfile.bind(localGuideController)
+      )
+    );
+
+    this.router.patch(
+      "/local-guide/availability",
+      verifyAuth,
+      authorizeRole(["client"]),
+      validationMiddleware(UpdateLocalGuideAvailabilityReqDTO),
+      asyncHandler(
+        localGuideController.updateAvailability.bind(localGuideController)
+      )
+    );
+
+    this.router.patch(
+      "/local-guide/profile",
+      validationMiddleware(UpdateLocalGuideProfileReqDTO),
+      asyncHandler(
+        localGuideController.updateProfile.bind(localGuideController)
+      )
+    );
+
+    //--------------Volunteer Post Routes -------------------
+    this.router.post(
+      "/local-guide/posts",
+      validationMiddleware(CreateVolunteerPostReqDTO),
+      asyncHandler(
+        volunteerPostController.createPost.bind(volunteerPostController)
+      )
+    );
+
+    this.router.put(
+      "/local-guide/posts/:postId",
+      asyncHandler(
+        volunteerPostController.updatePost.bind(volunteerPostController)
+      )
+    );
+
+    this.router.delete(
+      "/local-guide/posts/:postId",
+      asyncHandler(
+        volunteerPostController.deletePost.bind(volunteerPostController)
+      )
+    );
+
+    this.router.get(
+      "/local-guide/posts",
+      validationMiddleware(GetVolunteerPostsReqDTO),
+      asyncHandler(
+        volunteerPostController.getPosts.bind(volunteerPostController)
+      )
+    );
+
+    this.router.get(
+      "/local-guide/posts/search",
+      validationMiddleware(SearchVolunteerPostsReqDTO),
+      asyncHandler(
+        volunteerPostController.searchPosts.bind(volunteerPostController)
+      )
+    );
+
+    this.router.get(
+      "/local-guide/posts/:postId",
+      asyncHandler(
+        volunteerPostController.getPost.bind(volunteerPostController)
+      )
+    );
+
+    this.router.get(
+      "/local-guide/posts/location",
+      validationMiddleware(GetVolunteerPostsByLocationReqDTO),
+      asyncHandler(
+        volunteerPostController.getPostsByLocation.bind(volunteerPostController)
+      )
+    );
+
+    this.router.post(
+      "/local-guide/posts/:postId/like",
+      asyncHandler(
+        volunteerPostController.likePost.bind(volunteerPostController)
+      )
+    );
+
+    this.router.delete(
+      "/local-guide/posts/:postId/like",
+      asyncHandler(
+        volunteerPostController.unlikePost.bind(volunteerPostController)
       )
     );
   }

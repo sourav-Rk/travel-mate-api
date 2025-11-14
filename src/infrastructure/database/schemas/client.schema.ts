@@ -49,6 +49,17 @@ export const clientSchema = new mongoose.Schema<IClientModel>(
       type: Boolean,
       default: false,
     },
+    isLocalGuide: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    localGuideProfileId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "local_guide_profiles",
+      default: null,
+      sparse: true,
+    },
   },
   {
     timestamps: true,
