@@ -28,7 +28,6 @@ export class GetVendorSalesReportUsecase implements IGetVendorSalesReportUsecase
     endDate?: string,
     packageId?: string,
     bookingStatus?: string,
-    paymentMode?: string
   ): Promise<VendorSalesReportDto> {
 
     let startDateObj: Date | undefined = undefined;
@@ -84,16 +83,6 @@ export class GetVendorSalesReportUsecase implements IGetVendorSalesReportUsecase
           break;
       }
     }
-
-    console.log("=== Date Calculation Debug ===");
-    console.log("Input:", { period, startDate, endDate });
-    console.log("Calculated dates (UTC):", {
-      startDateObj: startDateObj?.toISOString(),
-      endDateObj: endDateObj?.toISOString(),
-      startDateObjLocal: startDateObj?.toLocaleString(),
-      endDateObjLocal: endDateObj?.toLocaleString(),
-    });
-    console.log("Will filter by dates:", !!(startDateObj || endDateObj));
 
     const [
       totalBookings,
@@ -165,8 +154,10 @@ export class GetVendorSalesReportUsecase implements IGetVendorSalesReportUsecase
     const totalAdminCommission = totalRevenue * 0.1;
 
 
-    // Get refunded bookings count (bookings with refundAmount > 0)
-    // We'll need to query this separately or estimate from cancelled bookings
+    /**
+     * Get refunded bookings count (bookings with refundAmount > 0)
+     *  We'll need to query this separately or estimate from cancelled bookings
+     */
     const refundedBookings = bookingStatusDistribution[BOOKINGSTATUS.CANCELLED] || 0;
 
     const summary: VendorSalesReportSummaryDto = {

@@ -12,6 +12,9 @@ import { IGroupChatRepository } from "../../domain/repositoryInterfaces/group-ch
 import { IGroupMessageRepository } from "../../domain/repositoryInterfaces/group-chat/group-message-repository.interface";
 import { IGuideRepository } from "../../domain/repositoryInterfaces/guide/guide-repository.interface";
 import { IGuideInstructionRepository } from "../../domain/repositoryInterfaces/guide-instruction/guide-instruction-repository.interface";
+import { ILocalGuideProfileRepository } from "../../domain/repositoryInterfaces/local-guide-profile/local-guide-profile-repository.interface";
+import { IPostLikeRepository } from "../../domain/repositoryInterfaces/post-like/post-like-repository.interface";
+import { IVolunteerPostRepository } from "../../domain/repositoryInterfaces/volunteer-post/volunteer-post-repository.interface";
 import { IMessageRepository } from "../../domain/repositoryInterfaces/message/message-repository.interface";
 import { INotificationRepository } from "../../domain/repositoryInterfaces/notification/notification-repository.interface";
 import { IActivitiesRepository } from "../../domain/repositoryInterfaces/package/activities-repository.interface";
@@ -37,6 +40,9 @@ import { GroupChatRepository } from "../repository/group-chat/group-chat.reposit
 import { GroupMessageRepository } from "../repository/group-chat/group-message.repository";
 import { GuideRepository } from "../repository/guide/guide.repository";
 import { GuideInstructionRepository } from "../repository/guide-instruction/guide-instruction.repository";
+import { LocalGuideProfileRepository } from "../repository/local-guide-profile/local-guide-profile.repository";
+import { VolunteerPostRepository } from "../repository/volunteer-post/volunteer-post.repository";
+import { PostLikeRepository } from "../repository/post-like/post-like.repository";
 import { MessageRepository } from "../repository/message/message.repository";
 import { NotificationRepository } from "../repository/notification/notification.repository";
 import { ActivitiesRepository } from "../repository/package/activities.repository";
@@ -151,6 +157,21 @@ export class RepositoryRegistry {
 
     container.register<IGroupMessageRepository>('IGroupMessageRepository',{
       useClass : GroupMessageRepository
+    })
+
+    //local guide profile repository
+    container.register<ILocalGuideProfileRepository>('ILocalGuideProfileRepository',{
+      useClass : LocalGuideProfileRepository
+    })
+
+    //volunteer post repository
+    container.register<IVolunteerPostRepository>('IVolunteerPostRepository',{
+      useClass : VolunteerPostRepository
+    })
+
+    //post like repository
+    container.register<IPostLikeRepository>('IPostLikeRepository',{
+      useClass : PostLikeRepository
     })
 
     //database session

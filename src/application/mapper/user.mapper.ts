@@ -23,6 +23,14 @@ export class UserMapper {
       user.googleId = doc.googleId;
     }
 
+    if(doc.isLocalGuide){
+      user.isLocalGuide
+    }
+
+    if(doc.localGuideProfileId){
+      user.localGuideProfileId
+    }
+
     if (doc.bio) {
       user.bio = doc.bio;
     }

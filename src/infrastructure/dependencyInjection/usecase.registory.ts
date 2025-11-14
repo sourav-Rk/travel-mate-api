@@ -75,6 +75,22 @@ import { GetGuideDetailsClient } from "../../application/usecase/implementations
 import { GetGuideProfileUsecase } from "../../application/usecase/implementations/guide/getGuideProfileUsecase";
 import { ResetPasswordUsecase } from "../../application/usecase/implementations/guide/reset-password.usecase";
 import { UpdateGuidePasswordUsecase } from "../../application/usecase/implementations/guide/updateGuidePasswordUsecase";
+import { GetPendingVerificationsUsecase } from "../../application/usecase/implementations/local-guide/get-pending-verifications.usecase";
+import { GetLocalGuideProfileUsecase } from "../../application/usecase/implementations/local-guide/get-local-guide-profile.usecase";
+import { UpdateLocalGuideAvailabilityUsecase } from "../../application/usecase/implementations/local-guide/update-local-guide-availability.usecase";
+import { UpdateLocalGuideProfileUsecase } from "../../application/usecase/implementations/local-guide/update-local-guide-profile.usecase";
+import { RejectLocalGuideUsecase } from "../../application/usecase/implementations/local-guide/reject-local-guide.usecase";
+import { RequestLocalGuideVerificationUsecase } from "../../application/usecase/implementations/local-guide/request-local-guide-verification.usecase";
+import { VerifyLocalGuideUsecase } from "../../application/usecase/implementations/local-guide/verify-local-guide.usecase";
+import { CreateVolunteerPostUsecase } from "../../application/usecase/implementations/volunteer-post/create-volunteer-post.usecase";
+import { UpdateVolunteerPostUsecase } from "../../application/usecase/implementations/volunteer-post/update-volunteer-post.usecase";
+import { DeleteVolunteerPostUsecase } from "../../application/usecase/implementations/volunteer-post/delete-volunteer-post.usecase";
+import { GetVolunteerPostUsecase } from "../../application/usecase/implementations/volunteer-post/get-volunteer-post.usecase";
+import { GetVolunteerPostsUsecase } from "../../application/usecase/implementations/volunteer-post/get-volunteer-posts.usecase";
+import { GetVolunteerPostsByLocationUsecase } from "../../application/usecase/implementations/volunteer-post/get-volunteer-posts-by-location.usecase";
+import { SearchVolunteerPostsUsecase } from "../../application/usecase/implementations/volunteer-post/search-volunteer-posts.usecase";
+import { LikeVolunteerPostUsecase } from "../../application/usecase/implementations/volunteer-post/like-volunteer-post.usecase";
+import { UnlikeVolunteerPostUsecase } from "../../application/usecase/implementations/volunteer-post/unlike-volunteer-post.usecase";
 import { CreateInstructionUsecase } from "../../application/usecase/implementations/guide-instructions/create-instruction.usecase";
 import { GetInstructionsClientUsecase } from "../../application/usecase/implementations/guide-instructions/get-instructions-client.usecase";
 import { MarkAllInstructionsReadUseCase } from "../../application/usecase/implementations/guide-instructions/mark-all-instructons-read.usecase";
@@ -190,6 +206,22 @@ import { IGetGuideDetailsClientUsecase } from "../../application/usecase/interfa
 import { IGetGuideProfileUsecase } from "../../application/usecase/interfaces/guide/getGuideProfile-usecase.interface";
 import { IResetPasswordUsecase } from "../../application/usecase/interfaces/guide/reset-password-usecase.interface";
 import { IUpdateGuidePasswordUsecase } from "../../application/usecase/interfaces/guide/updateGuidePassword-usecase.interface";
+import { IGetPendingVerificationsUsecase } from "../../application/usecase/interfaces/local-guide/get-pending-verifications-usecase.interface";
+import { IGetLocalGuideProfileUsecase } from "../../application/usecase/interfaces/local-guide/get-local-guide-profile-usecase.interface";
+import { IUpdateLocalGuideAvailabilityUsecase } from "../../application/usecase/interfaces/local-guide/update-local-guide-availability-usecase.interface";
+import { IUpdateLocalGuideProfileUsecase } from "../../application/usecase/interfaces/local-guide/update-local-guide-profile-usecase.interface";
+import { IRejectLocalGuideUsecase } from "../../application/usecase/interfaces/local-guide/reject-local-guide-usecase.interface";
+import { IRequestLocalGuideVerificationUsecase } from "../../application/usecase/interfaces/local-guide/request-local-guide-verification-usecase.interface";
+import { IVerifyLocalGuideUsecase } from "../../application/usecase/interfaces/local-guide/verify-local-guide-usecase.interface";
+import { ICreateVolunteerPostUsecase } from "../../application/usecase/interfaces/volunteer-post/create-volunteer-post-usecase.interface";
+import { IUpdateVolunteerPostUsecase } from "../../application/usecase/interfaces/volunteer-post/update-volunteer-post-usecase.interface";
+import { IDeleteVolunteerPostUsecase } from "../../application/usecase/interfaces/volunteer-post/delete-volunteer-post-usecase.interface";
+import { IGetVolunteerPostUsecase } from "../../application/usecase/interfaces/volunteer-post/get-volunteer-post-usecase.interface";
+import { IGetVolunteerPostsUsecase } from "../../application/usecase/interfaces/volunteer-post/get-volunteer-posts-usecase.interface";
+import { IGetVolunteerPostsByLocationUsecase } from "../../application/usecase/interfaces/volunteer-post/get-volunteer-posts-by-location-usecase.interface";
+import { ISearchVolunteerPostsUsecase } from "../../application/usecase/interfaces/volunteer-post/search-volunteer-posts-usecase.interface";
+import { ILikeVolunteerPostUsecase } from "../../application/usecase/interfaces/volunteer-post/like-volunteer-post-usecase.interface";
+import { IUnlikeVolunteerPostUsecase } from "../../application/usecase/interfaces/volunteer-post/unlike-volunteer-post-usecase.interface";
 import { ICreateInstructionUsecase } from "../../application/usecase/interfaces/guide-instruction/create-instruction-usecase.interface";
 import { IGetInstructionsClientUsecase } from "../../application/usecase/interfaces/guide-instruction/get-instructions-client-usecase.interface";
 import { IMarkAllInstructionsReadUseCase } from "../../application/usecase/interfaces/guide-instruction/mark-all-instructions-usecase.interface";
@@ -893,6 +925,111 @@ export class UsecaseRegistory {
     container.register<IGenerateSignedUrlUsecase>("IGenerateSignedUrlUsecase", {
       useClass: GenerateSignedUrlUsecase,
     });
+
+    //local guide usecases
+    container.register<IRequestLocalGuideVerificationUsecase>(
+      "IRequestLocalGuideVerificationUsecase",
+      {
+        useClass: RequestLocalGuideVerificationUsecase,
+      }
+    );
+
+    container.register<IGetPendingVerificationsUsecase>(
+      "IGetPendingVerificationsUsecase",
+      {
+        useClass: GetPendingVerificationsUsecase,
+      }
+    );
+
+    container.register<IGetLocalGuideProfileUsecase>(
+      "IGetLocalGuideProfileUsecase",
+      {
+        useClass: GetLocalGuideProfileUsecase,
+      }
+    );
+
+  container.register<IUpdateLocalGuideAvailabilityUsecase>(
+    "IUpdateLocalGuideAvailabilityUsecase",
+    {
+      useClass: UpdateLocalGuideAvailabilityUsecase,
+    }
+  );
+
+  container.register<IUpdateLocalGuideProfileUsecase>(
+    "IUpdateLocalGuideProfileUsecase",
+    {
+      useClass: UpdateLocalGuideProfileUsecase,
+    }
+  );
+
+    container.register<IVerifyLocalGuideUsecase>("IVerifyLocalGuideUsecase", {
+      useClass: VerifyLocalGuideUsecase,
+    });
+
+    container.register<IRejectLocalGuideUsecase>("IRejectLocalGuideUsecase", {
+      useClass: RejectLocalGuideUsecase,
+    });
+
+    //volunteer post usecases
+    container.register<ICreateVolunteerPostUsecase>(
+      "ICreateVolunteerPostUsecase",
+      {
+        useClass: CreateVolunteerPostUsecase,
+      }
+    );
+
+    container.register<IUpdateVolunteerPostUsecase>(
+      "IUpdateVolunteerPostUsecase",
+      {
+        useClass: UpdateVolunteerPostUsecase,
+      }
+    );
+
+    container.register<IDeleteVolunteerPostUsecase>(
+      "IDeleteVolunteerPostUsecase",
+      {
+        useClass: DeleteVolunteerPostUsecase,
+      }
+    );
+
+    container.register<IGetVolunteerPostUsecase>("IGetVolunteerPostUsecase", {
+      useClass: GetVolunteerPostUsecase,
+    });
+
+    container.register<IGetVolunteerPostsUsecase>(
+      "IGetVolunteerPostsUsecase",
+      {
+        useClass: GetVolunteerPostsUsecase,
+      }
+    );
+
+    container.register<IGetVolunteerPostsByLocationUsecase>(
+      "IGetVolunteerPostsByLocationUsecase",
+      {
+        useClass: GetVolunteerPostsByLocationUsecase,
+      }
+    );
+
+    container.register<ISearchVolunteerPostsUsecase>(
+      "ISearchVolunteerPostsUsecase",
+      {
+        useClass: SearchVolunteerPostsUsecase,
+      }
+    );
+
+    container.register<ILikeVolunteerPostUsecase>(
+      "ILikeVolunteerPostUsecase",
+      {
+        useClass: LikeVolunteerPostUsecase,
+      }
+    );
+
+    container.register<IUnlikeVolunteerPostUsecase>(
+      "IUnlikeVolunteerPostUsecase",
+      {
+        useClass: UnlikeVolunteerPostUsecase,
+      }
+    );
 
     // ------logger--------
     container.register<ILogger>("ILogger", {
