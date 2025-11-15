@@ -1,0 +1,35 @@
+import { IReviewEntity } from "../../domain/entities/review.entity";
+import { IReviewModel } from "../../infrastructure/database/models/review.model";
+import {
+  ReviewListDto,
+  ReviewListWithUserDetailsDto,
+} from "../dto/response/reviewDto";
+
+export class ReviewMapper {
+  static toEntity(doc: IReviewModel): IReviewEntity {
+    return {
+      _id: String(doc._id),
+      rating: doc.rating,
+      userId: String(doc.userId),
+      comment: doc.comment!,
+      targetType: doc.targetType,
+      packageId: doc.packageId ?? "",
+      guideId: doc.guideId ?? "",
+      createdAt: doc.createdAt,
+    };
+  }
+
+  static mapToReviewListDto(doc: ReviewListWithUserDetailsDto): ReviewListDto {
+    return {
+      _id: String(doc._id),
+      userId: {
+        _id: doc.userDetails._id,
+        firstName: doc.userDetails.firstName,
+        lastName: doc.userDetails.lastName,
+      },
+      rating: doc.rating,
+      comment: doc.comment!,
+      createdAt: doc.createdAt!,
+    };
+  }
+}
