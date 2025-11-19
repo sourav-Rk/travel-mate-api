@@ -35,7 +35,7 @@ export interface LocalGuideBookingListResult {
 
 export interface IGetLocalGuideBookingsForGuideUsecase {
   execute(
-    guideId: string,
+    clientId: string,
     filters: LocalGuideBookingListFilters
   ): Promise<LocalGuideBookingListResult>;
 }

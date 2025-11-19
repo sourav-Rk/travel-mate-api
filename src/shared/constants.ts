@@ -153,6 +153,7 @@ export const ERROR_MESSAGE = {
 
   LOCAL_GUIDE: {
     LOCAL_GUIDE_PROFILE_NOT_FOUND: "Local guide profile not found",
+    NOT_VERIFIED_LOCAL_GUIDE : "You are not a verified local guide",
     LOCAL_GUIDE_PROFILE_ALREADY_EXISTS:
       "Local guide profile already exists for this user",
     LOCAL_GUIDE_ALREADY_VERIFIED: "Local guide is already verified",
@@ -344,6 +345,7 @@ export const SUCCESS_MESSAGE = {
     AVAILABLE: "Successfully set to available",
     NOT_AVAILABLE: "Successfully set to not available",
     SERVICE_MARKED_COMPLETE: "Service marked as complete successfully",
+    QUOTE_CREATED : "Quote created successfully"
   },
 
   VOLUNTEER_POST: {
@@ -353,6 +355,10 @@ export const SUCCESS_MESSAGE = {
     POST_LIKED: "Post liked successfully",
     POST_UNLIKED: "Post unliked successfully",
   },
+
+  LOCAL_GUIDE_BOOKING:{
+    QUOTE_ACCEPTED : "Quote accepted succesfully! Pay the advance to confirm"
+  }
 };
 
 export const ROLES = {

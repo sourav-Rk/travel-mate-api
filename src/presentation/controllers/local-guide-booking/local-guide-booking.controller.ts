@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
-import { plainToInstance } from "class-transformer";
-import { validate } from "class-validator";
 
 import { ICreateQuoteUsecase } from "../../../application/usecase/interfaces/local-guide-booking/create-quote.interface";
 import { IGetPendingQuotesUsecase } from "../../../application/usecase/interfaces/guide-chat/get-pending-quotes.interface";
@@ -9,18 +7,13 @@ import { IAcceptQuoteUsecase } from "../../../application/usecase/interfaces/loc
 import { IDeclineQuoteUsecase } from "../../../application/usecase/interfaces/local-guide-booking/decline-quote.interface";
 import { IPayLocalGuideAdvanceAmountUsecase } from "../../../application/usecase/interfaces/local-guide-booking/pay-advance-amount.interface";
 import { IPayLocalGuideFullAmountUsecase } from "../../../application/usecase/interfaces/local-guide-booking/pay-full-amount.interface";
-import { IGetLocalGuideBookingsUsecase} from "../../../application/usecase/interfaces/local-guide-booking/get-bookings.interface";
+import { IGetLocalGuideBookingsUsecase } from "../../../application/usecase/interfaces/local-guide-booking/get-bookings.interface";
 import { IGetLocalGuideBookingsForGuideUsecase } from "../../../application/usecase/interfaces/local-guide-booking/get-guide-bookings.interface";
 import { IGetLocalGuideBookingDetailsUsecase } from "../../../application/usecase/interfaces/local-guide-booking/get-booking-details.interface";
 import { IMarkServiceCompleteUsecase } from "../../../application/usecase/interfaces/local-guide-booking/mark-service-complete.interface";
 import { IClientRepository } from "../../../domain/repositoryInterfaces/client/client.repository.interface";
-import { NotFoundError } from "../../../domain/errors/notFoundError";
 import { ValidationError } from "../../../domain/errors/validationError";
-import {
-  CreateQuoteDto,
-  AcceptQuoteDto,
-  DeclineQuoteDto,
-} from "../../../application/dto/request/local-guide-booking.dto";
+
 import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import {
   ERROR_MESSAGE,
@@ -34,7 +27,9 @@ import { ILocalGuideBookingController } from "../../interfaces/controllers/local
 import { CustomRequest } from "../../middlewares/auth.middleware";
 
 @injectable()
-export class LocalGuideBookingController implements ILocalGuideBookingController {
+export class LocalGuideBookingController
+  implements ILocalGuideBookingController
+{
   constructor(
     @inject("ICreateQuoteUsecase")
     private readonly _createQuoteUsecase: ICreateQuoteUsecase,
@@ -61,18 +56,13 @@ export class LocalGuideBookingController implements ILocalGuideBookingController
   ) {}
 
   async createQuote(req: Request, res: Response): Promise<void> {
-    const body = plainToInstance(CreateQuoteDto, req.body);
-    const errors = await validate(body);
-    if (errors.length > 0) {
-      throw new ValidationError(Object.values(errors[0].constraints ?? {})[0]);
-    }
-
+    const quoteData = req.body;
     const userId = (req as CustomRequest).user.id;
-    const quote = await this._createQuoteUsecase.execute(body, userId);
+    const quote = await this._createQuoteUsecase.execute(quoteData, userId);
     ResponseHelper.success(
       res,
       HTTP_STATUS.CREATED,
-      SUCCESS_MESSAGE.OPERATION_SUCCESS,
+      SUCCESS_MESSAGE.LOCAL_GUIDE.QUOTE_CREATED,
       quote,
       "quote"
     );
@@ -123,7 +113,11 @@ export class LocalGuideBookingController implements ILocalGuideBookingController
       );
     }
 
-    const result = await this._payFullAmountUsecase.execute(userId,bookingId, amount);
+    const result = await this._payFullAmountUsecase.execute(
+      userId,
+      bookingId,
+      amount
+    );
     ResponseHelper.success(
       res,
       HTTP_STATUS.OK,
@@ -133,32 +127,22 @@ export class LocalGuideBookingController implements ILocalGuideBookingController
   }
 
   async acceptQuote(req: Request, res: Response): Promise<void> {
-    const body = plainToInstance(AcceptQuoteDto, req.body);
-    const errors = await validate(body);
-    if (errors.length > 0) {
-      throw new ValidationError(Object.values(errors[0].constraints ?? {})[0]);
-    }
-
+    const data = req.body;
     const userId = (req as CustomRequest).user.id;
-    const booking = await this._acceptQuoteUsecase.execute(body, userId);
+    const booking = await this._acceptQuoteUsecase.execute(data, userId);
     ResponseHelper.success(
       res,
       HTTP_STATUS.CREATED,
-      SUCCESS_MESSAGE.OPERATION_SUCCESS,
+      SUCCESS_MESSAGE.LOCAL_GUIDE_BOOKING.QUOTE_ACCEPTED,
       booking,
       "booking"
     );
   }
 
   async declineQuote(req: Request, res: Response): Promise<void> {
-    const body = plainToInstance(DeclineQuoteDto, req.body);
-    const errors = await validate(body);
-    if (errors.length > 0) {
-      throw new ValidationError(Object.values(errors[0].constraints ?? {})[0]);
-    }
-
+    const data = req.body;
     const userId = (req as CustomRequest).user.id;
-    await this._declineQuoteUsecase.execute(body, userId);
+    await this._declineQuoteUsecase.execute(data, userId);
     ResponseHelper.success(
       res,
       HTTP_STATUS.OK,
@@ -170,7 +154,7 @@ export class LocalGuideBookingController implements ILocalGuideBookingController
 
   async getLocalGuideBookings(req: Request, res: Response): Promise<void> {
     const travellerId = (req as CustomRequest).user.id;
-    const category:LocalGuideBookingCategory =
+    const category: LocalGuideBookingCategory =
       req.query.category === "completed" ? "completed" : "pending";
     const status = req.query.status
       ? (String(req.query.status) as LocalGuideBookingStatus)
@@ -202,21 +186,13 @@ export class LocalGuideBookingController implements ILocalGuideBookingController
     );
   }
 
-  async getLocalGuideBookingsForGuide(req: Request, res: Response): Promise<void> {
+  async getLocalGuideBookingsForGuide(
+    req: Request,
+    res: Response
+  ): Promise<void> {
     const clientId = (req as CustomRequest).user.id;
-    
-    // Get the client to retrieve their localGuideProfileId
-    const client = await this.clientRepository.findById(clientId);
-    
-    if (!client) {
-      throw new NotFoundError(ERROR_MESSAGE.USER_NOT_FOUND);
-    }
 
-    if (!client.localGuideProfileId) {
-      throw new ValidationError("You are not a verified local guide");
-    }
-
-    const category:LocalGuideBookingCategory =
+    const category: LocalGuideBookingCategory =
       req.query.category === "completed" ? "completed" : "pending";
     const status = req.query.status
       ? (String(req.query.status) as LocalGuideBookingStatus)
@@ -236,9 +212,8 @@ export class LocalGuideBookingController implements ILocalGuideBookingController
       limit: req.query.limit ? Number(req.query.limit) : undefined,
     };
 
-    // Use the localGuideProfileId as the guideId
     const data = await this._getLocalGuideBookingsForGuideUsecase.execute(
-      client.localGuideProfileId,
+      clientId,
       filters
     );
     ResponseHelper.success(
@@ -249,7 +224,10 @@ export class LocalGuideBookingController implements ILocalGuideBookingController
     );
   }
 
-  async getLocalGuideBookingDetails(req: Request, res: Response): Promise<void> {
+  async getLocalGuideBookingDetails(
+    req: Request,
+    res: Response
+  ): Promise<void> {
     const bookingId = req.params.bookingId;
     const userId = (req as CustomRequest).user.id;
 
@@ -297,6 +275,3 @@ export class LocalGuideBookingController implements ILocalGuideBookingController
     );
   }
 }
-
-
-

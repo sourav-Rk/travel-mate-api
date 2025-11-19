@@ -27,7 +27,7 @@ export class AcceptQuoteUsecase implements IAcceptQuoteUsecase {
   async execute(
     data: AcceptQuoteDto,
     travellerId: string
-  ): Promise<LocalGuideBookingDto> {
+  ): Promise<void> {
     /**
      * Find quote message
      */
@@ -227,51 +227,5 @@ export class AcceptQuoteUsecase implements IAcceptQuoteUsecase {
       }
     );
 
-    /**
-     * Return booking DTO
-     */
-    const bookingDto: LocalGuideBookingDto = {
-      _id: booking._id!,
-      bookingId: booking.bookingId,
-      travellerId: booking.travellerId,
-      guideId: booking.guideId,
-      guideProfileId: booking.guideProfileId,
-      quoteId: booking.quoteId,
-      guideChatRoomId: booking.guideChatRoomId,
-      sessionDate: booking.sessionDate.toISOString(),
-      sessionTime: booking.sessionTime,
-      hours: booking.hours,
-      hourlyRate: booking.hourlyRate,
-      totalAmount: booking.totalAmount,
-      location: booking.location,
-      notes: booking.notes,
-      status: booking.status,
-      advancePayment: {
-        amount: booking.advancePayment.amount,
-        paid: booking.advancePayment.paid,
-        dueDate: booking.advancePayment.dueDate.toISOString(),
-        paidAt: booking.advancePayment.paidAt?.toISOString() || null,
-      },
-      fullPayment: {
-        amount: booking.fullPayment.amount,
-        paid: booking.fullPayment.paid,
-        dueDate: booking.fullPayment.dueDate?.toISOString() || null,
-        paidAt: booking.fullPayment.paidAt?.toISOString() || null,
-      },
-      serviceCompletedAt: booking.serviceCompletedAt?.toISOString(),
-      cancelledAt: booking.cancelledAt?.toISOString(),
-      cancellationRequest: booking.cancellationRequest
-        ? {
-            requestedAt: booking.cancellationRequest.requestedAt.toISOString(),
-            reason: booking.cancellationRequest.reason,
-            calculatedRefund: booking.cancellationRequest.calculatedRefund,
-            approvedAt: booking.cancellationRequest.approvedAt?.toISOString(),
-          }
-        : undefined,
-      createdAt: booking.createdAt?.toISOString() || new Date().toISOString(),
-      updatedAt: booking.updatedAt?.toISOString() || new Date().toISOString(),
-    };
-
-    return bookingDto;
   }
 }

@@ -48,6 +48,7 @@ import { validationMiddleware } from "../../middlewares/validation.middleware";
 import { BaseRoute } from "../base.route";
 import { CommonUploadRoutes } from "../common/common-upload.route";
 import { FcmTokenRoutes } from "../fcmToken/fcmToken.route";
+import { AcceptQuoteDto, CreateQuoteDto, DeclineQuoteDto } from "../../../application/dto/request/local-guide-booking.dto";
 
 @injectable()
 export class ClientRoute extends BaseRoute {
@@ -486,6 +487,7 @@ export class ClientRoute extends BaseRoute {
 
     this.router.post(
       "/guide-chat/quote",
+      validationMiddleware(CreateQuoteDto),
       asyncHandler(localGuideBookingController.createQuote.bind(localGuideBookingController))
     );
 
@@ -496,11 +498,13 @@ export class ClientRoute extends BaseRoute {
 
     this.router.post(
       "/guide-chat/quote/accept",
+      validationMiddleware(AcceptQuoteDto),
       asyncHandler(localGuideBookingController.acceptQuote.bind(localGuideBookingController))
     );
 
     this.router.post(
       "/guide-chat/quote/decline",
+      validationMiddleware(DeclineQuoteDto),
       asyncHandler(localGuideBookingController.declineQuote.bind(localGuideBookingController))
     );
 
