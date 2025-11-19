@@ -10,6 +10,7 @@ import { IVolunteerPostRepository } from "../../../../domain/repositoryInterface
 import { ERROR_MESSAGE } from "../../../../shared/constants";
 import { IGetVolunteerPostUsecase } from "../../interfaces/volunteer-post/get-volunteer-post-usecase.interface";
 import { VolunteerPostMapper } from "../../../mapper/volunteer-post.mapper";
+import { IUpdateLocalGuideStatsUsecase } from "../../interfaces/badge/update-stats.interface";
 
 @injectable()
 export class GetVolunteerPostUsecase implements IGetVolunteerPostUsecase {
@@ -21,7 +22,9 @@ export class GetVolunteerPostUsecase implements IGetVolunteerPostUsecase {
     @inject("IClientRepository")
     private _clientRepository: IClientRepository,
     @inject("IPostLikeRepository")
-    private _postLikeRepository: IPostLikeRepository
+    private _postLikeRepository: IPostLikeRepository,
+    @inject("IUpdateLocalGuideStatsUsecase")
+    private _updateLocalGuideStatsUsecase: IUpdateLocalGuideStatsUsecase
   ) {}
 
   async execute(
@@ -53,6 +56,19 @@ export class GetVolunteerPostUsecase implements IGetVolunteerPostUsecase {
       if (updatedPost) {
         post = updatedPost;
       }
+
+      /**
+       * Update guide stats and trigger badge evaluation
+       */
+      try {
+        await this._updateLocalGuideStatsUsecase.execute(
+          post.localGuideProfileId,
+          { trigger: "post_view" }
+        );
+      } catch (error) {
+        // Log error but don't fail the view operation
+        console.error("Error updating guide stats for badge evaluation:", error);
+      }
     }
 
 
@@ -65,6 +81,7 @@ export class GetVolunteerPostUsecase implements IGetVolunteerPostUsecase {
       if (user) {
         guideDetails = {
           _id: profile._id || "",
+          userId : user._id,
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,

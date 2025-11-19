@@ -57,6 +57,23 @@ import { GetMessagesUsecase } from "../../application/usecase/implementations/ch
 import { MarkAsDeliveredUsecase } from "../../application/usecase/implementations/chat/mark-delivered.usecase";
 import { MarkReadUsecase } from "../../application/usecase/implementations/chat/mark-read.usecase";
 import { SendMessageUsecase } from "../../application/usecase/implementations/chat/send-message.usecase";
+import { CreateGuideChatRoomUsecase } from "../../application/usecase/implementations/guide-chat/create-guide-chat-room.usecase";
+import { GetGuideChatRoomsUsecase } from "../../application/usecase/implementations/guide-chat/get-guide-chat-rooms.usecase";
+import { GetGuideMessagesUsecase } from "../../application/usecase/implementations/guide-chat/get-guide-messages.usecase";
+import { SendGuideMessageUsecase } from "../../application/usecase/implementations/guide-chat/send-guide-message.usecase";
+import { MarkGuideMessagesDeliveredUsecase } from "../../application/usecase/implementations/guide-chat/mark-guide-messages-delivered.usecase";
+import { MarkGuideMessagesReadUsecase } from "../../application/usecase/implementations/guide-chat/mark-guide-messages-read.usecase";
+import { CreateQuoteUsecase } from "../../application/usecase/implementations/local-guide-booking/create-quote.usecase";
+import { AcceptQuoteUsecase } from "../../application/usecase/implementations/local-guide-booking/accept-quote.usecase";
+import { DeclineQuoteUsecase } from "../../application/usecase/implementations/local-guide-booking/decline-quote.usecase";
+import { PayLocalGuideAdvanceAmountUsecase } from "../../application/usecase/implementations/local-guide-booking/pay-advance-amount.usecase";
+import { PayLocalGuideFullAmountUsecase } from "../../application/usecase/implementations/local-guide-booking/pay-full-amount.usecase";
+import { GetBookingByChatRoomUsecase } from "../../application/usecase/implementations/local-guide-booking/get-booking-by-chat-room.usecase";
+import { GetPendingQuotesUsecase } from "../../application/usecase/implementations/guide-chat/get-pending-quotes.usecase";
+import { GetLocalGuideBookingsUsecase } from "../../application/usecase/implementations/local-guide-booking/get-bookings.usecase";
+import { GetLocalGuideBookingsForGuideUsecase } from "../../application/usecase/implementations/local-guide-booking/get-guide-bookings.usecase";
+import { GetLocalGuideBookingDetailsUsecase } from "../../application/usecase/implementations/local-guide-booking/get-booking-details.usecase";
+import { MarkServiceCompleteUsecase } from "../../application/usecase/implementations/local-guide-booking/mark-service-complete.usecase";
 import { GetClientDetailsVendorUsecase } from "../../application/usecase/implementations/client/get-client-details-vendor-usecase";
 import { GetClientDetailsUsecase } from "../../application/usecase/implementations/client/getClientDetails.usecase";
 import { UpdateClientPasswordUsecase } from "../../application/usecase/implementations/client/update-client-password.usecase";
@@ -91,6 +108,9 @@ import { GetVolunteerPostsByLocationUsecase } from "../../application/usecase/im
 import { SearchVolunteerPostsUsecase } from "../../application/usecase/implementations/volunteer-post/search-volunteer-posts.usecase";
 import { LikeVolunteerPostUsecase } from "../../application/usecase/implementations/volunteer-post/like-volunteer-post.usecase";
 import { UnlikeVolunteerPostUsecase } from "../../application/usecase/implementations/volunteer-post/unlike-volunteer-post.usecase";
+import { UpdateLocalGuideStatsUsecase } from "../../application/usecase/implementations/badge/update-stats.usecase";
+import { EvaluateBadgesUsecase } from "../../application/usecase/implementations/badge/evaluate-badges.usecase";
+import { GetBadgesUsecase } from "../../application/usecase/implementations/badge/get-badges.usecase";
 import { CreateInstructionUsecase } from "../../application/usecase/implementations/guide-instructions/create-instruction.usecase";
 import { GetInstructionsClientUsecase } from "../../application/usecase/implementations/guide-instructions/get-instructions-client.usecase";
 import { MarkAllInstructionsReadUseCase } from "../../application/usecase/implementations/guide-instructions/mark-all-instructons-read.usecase";
@@ -188,6 +208,23 @@ import { IGetMessagesUsecase } from "../../application/usecase/interfaces/chat/g
 import { IMarkAsDeliveredUsecase } from "../../application/usecase/interfaces/chat/mark-delivered-usecase.interface";
 import { IMarkReadUsecase } from "../../application/usecase/interfaces/chat/mark-read-usecase.interface";
 import { ISendMessageUseCase } from "../../application/usecase/interfaces/chat/send-message-usecase.interface";
+import { ICreateGuideChatRoomUsecase } from "../../application/usecase/interfaces/guide-chat/create-guide-chat-room.interface";
+import { IGetGuideChatRoomsUsecase } from "../../application/usecase/interfaces/guide-chat/get-guide-chat-rooms.interface";
+import { IGetGuideMessagesUsecase } from "../../application/usecase/interfaces/guide-chat/get-guide-messages.interface";
+import { ISendGuideMessageUsecase } from "../../application/usecase/interfaces/guide-chat/send-guide-message.interface";
+import { IMarkGuideMessagesDeliveredUsecase } from "../../application/usecase/interfaces/guide-chat/mark-guide-messages-delivered.interface";
+import { IMarkGuideMessagesReadUsecase } from "../../application/usecase/interfaces/guide-chat/mark-guide-messages-read.interface";
+import { ICreateQuoteUsecase } from "../../application/usecase/interfaces/local-guide-booking/create-quote.interface";
+import { IAcceptQuoteUsecase } from "../../application/usecase/interfaces/local-guide-booking/accept-quote.interface";
+import { IDeclineQuoteUsecase } from "../../application/usecase/interfaces/local-guide-booking/decline-quote.interface";
+import { IPayLocalGuideAdvanceAmountUsecase } from "../../application/usecase/interfaces/local-guide-booking/pay-advance-amount.interface";
+import { IPayLocalGuideFullAmountUsecase } from "../../application/usecase/interfaces/local-guide-booking/pay-full-amount.interface";
+import { IGetBookingByChatRoomUsecase } from "../../application/usecase/interfaces/local-guide-booking/get-booking-by-chat-room.interface";
+import { IGetPendingQuotesUsecase } from "../../application/usecase/interfaces/guide-chat/get-pending-quotes.interface";
+import { IGetLocalGuideBookingsUsecase } from "../../application/usecase/interfaces/local-guide-booking/get-bookings.interface";
+import { IGetLocalGuideBookingsForGuideUsecase } from "../../application/usecase/interfaces/local-guide-booking/get-guide-bookings.interface";
+import { IGetLocalGuideBookingDetailsUsecase } from "../../application/usecase/interfaces/local-guide-booking/get-booking-details.interface";
+import { IMarkServiceCompleteUsecase } from "../../application/usecase/interfaces/local-guide-booking/mark-service-complete.interface";
 import { IGetClientDetailsVendorUsecase } from "../../application/usecase/interfaces/client/get-client-details-vendor-usecase.interface";
 import { IGetClientDetailsUsecase } from "../../application/usecase/interfaces/client/getClientDetails-usecase.interface";
 import { IUpdateClientPasswordUsecase } from "../../application/usecase/interfaces/client/update-client-password-usecase.interface";
@@ -222,6 +259,9 @@ import { IGetVolunteerPostsByLocationUsecase } from "../../application/usecase/i
 import { ISearchVolunteerPostsUsecase } from "../../application/usecase/interfaces/volunteer-post/search-volunteer-posts-usecase.interface";
 import { ILikeVolunteerPostUsecase } from "../../application/usecase/interfaces/volunteer-post/like-volunteer-post-usecase.interface";
 import { IUnlikeVolunteerPostUsecase } from "../../application/usecase/interfaces/volunteer-post/unlike-volunteer-post-usecase.interface";
+import { IUpdateLocalGuideStatsUsecase } from "../../application/usecase/interfaces/badge/update-stats.interface";
+import { IEvaluateBadgesUsecase } from "../../application/usecase/interfaces/badge/evaluate-badges.interface";
+import { IGetBadgesUsecase } from "../../application/usecase/interfaces/badge/get-badges.interface";
 import { ICreateInstructionUsecase } from "../../application/usecase/interfaces/guide-instruction/create-instruction-usecase.interface";
 import { IGetInstructionsClientUsecase } from "../../application/usecase/interfaces/guide-instruction/get-instructions-client-usecase.interface";
 import { IMarkAllInstructionsReadUseCase } from "../../application/usecase/interfaces/guide-instruction/mark-all-instructions-usecase.interface";
@@ -808,6 +848,114 @@ export class UsecaseRegistory {
       useClass: MarkAsDeliveredUsecase,
     });
 
+    // guide service chat usecases
+    container.register<ICreateGuideChatRoomUsecase>(
+      "ICreateGuideChatRoomUsecase",
+      {
+        useClass: CreateGuideChatRoomUsecase,
+      }
+    );
+
+    container.register<IGetGuideChatRoomsUsecase>(
+      "IGetGuideChatRoomsUsecase",
+      {
+        useClass: GetGuideChatRoomsUsecase,
+      }
+    );
+
+    container.register<ISendGuideMessageUsecase>(
+      "ISendGuideMessageUsecase",
+      {
+        useClass: SendGuideMessageUsecase,
+      }
+    );
+
+    container.register<IGetGuideMessagesUsecase>(
+      "IGetGuideMessagesUsecase",
+      {
+        useClass: GetGuideMessagesUsecase,
+      }
+    );
+
+    container.register<IMarkGuideMessagesDeliveredUsecase>(
+      "IMarkGuideMessagesDeliveredUsecase",
+      {
+        useClass: MarkGuideMessagesDeliveredUsecase,
+      }
+    );
+
+    container.register<IMarkGuideMessagesReadUsecase>(
+      "IMarkGuideMessagesReadUsecase",
+      {
+        useClass: MarkGuideMessagesReadUsecase,
+      }
+    );
+
+    container.register<ICreateQuoteUsecase>("ICreateQuoteUsecase", {
+      useClass: CreateQuoteUsecase,
+    });
+
+    container.register<IAcceptQuoteUsecase>("IAcceptQuoteUsecase", {
+      useClass: AcceptQuoteUsecase,
+    });
+
+    container.register<IDeclineQuoteUsecase>("IDeclineQuoteUsecase", {
+      useClass: DeclineQuoteUsecase,
+    });
+
+    container.register<IPayLocalGuideAdvanceAmountUsecase>(
+      "IPayLocalGuideAdvanceAmountUsecase",
+      {
+        useClass: PayLocalGuideAdvanceAmountUsecase,
+      }
+    );
+
+    container.register<IPayLocalGuideFullAmountUsecase>(
+      "IPayLocalGuideFullAmountUsecase",
+      {
+        useClass: PayLocalGuideFullAmountUsecase,
+      }
+    );
+
+    container.register<IGetBookingByChatRoomUsecase>(
+      "IGetBookingByChatRoomUsecase",
+      {
+        useClass: GetBookingByChatRoomUsecase,
+      }
+    );
+
+    container.register<IGetLocalGuideBookingsUsecase>(
+      "IGetLocalGuideBookingsUsecase",
+      {
+        useClass: GetLocalGuideBookingsUsecase,
+      }
+    );
+
+    container.register<IGetLocalGuideBookingsForGuideUsecase>(
+      "IGetLocalGuideBookingsForGuideUsecase",
+      {
+        useClass: GetLocalGuideBookingsForGuideUsecase,
+      }
+    );
+
+    container.register<IGetLocalGuideBookingDetailsUsecase>(
+      "IGetLocalGuideBookingDetailsUsecase",
+      {
+        useClass: GetLocalGuideBookingDetailsUsecase,
+      }
+    );
+
+    container.register<IMarkServiceCompleteUsecase>(
+      "IMarkServiceCompleteUsecase",
+      {
+        useClass: MarkServiceCompleteUsecase,
+      }
+    );
+
+    container.register<IGetPendingQuotesUsecase>("IGetPendingQuotesUsecase", {
+      useClass: GetPendingQuotesUsecase,
+    });
+
     //chat-room-usecase
     container.register<ICheckChatRoomUsecase>("ICheckChatRoomUsecase", {
       useClass: CheckChatRoomUsecase,
@@ -1030,6 +1178,22 @@ export class UsecaseRegistory {
         useClass: UnlikeVolunteerPostUsecase,
       }
     );
+
+    //badge usecases
+    container.register<IUpdateLocalGuideStatsUsecase>(
+      "IUpdateLocalGuideStatsUsecase",
+      {
+        useClass: UpdateLocalGuideStatsUsecase,
+      }
+    );
+
+    container.register<IEvaluateBadgesUsecase>("IEvaluateBadgesUsecase", {
+      useClass: EvaluateBadgesUsecase,
+    });
+
+    container.register<IGetBadgesUsecase>("IGetBadgesUsecase", {
+      useClass: GetBadgesUsecase,
+    });
 
     // ------logger--------
     container.register<ILogger>("ILogger", {

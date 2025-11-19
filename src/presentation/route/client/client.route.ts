@@ -27,6 +27,9 @@ import {
   volunteerPostController,
   walletController,
   wishlistController,
+  guideChatController,
+  localGuideBookingController,
+  badgeController,
 } from "../../../infrastructure/dependencyInjection/resolve";
 import {
   RequestLocalGuideVerificationReqDTO,
@@ -463,6 +466,107 @@ export class ClientRoute extends BaseRoute {
       asyncHandler(
         volunteerPostController.unlikePost.bind(volunteerPostController)
       )
+    );
+
+    //--------------- Guide service chat -------------------
+    this.router.post(
+      "/guide-chat",
+      asyncHandler(guideChatController.createRoom.bind(guideChatController))
+    );
+
+    this.router.get(
+      "/guide-chat/rooms",
+      asyncHandler(guideChatController.getRooms.bind(guideChatController))
+    );
+
+    this.router.get(
+      "/guide-chat/messages/:guideChatRoomId",
+      asyncHandler(guideChatController.getMessages.bind(guideChatController))
+    );
+
+    this.router.post(
+      "/guide-chat/quote",
+      asyncHandler(localGuideBookingController.createQuote.bind(localGuideBookingController))
+    );
+
+    this.router.get(
+      "/guide-chat/quotes/pending",
+      asyncHandler(localGuideBookingController.getPendingQuotes.bind(localGuideBookingController))
+    );
+
+    this.router.post(
+      "/guide-chat/quote/accept",
+      asyncHandler(localGuideBookingController.acceptQuote.bind(localGuideBookingController))
+    );
+
+    this.router.post(
+      "/guide-chat/quote/decline",
+      asyncHandler(localGuideBookingController.declineQuote.bind(localGuideBookingController))
+    );
+
+    //------------------Local Guide Booking Routes-----------------
+
+    this.router.get(
+      "/local-guide/bookings",
+      asyncHandler(
+        localGuideBookingController.getLocalGuideBookings.bind(localGuideBookingController)
+      )
+    );
+
+    this.router.post(
+      "/local-guide/bookings/:bookingId/pay-advance",
+      asyncHandler(
+        localGuideBookingController.payAdvanceAmount.bind(localGuideBookingController)
+      )
+    );
+
+    this.router.post(
+      "/local-guide/bookings/:bookingId/pay-full",
+      asyncHandler(localGuideBookingController.payFullAmount.bind(localGuideBookingController))
+    );
+
+    this.router.get(
+      "/local-guide/bookings/chat-room/:guideChatRoomId",
+      asyncHandler(
+        guideChatController.getBookingByChatRoom.bind(guideChatController)
+      )
+    );
+
+    this.router.get(
+      "/local-guide/my-service-bookings",
+      asyncHandler(
+        localGuideBookingController.getLocalGuideBookingsForGuide.bind(localGuideBookingController)
+      )
+    );
+
+    this.router.get(
+      "/local-guide/bookings/:bookingId",
+      asyncHandler(
+        localGuideBookingController.getLocalGuideBookingDetails.bind(localGuideBookingController)
+      )
+    );
+
+    this.router.post(
+      "/local-guide/bookings/:bookingId/complete",
+      asyncHandler(
+        localGuideBookingController.markServiceComplete.bind(localGuideBookingController)
+      )
+    );
+
+    // ----------------- Badge Routes ----------------
+    this.router.get(
+      "/local-guide/badges",
+      asyncHandler(badgeController.getAllBadges.bind(badgeController))
+    );
+
+    this.router.get(
+      "/local-guide/my-badges",
+      asyncHandler(badgeController.getGuideBadges.bind(badgeController))
+    );
+
+    this.router.post(
+      "/local-guide/evaluate-badges",
+      asyncHandler(badgeController.evaluateBadges.bind(badgeController))
     );
   }
 }

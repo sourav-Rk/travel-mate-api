@@ -19,4 +19,11 @@ export interface IReviewRepository extends IBaseRepository<IReviewEntity> {
     guideId: string
   ): Promise<ReviewAggregateResult | null>;
 
+  getRatingStatsByGuideId(
+    guideId: string
+  ): Promise<{
+    averageRating: number;
+    totalRatings: number;
+  }>;
+
 }

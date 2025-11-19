@@ -66,6 +66,7 @@ export interface LocalGuideVerificationResponseDto {
 // volunteer-post.dto.ts
 export interface LocalGuideDetailsDto {
   _id: string;
+  userId?: string;
   firstName: string;
   lastName: string;
   email: string;

@@ -88,5 +88,14 @@ export interface IVolunteerPostRepository
   incrementLikes(postId: string): Promise<IVolunteerPostEntity | null>;
 
   decrementLikes(postId: string): Promise<IVolunteerPostEntity | null>;
+
+  aggregateLikesAndViews(
+    guideProfileId: string
+  ): Promise<{
+    totalLikes: number;
+    totalViews: number;
+    maxPostLikes: number;
+    maxPostViews: number;
+  }>;
 }
 

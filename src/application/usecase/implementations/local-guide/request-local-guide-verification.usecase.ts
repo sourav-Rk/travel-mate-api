@@ -162,6 +162,11 @@ export class RequestLocalGuideVerificationUsecase
           totalRatings: 0,
           totalPosts: 0,
           totalEarnings: 0,
+          completionRate:0,
+          maxPostLikes:0,
+          maxPostViews:0,
+          totalLikes:0,
+          totalViews:0
         },
         badges: [],
       });

@@ -2,7 +2,7 @@ import { TVerificationStatus } from "../../shared/constants";
 
 export interface ILocation {
   type: "Point";
-  coordinates: [number, number]; // [longitude, latitude]
+  coordinates: [number, number];
   city: string;
   state: string;
   country: string;
@@ -23,6 +23,11 @@ export interface IGuideStats {
   totalRatings: number;
   totalPosts: number;
   totalEarnings: number;
+  totalLikes: number;
+  totalViews: number;
+  maxPostLikes: number;
+  maxPostViews: number;
+  completionRate: number;
 }
 
 export interface ILocalGuideProfileEntity {

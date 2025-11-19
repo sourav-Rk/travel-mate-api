@@ -49,4 +49,13 @@ export interface ILocalGuideProfileRepository
     data: Partial<ILocalGuideProfileEntity>,
     clearRejectionFields?: boolean
   ): Promise<ILocalGuideProfileEntity | null>;
+
+  updateStats(
+    profileId: string,
+    stats: Partial<ILocalGuideProfileEntity["stats"]>
+  ): Promise<ILocalGuideProfileEntity | null>;
+
+  addBadge(profileId: string, badgeId: string): Promise<ILocalGuideProfileEntity | null>;
+
+  getBadges(profileId: string): Promise<string[]>;
 }

@@ -38,7 +38,9 @@ export class UnlikeVolunteerPostUsecase implements IUnlikeVolunteerPostUsecase {
       throw new NotFoundError(ERROR_MESSAGE.VOLUNTEER_POST.POST_NOT_FOUND);
     }
 
-    // Check if user has liked this post
+    /**
+     *Check if user has liked this post 
+     */
     const existingLike = await this._postLikeRepository.findByUserIdAndPostId(
       userId,
       postId
@@ -51,12 +53,22 @@ export class UnlikeVolunteerPostUsecase implements IUnlikeVolunteerPostUsecase {
       );
     }
 
-    // Delete like record
+    /**
+     *Delete like record 
+     */
     await this._postLikeRepository.deleteByUserIdAndPostId(userId, postId);
 
-    // Decrement likes count on post
+    /**
+     *Decrement likes count on post 
+     */
     await this._volunteerPostRepository.decrementLikes(postId);
   }
 }
+
+
+
+
+
+
 
 

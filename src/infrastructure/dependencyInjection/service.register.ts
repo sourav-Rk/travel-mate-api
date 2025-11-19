@@ -11,6 +11,7 @@ import { IRevenueDistributionService } from "../../application/services/interfac
 import { ITokenService } from "../../domain/service-interfaces/token-service.interface";
 import { IUserExistenceService } from "../../application/services/interfaces/user-existence-service.interface";
 import { IVendorPaymentService } from "../../application/services/interfaces/vendor-payment-service.interface";
+import { ILocalGuidePaymentService } from "../../application/services/interfaces/local-guide-payment-service.interface";
 import { stripe } from "../config/stripe/stripe.confige";
 import { AdminPaymentService } from "../../application/services/implementations/admin-payment.service";
 import { EmailService } from "../service/email.servie";
@@ -22,8 +23,10 @@ import { RevenueDistributionService } from "../../application/services/implement
 import { TokenService } from "../service/token.service";
 import { UserExistenceServive } from "../../application/services/implementations/user-existence.service";
 import { VendorPaymentService } from "../../application/services/implementations/vendor-payment.service";
+import { LocalGuidePaymentService } from "../../application/services/implementations/local-guide-payment.service";
 import { RealTimeNotificationService } from "../service/real-time-notification.service";
 import { IRealTimeNotificationService } from "../../domain/service-interfaces/real-time-notification-service.interface";
+import { BadgeEvaluationHandlerService } from "../service/badge-evaluation-handler.service";
 
 export class ServiceRegistory {
   static registerService(): void {
@@ -74,6 +77,13 @@ export class ServiceRegistory {
       useClass: AdminPaymentService,
     });
 
+    container.register<ILocalGuidePaymentService>(
+      "ILocalGuidePaymentService",
+      {
+        useClass: LocalGuidePaymentService,
+      }
+    );
+
     // container.register<ISocketService>("ISocketService", {
     //   useClass: SocketService,
     // });
@@ -82,6 +92,11 @@ export class ServiceRegistory {
       "IRealTimeNotificationService",
       RealTimeNotificationService
     );
+
+    // Register BadgeEvaluationHandlerService as singleton (similar to EmailService)
+    // This ensures the event listener is registered on app startup
+    container.resolve(BadgeEvaluationHandlerService);
+
     container.resolve(EmailService);
   }
 }

@@ -16,6 +16,7 @@ import {
   VERIFICATION_STATUS,
 } from "../../../../shared/constants";
 import { ICreateVolunteerPostUsecase } from "../../interfaces/volunteer-post/create-volunteer-post-usecase.interface";
+import { IUpdateLocalGuideStatsUsecase } from "../../interfaces/badge/update-stats.interface";
 
 @injectable()
 export class CreateVolunteerPostUsecase implements ICreateVolunteerPostUsecase {
@@ -25,7 +26,9 @@ export class CreateVolunteerPostUsecase implements ICreateVolunteerPostUsecase {
     @inject("ILocalGuideProfileRepository")
     private _localGuideProfileRepository: ILocalGuideProfileRepository,
     @inject("IVolunteerPostRepository")
-    private _volunteerPostRepository: IVolunteerPostRepository
+    private _volunteerPostRepository: IVolunteerPostRepository,
+    @inject("IUpdateLocalGuideStatsUsecase")
+    private _updateLocalGuideStatsUsecase: IUpdateLocalGuideStatsUsecase
   ) {}
 
   async execute(
@@ -56,7 +59,10 @@ export class CreateVolunteerPostUsecase implements ICreateVolunteerPostUsecase {
       );
     }
 
-    // Validate coordinates
+
+    /**
+     * Validate coordinates 
+     */
     const [longitude, latitude] = data.location.coordinates;
     if (
       longitude < -180 ||
@@ -70,7 +76,9 @@ export class CreateVolunteerPostUsecase implements ICreateVolunteerPostUsecase {
       );
     }
 
-    // Validate hourlyRate in profile if offering service
+    /**
+     *Validate hourlyRate in profile if offering service 
+     */
     if (data.offersGuideService && !profile.hourlyRate) {
       throw new ValidationError(
         ERROR_MESSAGE.VOLUNTEER_POST.PROFILE_HOURLY_RATE_REQUIRED
@@ -83,7 +91,9 @@ export class CreateVolunteerPostUsecase implements ICreateVolunteerPostUsecase {
       );
     }
 
-    // Validate tags count
+    /**
+     *Validate tags count 
+     */
     if (data.tags && data.tags.length > 20) {
       throw new ValidationError(ERROR_MESSAGE.VOLUNTEER_POST.MAX_TAGS_EXCEEDED);
     }
@@ -117,6 +127,18 @@ export class CreateVolunteerPostUsecase implements ICreateVolunteerPostUsecase {
         totalPosts: profile.stats.totalPosts + 1,
       },
     });
+
+    /**
+     * Update guide stats and trigger badge evaluation
+     */
+    try {
+      await this._updateLocalGuideStatsUsecase.execute(
+        profile._id || "",
+        { trigger: "post_creation" }
+      );
+    } catch (error) {
+      console.error("Error updating guide stats for badge evaluation:", error);
+    }
     
   }
 }

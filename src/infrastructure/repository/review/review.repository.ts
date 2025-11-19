@@ -137,4 +137,44 @@ export class ReviewRepository
     return aggregation[0];
 
   }
+
+  async getRatingStatsByGuideId(
+    guideId: string
+  ): Promise<{
+    averageRating: number;
+    totalRatings: number;
+  }> {
+    const aggregation = await reviewDB.aggregate([
+      {
+        $match: {
+          guideId,
+          targetType: "guide",
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          averageRating: { $avg: "$rating" },
+          totalRatings: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          averageRating: { $ifNull: ["$averageRating", 0] },
+          totalRatings: { $ifNull: ["$totalRatings", 0] },
+        },
+      },
+    ]);
+
+    if (aggregation.length === 0) {
+      return { averageRating: 0, totalRatings: 0 };
+    }
+
+    const result = aggregation[0];
+    return {
+      averageRating: Math.round((result.averageRating || 0) * 100) / 100,
+      totalRatings: result.totalRatings || 0,
+    };
+  }
 }

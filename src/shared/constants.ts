@@ -1,3 +1,5 @@
+import { LocalGuideBookingDto } from "../application/dto/response/local-guide-booking.dto";
+
 export enum GENDER {
   MALE = "male",
   FEMALE = "female",
@@ -15,6 +17,15 @@ export enum BOOKINGSTATUS {
   ADVANCE_PENDING = "advance_pending",
   CANCELLATION_REQUESTED = "cancellation_requested",
 }
+
+export type LocalGuideBookingStatus =
+  | "QUOTE_ACCEPTED"
+  | "ADVANCE_PENDING"
+  | "CONFIRMED"
+  | "IN_PROGRESS"
+  | "COMPLETED"
+  | "FULLY_PAID"
+  | "CANCELLED";
 
 export type REVIEWTARGET = "guide" | "package";
 
@@ -138,16 +149,19 @@ export const ERROR_MESSAGE = {
   MARK_READ_FAILED: "Mark as read failed",
   CHATROOM_NOT_FOUND: "Chatroom not found",
   WALLET_NOT_FOUND: "Wallet not found",
+  RATING_ERROR: "Rating must be between 1 and 5",
 
-  LOCAL_GUIDE:{
-  LOCAL_GUIDE_PROFILE_NOT_FOUND: "Local guide profile not found",
-  LOCAL_GUIDE_PROFILE_ALREADY_EXISTS: "Local guide profile already exists for this user",
-  LOCAL_GUIDE_ALREADY_VERIFIED: "Local guide is already verified",
-  LOCAL_GUIDE_NOT_VERIFIED: "Local guide is not verified",
-  VERIFICATION_ALREADY_PENDING: "Verification request is already pending",
-  INVALID_COORDINATES: "Invalid coordinates format. Must be [longitude, latitude]",
-  LOCATION_REQUIRED: "Location with precise coordinates is required",
-  ALREADY_REJECTED:"Verification request has already been rejected"
+  LOCAL_GUIDE: {
+    LOCAL_GUIDE_PROFILE_NOT_FOUND: "Local guide profile not found",
+    LOCAL_GUIDE_PROFILE_ALREADY_EXISTS:
+      "Local guide profile already exists for this user",
+    LOCAL_GUIDE_ALREADY_VERIFIED: "Local guide is already verified",
+    LOCAL_GUIDE_NOT_VERIFIED: "Local guide is not verified",
+    VERIFICATION_ALREADY_PENDING: "Verification request is already pending",
+    INVALID_COORDINATES:
+      "Invalid coordinates format. Must be [longitude, latitude]",
+    LOCATION_REQUIRED: "Location with precise coordinates is required",
+    ALREADY_REJECTED: "Verification request has already been rejected",
   },
 
   VOLUNTEER_POST: {
@@ -156,8 +170,10 @@ export const ERROR_MESSAGE = {
     POST_NOT_FOUND: "Volunteer post not found",
     LOCAL_GUIDE_PROFILE_NOT_FOUND: "Local guide profile not found",
     GUIDE_NOT_VERIFIED: "Local guide must be verified to create posts",
-    INVALID_COORDINATES: "Invalid coordinates format. Must be [longitude, latitude]",
-    PROFILE_HOURLY_RATE_REQUIRED: "Profile hourly rate is required when offering guide service. Please update your profile with an hourly rate.",
+    INVALID_COORDINATES:
+      "Invalid coordinates format. Must be [longitude, latitude]",
+    PROFILE_HOURLY_RATE_REQUIRED:
+      "Profile hourly rate is required when offering guide service. Please update your profile with an hourly rate.",
     MAX_IMAGES_EXCEEDED: "Maximum 10 images allowed per post",
     MAX_TAGS_EXCEEDED: "Maximum 20 tags allowed per post",
     UNAUTHORIZED_ACCESS: "You are not authorized to perform this action",
@@ -185,7 +201,6 @@ export const ERROR_MESSAGE = {
     INSTRUCTION_NOT_FOUND: "Instruction not found",
   },
 
-
   GROUP: {
     ATLEAST_TWO_MEMBERS: "Group chat must have at least 2 members",
     NO_GROUP_CHAT: "No group chat found for this package",
@@ -203,8 +218,53 @@ export const ERROR_MESSAGE = {
     FAILED_TO_MARK_MESSAGE_READ: "Failed to mark message as read",
   },
 
+  GUIDE_CHAT: {
+    SELF_CHAT_NOT_ALLOWED:
+      "Traveller and guide cannot be the same account for guide chat.",
+  },
+
+  QUOTE: {
+    GUIDE_PROFILE_NOT_FOUND: "Local guide profile not found",
+    HOURLY_RATE_NOT_SET: "Hourly rate is not set in your profile",
+    INVALID_SESSION_DATE: "Session date must be in the future",
+    INVALID_HOURS: "Hours must be greater than 0",
+    QUOTE_PAYLOAD_REQUIRED: "Quote payload is required for quote message type",
+    ROOM_NOT_FOUND: "Chat room not found",
+    ONLY_GUIDE_CAN_CREATE_QUOTE: "Only guides can create quotes",
+    QUOTE_NOT_FOUND: "Quote not found",
+    QUOTE_ALREADY_PROCESSED: "Quote has already been accepted or declined",
+    QUOTE_EXPIRED: "Quote has expired",
+    ONLY_TRAVELLER_CAN_ACCEPT: "Only the traveller can accept quotes",
+    ONLY_TRAVELLER_CAN_DECLINE: "Only the traveller can decline quotes",
+    BOOKING_ALREADY_EXISTS: "A booking already exists for this quote",
+    OVERLAPPING_BOOKING: "Guide has a conflicting booking at this time",
+  },
+
+  LOCAL_GUIDE_BOOKING: {
+    BOOKING_NOT_FOUND: "Local guide booking not found",
+    ALREADY_PAID_ADVANCE: "Advance payment has already been paid",
+    ALREADY_PAID_FULL: "Full payment has already been paid",
+    CONFLICT_IN_AMOUNT: "Payment amount does not match the required amount",
+    DUE_DATE_FOR_ADVANCE_PAYMENT_END: "Advance payment due date has passed",
+    DUE_DATE_FOR_FULL_PAYMENT_END: "Full payment due date has passed",
+    INVALID_BOOKING_STATUS: "Booking is not in a valid state for this payment",
+    SERVICE_NOT_COMPLETED:
+      "Service must be completed before making full payment",
+    ADVANCE_NOT_PAID: "Advance payment must be completed before full payment",
+    BOOKING_ID_AND_AMOUNT_REQUIRED: "Booking ID and amount are required",
+    SERVICE_ALREADY_COMPLETED: "Service has already been completed",
+    ADVANCE_PAYMENT_REQUIRED:
+      "Advance payment must be completed before marking service as complete",
+    ONLY_TRAVELLER_CAN_COMPLETE:
+      "Only the traveller can mark the service as complete",
+    ONLY_TRAVELLER_CAN_PAY_THE_AMOUNT: "Only the traveller can pay the amount",
+  },
+
   CHAT: {
     FAILED_TO_START_CHAT: "Failed to start chat",
+    MESSAGE_TEXT_REQUIRED: "Message text is required",
+    MEDIA_ATTACHMENT_REQUIRED: "Media attachment required for media message",
+    CHAT_ROOM_ID_REQUIRED: "Chat room id is required",
   },
 };
 
@@ -273,25 +333,26 @@ export const SUCCESS_MESSAGE = {
     ALL_INSTRUCTIONS_MARKED_AS_READ: "All instructions marked as read",
   },
 
-
-   LOCAL_GUIDE: {
+  LOCAL_GUIDE: {
     VERIFICATION_REQUESTED: "Verification request submitted successfully",
-    VERIFICATION_RESUBMITTED: "Verification request resubmitted successfully. Your request is now pending review",
+    VERIFICATION_RESUBMITTED:
+      "Verification request resubmitted successfully. Your request is now pending review",
     VERIFICATION_APPROVED: "Local guide verification approved",
     VERIFICATION_REJECTED: "Local guide verification rejected",
     PROFILE_CREATED: "Local guide profile created successfully",
     PROFILE_UPDATED: "Local guide profile updated successfully",
-    AVAILABLE : "Successfully set to available",
-    NOT_AVAILABLE : "Successfully set to not available"
+    AVAILABLE: "Successfully set to available",
+    NOT_AVAILABLE: "Successfully set to not available",
+    SERVICE_MARKED_COMPLETE: "Service marked as complete successfully",
   },
 
-  VOLUNTEER_POST :{
-    POST_CREATED : "Post created successfully",
-    POST_UPDATED : "Post updated successfully",
-    POST_DELETED : "Post deleted successfully",
-    POST_LIKED : "Post liked successfully",
-    POST_UNLIKED : "Post unliked successfully"
-  }
+  VOLUNTEER_POST: {
+    POST_CREATED: "Post created successfully",
+    POST_UPDATED: "Post updated successfully",
+    POST_DELETED: "Post deleted successfully",
+    POST_LIKED: "Post liked successfully",
+    POST_UNLIKED: "Post unliked successfully",
+  },
 };
 
 export const ROLES = {
@@ -329,7 +390,11 @@ export const VERIFICATION_STATUS = {
 
 export type TRole = "admin" | "vendor" | "client" | "guide";
 export type TStatus = "pending" | "verified" | "rejected";
-export type TVerificationStatus = "pending" | "reviewing" | "verified" | "rejected";
+export type TVerificationStatus =
+  | "pending"
+  | "reviewing"
+  | "verified"
+  | "rejected";
 
 export type PackageStatus =
   | "draft"
@@ -350,6 +415,7 @@ export type BookingStatus =
 
 export enum EVENT_EMMITER_TYPE {
   SENDMAIL = "sendmail",
+  LOCAL_GUIDE_STATS_UPDATED = "local_guide_stats_updated",
 }
 
 export enum MAIL_CONTENT_PURPOSE {
@@ -389,6 +455,10 @@ export const TRANSACTION_DESCRIPTIONS = {
     `Refund for cancellation of booking ${bookingId}`,
   CANCELLATION_REFUND: (bookingId: string) =>
     `Refund deduction for cancelled booking ${bookingId}`,
+  LOCAL_GUIDE_ADVANCE_PAYMENT: (bookingId: string) =>
+    `Payment received for local guide booking ${bookingId} (Advance)`,
+  LOCAL_GUIDE_FULL_PAYMENT: (bookingId: string) =>
+    `Payment received for local guide booking ${bookingId} (Full)`,
 };
 
 export interface CancellationPolicy {
@@ -483,7 +553,6 @@ export const POST_STATUS = {
   HIDDEN: "hidden",
 } as const;
 
-
 export type TPostStatus = "draft" | "published" | "archived" | "hidden";
 export type TPostCategory =
   | "hidden-spots"
@@ -538,3 +607,53 @@ export const NOTIFICATIONS = {
       `${name} has requested cancellation for the booking ${bookingId}-${packageName}`,
   },
 };
+
+export type LocalGuidePaymentFilter =
+  | "advance_due"
+  | "advance_overdue"
+  | "full_due"
+  | "full_paid";
+
+export type LocalGuideBookingCategory = "pending" | "completed";
+
+export interface LocalGuideBookingListFilters {
+  category?: LocalGuideBookingCategory;
+  status?: LocalGuideBookingStatus;
+  paymentStatus?: LocalGuidePaymentFilter;
+  search?: string;
+  from?: string;
+  to?: string;
+  page?: number;
+  limit?: number;
+}
+
+export interface LocalGuideBookingListResult {
+  bookings: LocalGuideBookingDto[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+  summary: {
+    pendingCount: number;
+    completedCount: number;
+  };
+}
+
+export interface StatsUpdatePayload {
+  guideProfileId: string;
+  stats: {
+    totalLikes: number;
+    totalViews: number;
+    maxPostLikes: number;
+    maxPostViews: number;
+    completionRate: number;
+    completedSessions: number;
+    totalSessions: number;
+    averageRating: number;
+    totalRatings: number;
+    totalPosts: number;
+  };
+  trigger?: "service_completion" | "post_creation" | "post_like" | "post_view";
+}

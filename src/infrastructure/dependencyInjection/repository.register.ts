@@ -6,6 +6,8 @@ import { IKYCRepository } from "../../domain/repositoryInterfaces/auth/kyc-repos
 import { IOTPRepository } from "../../domain/repositoryInterfaces/auth/otp-repository.interface";
 import { IBookingRepository } from "../../domain/repositoryInterfaces/booking/booking-repository.interface";
 import { IChatRoomRepository } from "../../domain/repositoryInterfaces/chatroom/chatroom-repository.interface";
+import { IGuideChatRoomRepository } from "../../domain/repositoryInterfaces/guide-chat/guide-chat-room-repository.interface";
+import { IGuideMessageRepository } from "../../domain/repositoryInterfaces/guide-chat/guide-message-repository.interface";
 import { IClientRepository } from "../../domain/repositoryInterfaces/client/client.repository.interface";
 import { IFCMTokenRepository } from "../../domain/repositoryInterfaces/fcmToken/fcmTokenRepository.interface";
 import { IGroupChatRepository } from "../../domain/repositoryInterfaces/group-chat/group-chat-repository.interface";
@@ -13,6 +15,7 @@ import { IGroupMessageRepository } from "../../domain/repositoryInterfaces/group
 import { IGuideRepository } from "../../domain/repositoryInterfaces/guide/guide-repository.interface";
 import { IGuideInstructionRepository } from "../../domain/repositoryInterfaces/guide-instruction/guide-instruction-repository.interface";
 import { ILocalGuideProfileRepository } from "../../domain/repositoryInterfaces/local-guide-profile/local-guide-profile-repository.interface";
+import { ILocalGuideBookingRepository } from "../../domain/repositoryInterfaces/local-guide-booking/local-guide-booking-repository.interface";
 import { IPostLikeRepository } from "../../domain/repositoryInterfaces/post-like/post-like-repository.interface";
 import { IVolunteerPostRepository } from "../../domain/repositoryInterfaces/volunteer-post/volunteer-post-repository.interface";
 import { IMessageRepository } from "../../domain/repositoryInterfaces/message/message-repository.interface";
@@ -34,6 +37,8 @@ import { KYCRepository } from "../repository/auth/kyc.repository";
 import { OTPRepository } from "../repository/auth/otp.repository";
 import { BookingRepository } from "../repository/booking/booking.repository";
 import { ChatRoomRepository } from "../repository/chatroom/chatroom-repository";
+import { GuideChatRoomRepository } from "../repository/guide-chat/guide-chat-room.repository";
+import { GuideMessageRepository } from "../repository/guide-chat/guide-message.repository";
 import { ClientRepository } from "../repository/client/client.repository";
 import { FCMTokenRepository } from "../repository/fcmToken/fcmToken.repository";
 import { GroupChatRepository } from "../repository/group-chat/group-chat.repository";
@@ -41,6 +46,7 @@ import { GroupMessageRepository } from "../repository/group-chat/group-message.r
 import { GuideRepository } from "../repository/guide/guide.repository";
 import { GuideInstructionRepository } from "../repository/guide-instruction/guide-instruction.repository";
 import { LocalGuideProfileRepository } from "../repository/local-guide-profile/local-guide-profile.repository";
+import { LocalGuideBookingRepository } from "../repository/local-guide-booking/local-guide-booking.repository";
 import { VolunteerPostRepository } from "../repository/volunteer-post/volunteer-post.repository";
 import { PostLikeRepository } from "../repository/post-like/post-like.repository";
 import { MessageRepository } from "../repository/message/message.repository";
@@ -131,9 +137,17 @@ export class RepositoryRegistry {
       useClass : MessageRepository
     });
 
+    container.register<IGuideMessageRepository>("IGuideMessageRepository", {
+      useClass: GuideMessageRepository,
+    });
+
     //chatroom repository
     container.register<IChatRoomRepository>('IChatRoomRepository',{
       useClass : ChatRoomRepository
+    });
+
+    container.register<IGuideChatRoomRepository>("IGuideChatRoomRepository", {
+      useClass: GuideChatRoomRepository,
     });
 
     //wallet repositorry
@@ -162,6 +176,11 @@ export class RepositoryRegistry {
     //local guide profile repository
     container.register<ILocalGuideProfileRepository>('ILocalGuideProfileRepository',{
       useClass : LocalGuideProfileRepository
+    })
+
+    //local guide booking repository
+    container.register<ILocalGuideBookingRepository>('ILocalGuideBookingRepository',{
+      useClass : LocalGuideBookingRepository
     })
 
     //volunteer post repository

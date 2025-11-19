@@ -4,6 +4,7 @@ import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { ValidationError } from "../../../../domain/errors/validationError";
 import { ILocalGuideProfileRepository } from "../../../../domain/repositoryInterfaces/local-guide-profile/local-guide-profile-repository.interface";
 import { IClientRepository } from "../../../../domain/repositoryInterfaces/client/client.repository.interface";
+import { IUpdateLocalGuideStatsUsecase } from "../../interfaces/badge/update-stats.interface";
 import { ERROR_MESSAGE } from "../../../../shared/constants";
 import { LocalGuideProfileDto } from "../../../dto/response/local-guide.dto";
 import { LocalGuideProfileMapper } from "../../../mapper/local-guide-profile.mapper";
@@ -15,7 +16,9 @@ export class GetLocalGuideProfileUsecase implements IGetLocalGuideProfileUsecase
     @inject("ILocalGuideProfileRepository")
     private _localGuideProfileRepository: ILocalGuideProfileRepository,
     @inject("IClientRepository")
-    private _clientRepository: IClientRepository
+    private _clientRepository: IClientRepository,
+    @inject("IUpdateLocalGuideStatsUsecase")
+    private _updateLocalGuideStatsUsecase: IUpdateLocalGuideStatsUsecase
   ) {}
 
   async execute(userId: string): Promise<LocalGuideProfileDto | null> {
@@ -34,10 +37,34 @@ export class GetLocalGuideProfileUsecase implements IGetLocalGuideProfileUsecase
     /**
      * Get local guide profile
      */
-    const profile = await this._localGuideProfileRepository.findByUserId(userId);
+    let profile = await this._localGuideProfileRepository.findByUserId(userId);
 
     if (!profile) {
       return null;
+    }
+
+    /**
+     * Refresh stats if they appear to be stale (all zeros or missing)
+     * This ensures stats are up-to-date when viewing the profile
+     */
+    const statsAreStale =
+      profile.stats.totalSessions === 0 &&
+      profile.stats.completedSessions === 0 &&
+      profile.stats.totalEarnings === 0 &&
+      profile.stats.averageRating === 0 &&
+      profile.stats.totalRatings === 0;
+
+    if (statsAreStale && profile._id) {
+      try {
+        // Update stats in background (non-blocking)
+        await this._updateLocalGuideStatsUsecase.execute(profile._id, {
+          trigger: "service_completion",
+        });
+        // Refetch profile to get updated stats
+        profile = await this._localGuideProfileRepository.findByUserId(userId);
+      } catch (error) {
+        console.error("Error refreshing stats:", error);
+      }
     }
 
     /**
@@ -51,7 +78,7 @@ export class GetLocalGuideProfileUsecase implements IGetLocalGuideProfileUsecase
       profileImage: user.profileImage,
     };
 
-    return LocalGuideProfileMapper.toDto(profile, userDetails);
+    return LocalGuideProfileMapper.toDto(profile!, userDetails);
   }
 }
 

@@ -16,10 +16,13 @@ import { FcmTokencontroller } from "../../presentation/controllers/common/fcmTok
 import { GroupChatController } from "../../presentation/controllers/group-chat/group-chat.controller";
 import { GuideController } from "../../presentation/controllers/guide/guide.controller";
 import { GuideProfileController } from "../../presentation/controllers/guide/guideProfileController";
+import { GuideChatController } from "../../presentation/controllers/guide-chat/guide-chat.controller";
+import { LocalGuideBookingController } from "../../presentation/controllers/local-guide-booking/local-guide-booking.controller";
 import { GuideInstructionController } from "../../presentation/controllers/guide-instruction/guide-instruction.controller";
 import { ItineraryController } from "../../presentation/controllers/itinerary/itinerary.controller";
 import { LocalGuideController } from "../../presentation/controllers/local-guide/local-guide.controller";
 import { VolunteerPostController } from "../../presentation/controllers/volunteer-post/volunteer-post.controller";
+import { BadgeController } from "../../presentation/controllers/badge/badge.controller";
 import { KycController } from "../../presentation/controllers/kyc/kycController";
 import { SignedUrlController } from "../../presentation/controllers/media/signedUrl.controller";
 import { NotificationController } from "../../presentation/controllers/notification/notification.controller";
@@ -46,6 +49,8 @@ import { ICommonController } from "../../presentation/interfaces/controllers/com
 import { IFcmController } from "../../presentation/interfaces/controllers/fcmToken.controller";
 import { IGuideProfileController } from "../../presentation/interfaces/controllers/guide/guide-profile-controller.interface";
 import { IGuideController } from "../../presentation/interfaces/controllers/guide/guide.controller.interface";
+import { IGuideChatController } from "../../presentation/interfaces/controllers/guide-chat/guide-chat.controller.interface";
+import { ILocalGuideBookingController } from "../../presentation/interfaces/controllers/local-guide-booking/local-guide-booking.controller.interface";
 import { IItineraryController } from "../../presentation/interfaces/controllers/itinerary/itinerary-controller.interface";
 import { IKycController } from "../../presentation/interfaces/controllers/kyc/kycController.interface";
 import { INotificationController } from "../../presentation/interfaces/controllers/notification/notification-controller.interface";
@@ -61,6 +66,7 @@ import { IVendorSalesReportController } from "../../presentation/interfaces/cont
 import { IWishlistController } from "../../presentation/interfaces/controllers/wishlist/wishlist-controller.interface";
 import { ILocalGuideController } from "../../presentation/interfaces/controllers/local-guide/local-guide.controller.interface";
 import { IVolunteerPostController } from "../../presentation/interfaces/controllers/volunteer-post/volunteer-post.controller.interface";
+import { IBadgeController } from "../../presentation/interfaces/controllers/badge/badge.controller.interface";
 import { IBlockedMiddleware } from "../../presentation/interfaces/middleware/blocked-middleware.interface";
 import { IErrorMiddleware } from "../../presentation/interfaces/middleware/error-middleware.interface";
 import { IChatSocketHandler } from "../../presentation/interfaces/socket/chat-socket-handler.interface";
@@ -120,6 +126,12 @@ export const adminController =
 //guide controller
 export const guideController =
   container.resolve<IGuideController>(GuideController);
+
+export const guideChatController =
+  container.resolve<IGuideChatController>(GuideChatController);
+
+export const localGuideBookingController =
+  container.resolve<ILocalGuideBookingController>(LocalGuideBookingController);
 
 //guide profile controller
 export const guideProfileController =
@@ -215,6 +227,10 @@ export const localGuideController =
 //volunteer post controller
 export const volunteerPostController =
   container.resolve<IVolunteerPostController>(VolunteerPostController);
+
+//badge controller
+export const badgeController =
+  container.resolve<IBadgeController>(BadgeController);
 
 //group chat controller
 export const groupChatController = container.resolve(GroupChatController);
