@@ -32,3 +32,9 @@ postLikeSchema.index({ userId: 1 });
 postLikeSchema.index({ postId: 1 });
 
 
+
+
+
+
+
+

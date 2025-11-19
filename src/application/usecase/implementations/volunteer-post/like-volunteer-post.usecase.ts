@@ -11,6 +11,7 @@ import {
   HTTP_STATUS,
 } from "../../../../shared/constants";
 import { ILikeVolunteerPostUsecase } from "../../interfaces/volunteer-post/like-volunteer-post-usecase.interface";
+import { IUpdateLocalGuideStatsUsecase } from "../../interfaces/badge/update-stats.interface";
 
 @injectable()
 export class LikeVolunteerPostUsecase implements ILikeVolunteerPostUsecase {
@@ -20,7 +21,9 @@ export class LikeVolunteerPostUsecase implements ILikeVolunteerPostUsecase {
     @inject("IVolunteerPostRepository")
     private _volunteerPostRepository: IVolunteerPostRepository,
     @inject("IPostLikeRepository")
-    private _postLikeRepository: IPostLikeRepository
+    private _postLikeRepository: IPostLikeRepository,
+    @inject("IUpdateLocalGuideStatsUsecase")
+    private _updateLocalGuideStatsUsecase: IUpdateLocalGuideStatsUsecase
   ) {}
 
   async execute(userId: string, postId: string): Promise<void> {
@@ -38,7 +41,9 @@ export class LikeVolunteerPostUsecase implements ILikeVolunteerPostUsecase {
       throw new NotFoundError(ERROR_MESSAGE.VOLUNTEER_POST.POST_NOT_FOUND);
     }
 
-    // Check if user already liked this post
+    /**
+     *Check if user already liked this post 
+     */
     const existingLike = await this._postLikeRepository.findByUserIdAndPostId(
       userId,
       postId
@@ -51,15 +56,36 @@ export class LikeVolunteerPostUsecase implements ILikeVolunteerPostUsecase {
       );
     }
 
-    // Create like record
+    /**
+     *Create like record 
+     */
     await this._postLikeRepository.save({
       userId,
       postId,
     });
 
-    // Increment likes count on post
+    /**
+     *Increment likes count on post 
+     */
     await this._volunteerPostRepository.incrementLikes(postId);
+
+    /**
+     * Update guide stats and trigger badge evaluation
+     */
+    try {
+      await this._updateLocalGuideStatsUsecase.execute(
+        post.localGuideProfileId,
+        { trigger: "post_like" }
+      );
+    } catch (error) {
+      console.error("Error updating guide stats for badge evaluation:", error);
+    }
   }
 }
+
+
+
+
+
 
 

@@ -6,6 +6,7 @@ import { IMarkAsDeliveredUsecase } from "../../application/usecase/interfaces/ch
 import { IMarkReadUsecase } from "../../application/usecase/interfaces/chat/mark-read-usecase.interface";
 import { ISendMessageUseCase } from "../../application/usecase/interfaces/chat/send-message-usecase.interface";
 import { IMessageEntity } from "../../domain/entities/message.entity";
+import { GuideSendMessageDto } from "../../application/dto/request/guide-chat.dto";
 import {
   getOnlineUsers,
   isUserOnline,
@@ -16,6 +17,11 @@ import { ERROR_MESSAGE } from "../../shared/constants";
 import { CHAT_SOCKET_EVENTS } from "../../shared/socket-events-constants";
 import { getErrorMessage } from "../../shared/utils/error-handler";
 import { IChatSocketHandler } from "../interfaces/socket/chat-socket-handler.interface";
+import { ICreateGuideChatRoomUsecase } from "../../application/usecase/interfaces/guide-chat/create-guide-chat-room.interface";
+import { ISendGuideMessageUsecase } from "../../application/usecase/interfaces/guide-chat/send-guide-message.interface";
+import { IMarkGuideMessagesDeliveredUsecase } from "../../application/usecase/interfaces/guide-chat/mark-guide-messages-delivered.interface";
+import { IMarkGuideMessagesReadUsecase } from "../../application/usecase/interfaces/guide-chat/mark-guide-messages-read.interface";
+import { IGuideChatRoomRepository } from "../../domain/repositoryInterfaces/guide-chat/guide-chat-room-repository.interface";
 
 @injectable()
 export class ChatSocketHandler implements IChatSocketHandler {
@@ -30,7 +36,22 @@ export class ChatSocketHandler implements IChatSocketHandler {
     private _markReadUsecase: IMarkReadUsecase,
 
     @inject("IMarkAsDeliveredUsecase")
-    private _markAsDeliveredUsecase: IMarkAsDeliveredUsecase
+    private _markAsDeliveredUsecase: IMarkAsDeliveredUsecase,
+
+    @inject("ICreateGuideChatRoomUsecase")
+    private _createGuideChatRoomUsecase: ICreateGuideChatRoomUsecase,
+
+    @inject("ISendGuideMessageUsecase")
+    private _sendGuideMessageUsecase: ISendGuideMessageUsecase,
+
+    @inject("IMarkGuideMessagesDeliveredUsecase")
+    private _markGuideMessagesDeliveredUsecase: IMarkGuideMessagesDeliveredUsecase,
+
+    @inject("IMarkGuideMessagesReadUsecase")
+    private _markGuideMessagesReadUsecase: IMarkGuideMessagesReadUsecase,
+
+    @inject("IGuideChatRoomRepository")
+    private _guideChatRoomRepository: IGuideChatRoomRepository
   ) {}
 
   register(io: Server, socket: Socket): void {
@@ -42,6 +63,218 @@ export class ChatSocketHandler implements IChatSocketHandler {
         userId: socket.data.userId,
       });
     }
+
+    socket.on(
+      CHAT_SOCKET_EVENTS.CLIENT.GUIDE_SERVICE_START_CHAT,
+      async (
+        data,
+        ack?: (res: {
+          success: boolean;
+          guideChatRoomId?: string;
+          error?: string;
+        }) => void
+      ) => {
+        try {
+         /**
+          *  Prevent guides from initiating chat - only travellers (clients) can start guide chats
+          * This prevents guides from accidentally creating self-chat rooms
+          */
+          if (socket.data.role === "guide") {
+            return ack?.({
+              success: false,
+              error: ERROR_MESSAGE.GUIDE_CHAT.SELF_CHAT_NOT_ALLOWED,
+            });
+          }
+
+          const travellerId =
+            data.travellerId && data.travellerId.length > 0
+              ? data.travellerId
+              : socket.data.role === "client"
+              ? socket.data.userId
+              : undefined;
+
+          const guideId =
+            data.guideId && data.guideId.length > 0
+              ? data.guideId
+              : socket.data.role === "guide"
+              ? socket.data.userId
+              : undefined;
+
+          if (!travellerId || !guideId) {
+            return ack?.({
+              success: false,
+              error: ERROR_MESSAGE.GROUP.MISSING_MESSAGE_DATA,
+            });
+          }
+
+          if (travellerId === guideId) {
+            return ack?.({
+              success: false,
+              error: ERROR_MESSAGE.GUIDE_CHAT.SELF_CHAT_NOT_ALLOWED,
+            });
+          }
+
+          const room = await this._createGuideChatRoomUsecase.execute({
+            travellerId,
+            guideId,
+            context: {
+              guideProfileId: data.guideProfileId,
+              postId: data.postId,
+              bookingId: data.bookingId,
+            },
+          });
+
+          socket.join(room._id);
+          socket.emit(CHAT_SOCKET_EVENTS.SERVER.GUIDE_SERVICE_CHAT_READY, {
+            guideChatRoomId: room._id,
+          });
+
+          ack?.({
+            success: true,
+            guideChatRoomId: room._id,
+          });
+        } catch (error) {
+          ack?.({
+            success: false,
+            error: getErrorMessage(error, ERROR_MESSAGE.SERVER_ERROR),
+          });
+        }
+      }
+    );
+
+    socket.on(
+      CHAT_SOCKET_EVENTS.CLIENT.GUIDE_SERVICE_JOIN_ROOM,
+      async (
+        data: { guideChatRoomId: string },
+        ack?: (res: { success: boolean; error?: string }) => void
+      ) => {
+        try {
+          if (!data.guideChatRoomId) {
+            return ack?.({
+              success: false,
+              error: ERROR_MESSAGE.GROUP.MISSING_MESSAGE_DATA,
+            });
+          }
+
+          /**
+           * Verify the user is a participant in this room
+           */
+          const room = await this._guideChatRoomRepository.findById(data.guideChatRoomId);
+          if (!room) {
+            return ack?.({
+              success: false,
+              error: "Chat room not found",
+            });
+          }
+
+          const isParticipant = room.participants.some(
+            (participant) => participant.userId === socket.data.userId
+          );
+
+          if (!isParticipant) {
+            return ack?.({
+              success: false,
+              error: "You are not a participant in this chat room",
+            });
+          }
+
+          socket.join(data.guideChatRoomId);
+          ack?.({ success: true });
+        } catch (error) {
+          ack?.({
+            success: false,
+            error: getErrorMessage(error, ERROR_MESSAGE.SERVER_ERROR),
+          });
+        }
+      }
+    );
+
+    socket.on(
+      CHAT_SOCKET_EVENTS.CLIENT.GUIDE_SERVICE_SEND_MESSAGE,
+      async (
+        data: GuideSendMessageDto,
+        ack?: (res: { success: boolean; error?: string }) => void
+      ) => {
+        try {
+          const message = await this._sendGuideMessageUsecase.execute(data);
+          io
+            .to(message.guideChatRoomId)
+            .emit(
+              CHAT_SOCKET_EVENTS.SERVER.GUIDE_SERVICE_NEW_MESSAGE,
+              message
+            );
+          ack?.({ success: true });
+        } catch (error) {
+          ack?.({
+            success: false,
+            error: getErrorMessage(error, ERROR_MESSAGE.SERVER_ERROR),
+          });
+        }
+      }
+    );
+
+    socket.on(
+      CHAT_SOCKET_EVENTS.CLIENT.GUIDE_SERVICE_MARK_DELIVERED,
+      async (
+        data: { guideChatRoomId: string; userId: string },
+        ack?: (res: { success: boolean; error?: string }) => void
+      ) => {
+        try {
+          const messageIds = await this._markGuideMessagesDeliveredUsecase.execute(
+            data.guideChatRoomId,
+            data.userId
+          );
+
+          socket
+            .to(data.guideChatRoomId)
+            .emit(
+              CHAT_SOCKET_EVENTS.SERVER.GUIDE_SERVICE_MESSAGES_DELIVERED,
+              {
+                guideChatRoomId: data.guideChatRoomId,
+                userId: data.userId,
+                messageIds,
+              }
+            );
+
+          ack?.({ success: true });
+        } catch (error) {
+          ack?.({
+            success: false,
+            error: ERROR_MESSAGE.GROUP.FAILED_TO_MARK_MESSAGE_DELIVERED,
+          });
+        }
+      }
+    );
+
+    socket.on(
+      CHAT_SOCKET_EVENTS.CLIENT.GUIDE_SERVICE_MARK_READ,
+      async (
+        data: { guideChatRoomId: string; userId: string },
+        ack?: (res: { success: boolean; error?: string }) => void
+      ) => {
+        try {
+          const messageIds = await this._markGuideMessagesReadUsecase.execute(
+            data.guideChatRoomId,
+            data.userId
+          );
+
+          socket
+            .to(data.guideChatRoomId)
+            .emit(CHAT_SOCKET_EVENTS.SERVER.GUIDE_SERVICE_MESSAGES_READ, {
+              guideChatRoomId: data.guideChatRoomId,
+              userId: data.userId,
+              messageIds,
+            });
+
+          ack?.({ success: true });
+        } catch (error) {
+          ack?.({
+            success: false,
+            error: ERROR_MESSAGE.GROUP.FAILED_TO_MARK_MESSAGE_READ,
+          });
+        }
+      }
+    );
 
     socket.on(
       CHAT_SOCKET_EVENTS.CLIENT.CHECK_ONLINE_STATUS,

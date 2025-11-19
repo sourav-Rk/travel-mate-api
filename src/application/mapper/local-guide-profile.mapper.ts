@@ -40,12 +40,17 @@ export type AggregationResult = {
   isAvailable: boolean;
   availabilityNote?: string | null;
   stats: {
-    totalSessions: number;
-    completedSessions: number;
-    averageRating: number;
-    totalRatings: number;
-    totalPosts: number;
-    totalEarnings: number;
+     totalSessions: number;
+  completedSessions: number;
+  averageRating: number;
+  totalRatings: number;
+  totalPosts: number;
+  totalEarnings: number;
+  totalLikes: number;
+  totalViews: number;
+  maxPostLikes: number;
+  maxPostViews: number;
+  completionRate: number;
   };
   badges: string[];
   createdAt?: Date;
@@ -105,6 +110,11 @@ export class LocalGuideProfileMapper {
         totalRatings: doc.stats.totalRatings,
         totalPosts: doc.stats.totalPosts,
         totalEarnings: doc.stats.totalEarnings,
+        completionRate : doc.stats.completionRate,
+        maxPostLikes : doc.stats.maxPostLikes,
+        maxPostViews : doc.stats.maxPostViews,
+        totalLikes : doc.stats.totalLikes,
+        totalViews : doc.stats.totalViews,
       },
       badges: doc.badges || [],
       createdAt: doc.createdAt,

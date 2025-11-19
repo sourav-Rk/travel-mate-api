@@ -152,6 +152,28 @@ export const localGuideProfileSchema = new mongoose.Schema<ILocalGuideProfileMod
         type: Number,
         default: 0,
       },
+      totalLikes: {
+        type: Number,
+        default: 0,
+      },
+      totalViews: {
+        type: Number,
+        default: 0,
+      },
+      maxPostLikes: {
+        type: Number,
+        default: 0,
+      },
+      maxPostViews: {
+        type: Number,
+        default: 0,
+      },
+      completionRate: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 100,
+      },
     },
     badges: {
       type: [String],

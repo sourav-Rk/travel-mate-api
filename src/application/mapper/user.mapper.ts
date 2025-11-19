@@ -15,6 +15,8 @@ export class UserMapper {
       role: doc.role,
       profileImage: doc.profileImage,
       isBlocked: doc.isBlocked,
+      localGuideProfileId: doc.localGuideProfileId ?? "",
+      isLocalGuide: doc.isLocalGuide,
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
     };
@@ -23,12 +25,12 @@ export class UserMapper {
       user.googleId = doc.googleId;
     }
 
-    if(doc.isLocalGuide){
-      user.isLocalGuide
+    if (doc.isLocalGuide) {
+      user.isLocalGuide;
     }
 
-    if(doc.localGuideProfileId){
-      user.localGuideProfileId
+    if (doc.localGuideProfileId) {
+      user.localGuideProfileId;
     }
 
     if (doc.bio) {

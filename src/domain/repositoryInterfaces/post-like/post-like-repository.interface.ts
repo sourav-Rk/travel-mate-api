@@ -15,8 +15,15 @@ export interface IPostLikeRepository extends IBaseRepository<IPostLikeEntity> {
     userId: string,
     postId: string
   ): Promise<boolean>;
+  
 
   countByPostId(postId: string): Promise<number>;
 }
+
+
+
+
+
+
 
 

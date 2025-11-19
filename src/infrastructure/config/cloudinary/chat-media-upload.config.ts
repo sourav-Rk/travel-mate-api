@@ -1,6 +1,6 @@
-import { v2 as cloudinary } from "cloudinary";
 import multer from "multer";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
+import { cloudinary } from "./cloudinary.donfig";
 
 
 const chatMediaStorage = new CloudinaryStorage({
@@ -69,7 +69,6 @@ export const chatMediaUpload = multer({
   },
 });
 
-export { cloudinary };
 
 
 

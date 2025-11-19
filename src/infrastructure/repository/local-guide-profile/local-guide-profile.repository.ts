@@ -296,4 +296,60 @@ export class LocalGuideProfileRepository
     if (!updated) return null;
     return LocalGuideProfileMapper.toEntity(updated);
   }
+
+  async updateStats(
+    profileId: string,
+    stats: Partial<ILocalGuideProfileEntity["stats"]>
+  ): Promise<ILocalGuideProfileEntity | null> {
+    const updateData: FilterQuery<ILocalGuideProfileModel> = {
+      updatedAt: new Date(),
+    };
+
+    // Build stats update object
+    Object.keys(stats).forEach((key) => {
+      const value = (stats as any)[key];
+      if (value !== undefined) {
+        updateData[`stats.${key}`] = value;
+      }
+    });
+
+    const updated = await localGuideProfileDB
+      .findByIdAndUpdate(profileId, updateData, { new: true })
+      .populate("userId", "firstName lastName email profileImage")
+      .exec();
+
+    if (!updated) return null;
+    return LocalGuideProfileMapper.toEntity(updated);
+  }
+
+  async addBadge(
+    profileId: string,
+    badgeId: string
+  ): Promise<ILocalGuideProfileEntity | null> {
+    const updated = await localGuideProfileDB
+      .findByIdAndUpdate(
+        profileId,
+        {
+          $addToSet: { badges: badgeId },
+          updatedAt: new Date(),
+        },
+        { new: true }
+      )
+      .populate("userId", "firstName lastName email profileImage")
+      .exec();
+
+    if (!updated) return null;
+    return LocalGuideProfileMapper.toEntity(updated);
+  }
+
+  async getBadges(profileId: string): Promise<string[]> {
+    const profile = await localGuideProfileDB
+      .findById(profileId)
+      .select("badges")
+      .lean()
+      .exec();
+
+    if (!profile) return [];
+    return profile.badges || [];
+  }
 }

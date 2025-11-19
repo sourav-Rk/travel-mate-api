@@ -347,5 +347,54 @@ export class VolunteerPostRepository
     if (!post) return null;
     return VolunteerPostMapper.toEntity(post);
   }
+
+  async aggregateLikesAndViews(
+    guideProfileId: string
+  ): Promise<{
+    totalLikes: number;
+    totalViews: number;
+    maxPostLikes: number;
+    maxPostViews: number;
+  }> {
+    const pipeline: PipelineStage[] = [
+      {
+        $match: {
+          localGuideProfileId: guideProfileId,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalLikes: { $sum: "$likes" },
+          totalViews: { $sum: "$views" },
+          maxPostLikes: { $max: "$likes" },
+          maxPostViews: { $max: "$views" },
+        },
+      },
+    ];
+
+    const result = await volunteerPostDB
+      .aggregate<{
+        totalLikes: number;
+        totalViews: number;
+        maxPostLikes: number;
+        maxPostViews: number;
+      }>(pipeline)
+      .exec();
+
+    const aggregated = result[0] || {
+      totalLikes: 0,
+      totalViews: 0,
+      maxPostLikes: 0,
+      maxPostViews: 0,
+    };
+
+    return {
+      totalLikes: aggregated.totalLikes || 0,
+      totalViews: aggregated.totalViews || 0,
+      maxPostLikes: aggregated.maxPostLikes || 0,
+      maxPostViews: aggregated.maxPostViews || 0,
+    };
+  }
 }
 

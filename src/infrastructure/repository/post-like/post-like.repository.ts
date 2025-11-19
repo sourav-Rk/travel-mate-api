@@ -2,10 +2,11 @@ import { injectable } from "tsyringe";
 
 import { IPostLikeEntity } from "../../../domain/entities/post-like.entity";
 import { IPostLikeRepository } from "../../../domain/repositoryInterfaces/post-like/post-like-repository.interface";
-import { postLikeDB } from "../../database/models/post-like.model";
+import { IPostLikeModel, postLikeDB } from "../../database/models/post-like.model";
+import { BaseRepository } from "../baseRepository";
 
 @injectable()
-export class PostLikeRepository implements IPostLikeRepository {
+export class PostLikeRepository extends BaseRepository<IPostLikeModel,IPostLikeEntity> implements IPostLikeRepository {
   async save(data: IPostLikeEntity): Promise<IPostLikeEntity> {
     const like = new postLikeDB({
       userId: data.userId,
@@ -33,11 +34,6 @@ export class PostLikeRepository implements IPostLikeRepository {
       .findByIdAndUpdate(id, data, { new: true })
       .exec();
     return like ? this.toEntity(like) : null;
-  }
-
-  async deleteById(id: string): Promise<boolean> {
-    const result = await postLikeDB.findByIdAndDelete(id).exec();
-    return !!result;
   }
 
   async findByUserIdAndPostId(
@@ -90,5 +86,11 @@ export class PostLikeRepository implements IPostLikeRepository {
     };
   }
 }
+
+
+
+
+
+
 
 
