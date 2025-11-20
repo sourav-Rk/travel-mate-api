@@ -201,3 +201,101 @@ export class UpdateLocalGuideProfileReqDTO {
   @MaxLength(500, { message: "Availability note cannot exceed 500 characters" })
   availabilityNote?: string;
 }
+
+export class BoundingBoxDto {
+  @Transform(({ value }) => value ? Number(value) : 1)
+  @IsNotEmpty({ message: "North coordinate is required" })
+  @IsNumber({}, { message: "North must be a number" })
+  @Min(-90, { message: "North must be between -90 and 90" })
+  @Max(90, { message: "North must be between -90 and 90" })
+  north!: number;
+  
+  @Transform(({ value }) => value ? Number(value) : 1)
+  @IsNotEmpty({ message: "South coordinate is required" })
+  @IsNumber({}, { message: "South must be a number" })
+  @Min(-90, { message: "South must be between -90 and 90" })
+  @Max(90, { message: "South must be between -90 and 90" })
+  south!: number;
+  
+  @Transform(({ value }) => value ? Number(value) : 1)
+  @IsNotEmpty({ message: "East coordinate is required" })
+  @IsNumber({}, { message: "East must be a number" })
+  @Min(-180, { message: "East must be between -180 and 180" })
+  @Max(180, { message: "East must be between -180 and 180" })
+  east!: number;
+
+  @Transform(({ value }) => value ? Number(value) : 1)
+  @IsNotEmpty({ message: "West coordinate is required" })
+  @IsNumber({}, { message: "West must be a number" })
+  @Min(-180, { message: "West must be between -180 and 180" })
+  @Max(180, { message: "West must be between -180 and 180" })
+  west!: number;
+}
+
+export class GetLocalGuidesByLocationReqDTO {
+  @Transform(({ value }) => value ? Number(value) : 1)
+  @IsOptional()
+  @IsNumber({}, { message: "Page must be a number" })
+  @Min(1, { message: "Page must be at least 1" })
+  page?: number = 1;
+
+  @Transform(({ value }) => value ? Number(value) : 10)
+  @IsOptional()
+  @IsNumber({}, { message: "Limit must be a number" })
+  @Min(1, { message: "Limit must be at least 1" })
+  limit?: number = 10;
+  
+  @Transform(({ value }) => value ? Number(value) : undefined)
+  @IsOptional()
+  @IsNumber({}, { message: "Longitude must be a number" })
+  @Min(-180, { message: "Longitude must be between -180 and 180" })
+  @Max(180, { message: "Longitude must be between -180 and 180" })
+  longitude?: number;
+  
+  @Transform(({ value }) => value ? Number(value) : undefined)
+  @IsOptional()
+  @IsNumber({}, { message: "Latitude must be a number" })
+  @Min(-90, { message: "Latitude must be between -90 and 90" })
+  @Max(90, { message: "Latitude must be between -90 and 90" })
+  latitude?: number;
+
+  @Transform(({ value }) => value ? Number(value) : 10000)
+  @IsOptional()
+  @IsNumber({}, { message: "Radius must be a number" })
+  @Min(100, { message: "Radius must be at least 100 meters" })
+  @Max(50000, { message: "Radius cannot exceed 50000 meters" })
+  radiusInMeters?: number = 10000;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => BoundingBoxDto)
+  boundingBox?: BoundingBoxDto;
+
+  @IsOptional()
+  @IsBoolean({ message: "isAvailable must be a boolean value" })
+  @Transform(({ value }) => {
+    if (value === "true") return true;
+    if (value === "false") return false;
+    return value;
+  })
+  isAvailable?: boolean;
+
+  @IsOptional()
+  @IsArray({ message: "Specialties must be an array" })
+  @IsEnum(GUIDE_SPECIALTIES, {
+    each: true,
+    message: "Each specialty must be a valid guide specialty",
+  })
+  @Transform(({ value }) => {
+    if (typeof value === 'string') return value.split(',');
+    return value;
+  })
+  specialties?: string[];
+
+  @Transform(({ value }) => value ? Number(value) : undefined)
+  @IsOptional()
+  @IsNumber({}, { message: "Min rating must be a number" })
+  @Min(0, { message: "Min rating must be at least 0" })
+  @Max(5, { message: "Min rating cannot exceed 5" })
+  minRating?: number;
+}

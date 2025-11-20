@@ -90,6 +90,8 @@ export class GetVolunteerPostUsecase implements IGetVolunteerPostUsecase {
           specialties: profile.specialties,
           languages: profile.languages,
           hourlyRate: profile.hourlyRate,
+          gender :user.gender,
+          isAvailable : profile.isAvailable
         };
       }
     }

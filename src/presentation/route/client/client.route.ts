@@ -32,6 +32,7 @@ import {
   badgeController,
 } from "../../../infrastructure/dependencyInjection/resolve";
 import {
+  GetLocalGuidesByLocationReqDTO,
   RequestLocalGuideVerificationReqDTO,
   UpdateLocalGuideAvailabilityReqDTO,
   UpdateLocalGuideProfileReqDTO,
@@ -48,7 +49,11 @@ import { validationMiddleware } from "../../middlewares/validation.middleware";
 import { BaseRoute } from "../base.route";
 import { CommonUploadRoutes } from "../common/common-upload.route";
 import { FcmTokenRoutes } from "../fcmToken/fcmToken.route";
-import { AcceptQuoteDto, CreateQuoteDto, DeclineQuoteDto } from "../../../application/dto/request/local-guide-booking.dto";
+import {
+  AcceptQuoteDto,
+  CreateQuoteDto,
+  DeclineQuoteDto,
+} from "../../../application/dto/request/local-guide-booking.dto";
 
 @injectable()
 export class ClientRoute extends BaseRoute {
@@ -366,8 +371,6 @@ export class ClientRoute extends BaseRoute {
     //--------------Local Guide Routes-------------------
     this.router.post(
       "/local-guide/request-verification",
-      verifyAuth,
-      authorizeRole(["client"]),
       validationMiddleware(RequestLocalGuideVerificationReqDTO),
       asyncHandler(
         localGuideController.requestVerification.bind(localGuideController)
@@ -376,17 +379,22 @@ export class ClientRoute extends BaseRoute {
 
     this.router.get(
       "/local-guide/profile",
-      verifyAuth,
-      authorizeRole(["client"]),
       asyncHandler(
         localGuideController.getLocalGuideProfile.bind(localGuideController)
       )
     );
 
+    this.router.get(
+      "/local-guide/public-profile/:profileId",
+      asyncHandler(
+        localGuideController.getLocalGuidePublicProfile.bind(
+          localGuideController
+        )
+      )
+    );
+
     this.router.patch(
       "/local-guide/availability",
-      verifyAuth,
-      authorizeRole(["client"]),
       validationMiddleware(UpdateLocalGuideAvailabilityReqDTO),
       asyncHandler(
         localGuideController.updateAvailability.bind(localGuideController)
@@ -398,6 +406,14 @@ export class ClientRoute extends BaseRoute {
       validationMiddleware(UpdateLocalGuideProfileReqDTO),
       asyncHandler(
         localGuideController.updateProfile.bind(localGuideController)
+      )
+    );
+
+    this.router.get(
+      "/local-guide/search-by-location",
+      validationMiddleware(GetLocalGuidesByLocationReqDTO),
+      asyncHandler(
+        localGuideController.getLocalGuidesByLocation.bind(localGuideController)
       )
     );
 
@@ -455,6 +471,14 @@ export class ClientRoute extends BaseRoute {
       )
     );
 
+    this.router.get(
+      "/volunteer-post/search-by-location",
+      validationMiddleware(GetVolunteerPostsByLocationReqDTO),
+      asyncHandler(
+        volunteerPostController.getPostsByLocation.bind(volunteerPostController)
+      )
+    );
+
     this.router.post(
       "/local-guide/posts/:postId/like",
       asyncHandler(
@@ -488,24 +512,40 @@ export class ClientRoute extends BaseRoute {
     this.router.post(
       "/guide-chat/quote",
       validationMiddleware(CreateQuoteDto),
-      asyncHandler(localGuideBookingController.createQuote.bind(localGuideBookingController))
+      asyncHandler(
+        localGuideBookingController.createQuote.bind(
+          localGuideBookingController
+        )
+      )
     );
 
     this.router.get(
       "/guide-chat/quotes/pending",
-      asyncHandler(localGuideBookingController.getPendingQuotes.bind(localGuideBookingController))
+      asyncHandler(
+        localGuideBookingController.getPendingQuotes.bind(
+          localGuideBookingController
+        )
+      )
     );
 
     this.router.post(
       "/guide-chat/quote/accept",
       validationMiddleware(AcceptQuoteDto),
-      asyncHandler(localGuideBookingController.acceptQuote.bind(localGuideBookingController))
+      asyncHandler(
+        localGuideBookingController.acceptQuote.bind(
+          localGuideBookingController
+        )
+      )
     );
 
     this.router.post(
       "/guide-chat/quote/decline",
       validationMiddleware(DeclineQuoteDto),
-      asyncHandler(localGuideBookingController.declineQuote.bind(localGuideBookingController))
+      asyncHandler(
+        localGuideBookingController.declineQuote.bind(
+          localGuideBookingController
+        )
+      )
     );
 
     //------------------Local Guide Booking Routes-----------------
@@ -513,20 +553,28 @@ export class ClientRoute extends BaseRoute {
     this.router.get(
       "/local-guide/bookings",
       asyncHandler(
-        localGuideBookingController.getLocalGuideBookings.bind(localGuideBookingController)
+        localGuideBookingController.getLocalGuideBookings.bind(
+          localGuideBookingController
+        )
       )
     );
 
     this.router.post(
       "/local-guide/bookings/:bookingId/pay-advance",
       asyncHandler(
-        localGuideBookingController.payAdvanceAmount.bind(localGuideBookingController)
+        localGuideBookingController.payAdvanceAmount.bind(
+          localGuideBookingController
+        )
       )
     );
 
     this.router.post(
       "/local-guide/bookings/:bookingId/pay-full",
-      asyncHandler(localGuideBookingController.payFullAmount.bind(localGuideBookingController))
+      asyncHandler(
+        localGuideBookingController.payFullAmount.bind(
+          localGuideBookingController
+        )
+      )
     );
 
     this.router.get(
@@ -539,21 +587,27 @@ export class ClientRoute extends BaseRoute {
     this.router.get(
       "/local-guide/my-service-bookings",
       asyncHandler(
-        localGuideBookingController.getLocalGuideBookingsForGuide.bind(localGuideBookingController)
+        localGuideBookingController.getLocalGuideBookingsForGuide.bind(
+          localGuideBookingController
+        )
       )
     );
 
     this.router.get(
       "/local-guide/bookings/:bookingId",
       asyncHandler(
-        localGuideBookingController.getLocalGuideBookingDetails.bind(localGuideBookingController)
+        localGuideBookingController.getLocalGuideBookingDetails.bind(
+          localGuideBookingController
+        )
       )
     );
 
     this.router.post(
       "/local-guide/bookings/:bookingId/complete",
       asyncHandler(
-        localGuideBookingController.markServiceComplete.bind(localGuideBookingController)
+        localGuideBookingController.markServiceComplete.bind(
+          localGuideBookingController
+        )
       )
     );
 

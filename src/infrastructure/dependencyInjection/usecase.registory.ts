@@ -94,6 +94,8 @@ import { ResetPasswordUsecase } from "../../application/usecase/implementations/
 import { UpdateGuidePasswordUsecase } from "../../application/usecase/implementations/guide/updateGuidePasswordUsecase";
 import { GetPendingVerificationsUsecase } from "../../application/usecase/implementations/local-guide/get-pending-verifications.usecase";
 import { GetLocalGuideProfileUsecase } from "../../application/usecase/implementations/local-guide/get-local-guide-profile.usecase";
+import { GetLocalGuidePublicProfileUsecase } from "../../application/usecase/implementations/local-guide/get-local-guide-public-profile.usecase";
+import { GetLocalGuidesByLocationUsecase } from "../../application/usecase/implementations/local-guide/get-local-guides-by-location.usecase";
 import { UpdateLocalGuideAvailabilityUsecase } from "../../application/usecase/implementations/local-guide/update-local-guide-availability.usecase";
 import { UpdateLocalGuideProfileUsecase } from "../../application/usecase/implementations/local-guide/update-local-guide-profile.usecase";
 import { RejectLocalGuideUsecase } from "../../application/usecase/implementations/local-guide/reject-local-guide.usecase";
@@ -245,6 +247,8 @@ import { IResetPasswordUsecase } from "../../application/usecase/interfaces/guid
 import { IUpdateGuidePasswordUsecase } from "../../application/usecase/interfaces/guide/updateGuidePassword-usecase.interface";
 import { IGetPendingVerificationsUsecase } from "../../application/usecase/interfaces/local-guide/get-pending-verifications-usecase.interface";
 import { IGetLocalGuideProfileUsecase } from "../../application/usecase/interfaces/local-guide/get-local-guide-profile-usecase.interface";
+import { IGetLocalGuidePublicProfileUsecase } from "../../application/usecase/interfaces/local-guide/get-local-guide-public-profile-usecase.interface";
+import { IGetLocalGuidesByLocationUsecase } from "../../application/usecase/interfaces/local-guide/get-local-guides-by-location.interface";
 import { IUpdateLocalGuideAvailabilityUsecase } from "../../application/usecase/interfaces/local-guide/update-local-guide-availability-usecase.interface";
 import { IUpdateLocalGuideProfileUsecase } from "../../application/usecase/interfaces/local-guide/update-local-guide-profile-usecase.interface";
 import { IRejectLocalGuideUsecase } from "../../application/usecase/interfaces/local-guide/reject-local-guide-usecase.interface";
@@ -1093,6 +1097,19 @@ export class UsecaseRegistory {
       "IGetLocalGuideProfileUsecase",
       {
         useClass: GetLocalGuideProfileUsecase,
+      }
+    );
+    container.register<IGetLocalGuidePublicProfileUsecase>(
+      "IGetLocalGuidePublicProfileUsecase",
+      {
+        useClass: GetLocalGuidePublicProfileUsecase,
+      }
+    );
+
+    container.register<IGetLocalGuidesByLocationUsecase>(
+      "IGetLocalGuidesByLocationUsecase",
+      {
+        useClass: GetLocalGuidesByLocationUsecase,
       }
     );
 

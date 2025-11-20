@@ -8,5 +8,7 @@ export interface ILocalGuideController {
   getLocalGuideProfile(req: Request, res: Response): Promise<void>;
   updateAvailability(req: Request, res: Response): Promise<void>;
   updateProfile(req: Request, res: Response): Promise<void>;
+  getLocalGuidesByLocation(req: Request, res: Response): Promise<void>;
+  getLocalGuidePublicProfile(req: Request, res: Response): Promise<void>;
 }
 

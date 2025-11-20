@@ -172,6 +172,117 @@ export class VolunteerPostRepository
     };
   }
 
+  async findByBoundingBox(
+    boundingBox: {
+      north: number;
+      south: number;
+      east: number;
+      west: number;
+    },
+    centerPoint: { longitude: number; latitude: number },
+    filters?: IPostFilters,
+    pagination?: IPaginationOptions
+  ): Promise<{
+    posts: Array<IVolunteerPostEntity & { distance?: number }>;
+    total: number;
+    currentPage: number;
+    totalPages: number;
+  }> {
+    const page = pagination?.page || 1;
+    const limit = pagination?.limit || 10;
+    const skip = (page - 1) * limit;
+
+    const baseQuery = this.buildFilterQuery(filters);
+    if (!baseQuery.status) {
+      baseQuery.status = "published";
+    }
+
+    baseQuery["location.coordinates"] = {
+      $geoWithin: {
+        $box: [
+          [boundingBox.west, boundingBox.south],
+          [boundingBox.east, boundingBox.north],
+        ],
+      },
+    };
+
+    const pipeline: PipelineStage[] = [
+      {
+        $match: baseQuery,
+      },
+      {
+        $addFields: {
+          coordLongitude: { $arrayElemAt: ["$location.coordinates", 0] },
+          coordLatitude: { $arrayElemAt: ["$location.coordinates", 1] },
+        },
+      },
+      {
+        $addFields: {
+          distance: {
+            $multiply: [
+              6371000, // Earth radius in meters
+              {
+                $acos: {
+                  $add: [
+                    {
+                      $multiply: [
+                        { $sin: { $degreesToRadians: "$coordLatitude" } },
+                        { $sin: { $degreesToRadians: centerPoint.latitude } },
+                      ],
+                    },
+                    {
+                      $multiply: [
+                        { $cos: { $degreesToRadians: "$coordLatitude" } },
+                        { $cos: { $degreesToRadians: centerPoint.latitude } },
+                        {
+                          $cos: {
+                            $degreesToRadians: {
+                              $subtract: ["$coordLongitude", centerPoint.longitude],
+                            },
+                          },
+                        },
+                      ],
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      },
+      {
+        $facet: {
+          posts: [
+            { $sort: this.buildSortStage(pagination?.sortBy) },
+            { $skip: skip },
+            { $limit: limit },
+          ],
+          total: [{ $count: "count" }],
+        },
+      },
+    ];
+
+    const result = await volunteerPostDB
+      .aggregate<{
+        posts: Array<IVolunteerPostModel & { distance?: number }>;
+        total: Array<{ count: number }>;
+      }>(pipeline)
+      .exec();
+
+    const posts = result[0]?.posts || [];
+    const total = result[0]?.total[0]?.count || 0;
+
+    return {
+      posts: posts.map((post) => ({
+        ...VolunteerPostMapper.toEntity(post),
+        distance: post.distance,
+      })),
+      total,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+    };
+  }
+
   async findByCategory(
     category: string,
     filters?: IPostFilters,

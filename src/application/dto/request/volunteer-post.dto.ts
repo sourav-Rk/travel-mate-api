@@ -144,6 +144,36 @@ export class GetVolunteerPostsReqDTO {
   sortBy?: "newest" | "oldest" | "views" | "likes";
 }
 
+export class BoundingBoxDto {
+  @Transform(({ value }) => value ? Number(value) : 1)
+  @IsNotEmpty({ message: "North coordinate is required" })
+  @IsNumber({}, { message: "North must be a number" })
+  @Min(-90, { message: "North must be between -90 and 90" })
+  @Max(90, { message: "North must be between -90 and 90" })
+  north!: number;
+ 
+  @Transform(({ value }) => value ? Number(value) : 1)
+  @IsNotEmpty({ message: "South coordinate is required" })
+  @IsNumber({}, { message: "South must be a number" })
+  @Min(-90, { message: "South must be between -90 and 90" })
+  @Max(90, { message: "South must be between -90 and 90" })
+  south!: number;
+
+  @Transform(({ value }) => value ? Number(value) : 1)
+  @IsNotEmpty({ message: "East coordinate is required" })
+  @IsNumber({}, { message: "East must be a number" })
+  @Min(-180, { message: "East must be between -180 and 180" })
+  @Max(180, { message: "East must be between -180 and 180" })
+  east!: number;
+
+  @Transform(({ value }) => value ? Number(value) : 1)
+  @IsNotEmpty({ message: "West coordinate is required" })
+  @IsNumber({}, { message: "West must be a number" })
+  @Min(-180, { message: "West must be between -180 and 180" })
+  @Max(180, { message: "West must be between -180 and 180" })
+  west!: number;
+}
+
 export class GetVolunteerPostsByLocationReqDTO {
   @Transform(({ value }) => (value ? Number(value) : 1))
   @IsOptional()
@@ -157,24 +187,31 @@ export class GetVolunteerPostsByLocationReqDTO {
   @Min(1, { message: "Limit must be at least 1" })
   limit?: number = 10;
 
-  @IsNotEmpty({ message: "Longitude is required" })
+  @Transform(({ value }) => value ? Number(value) : undefined)
+  @IsOptional()
   @IsNumber({}, { message: "Longitude must be a number" })
   @Min(-180, { message: "Longitude must be between -180 and 180" })
   @Max(180, { message: "Longitude must be between -180 and 180" })
-  longitude!: number;
+  longitude?: number;
 
-  @IsNotEmpty({ message: "Latitude is required" })
+  @Transform(({ value }) => value ? Number(value) : undefined)
+  @IsOptional()
   @IsNumber({}, { message: "Latitude must be a number" })
   @Min(-90, { message: "Latitude must be between -90 and 90" })
   @Max(90, { message: "Latitude must be between -90 and 90" })
-  latitude!: number;
-
+  latitude?: number;
+  
+  @Transform(({ value }) => (value ? Number(value) : 10000))
   @IsOptional()
   @IsNumber({}, { message: "Radius must be a number" })
   @Min(100, { message: "Radius must be at least 100 meters" })
   @Max(50000, { message: "Radius cannot exceed 50000 meters" })
-  @Transform(({ value }) => (value ? Number(value) : 10000))
   radiusInMeters?: number = 10000;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => BoundingBoxDto)
+  boundingBox?: BoundingBoxDto;
 
   @IsOptional()
   @IsEnum(Object.values(POST_CATEGORY), {

@@ -32,8 +32,59 @@ export interface ILocalGuideProfileRepository
       isAvailable?: boolean;
       specialties?: string[];
       minRating?: number;
+    },
+    pagination?: {
+      page?: number;
+      limit?: number;
     }
-  ): Promise<ILocalGuideProfileEntity[]>;
+  ): Promise<{
+    guides: Array<{
+      entity: ILocalGuideProfileEntity;
+      userDetails?: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        profileImage?: string;
+      };
+      distance?: number;
+    }>;
+    total: number;
+    currentPage: number;
+    totalPages: number;
+  }>;
+  findByBoundingBox(
+    boundingBox: {
+      north: number;
+      south: number;
+      east: number;
+      west: number;
+    },
+    filters?: {
+      isAvailable?: boolean;
+      specialties?: string[];
+      minRating?: number;
+    },
+    pagination?: {
+      page?: number;
+      limit?: number;
+    }
+  ): Promise<{
+    guides: Array<{
+      entity: ILocalGuideProfileEntity;
+      userDetails?: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        profileImage?: string;
+      };
+      distance?: number;
+    }>;
+    total: number;
+    currentPage: number;
+    totalPages: number;
+  }>;
   updateVerificationStatus(
     profileId: string,
     status: "pending" | "reviewing" | "verified" | "rejected",
@@ -58,4 +109,21 @@ export interface ILocalGuideProfileRepository
   addBadge(profileId: string, badgeId: string): Promise<ILocalGuideProfileEntity | null>;
 
   getBadges(profileId: string): Promise<string[]>;
+  findPublicProfileById(
+    profileId: string
+  ): Promise<
+    | {
+        entity: ILocalGuideProfileEntity;
+        userDetails?: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+          email: string;
+          phone?: string;
+          gender?: string;
+          profileImage?: string;
+        };
+      }
+    | null
+  >;
 }

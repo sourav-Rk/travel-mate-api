@@ -2,6 +2,7 @@ import "reflect-metadata";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { Application } from "express";
+import qs from "qs";
 
 import { config } from "../../../shared/config";
 import {
@@ -33,6 +34,9 @@ export class App {
   }
 
   private configureMiddleware(): void {
+    this._app.set("query parser", (str: string) =>
+      qs.parse(str, { allowDots: true, allowPrototypes: false })
+    );
     this._app.use(
       cors({
         origin: config.client.uri,

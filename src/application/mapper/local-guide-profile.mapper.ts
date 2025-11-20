@@ -1,7 +1,10 @@
 import { ILocalGuideProfileEntity } from "../../domain/entities/local-guide-profile.entity";
 import { ILocalGuideProfileModel } from "../../infrastructure/database/models/local-guide-profile.model";
 import { TVerificationStatus } from "../../shared/constants";
-import { LocalGuideProfileDto } from "../dto/response/local-guide.dto";
+import {
+  LocalGuideProfileDto,
+  LocalGuidePublicProfileDto,
+} from "../dto/response/local-guide.dto";
 
 export type AggregationResult = {
   _id: unknown;
@@ -40,17 +43,17 @@ export type AggregationResult = {
   isAvailable: boolean;
   availabilityNote?: string | null;
   stats: {
-     totalSessions: number;
-  completedSessions: number;
-  averageRating: number;
-  totalRatings: number;
-  totalPosts: number;
-  totalEarnings: number;
-  totalLikes: number;
-  totalViews: number;
-  maxPostLikes: number;
-  maxPostViews: number;
-  completionRate: number;
+    totalSessions: number;
+    completedSessions: number;
+    averageRating: number;
+    totalRatings: number;
+    totalPosts: number;
+    totalEarnings: number;
+    totalLikes: number;
+    totalViews: number;
+    maxPostLikes: number;
+    maxPostViews: number;
+    completionRate: number;
   };
   badges: string[];
   createdAt?: Date;
@@ -62,7 +65,6 @@ export class LocalGuideProfileMapper {
   static toEntity(
     doc: ILocalGuideProfileModel | AggregationResult
   ): ILocalGuideProfileEntity {
-
     let userIdValue: string;
     if (
       typeof doc.userId === "object" &&
@@ -85,7 +87,8 @@ export class LocalGuideProfileMapper {
       verificationDocuments: {
         idProof: doc.verificationDocuments.idProof,
         addressProof: doc.verificationDocuments.addressProof,
-        additionalDocuments: doc.verificationDocuments.additionalDocuments || [],
+        additionalDocuments:
+          doc.verificationDocuments.additionalDocuments || [],
       },
       location: {
         type: doc.location.type as "Point",
@@ -110,11 +113,11 @@ export class LocalGuideProfileMapper {
         totalRatings: doc.stats.totalRatings,
         totalPosts: doc.stats.totalPosts,
         totalEarnings: doc.stats.totalEarnings,
-        completionRate : doc.stats.completionRate,
-        maxPostLikes : doc.stats.maxPostLikes,
-        maxPostViews : doc.stats.maxPostViews,
-        totalLikes : doc.stats.totalLikes,
-        totalViews : doc.stats.totalViews,
+        completionRate: doc.stats.completionRate,
+        maxPostLikes: doc.stats.maxPostLikes,
+        maxPostViews: doc.stats.maxPostViews,
+        totalLikes: doc.stats.totalLikes,
+        totalViews: doc.stats.totalViews,
       },
       badges: doc.badges || [],
       createdAt: doc.createdAt,
@@ -129,6 +132,8 @@ export class LocalGuideProfileMapper {
       firstName: string;
       lastName: string;
       email: string;
+      phone?: string;
+      gender?: string;
       profileImage?: string;
     }
   ): LocalGuideProfileDto {
@@ -157,22 +162,65 @@ export class LocalGuideProfileMapper {
     };
   }
 
-  static extractUserDetails(doc: ILocalGuideProfileModel | AggregationResult): {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    profileImage?: string;
-  } | undefined {
+  static extractUserDetails(doc: ILocalGuideProfileModel | AggregationResult):
+    | {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        phone?: string;
+        gender?: string;
+        profileImage?: string;
+      }
+    | undefined {
     if ("userDetails" in doc && doc.userDetails) {
       return {
         _id: String(doc.userDetails._id),
         firstName: doc.userDetails.firstName,
         lastName: doc.userDetails.lastName,
         email: doc.userDetails.email,
+        phone: (doc as any).userDetails.phone,
+        gender: (doc as any).userDetails.gender,
         profileImage: doc.userDetails.profileImage,
       };
     }
     return undefined;
+  }
+
+  static mapToPublicProfileDto(
+    entity: ILocalGuideProfileEntity,
+    userDetails?: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      phone?: string;
+      gender?: string;
+      profileImage?: string;
+    }
+  ): LocalGuidePublicProfileDto {
+    return {
+      _id: String(entity._id),
+      userId: String(entity.userId),
+      userDetails: {
+        _id: String(userDetails?._id),
+        firstName: userDetails?.firstName || "",
+        lastName: userDetails?.lastName || "",
+        email: userDetails?.email || "N/A",
+        phone: userDetails?.phone || "N/A",
+        gender: userDetails?.gender || "N/A",
+        profileImage: userDetails?.profileImage,
+      },
+      badges: entity.badges,
+      hourlyRate: entity.hourlyRate,
+      isAvailable: entity.isAvailable,
+      languages: entity.languages,
+      location: entity.location,
+      specialties: entity.specialties,
+      stats: entity.stats,
+      availabilityNote: entity.availabilityNote,
+      bio: entity.bio,
+      profileImage: entity.profileImage,
+    };
   }
 }
