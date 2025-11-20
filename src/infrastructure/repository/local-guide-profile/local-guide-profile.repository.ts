@@ -1,3 +1,4 @@
+import { FilterQuery, PipelineStage, Types } from "mongoose";
 import { injectable } from "tsyringe";
 
 import {
@@ -11,7 +12,6 @@ import {
   localGuideProfileDB,
 } from "../../database/models/local-guide-profile.model";
 import { BaseRepository } from "../baseRepository";
-import { FilterQuery, PipelineStage } from "mongoose";
 
 @injectable()
 export class LocalGuideProfileRepository
@@ -163,8 +163,31 @@ export class LocalGuideProfileRepository
       isAvailable?: boolean;
       specialties?: string[];
       minRating?: number;
+    },
+    pagination?: {
+      page?: number;
+      limit?: number;
     }
-  ): Promise<ILocalGuideProfileEntity[]> {
+  ): Promise<{
+    guides: Array<{
+      entity: ILocalGuideProfileEntity;
+      userDetails?: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        profileImage?: string;
+      };
+      distance?: number;
+    }>;
+    total: number;
+    currentPage: number;
+    totalPages: number;
+  }> {
+    const page = Number(pagination?.page) || 1;
+    const limit = Number(pagination?.limit) || 10;
+    const skip = Number((page - 1) * limit);
+
     const query: FilterQuery<ILocalGuideProfileModel> = {
       verificationStatus: "verified",
     };
@@ -181,7 +204,7 @@ export class LocalGuideProfileRepository
       query["stats.averageRating"] = { $gte: filters.minRating };
     }
 
-    const guides = await localGuideProfileDB.aggregate([
+    const pipeline: PipelineStage[] = [
       {
         $geoNear: {
           near: {
@@ -206,11 +229,190 @@ export class LocalGuideProfileRepository
         $unwind: "$userDetails",
       },
       {
-        $sort: { distance: 1 },
+        $facet: {
+          guides: [
+            { $sort: { distance: 1 } },
+            { $skip: skip },
+            { $limit: limit },
+          ],
+          total: [{ $count: "count" }],
+        },
       },
-    ]);
+    ];
 
-    return guides.map((guide) => LocalGuideProfileMapper.toEntity(guide));
+    const result = await localGuideProfileDB
+      .aggregate<{
+        guides: Array<ILocalGuideProfileModel & { distance?: number }>;
+        total: Array<{ count: number }>;
+      }>(pipeline)
+      .exec();
+
+    const guides = result[0]?.guides || [];
+    const total = result[0]?.total[0]?.count || 0;
+
+    return {
+      guides: guides.map((guide) => ({
+        entity: LocalGuideProfileMapper.toEntity(guide),
+        userDetails: LocalGuideProfileMapper.extractUserDetails(guide),
+        distance: guide.distance,
+      })),
+      total,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+    };
+  }
+
+  async findByBoundingBox(
+    boundingBox: {
+      north: number;
+      south: number;
+      east: number;
+      west: number;
+    },
+    filters?: {
+      isAvailable?: boolean;
+      specialties?: string[];
+      minRating?: number;
+    },
+    pagination?: {
+      page?: number;
+      limit?: number;
+    }
+  ): Promise<{
+    guides: Array<{
+      entity: ILocalGuideProfileEntity;
+      userDetails?: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        profileImage?: string;
+      };
+      distance?: number;
+    }>;
+    total: number;
+    currentPage: number;
+    totalPages: number;
+  }> {
+    const page = pagination?.page || 1;
+    const limit = pagination?.limit || 10;
+    const skip = (page - 1) * limit;
+
+    const query: FilterQuery<ILocalGuideProfileModel> = {
+      verificationStatus: "verified",
+      "location.coordinates": {
+        $geoWithin: {
+          $box: [
+            [boundingBox.west, boundingBox.south],
+            [boundingBox.east, boundingBox.north],
+          ],
+        },
+      },
+    };
+
+    if (filters?.isAvailable !== undefined) {
+      query.isAvailable = filters.isAvailable;
+    }
+
+    if (filters?.specialties && filters.specialties.length > 0) {
+      query.specialties = { $in: filters.specialties };
+    }
+
+    if (filters?.minRating !== undefined) {
+      query["stats.averageRating"] = { $gte: filters.minRating };
+    }
+
+    // Calculate center point for distance calculation
+    const centerLongitude = (boundingBox.west + boundingBox.east) / 2;
+    const centerLatitude = (boundingBox.north + boundingBox.south) / 2;
+
+    const pipeline: PipelineStage[] = [
+      {
+        $match: query,
+      },
+      {
+        $addFields: {
+          coordLongitude: { $arrayElemAt: ["$location.coordinates", 0] },
+          coordLatitude: { $arrayElemAt: ["$location.coordinates", 1] },
+        },
+      },
+      {
+        $addFields: {
+          distance: {
+            $multiply: [
+              6371000, // Earth radius in meters
+              {
+                $acos: {
+                  $add: [
+                    {
+                      $multiply: [
+                        { $sin: { $degreesToRadians: "$coordLatitude" } },
+                        { $sin: { $degreesToRadians: centerLatitude } },
+                      ],
+                    },
+                    {
+                      $multiply: [
+                        { $cos: { $degreesToRadians: "$coordLatitude" } },
+                        { $cos: { $degreesToRadians: centerLatitude } },
+                        {
+                          $cos: {
+                            $degreesToRadians: {
+                              $subtract: ["$coordLongitude", centerLongitude],
+                            },
+                          },
+                        },
+                      ],
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "clients",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userDetails",
+        },
+      },
+      {
+        $unwind: "$userDetails",
+      },
+      {
+        $facet: {
+          guides: [
+            { $sort: { distance: 1 } },
+            { $skip: skip },
+            { $limit: limit },
+          ],
+          total: [{ $count: "count" }],
+        },
+      },
+    ];
+
+    const result = await localGuideProfileDB
+      .aggregate<{
+        guides: Array<ILocalGuideProfileModel & { distance?: number }>;
+        total: Array<{ count: number }>;
+      }>(pipeline)
+      .exec();
+
+    const guides = result[0]?.guides || [];
+    const total = result[0]?.total[0]?.count || 0;
+
+    return {
+      guides: guides.map((guide) => ({
+        entity: LocalGuideProfileMapper.toEntity(guide),
+        userDetails: LocalGuideProfileMapper.extractUserDetails(guide),
+        distance: guide.distance,
+      })),
+      total,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
   async updateVerificationStatus(
@@ -351,5 +553,58 @@ export class LocalGuideProfileRepository
 
     if (!profile) return [];
     return profile.badges || [];
+  }
+
+  async findPublicProfileById(
+    profileId: string
+  ): Promise<
+    | {
+        entity: ILocalGuideProfileEntity;
+        userDetails?: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+          email: string;
+          phone?: string;
+          gender?: string;
+          profileImage?: string;
+        };
+      }
+    | null
+  > {
+    if (!Types.ObjectId.isValid(profileId)) {
+      return null;
+    }
+
+    const [profile] = await localGuideProfileDB
+      .aggregate<ILocalGuideProfileModel & { userDetails?: unknown }>([
+        {
+          $match: { _id: new Types.ObjectId(profileId) },
+        },
+        {
+          $lookup: {
+            from: "clients",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userDetails",
+          },
+        },
+        {
+          $unwind: {
+            path: "$userDetails",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+      ])
+      .exec();
+
+    if (!profile) {
+      return null;
+    }
+
+    return {
+      entity: LocalGuideProfileMapper.toEntity(profile),
+      userDetails: LocalGuideProfileMapper.extractUserDetails(profile),
+    };
   }
 }

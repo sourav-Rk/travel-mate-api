@@ -17,9 +17,6 @@ export class GetVolunteerPostsUsecase implements IGetVolunteerPostsUsecase {
     const page = Number(filters.page) || 1;
     const limit = Number(filters?.limit) > 0 ? Number(filters.limit) : 10;
 
-
-    console.log(filters)
-
     const postFilters = {
       status: filters.status,
       category: filters.category,

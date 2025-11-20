@@ -45,7 +45,7 @@ export class HandleStripeWebHookUsecase implements IHandleStripeWebHookUsecase {
     signature: string,
     endpointSecret: string
   ): Promise<void> {
-    console.log("webhook triggered!");
+  
 
     const event = await this._paymentService.verifyWebhookSignature(
       payload,
@@ -55,7 +55,6 @@ export class HandleStripeWebHookUsecase implements IHandleStripeWebHookUsecase {
 
     switch (event.type) {
       case "checkout.session.completed": {
-        console.log("checkout session completed ddddd");
         const session = event.data.object as Stripe.Checkout.Session;
         const bookingId = session.metadata?.bookingId;
         const type = session.metadata?.type;

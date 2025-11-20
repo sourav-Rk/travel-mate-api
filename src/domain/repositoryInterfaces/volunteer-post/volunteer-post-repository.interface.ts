@@ -22,6 +22,13 @@ export interface ILocationQuery {
   radiusInMeters: number;
 }
 
+export interface IBoundingBox {
+  north: number;
+  south: number;
+  east: number;
+  west: number;
+}
+
 export interface IVolunteerPostRepository
   extends IBaseRepository<IVolunteerPostEntity> {
   findByLocalGuideProfileId(
@@ -37,6 +44,17 @@ export interface IVolunteerPostRepository
 
   findByLocation(
     locationQuery: ILocationQuery,
+    filters?: IPostFilters,
+    pagination?: IPaginationOptions
+  ): Promise<{
+    posts: Array<IVolunteerPostEntity & { distance?: number }>;
+    total: number;
+    currentPage: number;
+    totalPages: number;
+  }>;
+  findByBoundingBox(
+    boundingBox: IBoundingBox,
+    centerPoint: { longitude: number; latitude: number },
     filters?: IPostFilters,
     pagination?: IPaginationOptions
   ): Promise<{

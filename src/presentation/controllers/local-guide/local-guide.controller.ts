@@ -1,13 +1,17 @@
+import { plainToInstance } from "class-transformer";
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 
+import { GetLocalGuidesByLocationReqDTO } from "../../../application/dto/request/local-guide.dto";
+import { IGetLocalGuideProfileUsecase } from "../../../application/usecase/interfaces/local-guide/get-local-guide-profile-usecase.interface";
+import { IGetLocalGuidePublicProfileUsecase } from "../../../application/usecase/interfaces/local-guide/get-local-guide-public-profile-usecase.interface";
+import { IGetLocalGuidesByLocationUsecase } from "../../../application/usecase/interfaces/local-guide/get-local-guides-by-location.interface";
 import { IGetPendingVerificationsUsecase } from "../../../application/usecase/interfaces/local-guide/get-pending-verifications-usecase.interface";
 import { IRejectLocalGuideUsecase } from "../../../application/usecase/interfaces/local-guide/reject-local-guide-usecase.interface";
 import { IRequestLocalGuideVerificationUsecase } from "../../../application/usecase/interfaces/local-guide/request-local-guide-verification-usecase.interface";
-import { IVerifyLocalGuideUsecase } from "../../../application/usecase/interfaces/local-guide/verify-local-guide-usecase.interface";
-import { IGetLocalGuideProfileUsecase } from "../../../application/usecase/interfaces/local-guide/get-local-guide-profile-usecase.interface";
 import { IUpdateLocalGuideAvailabilityUsecase } from "../../../application/usecase/interfaces/local-guide/update-local-guide-availability-usecase.interface";
 import { IUpdateLocalGuideProfileUsecase } from "../../../application/usecase/interfaces/local-guide/update-local-guide-profile-usecase.interface";
+import { IVerifyLocalGuideUsecase } from "../../../application/usecase/interfaces/local-guide/verify-local-guide-usecase.interface";
 import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import {
   HTTP_STATUS,
@@ -34,7 +38,11 @@ export class LocalGuideController implements ILocalGuideController {
     @inject("IUpdateLocalGuideAvailabilityUsecase")
     private _updateLocalGuideAvailabilityUsecase: IUpdateLocalGuideAvailabilityUsecase,
     @inject("IUpdateLocalGuideProfileUsecase")
-    private _updateLocalGuideProfileUsecase: IUpdateLocalGuideProfileUsecase
+    private _updateLocalGuideProfileUsecase: IUpdateLocalGuideProfileUsecase,
+    @inject("IGetLocalGuidesByLocationUsecase")
+    private _getLocalGuidesByLocationUsecase: IGetLocalGuidesByLocationUsecase,
+    @inject("IGetLocalGuidePublicProfileUsecase")
+    private _getLocalGuidePublicProfileUsecase: IGetLocalGuidePublicProfileUsecase
   ) {}
 
   async requestVerification(req: Request, res: Response): Promise<void> {
@@ -179,6 +187,38 @@ export class LocalGuideController implements ILocalGuideController {
       res,
       HTTP_STATUS.OK,
       SUCCESS_MESSAGE.LOCAL_GUIDE.PROFILE_UPDATED
+    );
+  }
+
+  async getLocalGuidesByLocation(req: Request, res: Response): Promise<void> {
+    const filters = plainToInstance(GetLocalGuidesByLocationReqDTO, req.query);
+    const result = await this._getLocalGuidesByLocationUsecase.execute(filters);
+
+    ResponseHelper.paginated(
+      res,
+      result.guides,
+      result.total,
+      result.currentPage,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      "guides"
+    );
+  }
+
+  async getLocalGuidePublicProfile(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    const { profileId } = req.params;
+
+    const profile =
+      await this._getLocalGuidePublicProfileUsecase.execute(profileId);
+
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      profile,
+      "profile"
     );
   }
 }
