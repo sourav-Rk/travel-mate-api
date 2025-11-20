@@ -29,60 +29,14 @@ export class GetVendorSalesReportUsecase implements IGetVendorSalesReportUsecase
     packageId?: string,
     bookingStatus?: string,
   ): Promise<VendorSalesReportDto> {
-
-    let startDateObj: Date | undefined = undefined;
-    let endDateObj: Date | undefined = undefined;
-    
-    if (startDate) {
-      const parsedDate = new Date(startDate);
-      if (!isNaN(parsedDate.getTime())) {
-        startDateObj = new Date(parsedDate);
-        startDateObj.setUTCHours(0, 0, 0, 0);
-      }
-    }
-    
-    if (endDate) {
-      const parsedDate = new Date(endDate);
-      if (!isNaN(parsedDate.getTime())) {
-        endDateObj = new Date(parsedDate);
-        endDateObj.setUTCHours(23, 59, 59, 999);
-      }
-    }
-
     const bookingStatusEnum = bookingStatus ? (bookingStatus as BOOKINGSTATUS) : undefined;
 
-    if (!startDateObj && !endDateObj && period && period !== "custom") {
-      const now = new Date();
-      const utcNow = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
-      
-      switch (period) {
-        case "daily":      
-          startDateObj = new Date(Date.UTC(utcNow.getUTCFullYear(), utcNow.getUTCMonth(), utcNow.getUTCDate(), 0, 0, 0, 0));
-          endDateObj = new Date(Date.UTC(utcNow.getUTCFullYear(), utcNow.getUTCMonth(), utcNow.getUTCDate(), 23, 59, 59, 999));
-          break;
-        case "weekly":        
-          const dayOfWeek = utcNow.getUTCDay();
-          const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; 
-          const startOfWeek = new Date(utcNow);
-          startOfWeek.setUTCDate(utcNow.getUTCDate() - daysFromMonday);
-          startDateObj = new Date(Date.UTC(startOfWeek.getUTCFullYear(), startOfWeek.getUTCMonth(), startOfWeek.getUTCDate(), 0, 0, 0, 0));
-          const endOfWeek = new Date(utcNow);
-          endOfWeek.setUTCDate(utcNow.getUTCDate() + (6 - daysFromMonday));
-          endDateObj = new Date(Date.UTC(endOfWeek.getUTCFullYear(), endOfWeek.getUTCMonth(), endOfWeek.getUTCDate(), 23, 59, 59, 999));
-          break;
-        case "monthly":
-         
-          startDateObj = new Date(Date.UTC(utcNow.getUTCFullYear(), utcNow.getUTCMonth(), 1, 0, 0, 0, 0));
-          
-          endDateObj = new Date(Date.UTC(utcNow.getUTCFullYear(), utcNow.getUTCMonth() + 1, 0, 23, 59, 59, 999));
-          break;
-        case "yearly":
-          
-          startDateObj = new Date(Date.UTC(utcNow.getUTCFullYear(), 0, 1, 0, 0, 0, 0));
-          endDateObj = new Date(Date.UTC(utcNow.getUTCFullYear(), 11, 31, 23, 59, 59, 999));
-          break;
-      }
-    }
+    // Calculate date range based on period and provided dates
+    const { startDate: startDateObj, endDate: endDateObj } = this._getPeriodDateRange(
+      period,
+      startDate,
+      endDate
+    );
 
     const [
       totalBookings,
@@ -217,5 +171,186 @@ export class GetVendorSalesReportUsecase implements IGetVendorSalesReportUsecase
       latestBookings: latestBookingsMapped,
     };
   }
-}
 
+  /**
+   * Calculates the start and end dates for a given period
+   * @param period - The period type (daily, weekly, monthly, yearly, custom)
+   * @param inputStartDate - Optional start date string
+   * @param inputEndDate - Optional end date string
+   * @returns An object containing startDate and endDate
+   */
+  private _getPeriodDateRange(
+    period: VENDOR_SALES_REPORT_PERIOD,
+    inputStartDate?: string,
+    inputEndDate?: string
+  ): { startDate: Date | undefined; endDate: Date | undefined } {
+    // Normalize empty strings to undefined
+    const normalizedStartDate = inputStartDate && inputStartDate.trim() !== "" ? inputStartDate : undefined;
+    const normalizedEndDate = inputEndDate && inputEndDate.trim() !== "" ? inputEndDate : undefined;
+
+    // If period is "custom", only use provided dates
+    if (period === "custom") {
+      let startDate: Date | undefined = undefined;
+      let endDate: Date | undefined = undefined;
+
+      if (normalizedStartDate) {
+        const parsedDate = new Date(normalizedStartDate);
+        if (!isNaN(parsedDate.getTime())) {
+          startDate = new Date(parsedDate);
+          startDate.setUTCHours(0, 0, 0, 0);
+        }
+      }
+
+      if (normalizedEndDate) {
+        const parsedDate = new Date(normalizedEndDate);
+        if (!isNaN(parsedDate.getTime())) {
+          endDate = new Date(parsedDate);
+          endDate.setUTCHours(23, 59, 59, 999);
+        }
+      }
+      return { startDate, endDate };
+    }
+
+    // For non-custom periods, if both dates are explicitly provided and valid, use them
+    if (normalizedStartDate && normalizedEndDate) {
+      const parsedStartDate = new Date(normalizedStartDate);
+      const parsedEndDate = new Date(normalizedEndDate);
+
+      if (!isNaN(parsedStartDate.getTime()) && !isNaN(parsedEndDate.getTime())) {
+        const startDate = new Date(parsedStartDate);
+        startDate.setUTCHours(0, 0, 0, 0);
+        const endDate = new Date(parsedEndDate);
+        endDate.setUTCHours(23, 59, 59, 999);
+        return { startDate, endDate };
+      }
+    }
+
+    // Calculate date range based on period
+    // At this point, period cannot be "custom" because we returned early
+    const dateRange = this._calculateDateRangeForPeriod(
+      period as Exclude<VENDOR_SALES_REPORT_PERIOD, "custom">
+    );
+    return { startDate: dateRange.startDate, endDate: dateRange.endDate };
+  }
+
+  /**
+   * Calculates the start and end dates for a given period
+   * @param period - The period type (daily, weekly, monthly, yearly)
+   * @returns An object containing startDate and endDate
+   */
+  private _calculateDateRangeForPeriod(
+    period: Exclude<VENDOR_SALES_REPORT_PERIOD, "custom">
+  ): { startDate: Date; endDate: Date } {
+    const now = new Date();
+    const utcNow = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
+    );
+
+    switch (period) {
+      case "daily": {
+        const startDate = new Date(
+          Date.UTC(
+            utcNow.getUTCFullYear(),
+            utcNow.getUTCMonth(),
+            utcNow.getUTCDate(),
+            0,
+            0,
+            0,
+            0
+          )
+        );
+        const endDate = new Date(
+          Date.UTC(
+            utcNow.getUTCFullYear(),
+            utcNow.getUTCMonth(),
+            utcNow.getUTCDate(),
+            23,
+            59,
+            59,
+            999
+          )
+        );
+        return { startDate, endDate };
+      }
+
+      case "weekly": {
+        const dayOfWeek = utcNow.getUTCDay();
+        const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+        const startOfWeek = new Date(utcNow);
+        startOfWeek.setUTCDate(utcNow.getUTCDate() - daysFromMonday);
+        const startDate = new Date(
+          Date.UTC(
+            startOfWeek.getUTCFullYear(),
+            startOfWeek.getUTCMonth(),
+            startOfWeek.getUTCDate(),
+            0,
+            0,
+            0,
+            0
+          )
+        );
+        const endOfWeek = new Date(utcNow);
+        endOfWeek.setUTCDate(utcNow.getUTCDate() + (6 - daysFromMonday));
+        const endDate = new Date(
+          Date.UTC(
+            endOfWeek.getUTCFullYear(),
+            endOfWeek.getUTCMonth(),
+            endOfWeek.getUTCDate(),
+            23,
+            59,
+            59,
+            999
+          )
+        );
+        return { startDate, endDate };
+      }
+
+      case "monthly": {
+        const startDate = new Date(
+          Date.UTC(utcNow.getUTCFullYear(), utcNow.getUTCMonth(), 1, 0, 0, 0, 0)
+        );
+        const endDate = new Date(
+          Date.UTC(
+            utcNow.getUTCFullYear(),
+            utcNow.getUTCMonth() + 1,
+            0,
+            23,
+            59,
+            59,
+            999
+          )
+        );
+        return { startDate, endDate };
+      }
+
+      case "yearly": {
+        const startDate = new Date(
+          Date.UTC(utcNow.getUTCFullYear(), 0, 1, 0, 0, 0, 0)
+        );
+        const endDate = new Date(
+          Date.UTC(utcNow.getUTCFullYear(), 11, 31, 23, 59, 59, 999)
+        );
+        return { startDate, endDate };
+      }
+
+      default: {
+        // Fallback to monthly if period is invalid
+        const startDate = new Date(
+          Date.UTC(utcNow.getUTCFullYear(), utcNow.getUTCMonth(), 1, 0, 0, 0, 0)
+        );
+        const endDate = new Date(
+          Date.UTC(
+            utcNow.getUTCFullYear(),
+            utcNow.getUTCMonth() + 1,
+            0,
+            23,
+            59,
+            59,
+            999
+          )
+        );
+        return { startDate, endDate };
+      }
+    }
+  }
+}

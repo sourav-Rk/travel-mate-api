@@ -18,7 +18,7 @@ export interface NotificationData {
     | "message"
     | "booking"
     | "payment";
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 @injectable()
@@ -80,7 +80,6 @@ export class RealTimeNotificationService
           notification
         );
       }
-
     } catch (error) {
       console.error(`Failed to send notification to user ${userId}:`, error);
       throw error;
@@ -135,7 +134,6 @@ export class RealTimeNotificationService
           notification
         );
       }
-
     } catch (error) {
       console.error(`Failed to send notification to users:`, error);
       throw error;
@@ -295,27 +293,3 @@ export class RealTimeNotificationService
     });
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

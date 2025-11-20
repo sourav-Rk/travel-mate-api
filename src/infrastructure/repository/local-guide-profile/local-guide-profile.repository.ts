@@ -478,7 +478,7 @@ export class LocalGuideProfileRepository
 
     
     Object.keys(data).forEach((key) => {
-      const value = (data as any)[key];
+      const value =  data[key as keyof Partial<ILocalGuideProfileEntity>];
       if (value !== undefined) {
         updateData[key] = value;
       }
@@ -509,7 +509,7 @@ export class LocalGuideProfileRepository
 
     // Build stats update object
     Object.keys(stats).forEach((key) => {
-      const value = (stats as any)[key];
+      const value =  stats[key as keyof Partial<ILocalGuideProfileEntity["stats"]>];
       if (value !== undefined) {
         updateData[`stats.${key}`] = value;
       }

@@ -61,6 +61,26 @@ export type AggregationResult = {
   distance?: number;
 };
 
+interface UserDetailsWithOptionalFields {
+  _id: unknown;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+  gender?: string;
+  profileImage?: string;
+}
+
+function hasUserDetails(obj: unknown): obj is UserDetailsWithOptionalFields {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'firstName' in obj &&
+    'lastName' in obj &&
+    'email' in obj
+  );
+}
+
 export class LocalGuideProfileMapper {
   static toEntity(
     doc: ILocalGuideProfileModel | AggregationResult
@@ -173,14 +193,14 @@ export class LocalGuideProfileMapper {
         profileImage?: string;
       }
     | undefined {
-    if ("userDetails" in doc && doc.userDetails) {
+    if ("userDetails" in doc && doc.userDetails && hasUserDetails(doc.userDetails)) {
       return {
         _id: String(doc.userDetails._id),
         firstName: doc.userDetails.firstName,
         lastName: doc.userDetails.lastName,
         email: doc.userDetails.email,
-        phone: (doc as any).userDetails.phone,
-        gender: (doc as any).userDetails.gender,
+        phone: doc.userDetails.phone,
+        gender: doc.userDetails.gender,
         profileImage: doc.userDetails.profileImage,
       };
     }

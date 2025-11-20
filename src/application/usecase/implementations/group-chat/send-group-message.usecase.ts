@@ -90,8 +90,6 @@ export class SendGroupMessageUsecase implements ISendGroupMessageUsecase {
       updatedAt: new Date(),
     };
 
-
-
     const groupMessage = await this._groupMessageRepository.save(messageData);
 
     let senderName = "Unknown User";
@@ -146,9 +144,15 @@ export class SendGroupMessageUsecase implements ISendGroupMessageUsecase {
     });
 
     const messageEntity: IGroupMessageEntity & { senderName: string } = {
-      _id: (groupMessage as any)._id?.toString() || (groupMessage as any)._id,
-      groupChatId: (groupMessage as any).groupChatId?.toString() || (groupMessage as any).groupChatId || data.groupChatId,
-      senderId: (groupMessage as any).senderId?.toString() || (groupMessage as any).senderId || data.senderId,
+      _id: groupMessage._id?.toString() || groupMessage._id,
+      groupChatId:
+        groupMessage.groupChatId?.toString() ||
+        groupMessage?.groupChatId ||
+        data.groupChatId,
+      senderId:
+        groupMessage.senderId?.toString() ||
+        groupMessage.senderId ||
+        data.senderId,
       senderType: groupMessage.senderType,
       message: groupMessage.message || "",
       mediaAttachments: groupMessage.mediaAttachments || [],

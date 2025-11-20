@@ -35,7 +35,6 @@ export class VendorSalesReportController implements IVendorSalesReportController
       endDate,
       packageId,
       bookingStatus,
-      paymentMode
     );
 
     ResponseHelper.success(

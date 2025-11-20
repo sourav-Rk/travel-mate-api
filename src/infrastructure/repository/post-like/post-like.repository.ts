@@ -76,7 +76,7 @@ export class PostLikeRepository extends BaseRepository<IPostLikeModel,IPostLikeE
     return await postLikeDB.countDocuments({ postId }).exec();
   }
 
-  private toEntity(doc: any): IPostLikeEntity {
+  private toEntity(doc: IPostLikeModel): IPostLikeEntity {
     return {
       _id: doc._id.toString(),
       userId: doc.userId.toString(),

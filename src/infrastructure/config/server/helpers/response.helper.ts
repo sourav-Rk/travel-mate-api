@@ -1,25 +1,6 @@
 
+
 import { Response } from "express";
-
-import { ApiResponse } from "../../../../application/dto/response/api-response-model";
-
-type SuccessResponse<T = unknown> = {
-  success: true;
-  message?: string;
-} & (T extends undefined ? {} : { data: T });
-
-type PaginatedSuccessResponse<T = unknown> = {
-  success: true;
-  message?: string;
-  data: T;
-  currentPage: number;
-  totalPages: number;
-};
-
-type ErrorResponse = {
-  success: false;
-  message: string;
-};
 
 export class ResponseHelper {
   static success<T>(
@@ -28,12 +9,17 @@ export class ResponseHelper {
     message?: string,
     payload?: T,
     key: string = "data"
-  ): Response<ApiResponse> {
-    const responseBody: any = { success: true, message };
-    if (payload !== undefined) {
-      responseBody[key] = payload;
-    }
-    return res.status(statusCode).json(responseBody);
+  ): Response {
+    const baseResponse = {
+      success: true as const,
+      ...(message && { message })
+    };
+
+    const responseWithPayload = payload !== undefined 
+      ? { ...baseResponse, [key]: payload }
+      : baseResponse;
+
+    return res.status(statusCode).json(responseWithPayload);
   }
 
   static paginated<T>(
@@ -43,22 +29,22 @@ export class ResponseHelper {
     currentPage: number,
     message?: string,
     dataKey: string = "data"
-  ): Response<ApiResponse> {
-    const responseBody: any = {
-      success: true,
+  ): Response {
+    const responseBody = {
+      success: true as const,
       [dataKey]: data,
       currentPage,
       totalPages,
+      ...(message && { message })
     };
-
-    if (message) {
-      responseBody.message = message;
-    }
 
     return res.status(200).json(responseBody);
   }
 
-  static error(res: Response, message: string, statusCode: number = 500) {
-    return res.status(statusCode).json({ success: false, message });
+  static error(res: Response, message: string, statusCode: number = 500): Response {
+    return res.status(statusCode).json({ 
+      success: false as const, 
+      message 
+    });
   }
 }

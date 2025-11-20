@@ -146,7 +146,7 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
             groupChatId: String(groupMessage.groupChatId || groupChatId),
             senderId: String(groupMessage.senderId || senderId),
             senderType: groupMessage.senderType,
-            senderName: (groupMessage as any).senderName || "Unknown",
+            senderName: String((groupMessage as { senderName?: string }).senderName || "Unknown"),
             message: groupMessage.message || "",
             mediaAttachments: groupMessage.mediaAttachments || [],
             messageType: groupMessage.messageType || "text",
