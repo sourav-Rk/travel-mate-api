@@ -4,10 +4,10 @@ import { NotFoundError } from "../../../domain/errors/notFoundError";
 import { IBookingRepository } from "../../../domain/repositoryInterfaces/booking/booking-repository.interface";
 import { IPackageRepository } from "../../../domain/repositoryInterfaces/package/package-repository.interface";
 import { IWalletRepository } from "../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
+import { ERROR_MESSAGE } from "../../../shared/constants";
 import { IAdminPaymentService } from "../interfaces/admin-payment-service.interface";
 import { IRevenueDistributionService } from "../interfaces/revenue-distribution-service.interface";
 import { IVendorPaymentService } from "../interfaces/vendor-payment-service.interface";
-import { ERROR_MESSAGE } from "../../../shared/constants";
 
 @injectable()
 export class RevenueDistributionService implements IRevenueDistributionService {

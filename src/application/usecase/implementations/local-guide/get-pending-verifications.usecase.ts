@@ -2,9 +2,9 @@ import { inject, injectable } from "tsyringe";
 
 import { PendingVerificationsResponseDto } from "../../../../application/dto/response/local-guide.dto";
 import { LocalGuideProfileMapper } from "../../../../application/mapper/local-guide-profile.mapper";
+import { ILocalGuideProfileRepository } from "../../../../domain/repositoryInterfaces/local-guide-profile/local-guide-profile-repository.interface";
 import { TVerificationStatus } from "../../../../shared/constants";
 import { IGetPendingVerificationsUsecase } from "../../interfaces/local-guide/get-pending-verifications-usecase.interface";
-import { ILocalGuideProfileRepository } from "../../../../domain/repositoryInterfaces/local-guide-profile/local-guide-profile-repository.interface";
 
 @injectable()
 export class GetPendingVerificationsUsecase

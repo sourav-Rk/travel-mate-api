@@ -1,13 +1,13 @@
 import { inject, injectable } from "tsyringe";
 
-import { DashboardStatsDto } from "../../../dto/response/dashboard.dto";
-import { DASHBOARD_PERIOD } from "../../../dto/request/admin.dto";
 import { IBookingRepository } from "../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
+import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
 import { IVendorRepository } from "../../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
 import { IWalletTransactionsRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-transactions-repository.interface";
-import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
-import { IGetDashboardStatsUsecase } from "../../interfaces/admin/get-dashboard-stats-usecase.interface";
+import { DASHBOARD_PERIOD } from "../../../dto/request/admin.dto";
+import { DashboardStatsDto } from "../../../dto/response/dashboard.dto";
 import { DashboardMapper } from "../../../mapper/dashboard.mapper";
+import { IGetDashboardStatsUsecase } from "../../interfaces/admin/get-dashboard-stats-usecase.interface";
 
 @injectable()
 export class GetDashboardStatsUsecase implements IGetDashboardStatsUsecase {

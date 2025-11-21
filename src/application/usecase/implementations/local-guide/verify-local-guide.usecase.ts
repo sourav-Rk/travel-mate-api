@@ -10,7 +10,6 @@ import {
   HTTP_STATUS,
   VERIFICATION_STATUS,
 } from "../../../../shared/constants";
-
 import { IVerifyLocalGuideUsecase } from "../../interfaces/local-guide/verify-local-guide-usecase.interface";
 
 @injectable()

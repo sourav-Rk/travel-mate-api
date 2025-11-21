@@ -7,9 +7,26 @@ import {
   UpdatePasswordReqDTO,
 } from "../../../application/dto/request/client.dto";
 import { GetGuideDetailsForClientReqDTO } from "../../../application/dto/request/guide.dto";
+import {
+  AcceptQuoteDto,
+  CreateQuoteDto,
+  DeclineQuoteDto,
+} from "../../../application/dto/request/local-guide-booking.dto";
+import {
+  GetLocalGuidesByLocationReqDTO,
+  RequestLocalGuideVerificationReqDTO,
+  UpdateLocalGuideAvailabilityReqDTO,
+  UpdateLocalGuideProfileReqDTO,
+} from "../../../application/dto/request/local-guide.dto";
 import { MarkReadNotificationReqDTO } from "../../../application/dto/request/notification.dto";
 import { BookingPaymentReqDTO } from "../../../application/dto/request/payment.dto";
 import { AddReviewReqDTO } from "../../../application/dto/request/review.dto";
+import {
+  CreateVolunteerPostReqDTO,
+  GetVolunteerPostsReqDTO,
+  GetVolunteerPostsByLocationReqDTO,
+  SearchVolunteerPostsReqDTO,
+} from "../../../application/dto/request/volunteer-post.dto";
 import {
   blockMiddleware,
   chatController,
@@ -31,29 +48,12 @@ import {
   localGuideBookingController,
   badgeController,
 } from "../../../infrastructure/dependencyInjection/resolve";
-import {
-  GetLocalGuidesByLocationReqDTO,
-  RequestLocalGuideVerificationReqDTO,
-  UpdateLocalGuideAvailabilityReqDTO,
-  UpdateLocalGuideProfileReqDTO,
-} from "../../../application/dto/request/local-guide.dto";
-import {
-  CreateVolunteerPostReqDTO,
-  GetVolunteerPostsReqDTO,
-  GetVolunteerPostsByLocationReqDTO,
-  SearchVolunteerPostsReqDTO,
-} from "../../../application/dto/request/volunteer-post.dto";
 import { asyncHandler } from "../../../shared/async-handler";
 import { authorizeRole, verifyAuth } from "../../middlewares/auth.middleware";
 import { validationMiddleware } from "../../middlewares/validation.middleware";
 import { BaseRoute } from "../base.route";
 import { CommonUploadRoutes } from "../common/common-upload.route";
 import { FcmTokenRoutes } from "../fcmToken/fcmToken.route";
-import {
-  AcceptQuoteDto,
-  CreateQuoteDto,
-  DeclineQuoteDto,
-} from "../../../application/dto/request/local-guide-booking.dto";
 
 @injectable()
 export class ClientRoute extends BaseRoute {

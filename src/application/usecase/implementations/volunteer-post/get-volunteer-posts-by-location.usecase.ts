@@ -3,8 +3,8 @@ import { inject, injectable } from "tsyringe";
 import { GetVolunteerPostsByLocationReqDTO } from "../../../../application/dto/request/volunteer-post.dto";
 import { VolunteerPostListDto } from "../../../../application/dto/response/volunteer-post.dto";
 import { IVolunteerPostRepository } from "../../../../domain/repositoryInterfaces/volunteer-post/volunteer-post-repository.interface";
-import { IGetVolunteerPostsByLocationUsecase } from "../../interfaces/volunteer-post/get-volunteer-posts-by-location-usecase.interface";
 import { VolunteerPostMapper } from "../../../mapper/volunteer-post.mapper";
+import { IGetVolunteerPostsByLocationUsecase } from "../../interfaces/volunteer-post/get-volunteer-posts-by-location-usecase.interface";
 
 @injectable()
 export class GetVolunteerPostsByLocationUsecase

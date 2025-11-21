@@ -1,3 +1,4 @@
+import { Type } from "class-transformer";
 import {
   IsDateString,
   IsNotEmpty,
@@ -7,7 +8,6 @@ import {
   Min,
   ValidateNested,
 } from "class-validator";
-import { Type } from "class-transformer";
 
 export class QuoteLocationDto {
   @IsOptional()
@@ -77,6 +77,7 @@ export class DeclineQuoteDto {
   @IsString()
   reason?: string;
 }
+
 
 
 

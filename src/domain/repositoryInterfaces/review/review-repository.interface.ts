@@ -1,4 +1,4 @@
-import { ReviewAggregateResult, ReviewListWithUserDetailsDto } from "../../../application/dto/response/reviewDto";
+import { ReviewAggregateResult } from "../../../application/dto/response/reviewDto";
 import { IReviewEntity } from "../../entities/review.entity";
 import { IBaseRepository } from "../baseRepository.interface";
 

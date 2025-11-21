@@ -8,9 +8,9 @@ import { ILocalGuideProfileRepository } from "../../../../domain/repositoryInter
 import { IPostLikeRepository } from "../../../../domain/repositoryInterfaces/post-like/post-like-repository.interface";
 import { IVolunteerPostRepository } from "../../../../domain/repositoryInterfaces/volunteer-post/volunteer-post-repository.interface";
 import { ERROR_MESSAGE } from "../../../../shared/constants";
-import { IGetVolunteerPostUsecase } from "../../interfaces/volunteer-post/get-volunteer-post-usecase.interface";
 import { VolunteerPostMapper } from "../../../mapper/volunteer-post.mapper";
 import { IUpdateLocalGuideStatsUsecase } from "../../interfaces/badge/update-stats.interface";
+import { IGetVolunteerPostUsecase } from "../../interfaces/volunteer-post/get-volunteer-post-usecase.interface";
 
 @injectable()
 export class GetVolunteerPostUsecase implements IGetVolunteerPostUsecase {

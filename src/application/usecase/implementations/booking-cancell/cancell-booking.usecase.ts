@@ -7,6 +7,7 @@ import { ValidationError } from "../../../../domain/errors/validationError";
 import { IBookingRepository } from "../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
 import { IClientRepository } from "../../../../domain/repositoryInterfaces/client/client.repository.interface";
 import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
+import { IRealTimeNotificationService } from "../../../../domain/service-interfaces/real-time-notification-service.interface";
 import {
   BOOKINGSTATUS,
   CANCELLATION_POLICIES,
@@ -18,7 +19,6 @@ import {
   NOTIFICATIONS,
 } from "../../../../shared/constants";
 import { ICancellBookingUsecase } from "../../interfaces/booking-cancell/cancell-booking-usecase.interface";
-import { IRealTimeNotificationService } from "../../../../domain/service-interfaces/real-time-notification-service.interface";
 
 @injectable()
 export class CancellBookingUsecase implements ICancellBookingUsecase {

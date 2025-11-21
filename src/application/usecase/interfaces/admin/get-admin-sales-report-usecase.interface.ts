@@ -1,5 +1,5 @@
-import { AdminSalesReportDto } from "../../../dto/response/salesReport.dto";
 import { DASHBOARD_PERIOD } from "../../../dto/request/admin.dto";
+import { AdminSalesReportDto } from "../../../dto/response/salesReport.dto";
 
 export interface IGetAdminSalesReportUsecase {
   execute(
@@ -10,6 +10,7 @@ export interface IGetAdminSalesReportUsecase {
     packageId?: string
   ): Promise<AdminSalesReportDto>;
 }
+
 
 
 

@@ -1,7 +1,6 @@
 import { inject, injectable } from "tsyringe";
 
 import { ValidationError } from "../../../../domain/errors/validationError";
-import { IOtpService } from "../../../services/interfaces/otp-service.interface";
 import {
   ERROR_MESSAGE,
   HTTP_STATUS,
@@ -11,6 +10,7 @@ import {
   ISuccessResponseHandler,
   successResponseHandler,
 } from "../../../../shared/utils/successResponseHandler";
+import { IOtpService } from "../../../services/interfaces/otp-service.interface";
 import { IVerifyOtpUsecase } from "../../interfaces/auth/verifyOtpUsecase";
 
 @injectable()

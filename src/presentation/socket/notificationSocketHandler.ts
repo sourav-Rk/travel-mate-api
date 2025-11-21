@@ -1,7 +1,8 @@
-import { injectable } from "tsyringe";
-import { INotificationSocketHandler } from "../interfaces/socket/notification-socket-handler.interface";
 import { Server, Socket } from "socket.io";
+import { injectable } from "tsyringe";
+
 import { NOTIFICATION_SOCKET_EVENTS } from "../../shared/socket-events-constants";
+import { INotificationSocketHandler } from "../interfaces/socket/notification-socket-handler.interface";
 
 @injectable()
 export class NotificationSocketHandler implements INotificationSocketHandler {

@@ -1,15 +1,15 @@
 import { inject, injectable } from "tsyringe";
 
+import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { ILocalGuideBookingRepository } from "../../../../domain/repositoryInterfaces/local-guide-booking/local-guide-booking-repository.interface";
 import { ILocalGuideProfileRepository } from "../../../../domain/repositoryInterfaces/local-guide-profile/local-guide-profile-repository.interface";
 import { IVolunteerPostRepository } from "../../../../domain/repositoryInterfaces/volunteer-post/volunteer-post-repository.interface";
-import { ILocalGuideBookingRepository } from "../../../../domain/repositoryInterfaces/local-guide-booking/local-guide-booking-repository.interface";
-import { IUpdateLocalGuideStatsUsecase } from "../../interfaces/badge/update-stats.interface";
 import {
   ERROR_MESSAGE,
   EVENT_EMMITER_TYPE,
 } from "../../../../shared/constants";
 import { eventBus } from "../../../../shared/eventBus";
-import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { IUpdateLocalGuideStatsUsecase } from "../../interfaces/badge/update-stats.interface";
 
 @injectable()
 export class UpdateLocalGuideStatsUsecase

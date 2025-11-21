@@ -1,3 +1,4 @@
+import { Type } from "class-transformer";
 import {
   IsArray,
   IsEnum,
@@ -7,7 +8,7 @@ import {
   IsString,
   ValidateNested,
 } from "class-validator";
-import { Type } from "class-transformer";
+
 import { QuoteMessagePayload } from "../response/local-guide-booking.dto";
 
 export class GuideChatContextDto {

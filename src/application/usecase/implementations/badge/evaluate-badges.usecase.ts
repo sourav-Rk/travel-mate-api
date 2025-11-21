@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
 
-import { ILocalGuideProfileRepository } from "../../../../domain/repositoryInterfaces/local-guide-profile/local-guide-profile-repository.interface";
-import { IEvaluateBadgesUsecase } from "../../interfaces/badge/evaluate-badges.interface";
 import { ALL_BADGES } from "../../../../domain/constants/badges/badge-definitions";
 import { BadgeCriteriaType } from "../../../../domain/entities/badge.entity";
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { ILocalGuideProfileRepository } from "../../../../domain/repositoryInterfaces/local-guide-profile/local-guide-profile-repository.interface";
 import { ERROR_MESSAGE } from "../../../../shared/constants";
+import { IEvaluateBadgesUsecase } from "../../interfaces/badge/evaluate-badges.interface";
 
 @injectable()
 export class EvaluateBadgesUsecase implements IEvaluateBadgesUsecase {

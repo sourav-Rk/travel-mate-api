@@ -1,10 +1,12 @@
 import { container } from "tsyringe";
 
 import { ILogger } from "../../domain/service-interfaces/logger.interface";
+import { IRealTimeNotificationService } from "../../domain/service-interfaces/real-time-notification-service.interface";
 import { ActivityController } from "../../presentation/controllers/activity/activity.controller";
 import { AddressController } from "../../presentation/controllers/address/address.controller";
 import { AdminController } from "../../presentation/controllers/admin/admin.controller";
 import { AuthController } from "../../presentation/controllers/auth/auth.controller";
+import { BadgeController } from "../../presentation/controllers/badge/badge.controller";
 import { ClientBookingController } from "../../presentation/controllers/booking/client-booking-controller";
 import { GuideBookingController } from "../../presentation/controllers/booking/guide-booking-controller";
 import { VendorBookingController } from "../../presentation/controllers/booking/vendor-booking-controller";
@@ -17,13 +19,11 @@ import { GroupChatController } from "../../presentation/controllers/group-chat/g
 import { GuideController } from "../../presentation/controllers/guide/guide.controller";
 import { GuideProfileController } from "../../presentation/controllers/guide/guideProfileController";
 import { GuideChatController } from "../../presentation/controllers/guide-chat/guide-chat.controller";
-import { LocalGuideBookingController } from "../../presentation/controllers/local-guide-booking/local-guide-booking.controller";
 import { GuideInstructionController } from "../../presentation/controllers/guide-instruction/guide-instruction.controller";
 import { ItineraryController } from "../../presentation/controllers/itinerary/itinerary.controller";
-import { LocalGuideController } from "../../presentation/controllers/local-guide/local-guide.controller";
-import { VolunteerPostController } from "../../presentation/controllers/volunteer-post/volunteer-post.controller";
-import { BadgeController } from "../../presentation/controllers/badge/badge.controller";
 import { KycController } from "../../presentation/controllers/kyc/kycController";
+import { LocalGuideController } from "../../presentation/controllers/local-guide/local-guide.controller";
+import { LocalGuideBookingController } from "../../presentation/controllers/local-guide-booking/local-guide-booking.controller";
 import { SignedUrlController } from "../../presentation/controllers/media/signedUrl.controller";
 import { NotificationController } from "../../presentation/controllers/notification/notification.controller";
 import { ClientPackageController } from "../../presentation/controllers/package/client-package-controller.interface";
@@ -31,15 +31,17 @@ import { GuidePackageController } from "../../presentation/controllers/package/g
 import { PackageController } from "../../presentation/controllers/package/package.controller";
 import { PaymentController } from "../../presentation/controllers/payment/payment.controller";
 import { ReviewController } from "../../presentation/controllers/review/review.controller";
-import { VendorController } from "../../presentation/controllers/vendor/vendor.controller";
 import { VendorSalesReportController } from "../../presentation/controllers/vendor/vendor-sales-report.controller";
+import { VendorController } from "../../presentation/controllers/vendor/vendor.controller";
 import { VendorProfileController } from "../../presentation/controllers/vendor/vendor.profile.controller";
+import { VolunteerPostController } from "../../presentation/controllers/volunteer-post/volunteer-post.controller";
 import { WalletController } from "../../presentation/controllers/wallet/wallet.controller";
 import { WishlistController } from "../../presentation/controllers/wishlist/wishlist.controller";
 import { IActivityController } from "../../presentation/interfaces/controllers/activity/activity-controller.interface";
 import { IAddressController } from "../../presentation/interfaces/controllers/address/address-controller.interface";
 import { IAdminController } from "../../presentation/interfaces/controllers/admin/admin.controller.interface";
 import { IAuthController } from "../../presentation/interfaces/controllers/auth/auth.controller.interfaces";
+import { IBadgeController } from "../../presentation/interfaces/controllers/badge/badge.controller.interface";
 import { IClientBookingController } from "../../presentation/interfaces/controllers/booking/client-booking-controller.interface";
 import { IGuideBookingController } from "../../presentation/interfaces/controllers/booking/guide-booking-controller.interface";
 import { IVendorBookingController } from "../../presentation/interfaces/controllers/booking/vendor-booking-controller.interface";
@@ -50,9 +52,10 @@ import { IFcmController } from "../../presentation/interfaces/controllers/fcmTok
 import { IGuideProfileController } from "../../presentation/interfaces/controllers/guide/guide-profile-controller.interface";
 import { IGuideController } from "../../presentation/interfaces/controllers/guide/guide.controller.interface";
 import { IGuideChatController } from "../../presentation/interfaces/controllers/guide-chat/guide-chat.controller.interface";
-import { ILocalGuideBookingController } from "../../presentation/interfaces/controllers/local-guide-booking/local-guide-booking.controller.interface";
 import { IItineraryController } from "../../presentation/interfaces/controllers/itinerary/itinerary-controller.interface";
 import { IKycController } from "../../presentation/interfaces/controllers/kyc/kycController.interface";
+import { ILocalGuideController } from "../../presentation/interfaces/controllers/local-guide/local-guide.controller.interface";
+import { ILocalGuideBookingController } from "../../presentation/interfaces/controllers/local-guide-booking/local-guide-booking.controller.interface";
 import { INotificationController } from "../../presentation/interfaces/controllers/notification/notification-controller.interface";
 import { IClientPackageController } from "../../presentation/interfaces/controllers/package/client-package.controller";
 import { IGuidePackageController } from "../../presentation/interfaces/controllers/package/guide-package-controller.interface";
@@ -61,16 +64,15 @@ import { IPaymentController } from "../../presentation/interfaces/controllers/pa
 import { IReviewController } from "../../presentation/interfaces/controllers/review/review-controller.interface";
 import { ISignedUrlController } from "../../presentation/interfaces/controllers/signedUrl.controller.interface";
 import { IVendorProfileController } from "../../presentation/interfaces/controllers/vendor/vendor-profile.controller.interface";
-import { IVendorController } from "../../presentation/interfaces/controllers/vendor/vendor.controller.interface";
 import { IVendorSalesReportController } from "../../presentation/interfaces/controllers/vendor/vendor-sales-report-controller.interface";
-import { IWishlistController } from "../../presentation/interfaces/controllers/wishlist/wishlist-controller.interface";
-import { ILocalGuideController } from "../../presentation/interfaces/controllers/local-guide/local-guide.controller.interface";
+import { IVendorController } from "../../presentation/interfaces/controllers/vendor/vendor.controller.interface";
 import { IVolunteerPostController } from "../../presentation/interfaces/controllers/volunteer-post/volunteer-post.controller.interface";
-import { IBadgeController } from "../../presentation/interfaces/controllers/badge/badge.controller.interface";
+import { IWishlistController } from "../../presentation/interfaces/controllers/wishlist/wishlist-controller.interface";
 import { IBlockedMiddleware } from "../../presentation/interfaces/middleware/blocked-middleware.interface";
 import { IErrorMiddleware } from "../../presentation/interfaces/middleware/error-middleware.interface";
 import { IChatSocketHandler } from "../../presentation/interfaces/socket/chat-socket-handler.interface";
 import { IGroupChatSocketHandler } from "../../presentation/interfaces/socket/group-chat-socket-handler.interface";
+import { INotificationSocketHandler } from "../../presentation/interfaces/socket/notification-socket-handler.interface";
 import { BlockedMiddleware } from "../../presentation/middlewares/block.middleware";
 import { ErrorMiddleware } from "../../presentation/middlewares/error.middleware";
 import { LoggerMiddleware } from "../../presentation/middlewares/logger.middleware";
@@ -81,14 +83,11 @@ import { GuideRoute } from "../../presentation/route/guide/guide.route";
 import { VendorRoute } from "../../presentation/route/vendor/vendor.route";
 import { ChatSocketHandler } from "../../presentation/socket/chatSocketHandler";
 import { GroupChatSocketHandler } from "../../presentation/socket/groupChatSocketHandler";
+import { NotificationSocketHandler } from "../../presentation/socket/notificationSocketHandler";
 import { CronScheduler } from "../cron/cronScheduler";
 import { ICronScheduler } from "../interface/cronScheduler.interface";
 
 import { DependencyInjection } from ".";
-import { INotificationSocketHandler } from "../../presentation/interfaces/socket/notification-socket-handler.interface";
-import { NotificationSocketHandler } from "../../presentation/socket/notificationSocketHandler";
-import { RealTimeNotificationService } from "../service/real-time-notification.service";
-import { IRealTimeNotificationService } from "../../domain/service-interfaces/real-time-notification-service.interface";
 
 DependencyInjection.registerAll();
 

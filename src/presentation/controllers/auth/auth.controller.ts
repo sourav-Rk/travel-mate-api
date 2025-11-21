@@ -5,6 +5,7 @@ import {
   LoginUserDTO,
   UserDto,
 } from "../../../application/dto/response/user.dto";
+import { IOtpService } from "../../../application/services/interfaces/otp-service.interface";
 import { IBlackListTokenUsecase } from "../../../application/usecase/interfaces/auth/blacklist-token-usecase.interface";
 import { IForgotPasswordResetUsecase } from "../../../application/usecase/interfaces/auth/forgotPassword-reset-usecase.interface";
 import { IForgotPasswordSendMailUsecase } from "../../../application/usecase/interfaces/auth/forgotPassword-sendMail-usecase.interface";
@@ -18,7 +19,6 @@ import { ISendEmailOtpUsecase } from "../../../application/usecase/interfaces/au
 import { ISendEmailUsecase } from "../../../application/usecase/interfaces/auth/send-email-usecase.interface";
 import { IVerifyOtpUsecase } from "../../../application/usecase/interfaces/auth/verifyOtpUsecase";
 import { ValidationError } from "../../../domain/errors/validationError";
-import { IOtpService } from "../../../application/services/interfaces/otp-service.interface";
 import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import {
   COOKIES_NAMES,
@@ -247,7 +247,6 @@ export class AuthController implements IAuthController {
   }
 
   async logout(req: Request, res: Response): Promise<void> {
-    const refreshToken = (req as CustomRequest).user.refreshToken;
     const accessToken = (req as CustomRequest).user.accessToken;
 
     await this._blackListTokenUsecase.execute(accessToken);

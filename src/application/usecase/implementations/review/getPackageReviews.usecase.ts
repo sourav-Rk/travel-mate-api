@@ -7,8 +7,6 @@ import { IReviewRepository } from "../../../../domain/repositoryInterfaces/revie
 import { ERROR_MESSAGE } from "../../../../shared/constants";
 import {
   PackageReviewListWithUserDetailsAndAverageRatingDto,
-  ReviewAggregateResult,
-  ReviewListDto,
 } from "../../../dto/response/reviewDto";
 import { ReviewMapper } from "../../../mapper/review.mapper";
 import { IGetPackageReviewsUsecase } from "../../interfaces/review/getPackageReviews-usecase.interface";

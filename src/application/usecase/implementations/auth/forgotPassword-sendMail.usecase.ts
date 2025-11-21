@@ -2,7 +2,6 @@ import { inject, injectable } from "tsyringe";
 
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { ITokenService } from "../../../../domain/service-interfaces/token-service.interface";
-import { IUserExistenceService } from "../../../services/interfaces/user-existence-service.interface";
 import {
   ERROR_MESSAGE,
   EVENT_EMMITER_TYPE,
@@ -10,6 +9,7 @@ import {
 } from "../../../../shared/constants";
 import { eventBus } from "../../../../shared/eventBus";
 import { mailContentProvider } from "../../../../shared/mailContentProvider";
+import { IUserExistenceService } from "../../../services/interfaces/user-existence-service.interface";
 import { IForgotPasswordSendMailUsecase } from "../../interfaces/auth/forgotPassword-sendMail-usecase.interface";
 
 @injectable()

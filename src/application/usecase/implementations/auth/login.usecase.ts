@@ -2,12 +2,12 @@ import { inject, injectable } from "tsyringe";
 
 import { IUserEntity } from "../../../../domain/entities/user.entity";
 import { CustomError } from "../../../../domain/errors/customError";
+import { IWalletRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import { LoginUserDTO } from "../../../dto/response/user.dto";
 import { ILoginUsecase } from "../../interfaces/auth/loginUsecase.interface";
 
 import { ILoginStrategy } from "./login-strategies/login-strategy.interface";
-import { IWalletRepository } from "../../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
 
 @injectable()
 export class LoginUsecase implements ILoginUsecase {

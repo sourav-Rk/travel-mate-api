@@ -1,4 +1,5 @@
 import { IsEnum, IsOptional, IsString } from "class-validator";
+
 import { BOOKINGSTATUS } from "../../../shared/constants";
 
 export type VENDOR_SALES_REPORT_PERIOD = "daily" | "weekly" | "monthly" | "yearly" | "custom";
@@ -28,6 +29,7 @@ export class GetVendorSalesReportReqDTO {
   @IsString()
   paymentMode?: string;
 }
+
 
 
 

@@ -1,11 +1,11 @@
+import { IGuideChatRoomEntity } from "../../domain/entities/guide-chat-room.entity";
+import { IGuideMessageEntity } from "../../domain/entities/guide-message.entity";
+import { IGuideChatRoomModel } from "../../infrastructure/database/models/guide-chat-room.model";
+import { IGuideMessageModel } from "../../infrastructure/database/models/guide-message.model";
 import {
   GuideChatRoomDto,
   GuideMessageDto,
 } from "../dto/response/guide-chat.dto";
-import { IGuideChatRoomEntity } from "../../domain/entities/guide-chat-room.entity";
-import { IGuideChatRoomModel } from "../../infrastructure/database/models/guide-chat-room.model";
-import { IGuideMessageModel } from "../../infrastructure/database/models/guide-message.model";
-import { IGuideMessageEntity } from "../../domain/entities/guide-message.entity";
 
 type EnrichedParticipant = {
   userId: string;

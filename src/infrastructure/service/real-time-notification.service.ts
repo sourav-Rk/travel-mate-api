@@ -1,10 +1,10 @@
-import { inject, injectable } from "tsyringe";
 import { Server } from "socket.io";
+import { inject, injectable } from "tsyringe";
 
 import { INotificationRepository } from "../../domain/repositoryInterfaces/notification/notification-repository.interface";
 import { IPushNotificationService } from "../../domain/service-interfaces/push-notifications.interface";
-import { NotificationSocketHandler } from "../../presentation/socket/notificationSocketHandler";
 import { IRealTimeNotificationService } from "../../domain/service-interfaces/real-time-notification-service.interface";
+import { NotificationSocketHandler } from "../../presentation/socket/notificationSocketHandler";
 
 export interface NotificationData {
   id?: string;
@@ -293,4 +293,5 @@ export class RealTimeNotificationService
     });
   }
 }
+
 

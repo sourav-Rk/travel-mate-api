@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
 
 import { ILocalGuideBookingRepository } from "../../../../domain/repositoryInterfaces/local-guide-booking/local-guide-booking-repository.interface";
-import { IGetBookingByChatRoomUsecase } from "../../interfaces/local-guide-booking/get-booking-by-chat-room.interface";
 import { LocalGuideBookingDto } from "../../../dto/response/local-guide-booking.dto";
 import { LocalGuideBookingMapper } from "../../../mapper/localGuideBooking.mapper";
+import { IGetBookingByChatRoomUsecase } from "../../interfaces/local-guide-booking/get-booking-by-chat-room.interface";
 
 @injectable()
 export class GetBookingByChatRoomUsecase
@@ -27,6 +27,7 @@ export class GetBookingByChatRoomUsecase
     return LocalGuideBookingMapper.toDto(booking);
   }
 }
+
 
 
 

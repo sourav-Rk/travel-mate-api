@@ -1,7 +1,6 @@
-import { ILocalGuideProfileEntity, ILocation } from "../../../domain/entities/local-guide-profile.entity";
+import { ILocation } from "../../../domain/entities/local-guide-profile.entity";
 import {
   TVerificationStatus,
-  VERIFICATION_STATUS,
 } from "../../../shared/constants";
 
 export interface LocalGuideProfileDto {

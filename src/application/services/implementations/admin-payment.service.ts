@@ -4,13 +4,13 @@ import { NotFoundError } from "../../../domain/errors/notFoundError";
 import { ValidationError } from "../../../domain/errors/validationError";
 import { IWalletRepository } from "../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
 import { IWalletTransactionsRepository } from "../../../domain/repositoryInterfaces/wallet/wallet-transactions-repository.interface";
-import { IAdminPaymentService } from "../interfaces/admin-payment-service.interface";
 import { config } from "../../../shared/config";
 import {
   ERROR_MESSAGE,
   TRANSACTION_DESCRIPTIONS,
   TRANSACTION_TYPE,
 } from "../../../shared/constants";
+import { IAdminPaymentService } from "../interfaces/admin-payment-service.interface";
 
 @injectable()
 export class AdminPaymentService implements IAdminPaymentService {

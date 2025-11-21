@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 
-import { IGetBadgesUsecase } from "../../../application/usecase/interfaces/badge/get-badges.interface";
 import { IEvaluateBadgesUsecase } from "../../../application/usecase/interfaces/badge/evaluate-badges.interface";
+import { IGetBadgesUsecase } from "../../../application/usecase/interfaces/badge/get-badges.interface";
 import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
 import { IBadgeController } from "../../interfaces/controllers/badge/badge.controller.interface";
-import { CustomRequest } from "../../middlewares/auth.middleware";
 
 @injectable()
 export class BadgeController implements IBadgeController {

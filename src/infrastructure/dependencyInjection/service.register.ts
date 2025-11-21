@@ -1,32 +1,32 @@
 import Stripe from "stripe";
 import { container } from "tsyringe";
 
-import { IAdminPaymentService } from "../../application/services/interfaces/admin-payment-service.interface";
-import { IEmailService } from "../../domain/service-interfaces/email-service.interface";
-import { IOtpService } from "../../application/services/interfaces/otp-service.interface";
-import { IPaymentService } from "../../domain/service-interfaces/payment-service.interface";
-import { IPhoneExistenceService } from "../../application/services/interfaces/phone-existence-service.interface";
-import { IPushNotificationService } from "../../domain/service-interfaces/push-notifications.interface";
-import { IRevenueDistributionService } from "../../application/services/interfaces/revenue-distribution-service.interface";
-import { ITokenService } from "../../domain/service-interfaces/token-service.interface";
-import { IUserExistenceService } from "../../application/services/interfaces/user-existence-service.interface";
-import { IVendorPaymentService } from "../../application/services/interfaces/vendor-payment-service.interface";
-import { ILocalGuidePaymentService } from "../../application/services/interfaces/local-guide-payment-service.interface";
-import { stripe } from "../config/stripe/stripe.confige";
 import { AdminPaymentService } from "../../application/services/implementations/admin-payment.service";
-import { EmailService } from "../service/email.servie";
+import { LocalGuidePaymentService } from "../../application/services/implementations/local-guide-payment.service";
 import { OtpService } from "../../application/services/implementations/otp.service";
-import { StripePaymentService } from "../service/payment.service";
 import { PhoneExistenceService } from "../../application/services/implementations/phone-existence.service";
-import { PushNotificationService } from "../service/push-notification.service";
 import { RevenueDistributionService } from "../../application/services/implementations/revenue-distribution.service";
-import { TokenService } from "../service/token.service";
 import { UserExistenceServive } from "../../application/services/implementations/user-existence.service";
 import { VendorPaymentService } from "../../application/services/implementations/vendor-payment.service";
-import { LocalGuidePaymentService } from "../../application/services/implementations/local-guide-payment.service";
-import { RealTimeNotificationService } from "../service/real-time-notification.service";
+import { IAdminPaymentService } from "../../application/services/interfaces/admin-payment-service.interface";
+import { ILocalGuidePaymentService } from "../../application/services/interfaces/local-guide-payment-service.interface";
+import { IOtpService } from "../../application/services/interfaces/otp-service.interface";
+import { IPhoneExistenceService } from "../../application/services/interfaces/phone-existence-service.interface";
+import { IRevenueDistributionService } from "../../application/services/interfaces/revenue-distribution-service.interface";
+import { IUserExistenceService } from "../../application/services/interfaces/user-existence-service.interface";
+import { IVendorPaymentService } from "../../application/services/interfaces/vendor-payment-service.interface";
+import { IEmailService } from "../../domain/service-interfaces/email-service.interface";
+import { IPaymentService } from "../../domain/service-interfaces/payment-service.interface";
+import { IPushNotificationService } from "../../domain/service-interfaces/push-notifications.interface";
 import { IRealTimeNotificationService } from "../../domain/service-interfaces/real-time-notification-service.interface";
+import { ITokenService } from "../../domain/service-interfaces/token-service.interface";
+import { stripe } from "../config/stripe/stripe.confige";
 import { BadgeEvaluationHandlerService } from "../service/badge-evaluation-handler.service";
+import { EmailService } from "../service/email.servie";
+import { StripePaymentService } from "../service/payment.service";
+import { PushNotificationService } from "../service/push-notification.service";
+import { RealTimeNotificationService } from "../service/real-time-notification.service";
+import { TokenService } from "../service/token.service";
 
 export class ServiceRegistory {
   static registerService(): void {

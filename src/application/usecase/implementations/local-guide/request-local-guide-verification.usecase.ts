@@ -3,9 +3,10 @@ import { inject, injectable } from "tsyringe";
 import { RequestLocalGuideVerificationReqDTO } from "../../../../application/dto/request/local-guide.dto";
 import { LocalGuideProfileDto } from "../../../../application/dto/response/local-guide.dto";
 import { LocalGuideProfileMapper } from "../../../../application/mapper/local-guide-profile.mapper";
-import { IClientRepository } from "../../../../domain/repositoryInterfaces/client/client.repository.interface";
 import { CustomError } from "../../../../domain/errors/customError";
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { ValidationError } from "../../../../domain/errors/validationError";
+import { IClientRepository } from "../../../../domain/repositoryInterfaces/client/client.repository.interface";
 import { ILocalGuideProfileRepository } from "../../../../domain/repositoryInterfaces/local-guide-profile/local-guide-profile-repository.interface";
 import {
   ERROR_MESSAGE,
@@ -13,7 +14,6 @@ import {
   VERIFICATION_STATUS,
 } from "../../../../shared/constants";
 import { IRequestLocalGuideVerificationUsecase } from "../../interfaces/local-guide/request-local-guide-verification-usecase.interface";
-import { ValidationError } from "../../../../domain/errors/validationError";
 
 @injectable()
 export class RequestLocalGuideVerificationUsecase

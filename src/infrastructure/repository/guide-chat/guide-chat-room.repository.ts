@@ -1,5 +1,6 @@
 import { injectable } from "tsyringe";
 
+import { LocalGuideMessageMapper } from "../../../application/mapper/local-guide-chat.mapper";
 import { IGuideChatRoomEntity } from "../../../domain/entities/guide-chat-room.entity";
 import { IGuideChatRoomRepository } from "../../../domain/repositoryInterfaces/guide-chat/guide-chat-room-repository.interface";
 import {
@@ -7,7 +8,6 @@ import {
   IGuideChatRoomModel,
 } from "../../database/models/guide-chat-room.model";
 import { BaseRepository } from "../baseRepository";
-import { LocalGuideMessageMapper } from "../../../application/mapper/local-guide-chat.mapper";
 
 @injectable()
 export class GuideChatRoomRepository

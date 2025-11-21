@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
 
-import { GuideMessageDto } from "../../../dto/response/guide-chat.dto";
 import { IGuideMessageRepository } from "../../../../domain/repositoryInterfaces/guide-chat/guide-message-repository.interface";
-import { IGetGuideMessagesUsecase } from "../../interfaces/guide-chat/get-guide-messages.interface";
+import { GuideMessageDto } from "../../../dto/response/guide-chat.dto";
 import { LocalGuideMessageMapper } from "../../../mapper/local-guide-chat.mapper";
+import { IGetGuideMessagesUsecase } from "../../interfaces/guide-chat/get-guide-messages.interface";
 
 @injectable()
 export class GetGuideMessagesUsecase implements IGetGuideMessagesUsecase {
@@ -28,6 +28,7 @@ export class GetGuideMessagesUsecase implements IGetGuideMessagesUsecase {
     );
   }
 }
+
 
 
 

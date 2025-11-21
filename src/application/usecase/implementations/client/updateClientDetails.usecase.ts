@@ -4,9 +4,9 @@ import { IClientEntity } from "../../../../domain/entities/client.entity";
 import { CustomError } from "../../../../domain/errors/customError";
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { IClientRepository } from "../../../../domain/repositoryInterfaces/client/client.repository.interface";
+import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import { IPhoneExistenceService } from "../../../services/interfaces/phone-existence-service.interface";
 import { IUserExistenceService } from "../../../services/interfaces/user-existence-service.interface";
-import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import { IUpdateClientDetailsUsecase } from "../../interfaces/client/updateClientDetails-usecase.interface";
 
 @injectable()

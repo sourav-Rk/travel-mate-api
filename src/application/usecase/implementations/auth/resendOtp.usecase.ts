@@ -1,7 +1,6 @@
 import { inject, injectable } from "tsyringe";
 
 import { ValidationError } from "../../../../domain/errors/validationError";
-import { IOtpService } from "../../../services/interfaces/otp-service.interface";
 import {
   ERROR_MESSAGE,
   EVENT_EMMITER_TYPE,
@@ -9,6 +8,7 @@ import {
 } from "../../../../shared/constants";
 import { eventBus } from "../../../../shared/eventBus";
 import { mailContentProvider } from "../../../../shared/mailContentProvider";
+import { IOtpService } from "../../../services/interfaces/otp-service.interface";
 import { IResendOtpUsecase } from "../../interfaces/auth/resendtOtp.interface";
 
 @injectable()

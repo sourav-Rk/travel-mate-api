@@ -1,5 +1,5 @@
-import { IsString, IsNotEmpty, IsOptional, IsArray, ValidateNested, IsEnum } from "class-validator";
 import { Type } from "class-transformer";
+import { IsString, IsNotEmpty, IsOptional, IsArray, ValidateNested, IsEnum } from "class-validator";
 
 export enum MediaType {
   IMAGE = "image",

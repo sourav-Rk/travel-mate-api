@@ -2,9 +2,7 @@ import { inject, injectable } from "tsyringe";
 
 import { CustomError } from "../../../../domain/errors/customError";
 import { IGuideRepository } from "../../../../domain/repositoryInterfaces/guide/guide-repository.interface";
-import { IPhoneExistenceService } from "../../../services/interfaces/phone-existence-service.interface";
 import { ITokenService } from "../../../../domain/service-interfaces/token-service.interface";
-import { IUserExistenceService } from "../../../services/interfaces/user-existence-service.interface";
 import {
   ERROR_MESSAGE,
   EVENT_EMMITER_TYPE,
@@ -14,6 +12,8 @@ import {
 import { eventBus } from "../../../../shared/eventBus";
 import { mailContentProvider } from "../../../../shared/mailContentProvider";
 import { GuideDto, UserDto } from "../../../dto/response/user.dto";
+import { IPhoneExistenceService } from "../../../services/interfaces/phone-existence-service.interface";
+import { IUserExistenceService } from "../../../services/interfaces/user-existence-service.interface";
 import { IAddGuideUsecase } from "../../interfaces/vendor/add-guide-usecase.interface";
 
 @injectable()

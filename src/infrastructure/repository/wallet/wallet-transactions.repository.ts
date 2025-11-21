@@ -11,7 +11,6 @@ import {
   walletTransactionsDB,
 } from "../../database/models/walletTransactions.model";
 import { BaseRepository } from "../baseRepository";
-import { Pipe } from "stream";
 
 @injectable()
 export class WalletTransactionsRepository

@@ -10,9 +10,9 @@ import { IGuideRepository } from "../../../../domain/repositoryInterfaces/guide/
 import { IRedisTokenRepository } from "../../../../domain/repositoryInterfaces/redis/redis-token-repository.interface";
 import { IVendorRepository } from "../../../../domain/repositoryInterfaces/vendor/vendor-repository.interface";
 import { ITokenService } from "../../../../domain/service-interfaces/token-service.interface";
-import { IUserExistenceService } from "../../../services/interfaces/user-existence-service.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import { hashPassword } from "../../../../shared/utils/bcryptHelper";
+import { IUserExistenceService } from "../../../services/interfaces/user-existence-service.interface";
 import { IForgotPasswordResetUsecase } from "../../interfaces/auth/forgotPassword-reset-usecase.interface";
 
 @injectable()

@@ -15,12 +15,12 @@ import { AddGuideReqDTO } from "../../../application/dto/request/guide.dto";
 import { AddKycReqDTO } from "../../../application/dto/request/kyc.dto";
 import { MarkReadNotificationReqDTO } from "../../../application/dto/request/notification.dto";
 import { GetPackagesVendorReqDTO } from "../../../application/dto/request/package.dto";
+import { GetVendorSalesReportReqDTO } from "../../../application/dto/request/vendor-sales-report.dto";
 import {
   ChangeEmailReqDto,
   UpdatePasswordVendorDTO,
   VendorProfileReqDTO,
 } from "../../../application/dto/request/vendor.dto";
-import { GetVendorSalesReportReqDTO } from "../../../application/dto/request/vendor-sales-report.dto";
 import {
   activityController,
   addressController,

@@ -1,19 +1,18 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 
-import { ICreateQuoteUsecase } from "../../../application/usecase/interfaces/local-guide-booking/create-quote.interface";
 import { IGetPendingQuotesUsecase } from "../../../application/usecase/interfaces/guide-chat/get-pending-quotes.interface";
 import { IAcceptQuoteUsecase } from "../../../application/usecase/interfaces/local-guide-booking/accept-quote.interface";
+import { ICreateQuoteUsecase } from "../../../application/usecase/interfaces/local-guide-booking/create-quote.interface";
 import { IDeclineQuoteUsecase } from "../../../application/usecase/interfaces/local-guide-booking/decline-quote.interface";
-import { IPayLocalGuideAdvanceAmountUsecase } from "../../../application/usecase/interfaces/local-guide-booking/pay-advance-amount.interface";
-import { IPayLocalGuideFullAmountUsecase } from "../../../application/usecase/interfaces/local-guide-booking/pay-full-amount.interface";
+import { IGetLocalGuideBookingDetailsUsecase } from "../../../application/usecase/interfaces/local-guide-booking/get-booking-details.interface";
 import { IGetLocalGuideBookingsUsecase } from "../../../application/usecase/interfaces/local-guide-booking/get-bookings.interface";
 import { IGetLocalGuideBookingsForGuideUsecase } from "../../../application/usecase/interfaces/local-guide-booking/get-guide-bookings.interface";
-import { IGetLocalGuideBookingDetailsUsecase } from "../../../application/usecase/interfaces/local-guide-booking/get-booking-details.interface";
 import { IMarkServiceCompleteUsecase } from "../../../application/usecase/interfaces/local-guide-booking/mark-service-complete.interface";
-import { IClientRepository } from "../../../domain/repositoryInterfaces/client/client.repository.interface";
+import { IPayLocalGuideAdvanceAmountUsecase } from "../../../application/usecase/interfaces/local-guide-booking/pay-advance-amount.interface";
+import { IPayLocalGuideFullAmountUsecase } from "../../../application/usecase/interfaces/local-guide-booking/pay-full-amount.interface";
 import { ValidationError } from "../../../domain/errors/validationError";
-
+import { IClientRepository } from "../../../domain/repositoryInterfaces/client/client.repository.interface";
 import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import {
   ERROR_MESSAGE,
@@ -275,6 +274,7 @@ export class LocalGuideBookingController
     );
   }
 }
+
 
 
 

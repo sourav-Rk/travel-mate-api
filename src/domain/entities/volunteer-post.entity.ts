@@ -1,4 +1,5 @@
 import { TPostCategory, TPostStatus } from "../../shared/constants";
+
 import { ILocation } from "./local-guide-profile.entity";
 
 

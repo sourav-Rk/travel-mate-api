@@ -3,13 +3,13 @@ import { inject, injectable } from "tsyringe";
 import { ValidationError } from "../../../domain/errors/validationError";
 import { IWalletRepository } from "../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
 import { IWalletTransactionsRepository } from "../../../domain/repositoryInterfaces/wallet/wallet-transactions-repository.interface";
-import { ILocalGuidePaymentService } from "../interfaces/local-guide-payment-service.interface";
 import {
   ERROR_MESSAGE,
   TRANSACTION_DESCRIPTIONS,
   TRANSACTION_TYPE,
   ROLES,
 } from "../../../shared/constants";
+import { ILocalGuidePaymentService } from "../interfaces/local-guide-payment-service.interface";
 
 @injectable()
 export class LocalGuidePaymentService implements ILocalGuidePaymentService {
@@ -75,6 +75,7 @@ export class LocalGuidePaymentService implements ILocalGuidePaymentService {
     });
   }
 }
+
 
 
 

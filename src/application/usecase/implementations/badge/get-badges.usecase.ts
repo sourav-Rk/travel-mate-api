@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 
+import { ALL_BADGES } from "../../../../domain/constants/badges/badge-definitions";
 import { ILocalGuideProfileRepository } from "../../../../domain/repositoryInterfaces/local-guide-profile/local-guide-profile-repository.interface";
 import { IGetBadgesUsecase } from "../../interfaces/badge/get-badges.interface";
-import { ALL_BADGES } from "../../../../domain/constants/badges/badge-definitions";
 
 @injectable()
 export class GetBadgesUsecase implements IGetBadgesUsecase {
@@ -96,6 +96,7 @@ export class GetBadgesUsecase implements IGetBadgesUsecase {
     };
   }
 }
+
 
 
 

@@ -1,5 +1,5 @@
-import { VendorDashboardStatsDto } from "../../../dto/response/vendor-dashboard.dto";
 import { VENDOR_DASHBOARD_PERIOD } from "../../../dto/request/vendor-dashboard.dto";
+import { VendorDashboardStatsDto } from "../../../dto/response/vendor-dashboard.dto";
 
 export interface IGetVendorDashboardStatsUsecase {
   execute(
@@ -9,6 +9,7 @@ export interface IGetVendorDashboardStatsUsecase {
     endDate?: string
   ): Promise<VendorDashboardStatsDto>;
 }
+
 
 
 

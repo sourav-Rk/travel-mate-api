@@ -10,8 +10,8 @@ import {
   ERROR_MESSAGE,
   HTTP_STATUS,
 } from "../../../../shared/constants";
-import { ILikeVolunteerPostUsecase } from "../../interfaces/volunteer-post/like-volunteer-post-usecase.interface";
 import { IUpdateLocalGuideStatsUsecase } from "../../interfaces/badge/update-stats.interface";
+import { ILikeVolunteerPostUsecase } from "../../interfaces/volunteer-post/like-volunteer-post-usecase.interface";
 
 @injectable()
 export class LikeVolunteerPostUsecase implements ILikeVolunteerPostUsecase {

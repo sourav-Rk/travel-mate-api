@@ -2,12 +2,12 @@ import { inject, injectable } from "tsyringe";
 
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { ValidationError } from "../../../../domain/errors/validationError";
-import { ILocalGuideProfileRepository } from "../../../../domain/repositoryInterfaces/local-guide-profile/local-guide-profile-repository.interface";
 import { IClientRepository } from "../../../../domain/repositoryInterfaces/client/client.repository.interface";
-import { IUpdateLocalGuideStatsUsecase } from "../../interfaces/badge/update-stats.interface";
+import { ILocalGuideProfileRepository } from "../../../../domain/repositoryInterfaces/local-guide-profile/local-guide-profile-repository.interface";
 import { ERROR_MESSAGE } from "../../../../shared/constants";
 import { LocalGuideProfileDto } from "../../../dto/response/local-guide.dto";
 import { LocalGuideProfileMapper } from "../../../mapper/local-guide-profile.mapper";
+import { IUpdateLocalGuideStatsUsecase } from "../../interfaces/badge/update-stats.interface";
 import { IGetLocalGuideProfileUsecase } from "../../interfaces/local-guide/get-local-guide-profile-usecase.interface";
 
 @injectable()

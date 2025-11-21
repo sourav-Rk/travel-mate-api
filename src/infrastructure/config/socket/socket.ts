@@ -1,14 +1,13 @@
 import { Server } from "socket.io";
 
+import { IRealTimeNotificationService } from "../../../domain/service-interfaces/real-time-notification-service.interface";
 import { ITokenService } from "../../../domain/service-interfaces/token-service.interface";
 import { IChatSocketHandler } from "../../../presentation/interfaces/socket/chat-socket-handler.interface";
 import { IGroupChatSocketHandler } from "../../../presentation/interfaces/socket/group-chat-socket-handler.interface";
+import { INotificationSocketHandler } from "../../../presentation/interfaces/socket/notification-socket-handler.interface";
 import { socketAuthMiddleware } from "../../../presentation/middlewares/socketAuth.middleware";
 
 import { userConnected, userDisconnected } from "./onlineUsers";
-import { INotificationSocketHandler } from "../../../presentation/interfaces/socket/notification-socket-handler.interface";
-import { RealTimeNotificationService } from "../../service/real-time-notification.service";
-import { IRealTimeNotificationService } from "../../../domain/service-interfaces/real-time-notification-service.interface";
 export function configureSocket(
   io: Server,
   chatSocketHandler: IChatSocketHandler,

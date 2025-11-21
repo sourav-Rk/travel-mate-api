@@ -1,12 +1,17 @@
 import { Server, Socket } from "socket.io";
 import { inject, injectable } from "tsyringe";
 
+import { GuideSendMessageDto } from "../../application/dto/request/guide-chat.dto";
 import { ICheckChatRoomUsecase } from "../../application/usecase/interfaces/chat/check-chat-room-usecase.interface";
 import { IMarkAsDeliveredUsecase } from "../../application/usecase/interfaces/chat/mark-delivered-usecase.interface";
 import { IMarkReadUsecase } from "../../application/usecase/interfaces/chat/mark-read-usecase.interface";
 import { ISendMessageUseCase } from "../../application/usecase/interfaces/chat/send-message-usecase.interface";
+import { ICreateGuideChatRoomUsecase } from "../../application/usecase/interfaces/guide-chat/create-guide-chat-room.interface";
+import { IMarkGuideMessagesDeliveredUsecase } from "../../application/usecase/interfaces/guide-chat/mark-guide-messages-delivered.interface";
+import { IMarkGuideMessagesReadUsecase } from "../../application/usecase/interfaces/guide-chat/mark-guide-messages-read.interface";
+import { ISendGuideMessageUsecase } from "../../application/usecase/interfaces/guide-chat/send-guide-message.interface";
 import { IMessageEntity } from "../../domain/entities/message.entity";
-import { GuideSendMessageDto } from "../../application/dto/request/guide-chat.dto";
+import { IGuideChatRoomRepository } from "../../domain/repositoryInterfaces/guide-chat/guide-chat-room-repository.interface";
 import {
   getOnlineUsers,
   isUserOnline,
@@ -17,11 +22,6 @@ import { ERROR_MESSAGE } from "../../shared/constants";
 import { CHAT_SOCKET_EVENTS } from "../../shared/socket-events-constants";
 import { getErrorMessage } from "../../shared/utils/error-handler";
 import { IChatSocketHandler } from "../interfaces/socket/chat-socket-handler.interface";
-import { ICreateGuideChatRoomUsecase } from "../../application/usecase/interfaces/guide-chat/create-guide-chat-room.interface";
-import { ISendGuideMessageUsecase } from "../../application/usecase/interfaces/guide-chat/send-guide-message.interface";
-import { IMarkGuideMessagesDeliveredUsecase } from "../../application/usecase/interfaces/guide-chat/mark-guide-messages-delivered.interface";
-import { IMarkGuideMessagesReadUsecase } from "../../application/usecase/interfaces/guide-chat/mark-guide-messages-read.interface";
-import { IGuideChatRoomRepository } from "../../domain/repositoryInterfaces/guide-chat/guide-chat-room-repository.interface";
 
 @injectable()
 export class ChatSocketHandler implements IChatSocketHandler {

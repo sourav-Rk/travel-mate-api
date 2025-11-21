@@ -1,17 +1,17 @@
 import { Types } from "mongoose";
 import { injectable } from "tsyringe";
 
+import { LocalGuideMessageMapper } from "../../../application/mapper/local-guide-chat.mapper";
 import { IGuideMessageEntity } from "../../../domain/entities/guide-message.entity";
 import { IGuideMessageRepository } from "../../../domain/repositoryInterfaces/guide-chat/guide-message-repository.interface";
+import {
+  guideChatRoomDB,
+} from "../../database/models/guide-chat-room.model";
 import {
   guideMessageDB,
   IGuideMessageModel,
 } from "../../database/models/guide-message.model";
-import {
-  guideChatRoomDB,
-} from "../../database/models/guide-chat-room.model";
 import { BaseRepository } from "../baseRepository";
-import { LocalGuideMessageMapper } from "../../../application/mapper/local-guide-chat.mapper";
 
 @injectable()
 export class GuideMessageRepository

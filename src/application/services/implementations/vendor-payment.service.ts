@@ -4,12 +4,12 @@ import { NotFoundError } from "../../../domain/errors/notFoundError";
 import { ValidationError } from "../../../domain/errors/validationError";
 import { IWalletRepository } from "../../../domain/repositoryInterfaces/wallet/wallet-repository.interface";
 import { IWalletTransactionsRepository } from "../../../domain/repositoryInterfaces/wallet/wallet-transactions-repository.interface";
-import { IVendorPaymentService } from "../interfaces/vendor-payment-service.interface";
 import {
   ERROR_MESSAGE,
   TRANSACTION_DESCRIPTIONS,
   TRANSACTION_TYPE,
 } from "../../../shared/constants";
+import { IVendorPaymentService } from "../interfaces/vendor-payment-service.interface";
 
 @injectable()
 export class VendorPaymentService implements IVendorPaymentService {

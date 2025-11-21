@@ -6,8 +6,8 @@ import {
   LocalGuideWithDistanceDto,
 } from "../../../../application/dto/response/local-guide.dto";
 import { ILocalGuideProfileRepository } from "../../../../domain/repositoryInterfaces/local-guide-profile/local-guide-profile-repository.interface";
-import { IGetLocalGuidesByLocationUsecase } from "../../interfaces/local-guide/get-local-guides-by-location.interface";
 import { LocalGuideProfileMapper } from "../../../mapper/local-guide-profile.mapper";
+import { IGetLocalGuidesByLocationUsecase } from "../../interfaces/local-guide/get-local-guides-by-location.interface";
 
 @injectable()
 export class GetLocalGuidesByLocationUsecase

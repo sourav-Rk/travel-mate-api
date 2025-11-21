@@ -1,8 +1,6 @@
 import { inject, injectable } from "tsyringe";
 
 import { CreateVolunteerPostReqDTO } from "../../../../application/dto/request/volunteer-post.dto";
-import { VolunteerPostDto } from "../../../../application/dto/response/volunteer-post.dto";
-import { VolunteerPostMapper } from "../../../../application/mapper/volunteer-post.mapper";
 import { CustomError } from "../../../../domain/errors/customError";
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { ValidationError } from "../../../../domain/errors/validationError";
@@ -15,8 +13,8 @@ import {
   POST_STATUS,
   VERIFICATION_STATUS,
 } from "../../../../shared/constants";
-import { ICreateVolunteerPostUsecase } from "../../interfaces/volunteer-post/create-volunteer-post-usecase.interface";
 import { IUpdateLocalGuideStatsUsecase } from "../../interfaces/badge/update-stats.interface";
+import { ICreateVolunteerPostUsecase } from "../../interfaces/volunteer-post/create-volunteer-post-usecase.interface";
 
 @injectable()
 export class CreateVolunteerPostUsecase implements ICreateVolunteerPostUsecase {

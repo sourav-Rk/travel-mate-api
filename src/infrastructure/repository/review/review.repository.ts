@@ -2,7 +2,6 @@ import { injectable } from "tsyringe";
 
 import {
   ReviewAggregateResult,
-  ReviewListWithUserDetailsDto,
 } from "../../../application/dto/response/reviewDto";
 import { ReviewMapper } from "../../../application/mapper/review.mapper";
 import { IReviewEntity } from "../../../domain/entities/review.entity";

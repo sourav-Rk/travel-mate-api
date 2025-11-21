@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 
-import { AdminSalesReportDto } from "../../../dto/response/salesReport.dto";
-import { DASHBOARD_PERIOD } from "../../../dto/request/admin.dto";
 import { IBookingRepository } from "../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
+import { DASHBOARD_PERIOD } from "../../../dto/request/admin.dto";
+import { AdminSalesReportDto } from "../../../dto/response/salesReport.dto";
 import { IGetAdminSalesReportUsecase } from "../../interfaces/admin/get-admin-sales-report-usecase.interface";
 
 @injectable()
@@ -83,6 +83,7 @@ export class GetAdminSalesReportUsecase implements IGetAdminSalesReportUsecase {
     };
   }
 }
+
 
 
 

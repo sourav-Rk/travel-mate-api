@@ -3,8 +3,8 @@ import { inject, injectable } from "tsyringe";
 
 import { IUserEntity } from "../../../../domain/entities/user.entity";
 import { CustomError } from "../../../../domain/errors/customError";
-import { IUserExistenceService } from "../../../services/interfaces/user-existence-service.interface";
 import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
+import { IUserExistenceService } from "../../../services/interfaces/user-existence-service.interface";
 import { IGoogleUsecase } from "../../interfaces/auth/google-usecase.interface";
 
 import { ILoginStrategy } from "./login-strategies/login-strategy.interface";

@@ -1,7 +1,6 @@
 import { inject, injectable } from "tsyringe";
 
 import { UpdateVolunteerPostReqDTO } from "../../../../application/dto/request/volunteer-post.dto";
-import { VolunteerPostDto } from "../../../../application/dto/response/volunteer-post.dto";
 import { CustomError } from "../../../../domain/errors/customError";
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { ValidationError } from "../../../../domain/errors/validationError";
@@ -10,7 +9,6 @@ import { IVolunteerPostRepository } from "../../../../domain/repositoryInterface
 import {
   ERROR_MESSAGE,
   HTTP_STATUS,
-  POST_STATUS,
 } from "../../../../shared/constants";
 import { IUpdateVolunteerPostUsecase } from "../../interfaces/volunteer-post/update-volunteer-post-usecase.interface";
 

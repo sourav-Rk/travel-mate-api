@@ -1,4 +1,5 @@
 import { Server } from "socket.io";
+
 import { NotificationData } from "../../infrastructure/service/real-time-notification.service";
 
 export interface IRealTimeNotificationService {

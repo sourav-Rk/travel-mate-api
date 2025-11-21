@@ -1,5 +1,5 @@
-import { DashboardStatsDto } from "../../../dto/response/dashboard.dto";
 import { DASHBOARD_PERIOD } from "../../../dto/request/admin.dto";
+import { DashboardStatsDto } from "../../../dto/response/dashboard.dto";
 
 export interface IGetDashboardStatsUsecase {
   execute(
@@ -8,6 +8,7 @@ export interface IGetDashboardStatsUsecase {
     endDate?: string
   ): Promise<DashboardStatsDto>;
 }
+
 
 
 

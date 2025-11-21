@@ -1,4 +1,3 @@
-import { IClientEntity } from "../../../domain/entities/client.entity";
 
 // export interface ReviewListWithUserDetailsDto {
 //   _id: string;

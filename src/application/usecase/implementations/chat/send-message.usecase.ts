@@ -7,7 +7,7 @@ import {
 import { CustomError } from "../../../../domain/errors/customError";
 import { IChatRoomRepository } from "../../../../domain/repositoryInterfaces/chatroom/chatroom-repository.interface";
 import { IMessageRepository } from "../../../../domain/repositoryInterfaces/message/message-repository.interface";
-import { RealTimeNotificationService } from "../../../../infrastructure/service/real-time-notification.service";
+import { IRealTimeNotificationService } from "../../../../domain/service-interfaces/real-time-notification-service.interface";
 import {
   CHAT_CONTEXT_TYPE,
   CHAT_USERS,
@@ -15,7 +15,6 @@ import {
   HTTP_STATUS,
 } from "../../../../shared/constants";
 import { ISendMessageUseCase } from "../../interfaces/chat/send-message-usecase.interface";
-import { IRealTimeNotificationService } from "../../../../domain/service-interfaces/real-time-notification-service.interface";
 
 @injectable()
 export class SendMessageUsecase implements ISendMessageUseCase {

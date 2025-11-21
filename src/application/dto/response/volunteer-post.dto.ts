@@ -1,4 +1,3 @@
-import { IVolunteerPostEntity } from "../../../domain/entities/volunteer-post.entity";
 import { LocalGuideDetailsDto } from "./local-guide.dto";
 
 export interface VolunteerPostDto {

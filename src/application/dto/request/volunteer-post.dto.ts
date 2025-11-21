@@ -1,3 +1,4 @@
+import { Transform, Type } from "class-transformer";
 import {
   IsArray,
   IsBoolean,
@@ -12,7 +13,6 @@ import {
   MinLength,
   ValidateNested,
 } from "class-validator";
-import { Transform, Type } from "class-transformer";
 
 import { POST_CATEGORY, POST_STATUS } from "../../../shared/constants";
 

@@ -15,7 +15,6 @@ import {
   chatController,
   groupChatController,
   guideBookingController,
-  guideChatController,
   guideClientController,
   guideController,
   guideInstructionController,

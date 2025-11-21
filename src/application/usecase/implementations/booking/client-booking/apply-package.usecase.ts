@@ -10,6 +10,7 @@ import { INotificationRepository } from "../../../../../domain/repositoryInterfa
 import { IPackageRepository } from "../../../../../domain/repositoryInterfaces/package/package-repository.interface";
 import { IWishListRepository } from "../../../../../domain/repositoryInterfaces/wishlist/wishlist-repository.interface";
 import { IPushNotificationService } from "../../../../../domain/service-interfaces/push-notifications.interface";
+import { IRealTimeNotificationService } from "../../../../../domain/service-interfaces/real-time-notification-service.interface";
 import {
   BOOKINGSTATUS,
   ERROR_MESSAGE,
@@ -22,7 +23,6 @@ import {
 } from "../../../../../shared/utils/successResponseHandler";
 import { PackageStatus } from "../../../../dto/request/package.dto";
 import { IApplyPackageUsecase } from "../../../interfaces/booking/client-booking/apply-package-usecase.interface";
-import { IRealTimeNotificationService } from "../../../../../domain/service-interfaces/real-time-notification-service.interface";
 
 @injectable()
 export class ApplyPackageUsecase implements IApplyPackageUsecase {
