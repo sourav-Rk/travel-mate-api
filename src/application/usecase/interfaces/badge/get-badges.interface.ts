@@ -1,32 +1,20 @@
+import { GetBadgesReqDTO } from "../../../dto/request/badge.dto";
+import { BadgeDto } from "../../../dto/response/badge.dto";
+
 export interface IGetBadgesUsecase {
-  getAllBadges(): Promise<Array<{
-    id: string;
-    name: string;
-    description: string;
-    category: string;
-    icon?: string;
-    isEarned: boolean;
-  }>>;
+  getAllBadges(filters?: GetBadgesReqDTO): Promise<{
+    badges: BadgeDto[];
+    total: number;
+    currentPage: number;
+    totalPages: number;
+  }>;
   
   getGuideBadges(guideProfileId: string): Promise<{
     earnedBadges: string[];
-    allBadges: Array<{
-      id: string;
-      name: string;
-      description: string;
-      category: string;
-      icon?: string;
-      isEarned: boolean;
-    }>;
+    allBadges: BadgeDto[];
   }>;
   
-  getBadgeById(badgeId: string): Promise<{
-    id: string;
-    name: string;
-    description: string;
-    category: string;
-    icon?: string;
-  } | null>;
+  getBadgeById(badgeId: string): Promise<BadgeDto | null>;
 }
 
 

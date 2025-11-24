@@ -1,4 +1,5 @@
-import { LocalGuideBookingListFilters, LocalGuideBookingListResult } from "../../../../shared/constants";
+import { LocalGuideBookingListFilters, } from "../../../../shared/constants";
+import { LocalGuideBookingListResult } from "../../../dto/response/local-guide-booking.dto";
 
 export interface IGetLocalGuideBookingsUsecase {
   execute(
@@ -6,6 +7,9 @@ export interface IGetLocalGuideBookingsUsecase {
     filters: LocalGuideBookingListFilters
   ): Promise<LocalGuideBookingListResult>;
 }
+
+
+
 
 
 

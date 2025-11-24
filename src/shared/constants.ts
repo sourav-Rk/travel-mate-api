@@ -1,11 +1,18 @@
 import { LocalGuideBookingDto } from "../application/dto/response/local-guide-booking.dto";
 
+/**
+ *GENDER constants
+ */
 export enum GENDER {
   MALE = "male",
   FEMALE = "female",
   OTHER = "other",
 }
 
+
+/**
+ *PACKAGE BOOKING STATUS
+ */
 export enum BOOKINGSTATUS {
   APPLIED = "applied",
   CONFIRMED = "confirmed",
@@ -18,6 +25,10 @@ export enum BOOKINGSTATUS {
   CANCELLATION_REQUESTED = "cancellation_requested",
 }
 
+
+/**
+ * LOCAL GUIDE BOOKING STATUS
+ */
 export type LocalGuideBookingStatus =
   | "QUOTE_ACCEPTED"
   | "ADVANCE_PENDING"
@@ -27,8 +38,16 @@ export type LocalGuideBookingStatus =
   | "FULLY_PAID"
   | "CANCELLED";
 
+
+/**
+ *REVIEW TARGET TYPE
+ */
 export type REVIEWTARGET = "guide" | "package";
 
+
+/**
+ *HTTP STATUS ENUMS
+ */
 export enum HTTP_STATUS {
   OK = 200,
   CREATED = 201,
@@ -42,6 +61,10 @@ export enum HTTP_STATUS {
   INTERNAL_SERVER_ERROR = 500,
 }
 
+
+/**
+ *ERROR MESSAGE CONSTANTS
+ */
 export const ERROR_MESSAGE = {
   USER_ID_OR_EMAIL_OR_ROLE_MISSING: "User id, email or role is missing",
   USER_ID_NOT_FOUND: "User Id not found",
@@ -153,7 +176,7 @@ export const ERROR_MESSAGE = {
 
   LOCAL_GUIDE: {
     LOCAL_GUIDE_PROFILE_NOT_FOUND: "Local guide profile not found",
-    NOT_VERIFIED_LOCAL_GUIDE : "You are not a verified local guide",
+    NOT_VERIFIED_LOCAL_GUIDE: "You are not a verified local guide",
     LOCAL_GUIDE_PROFILE_ALREADY_EXISTS:
       "Local guide profile already exists for this user",
     LOCAL_GUIDE_ALREADY_VERIFIED: "Local guide is already verified",
@@ -163,6 +186,13 @@ export const ERROR_MESSAGE = {
       "Invalid coordinates format. Must be [longitude, latitude]",
     LOCATION_REQUIRED: "Location with precise coordinates is required",
     ALREADY_REJECTED: "Verification request has already been rejected",
+    BADGE_ID_ALREADY_EXISTS: (badgeId: string) =>
+      `Badge with ID '${badgeId}' already exists`,
+    BADGE_ID_IS_REQUIRED: "Badge Id is required",
+    BADGE_NOT_FOUND: (badgeId: string) =>
+      `Badge with ID '${badgeId}' not found`,
+    FAILED_TO_UPDATE_BADGE: (badgeId: string) =>
+      `Failed to update badge with ID '${badgeId}'`,
   },
 
   VOLUNTEER_POST: {
@@ -269,6 +299,10 @@ export const ERROR_MESSAGE = {
   },
 };
 
+
+/**
+ *SUCCESS MESSAGE CONSTANTS 
+ */
 export const SUCCESS_MESSAGE = {
   ACCOUNT_CREATED: `Account created succesfully`,
   LOGIN_SUCCESS: "Logged in successfully",
@@ -345,7 +379,11 @@ export const SUCCESS_MESSAGE = {
     AVAILABLE: "Successfully set to available",
     NOT_AVAILABLE: "Successfully set to not available",
     SERVICE_MARKED_COMPLETE: "Service marked as complete successfully",
-    QUOTE_CREATED : "Quote created successfully"
+    QUOTE_CREATED: "Quote created successfully",
+    BADGES_EVALUATED: "Badges evaluated successfully",
+    BADGE_CREATED: "Badge created succesfully",
+    BADGE_UPDATED: "Badge updated succesfully",
+    BADGE_DISABLED: "Badge disabled succesfully",
   },
 
   VOLUNTEER_POST: {
@@ -356,10 +394,12 @@ export const SUCCESS_MESSAGE = {
     POST_UNLIKED: "Post unliked successfully",
   },
 
-  LOCAL_GUIDE_BOOKING:{
-    QUOTE_ACCEPTED : "Quote accepted succesfully! Pay the advance to confirm"
-  }
+  LOCAL_GUIDE_BOOKING: {
+    QUOTE_ACCEPTED: "Quote accepted succesfully! Pay the advance to confirm",
+  },
 };
+
+
 
 export const ROLES = {
   ADMIN: "admin",
@@ -631,20 +671,6 @@ export interface LocalGuideBookingListFilters {
   to?: string;
   page?: number;
   limit?: number;
-}
-
-export interface LocalGuideBookingListResult {
-  bookings: LocalGuideBookingDto[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
-  summary: {
-    pendingCount: number;
-    completedCount: number;
-  };
 }
 
 export interface StatsUpdatePayload {

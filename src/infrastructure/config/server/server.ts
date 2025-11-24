@@ -26,6 +26,11 @@ export class App {
   }
 
   private configureRoutes(): void {
+    // Health check endpoint (must be before other routes to avoid middleware)
+    this._app.get("/health", (req, res) => {
+      res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
+    });
+
     this._app.use("/api/v1/auth", authRoutes.router);
     this._app.use("/api/v1/client", clientRoutes.router);
     this._app.use("/api/v1/vendor", vendorRoutes.router);

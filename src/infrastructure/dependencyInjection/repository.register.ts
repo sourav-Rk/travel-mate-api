@@ -15,6 +15,7 @@ import { IGuideChatRoomRepository } from "../../domain/repositoryInterfaces/guid
 import { IGuideMessageRepository } from "../../domain/repositoryInterfaces/guide-chat/guide-message-repository.interface";
 import { IGuideInstructionRepository } from "../../domain/repositoryInterfaces/guide-instruction/guide-instruction-repository.interface";
 import { ILocalGuideBookingRepository } from "../../domain/repositoryInterfaces/local-guide-booking/local-guide-booking-repository.interface";
+import { IBadgeRepository } from "../../domain/repositoryInterfaces/badge/badge-repository.interface";
 import { ILocalGuideProfileRepository } from "../../domain/repositoryInterfaces/local-guide-profile/local-guide-profile-repository.interface";
 import { IMessageRepository } from "../../domain/repositoryInterfaces/message/message-repository.interface";
 import { INotificationRepository } from "../../domain/repositoryInterfaces/notification/notification-repository.interface";
@@ -46,6 +47,7 @@ import { GuideChatRoomRepository } from "../repository/guide-chat/guide-chat-roo
 import { GuideMessageRepository } from "../repository/guide-chat/guide-message.repository";
 import { GuideInstructionRepository } from "../repository/guide-instruction/guide-instruction.repository";
 import { LocalGuideBookingRepository } from "../repository/local-guide-booking/local-guide-booking.repository";
+import { BadgeRepository } from "../repository/badge/badge.repository";
 import { LocalGuideProfileRepository } from "../repository/local-guide-profile/local-guide-profile.repository";
 import { MessageRepository } from "../repository/message/message.repository";
 import { NotificationRepository } from "../repository/notification/notification.repository";
@@ -171,6 +173,11 @@ export class RepositoryRegistry {
 
     container.register<IGroupMessageRepository>('IGroupMessageRepository',{
       useClass : GroupMessageRepository
+    })
+
+    //badge repository
+    container.register<IBadgeRepository>('IBadgeRepository',{
+      useClass : BadgeRepository
     })
 
     //local guide profile repository
