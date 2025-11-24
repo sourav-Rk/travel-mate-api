@@ -9,8 +9,8 @@ import { LocalGuideBookingMapper } from "../../../mapper/localGuideBooking.mappe
 import {
   IGetLocalGuideBookingsForGuideUsecase,
   LocalGuideBookingListFilters,
-  LocalGuideBookingListResult,
 } from "../../interfaces/local-guide-booking/get-guide-bookings.interface";
+import { LocalGuideBookingListResult } from "../../../dto/response/local-guide-booking.dto";
 
 @injectable()
 export class GetLocalGuideBookingsForGuideUsecase

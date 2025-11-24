@@ -1,4 +1,4 @@
-import { LocalGuideBookingDto, LocalGuideBookingStatus } from "../../../dto/response/local-guide-booking.dto";
+import { LocalGuideBookingDto, LocalGuideBookingListResult, LocalGuideBookingStatus } from "../../../dto/response/local-guide-booking.dto";
 
 export type LocalGuideBookingCategory = "pending" | "completed";
 
@@ -19,19 +19,6 @@ export interface LocalGuideBookingListFilters {
   limit?: number;
 }
 
-export interface LocalGuideBookingListResult {
-  bookings: LocalGuideBookingDto[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
-  summary: {
-    pendingCount: number;
-    completedCount: number;
-  };
-}
 
 export interface IGetLocalGuideBookingsForGuideUsecase {
   execute(
@@ -39,6 +26,9 @@ export interface IGetLocalGuideBookingsForGuideUsecase {
     filters: LocalGuideBookingListFilters
   ): Promise<LocalGuideBookingListResult>;
 }
+
+
+
 
 
 

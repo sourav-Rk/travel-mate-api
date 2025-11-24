@@ -1,23 +1,31 @@
 import { inject, injectable } from "tsyringe";
 
-import { ALL_BADGES } from "../../../../domain/constants/badges/badge-definitions";
 import { BadgeCriteriaType } from "../../../../domain/entities/badge.entity";
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { IBadgeRepository } from "../../../../domain/repositoryInterfaces/badge/badge-repository.interface";
 import { ILocalGuideProfileRepository } from "../../../../domain/repositoryInterfaces/local-guide-profile/local-guide-profile-repository.interface";
 import { ERROR_MESSAGE } from "../../../../shared/constants";
 import { IEvaluateBadgesUsecase } from "../../interfaces/badge/evaluate-badges.interface";
+import { ValidationError } from "../../../../domain/errors/validationError";
 
 @injectable()
 export class EvaluateBadgesUsecase implements IEvaluateBadgesUsecase {
   constructor(
     @inject("ILocalGuideProfileRepository")
-    private readonly _localGuideProfileRepository: ILocalGuideProfileRepository
+    private readonly _localGuideProfileRepository: ILocalGuideProfileRepository,
+    @inject("IBadgeRepository")
+    private readonly _badgeRepository: IBadgeRepository
   ) {}
 
   async execute(guideProfileId: string): Promise<{
     newlyAwardedBadges: string[];
     totalBadges: number;
   }> { 
+
+    if(!guideProfileId){
+       throw new ValidationError(ERROR_MESSAGE.ID_REQUIRED);
+    }
+
     /**
      *Get current profile with stats 
      */
@@ -35,30 +43,35 @@ export class EvaluateBadgesUsecase implements IEvaluateBadgesUsecase {
     const earnedBadges = profile.badges || [];
 
     /**
-     *Evaluate all badges 
+     *Get all active badges from database
+     */
+    const allBadges = await this._badgeRepository.findAll({ isActive: true });
+
+    /**
+     *Evaluate all badges
      */
     const newlyAwardedBadges: string[] = [];
 
-    for (const badge of ALL_BADGES) {
+    for (const badge of allBadges.badges) {
       /**
-       * Skip if already earned 
+       * Skip if already earned
        */
-      if (earnedBadges.includes(badge.id)) {
+      if (earnedBadges.includes(badge.badgeId)) {
         continue;
       }
 
       /**
-       *Check if badge criteria are met 
+       *Check if badge criteria are met
        */
       if (this._evaluateBadgeCriteria(badge.criteria, profile.stats)) {
         /**
-         *Award badge 
+         *Award badge
          */
         await this._localGuideProfileRepository.addBadge(
           guideProfileId,
-          badge.id
+          badge.badgeId
         );
-        newlyAwardedBadges.push(badge.id);
+        newlyAwardedBadges.push(badge.badgeId);
       }
     }
 

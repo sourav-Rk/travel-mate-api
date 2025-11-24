@@ -6,11 +6,10 @@ import {
   IsOptional,
   IsObject,
   ValidateNested,
-  IsLatitude,
-  IsLongitude,
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { CoordinatesDto } from './coordinates.dto';
 
 export class LocationDto {
   @IsString()
@@ -29,14 +28,6 @@ export class LocationDto {
   @ValidateNested()
   @Type(() => CoordinatesDto)
   coordinates!: CoordinatesDto;
-}
-
-export class CoordinatesDto {
-  @IsLatitude()
-  lat!: number;
-
-  @IsLongitude()
-  lng!: number;
 }
 
 export class CreateInstructionDto {

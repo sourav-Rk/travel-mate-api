@@ -36,11 +36,16 @@ export const validationMiddleware = <T extends object>(dtoClass: ClassConstructo
   ): Promise<void> => {
     try {
       // Merge body, params, query for validation
+      // For PUT/PATCH requests, only validate body (params are identifiers, not part of update payload)
       const data: Record<string, unknown> = {};
       if (req.body && Object.keys(req.body).length > 0)
         Object.assign(data, req.body);
-      if (req.params && Object.keys(req.params).length > 0)
-        Object.assign(data, req.params);
+      // Only include params for GET requests (where params might be query filters)
+      // Exclude params for PUT/PATCH/POST requests to avoid validation errors
+      if (req.method !== "PUT" && req.method !== "PATCH" && req.method !== "POST") {
+        if (req.params && Object.keys(req.params).length > 0)
+          Object.assign(data, req.params);
+      }
       if (req.query && Object.keys(req.query).length > 0)
         Object.assign(data, req.query);
 

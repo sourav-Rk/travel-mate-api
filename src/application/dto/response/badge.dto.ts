@@ -1,10 +1,25 @@
+import { BadgeCategory, BadgeCriteriaType } from "../../../domain/entities/badge.entity";
+
 export interface BadgeDto {
   id: string;
+  badgeId: string;
   name: string;
   description: string;
-  category: "service" | "content" | "engagement" | "achievement";
+  category: BadgeCategory;
   icon?: string;
-  isEarned: boolean;
+  criteria: Array<{
+    type: BadgeCriteriaType;
+    value: number;
+    additionalCondition?: {
+      type: BadgeCriteriaType;
+      value: number;
+    };
+  }>;
+  priority?: number;
+  isActive?: boolean;
+  isEarned?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface BadgeEarnedDto {
@@ -18,6 +33,11 @@ export interface GuideBadgesResponse {
   allBadges: BadgeDto[];
   totalEarned: number;
   totalAvailable: number;
+}
+
+export interface BadgeListResponse {
+  badges: BadgeDto[];
+  total: number;
 }
 
 

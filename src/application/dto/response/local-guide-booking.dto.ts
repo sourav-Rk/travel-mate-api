@@ -95,3 +95,17 @@ export interface LocalGuideBookingDto {
   travellerName?: string;
   travellerProfileImage?: string;
 }
+
+export interface LocalGuideBookingListResult {
+  bookings: LocalGuideBookingDto[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+  summary: {
+    pendingCount: number;
+    completedCount: number;
+  };
+}

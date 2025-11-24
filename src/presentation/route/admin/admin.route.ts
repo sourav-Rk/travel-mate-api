@@ -8,9 +8,11 @@ import {
   GetDashboardStatsReqDTO,
   GetAdminSalesReportReqDTO,
 } from "../../../application/dto/request/admin.dto";
+import { CreateBadgeReqDTO, GetBadgesReqDTO, UpdateBadgeReqDTO } from "../../../application/dto/request/badge.dto";
 import { GetPendingVerificationsReqDTO } from "../../../application/dto/request/local-guide.dto";
 import {
   adminController,
+  badgeController,
   localGuideController,
   packageConroller,
   walletController,
@@ -119,6 +121,35 @@ export class AdminRoute extends BaseRoute {
       asyncHandler(
         localGuideController.rejectGuide.bind(localGuideController)
       )
+    );
+
+    //-------------- Badge Management Routes -----------------
+    this.router.post(
+      "/badges",
+      validationMiddleware(CreateBadgeReqDTO),
+      asyncHandler(badgeController.createBadge.bind(badgeController))
+    );
+
+    this.router.put(
+      "/badges/:badgeId",
+      validationMiddleware(UpdateBadgeReqDTO),
+      asyncHandler(badgeController.updateBadge.bind(badgeController))
+    );
+
+    this.router.delete(
+      "/badges/:badgeId",
+      asyncHandler(badgeController.deleteBadge.bind(badgeController))
+    );
+
+    this.router.get(
+      "/badges",
+      validationMiddleware(GetBadgesReqDTO),
+      asyncHandler(badgeController.getAllBadges.bind(badgeController))
+    );
+
+    this.router.get(
+      "/badges/:badgeId",
+      asyncHandler(badgeController.getBadgeById.bind(badgeController))
     );
   }
 }

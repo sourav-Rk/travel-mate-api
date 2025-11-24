@@ -147,7 +147,7 @@ export class AdminController implements IAdminController {
     ResponseHelper.success(
       res,
       HTTP_STATUS.OK,
-      SUCCESS_MESSAGE.SUCCESS,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
       salesReport,
       "salesReport"
     );

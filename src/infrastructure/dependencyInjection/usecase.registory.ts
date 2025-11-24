@@ -83,6 +83,9 @@ import { UnlikeVolunteerPostUsecase } from "../../application/usecase/implementa
 import { UpdateLocalGuideStatsUsecase } from "../../application/usecase/implementations/badge/update-stats.usecase";
 import { EvaluateBadgesUsecase } from "../../application/usecase/implementations/badge/evaluate-badges.usecase";
 import { GetBadgesUsecase } from "../../application/usecase/implementations/badge/get-badges.usecase";
+import { CreateBadgeUsecase } from "../../application/usecase/implementations/badge/create-badge.usecase";
+import { UpdateBadgeUsecase } from "../../application/usecase/implementations/badge/update-badge.usecase";
+import { DeleteBadgeUsecase } from "../../application/usecase/implementations/badge/delete-badge.usecase";
 import { ApplyPackageUsecase } from "../../application/usecase/implementations/booking/client-booking/apply-package.usecase";
 import { GetClientBookingDetailsUsecase } from "../../application/usecase/implementations/booking/client-booking/get-booking-details-client.usecase";
 import { GetBookingDetailsUsecase } from "../../application/usecase/implementations/booking/client-booking/getBooking-details.usecase";
@@ -236,6 +239,9 @@ import { IUnlikeVolunteerPostUsecase } from "../../application/usecase/interface
 import { IUpdateLocalGuideStatsUsecase } from "../../application/usecase/interfaces/badge/update-stats.interface";
 import { IEvaluateBadgesUsecase } from "../../application/usecase/interfaces/badge/evaluate-badges.interface";
 import { IGetBadgesUsecase } from "../../application/usecase/interfaces/badge/get-badges.interface";
+import { ICreateBadgeUsecase } from "../../application/usecase/interfaces/badge/create-badge.interface";
+import { IUpdateBadgeUsecase } from "../../application/usecase/interfaces/badge/update-badge.interface";
+import { IDeleteBadgeUsecase } from "../../application/usecase/interfaces/badge/delete-badge.interface";
 import { IApplyPackageUsecase } from "../../application/usecase/interfaces/booking/client-booking/apply-package-usecase.interface";
 import { IGetClientBookingDetailsUsecase } from "../../application/usecase/interfaces/booking/client-booking/get-booking-details-client-usecase.interface";
 import { IGetBookingDetailsClientUsecase } from "../../application/usecase/interfaces/booking/client-booking/get-booking-details-user-usecase.interface";
@@ -1210,6 +1216,18 @@ export class UsecaseRegistory {
 
     container.register<IGetBadgesUsecase>("IGetBadgesUsecase", {
       useClass: GetBadgesUsecase,
+    });
+
+    container.register<ICreateBadgeUsecase>("ICreateBadgeUsecase", {
+      useClass: CreateBadgeUsecase,
+    });
+
+    container.register<IUpdateBadgeUsecase>("IUpdateBadgeUsecase", {
+      useClass: UpdateBadgeUsecase,
+    });
+
+    container.register<IDeleteBadgeUsecase>("IDeleteBadgeUsecase", {
+      useClass: DeleteBadgeUsecase,
     });
 
     // ------logger--------

@@ -9,6 +9,7 @@ import { ERROR_MESSAGE } from "../../../../shared/constants";
 import { CreateInstructionDto } from "../../../dto/request/guide-instruction.dto";
 import { ICreateInstructionUsecase } from "../../interfaces/guide-instruction/create-instruction-usecase.interface";
 
+
 @injectable()
 export class CreateInstructionUsecase implements ICreateInstructionUsecase {
   constructor(

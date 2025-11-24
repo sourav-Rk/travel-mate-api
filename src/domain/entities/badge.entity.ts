@@ -1,4 +1,25 @@
-export type BadgeCategory = "service" | "content" | "engagement" | "achievement";
+export interface IBadgeEntity {
+  _id?: string;
+  badgeId: string;
+  name: string;
+  description: string;
+  category: BadgeCategory;
+  icon?: string;
+  criteria: IBadgeCriteria[];
+  priority?: number;
+  isActive?: boolean;
+  createdBy?: string;
+  updatedBy?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export enum BadgeCategory {
+  SERVICE = "service",
+  CONTENT = "content",
+  ENGAGEMENT = "engagement",
+  ACHIEVEMENT = "achievement",
+}
 
 export enum BadgeCriteriaType {
   COMPLETED_SERVICES = "completed_services",
@@ -24,14 +45,5 @@ export interface IBadgeCriteria {
   };
 }
 
-export interface IBadgeEntity {
-  id: string;
-  name: string;
-  description: string;
-  category: BadgeCategory;
-  icon?: string;
-  criteria: IBadgeCriteria[];
-  priority?: number; 
-}
 
 
