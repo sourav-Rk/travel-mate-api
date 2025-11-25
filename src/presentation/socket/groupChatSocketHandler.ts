@@ -43,11 +43,9 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
           error?: string;
         }) => void
       ) => {
-        const startTime = Date.now();
 
         try {
           const { packageId } = data;
-          const senderId = socket.data.userId;
 
           const groupChat = await this._getGroupChatByPackageUsecase.execute(
             packageId
@@ -64,13 +62,8 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
           }
 
           const roomName = this.getRoomName(groupChat._id.toString());
-          socket.join(roomName);
+          void socket.join(roomName);
           socket.data.groupChatId = groupChat._id.toString();
-
-          // Log room join for debugging
-          const room = io.sockets.adapter.rooms.get(roomName);
-          const roomSize = room ? room.size : 0;
-          console.log(`✅ User ${senderId} joined room: ${roomName}, Total members: ${roomSize}`);
 
           // Notify other users in the room that a new user joined
           socket.to(roomName).emit(GROUP_CHAT_SOCKET_EVENTS.SERVER.USER_JOINED_GROUP, {
@@ -91,7 +84,7 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
             ack({ success: true, groupChatId: groupChat._id });
           }
         } catch (err: unknown) {
-          const duration = Date.now() - startTime;
+           console.log(err)
           socket.emit(GROUP_CHAT_SOCKET_EVENTS.SERVER.GROUP_CHAT_ERROR, {
             message: ERROR_MESSAGE.GROUP.FAILED_TO_JOIN_GROUP_CHAT,
           });
@@ -160,12 +153,9 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
 
           if (!socket.rooms.has(roomName)) {
             console.log(`Sender not in room ${roomName}, joining now..`);
-            socket.join(roomName);
+            void socket.join(roomName);
             socket.data.groupChatId = groupChatId;
           }
-
-          const room = io.sockets.adapter.rooms.get(roomName);
-          const roomSize = room ? room.size : 0;
 
           io.to(roomName).emit(
             GROUP_CHAT_SOCKET_EVENTS.SERVER.NEW_GROUP_MESSAGE,
@@ -173,7 +163,7 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
           );
 
           ack?.({ success: true, message: messageToEmit });
-        } catch (err: unknown) {
+        } catch(err) {
           ack?.({
             success: false,
             error: getErrorMessage(err, ERROR_MESSAGE.SERVER_ERROR),
@@ -231,14 +221,14 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
             const roomName = this.getRoomName(groupChatId);
             
             // Notify other users in the room that this user left
-            socket.to(roomName).emit(GROUP_CHAT_SOCKET_EVENTS.SERVER.USER_LEFT_GROUP, {
+            void socket.to(roomName).emit(GROUP_CHAT_SOCKET_EVENTS.SERVER.USER_LEFT_GROUP, {
               userId: socket.data.userId,
               userType: socket.data.role,
               groupChatId: groupChatId,
               timestamp: new Date(),
             });
 
-            socket.leave(roomName);
+            void socket.leave(roomName);
             socket.data.groupChatId = null;
             
             console.log(`👋 User ${socket.data.userId} left room: ${roomName}`);
@@ -247,7 +237,7 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
           if (ack) {
             ack({ success: true });
           }
-        } catch (err) {
+        } catch {
           if (ack) {
             ack({
               success: false,
@@ -284,7 +274,7 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
             });
 
           if (ack) ack({ success: true });
-        } catch (error: unknown) {
+        } catch{
           if (ack)
             ack({
               success: false,
@@ -322,7 +312,7 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
             );
 
           if (ack) ack({ success: true });
-        } catch (error: unknown) {
+        } catch {
           if (ack)
             ack({
               success: false,
@@ -356,7 +346,7 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
           const onlineMembers = room ? Array.from(room) : [];
 
           if (ack) ack({ success: true, onlineMembers });
-        } catch (error: unknown) {
+        } catch {
           if (ack)
             ack({
               success: false,
@@ -374,7 +364,7 @@ export class GroupChatSocketHandler implements IGroupChatSocketHandler {
 
       if (socket.data.groupChatId) {
         const roomName = this.getRoomName(socket.data.groupChatId);
-        socket.leave(roomName);
+        void socket.leave(roomName);
         console.log(`User left group chat room ${roomName} on disconnect`);
       }
     });

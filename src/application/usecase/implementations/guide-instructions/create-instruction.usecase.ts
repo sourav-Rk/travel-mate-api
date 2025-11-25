@@ -9,7 +9,6 @@ import { ERROR_MESSAGE } from "../../../../shared/constants";
 import { CreateInstructionDto } from "../../../dto/request/guide-instruction.dto";
 import { ICreateInstructionUsecase } from "../../interfaces/guide-instruction/create-instruction-usecase.interface";
 
-
 @injectable()
 export class CreateInstructionUsecase implements ICreateInstructionUsecase {
   constructor(
@@ -22,8 +21,8 @@ export class CreateInstructionUsecase implements ICreateInstructionUsecase {
     @inject("IGuideInstructionRepository")
     private _guideInstructionRepository: IGuideInstructionRepository,
 
-    @inject('IPackageRepository')
-    private _packageRepository : IPackageRepository
+    @inject("IPackageRepository")
+    private _packageRepository: IPackageRepository
   ) {}
 
   async execute(
@@ -35,22 +34,25 @@ export class CreateInstructionUsecase implements ICreateInstructionUsecase {
       throw new NotFoundError(ERROR_MESSAGE.GUIDE_NOT_FOUND);
     }
 
-    const packageDetails = await this._packageRepository.findByPackageId(instructionData.packageId);
+    const packageDetails = await this._packageRepository.findByPackageId(
+      instructionData.packageId
+    );
 
-    if(!packageDetails){
+    if (!packageDetails) {
       throw new NotFoundError(ERROR_MESSAGE.PACKAGE_NOT_FOUND);
     }
-
 
     const bookings = await this._bookingRepository.findByPackageId(
       instructionData.packageId
     );
 
     if (bookings.length === 0) {
-      throw new NotFoundError(ERROR_MESSAGE.GUIDE_INSTRUCTIONS.NO_TRAVELLERS_FOUND);
+      throw new NotFoundError(
+        ERROR_MESSAGE.GUIDE_INSTRUCTIONS.NO_TRAVELLERS_FOUND
+      );
     }
 
-    const instruction = await this._guideInstructionRepository.save({
+    await this._guideInstructionRepository.save({
       guideId,
       packageId: instructionData.packageId,
       title: instructionData.title,

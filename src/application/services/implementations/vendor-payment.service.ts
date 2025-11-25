@@ -39,7 +39,7 @@ export class VendorPaymentService implements IVendorPaymentService {
       balance: newBalance,
     });
 
-    const vendorTransaction = await this._walletTransactionRepository.save({
+    await this._walletTransactionRepository.save({
       walletId: wallet._id,
       type: TRANSACTION_TYPE.CREDIT,
       referenceId: bookingId,
@@ -60,7 +60,6 @@ export class VendorPaymentService implements IVendorPaymentService {
     vendorId: string,
     refundAmount: number,
     bookingId: string,
-    cancellationReason: string
   ): Promise<void> {
     const vendorDeductionAmount = refundAmount * 0.9;
 

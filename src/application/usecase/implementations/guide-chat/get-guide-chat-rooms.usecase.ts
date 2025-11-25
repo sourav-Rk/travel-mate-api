@@ -39,7 +39,7 @@ export class GetGuideChatRoomsUsecase implements IGetGuideChatRoomsUsecase {
                 enrichedParticipant.lastName = client.lastName;
                 enrichedParticipant.profileImage = client.profileImage;
               }
-            } catch (error) {
+            } catch {
             }
 
             return enrichedParticipant;

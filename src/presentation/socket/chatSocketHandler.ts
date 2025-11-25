@@ -75,10 +75,10 @@ export class ChatSocketHandler implements IChatSocketHandler {
         }) => void
       ) => {
         try {
-         /**
-          *  Prevent guides from initiating chat - only travellers (clients) can start guide chats
-          * This prevents guides from accidentally creating self-chat rooms
-          */
+          /**
+           *  Prevent guides from initiating chat - only travellers (clients) can start guide chats
+           * This prevents guides from accidentally creating self-chat rooms
+           */
           if (socket.data.role === "guide") {
             return ack?.({
               success: false,
@@ -124,7 +124,7 @@ export class ChatSocketHandler implements IChatSocketHandler {
             },
           });
 
-          socket.join(room._id);
+          void socket.join(room._id);
           socket.emit(CHAT_SOCKET_EVENTS.SERVER.GUIDE_SERVICE_CHAT_READY, {
             guideChatRoomId: room._id,
           });
@@ -159,7 +159,9 @@ export class ChatSocketHandler implements IChatSocketHandler {
           /**
            * Verify the user is a participant in this room
            */
-          const room = await this._guideChatRoomRepository.findById(data.guideChatRoomId);
+          const room = await this._guideChatRoomRepository.findById(
+            data.guideChatRoomId
+          );
           if (!room) {
             return ack?.({
               success: false,
@@ -178,7 +180,7 @@ export class ChatSocketHandler implements IChatSocketHandler {
             });
           }
 
-          socket.join(data.guideChatRoomId);
+          void socket.join(data.guideChatRoomId);
           ack?.({ success: true });
         } catch (error) {
           ack?.({
@@ -197,12 +199,9 @@ export class ChatSocketHandler implements IChatSocketHandler {
       ) => {
         try {
           const message = await this._sendGuideMessageUsecase.execute(data);
-          io
+          void io
             .to(message.guideChatRoomId)
-            .emit(
-              CHAT_SOCKET_EVENTS.SERVER.GUIDE_SERVICE_NEW_MESSAGE,
-              message
-            );
+            .emit(CHAT_SOCKET_EVENTS.SERVER.GUIDE_SERVICE_NEW_MESSAGE, message);
           ack?.({ success: true });
         } catch (error) {
           ack?.({
@@ -220,24 +219,22 @@ export class ChatSocketHandler implements IChatSocketHandler {
         ack?: (res: { success: boolean; error?: string }) => void
       ) => {
         try {
-          const messageIds = await this._markGuideMessagesDeliveredUsecase.execute(
-            data.guideChatRoomId,
-            data.userId
-          );
+          const messageIds =
+            await this._markGuideMessagesDeliveredUsecase.execute(
+              data.guideChatRoomId,
+              data.userId
+            );
 
           socket
             .to(data.guideChatRoomId)
-            .emit(
-              CHAT_SOCKET_EVENTS.SERVER.GUIDE_SERVICE_MESSAGES_DELIVERED,
-              {
-                guideChatRoomId: data.guideChatRoomId,
-                userId: data.userId,
-                messageIds,
-              }
-            );
+            .emit(CHAT_SOCKET_EVENTS.SERVER.GUIDE_SERVICE_MESSAGES_DELIVERED, {
+              guideChatRoomId: data.guideChatRoomId,
+              userId: data.userId,
+              messageIds,
+            });
 
           ack?.({ success: true });
-        } catch (error) {
+        } catch {
           ack?.({
             success: false,
             error: ERROR_MESSAGE.GROUP.FAILED_TO_MARK_MESSAGE_DELIVERED,
@@ -267,7 +264,7 @@ export class ChatSocketHandler implements IChatSocketHandler {
             });
 
           ack?.({ success: true });
-        } catch (error) {
+        } catch {
           ack?.({
             success: false,
             error: ERROR_MESSAGE.GROUP.FAILED_TO_MARK_MESSAGE_READ,
@@ -282,7 +279,7 @@ export class ChatSocketHandler implements IChatSocketHandler {
         try {
           const isOnline = isUserOnline(userId);
           callback({ isOnline });
-        } catch (error) {
+        } catch {
           callback({ isOnline: false });
         }
       }
@@ -292,7 +289,7 @@ export class ChatSocketHandler implements IChatSocketHandler {
       try {
         const onlineUsers = getOnlineUsers();
         callback(onlineUsers);
-      } catch (error) {
+      } catch {
         callback([]);
       }
     });
@@ -325,8 +322,15 @@ export class ChatSocketHandler implements IChatSocketHandler {
           );
           socket.data.chatRoomId = chatroom?._id.toString();
 
+          if (!chatroom || !chatroom._id) {
+            return ack?.({
+              success: false,
+              error: ERROR_MESSAGE.CHAT.FAILED_TO_START_CHAT,
+            });
+          }
+
           // Join user to the room
-          socket.join(chatroom?._id.toString()!);
+          void socket.join(chatroom?._id.toString());
 
           // Notify client
           socket.emit(CHAT_SOCKET_EVENTS.SERVER.CHAT_JOINED, {
@@ -336,7 +340,7 @@ export class ChatSocketHandler implements IChatSocketHandler {
           if (ack) {
             ack({ success: true, chatRoomId: chatroom?._id });
           }
-        } catch (err) {
+        } catch {
           socket.emit(CHAT_SOCKET_EVENTS.SERVER.ERROR, {
             message: ERROR_MESSAGE.CHAT.FAILED_TO_START_CHAT,
           });
@@ -376,7 +380,8 @@ export class ChatSocketHandler implements IChatSocketHandler {
           if (
             !senderId ||
             !receiverId ||
-            (!message && (!mediaAttachments || mediaAttachments.length === 0)) ||
+            (!message &&
+              (!mediaAttachments || mediaAttachments.length === 0)) ||
             !senderType ||
             !receiverType ||
             !contextType
@@ -419,7 +424,7 @@ export class ChatSocketHandler implements IChatSocketHandler {
               );
               newMessage.status = "delivered";
             } catch (deliveryError) {
-              console.log(deliveryError)
+              console.log(deliveryError);
             }
           }
 
@@ -473,7 +478,7 @@ export class ChatSocketHandler implements IChatSocketHandler {
             });
 
           ack?.({ success: true });
-        } catch (error) {
+        } catch {
           ack?.({
             success: false,
             error: ERROR_MESSAGE.GROUP.FAILED_TO_MARK_MESSAGE_DELIVERED,
@@ -508,7 +513,7 @@ export class ChatSocketHandler implements IChatSocketHandler {
           });
 
           ack?.({ success: true });
-        } catch (error) {
+        } catch {
           ack?.({
             success: false,
             error: ERROR_MESSAGE.GROUP.FAILED_TO_MARK_MESSAGE_READ,
@@ -564,7 +569,7 @@ export class ChatSocketHandler implements IChatSocketHandler {
             });
 
           if (ack) ack({ success: true });
-        } catch (error: unknown) {
+        } catch {
           if (ack)
             ack({
               success: false,
@@ -583,7 +588,7 @@ export class ChatSocketHandler implements IChatSocketHandler {
       const userId = socket.data.userId;
 
       if (socket.data.chatRoomId) {
-        socket.leave(socket.data.chatRoomId);
+        void socket.leave(socket.data.chatRoomId);
         console.log(`User left room ${socket.data.chatRoomId} on disconnect`);
       }
 

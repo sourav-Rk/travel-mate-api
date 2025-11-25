@@ -12,8 +12,6 @@ export class LogoutUsecase implements ILogoutUsecase {
   ) {}
 
   async execute(refreshToken: string, accessToken: string): Promise<void> {
-    const payload = this._tokenService.verifyAccessToken(
-      accessToken
-    ) as CustomJwtPayload;
+    this._tokenService.verifyAccessToken(accessToken) as CustomJwtPayload;
   }
 }

@@ -82,8 +82,8 @@ export class LocalGuideBookingMapper {
             dueDate : doc.fullPayment.dueDate?.toISOString(),
             paidAt : doc.fullPayment.paidAt?.toISOString()
           },
-          createdAt : doc.createdAt?.toISOString()!,
-          updatedAt : doc.updatedAt?.toISOString()!,
+          createdAt : doc.createdAt?.toISOString()??"",
+          updatedAt : doc.updatedAt?.toISOString()??"",
           cancellationRequest : doc.cancellationRequest? {
             reason : doc.cancellationRequest?.reason,
             requestedAt : doc.cancellationRequest.requestedAt.toISOString(),

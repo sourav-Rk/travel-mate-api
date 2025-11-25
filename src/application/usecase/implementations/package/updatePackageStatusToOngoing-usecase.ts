@@ -25,7 +25,10 @@ export class UpdatePackageStatusToOngoing
     for (const pkg of packageStartingToday) {
       if (pkg.status !== "ongoing" && pkg.status === "applications_closed") {
         pkg.status = "ongoing";
-        await this._packageRepository.updatePackageStatus(pkg?._id!, "ongoing");
+        if (!pkg._id) {
+          continue;
+        }
+        await this._packageRepository.updatePackageStatus(pkg._id, "ongoing");
         console.log(`package ${pkg.packageName} marked as ongoing`);
       }
     }

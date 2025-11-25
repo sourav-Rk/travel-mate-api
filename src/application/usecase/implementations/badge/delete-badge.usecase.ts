@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
 
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { ValidationError } from "../../../../domain/errors/validationError";
 import { IBadgeRepository } from "../../../../domain/repositoryInterfaces/badge/badge-repository.interface";
 import { ERROR_MESSAGE } from "../../../../shared/constants";
 import { IDeleteBadgeUsecase } from "../../interfaces/badge/delete-badge.interface";
-import { ValidationError } from "../../../../domain/errors/validationError";
 
 @injectable()
 export class DeleteBadgeUsecase implements IDeleteBadgeUsecase {

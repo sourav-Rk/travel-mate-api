@@ -220,9 +220,9 @@ export class BookingMapper {
       bookingId: data.bookingId,
       refundAmount: data.cancellationRequest?.calculatedRefund || 0,
       status: data.status,
-      cancellationReason: data.cancellationRequest?.reason!,
+      cancellationReason: data.cancellationRequest?.reason ??"",
       
-      requestedAt: data.cancellationRequest?.requestedAt.toDateString()!,
+      requestedAt: data.cancellationRequest?.requestedAt.toDateString() ?? "",
       package: {
         packageId: data.package.packageId!,
         packageName: data.package.packageName,

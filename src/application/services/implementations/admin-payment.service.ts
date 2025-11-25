@@ -62,7 +62,6 @@ export class AdminPaymentService implements IAdminPaymentService {
   async processCancellationRefund(
     refundAmount: number,
     bookingId: string,
-    cancellationReason: string
   ): Promise<void> {
     if (refundAmount <= 0) {
       throw new ValidationError(

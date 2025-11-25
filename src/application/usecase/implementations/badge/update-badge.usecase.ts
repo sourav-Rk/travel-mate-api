@@ -1,12 +1,12 @@
 import { inject, injectable } from "tsyringe";
 
-import { UpdateBadgeReqDTO } from "../../../dto/request/badge.dto";
+import { IBadgeEntity } from "../../../../domain/entities/badge.entity";
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { ValidationError } from "../../../../domain/errors/validationError";
 import { IBadgeRepository } from "../../../../domain/repositoryInterfaces/badge/badge-repository.interface";
 import { ERROR_MESSAGE } from "../../../../shared/constants";
+import { UpdateBadgeReqDTO } from "../../../dto/request/badge.dto";
 import { IUpdateBadgeUsecase } from "../../interfaces/badge/update-badge.interface";
-import { ValidationError } from "../../../../domain/errors/validationError";
-import { IBadgeEntity } from "../../../../domain/entities/badge.entity";
 
 @injectable()
 export class UpdateBadgeUsecase implements IUpdateBadgeUsecase {

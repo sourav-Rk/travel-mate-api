@@ -42,8 +42,9 @@ export class CreateVolunteerPostUsecase implements ICreateVolunteerPostUsecase {
       throw new NotFoundError(ERROR_MESSAGE.USER_NOT_FOUND);
     }
 
-    const profile =
-      await this._localGuideProfileRepository.findByUserId(userId);
+    const profile = await this._localGuideProfileRepository.findByUserId(
+      userId
+    );
     if (!profile) {
       throw new NotFoundError(
         ERROR_MESSAGE.VOLUNTEER_POST.LOCAL_GUIDE_PROFILE_NOT_FOUND
@@ -57,9 +58,8 @@ export class CreateVolunteerPostUsecase implements ICreateVolunteerPostUsecase {
       );
     }
 
-
     /**
-     * Validate coordinates 
+     * Validate coordinates
      */
     const [longitude, latitude] = data.location.coordinates;
     if (
@@ -75,7 +75,7 @@ export class CreateVolunteerPostUsecase implements ICreateVolunteerPostUsecase {
     }
 
     /**
-     *Validate hourlyRate in profile if offering service 
+     *Validate hourlyRate in profile if offering service
      */
     if (data.offersGuideService && !profile.hourlyRate) {
       throw new ValidationError(
@@ -90,14 +90,14 @@ export class CreateVolunteerPostUsecase implements ICreateVolunteerPostUsecase {
     }
 
     /**
-     *Validate tags count 
+     *Validate tags count
      */
     if (data.tags && data.tags.length > 20) {
       throw new ValidationError(ERROR_MESSAGE.VOLUNTEER_POST.MAX_TAGS_EXCEEDED);
     }
 
     // Create post - always set status to published
-    const post = await this._volunteerPostRepository.save({
+    await this._volunteerPostRepository.save({
       localGuideProfileId: profile._id || "",
       title: data.title,
       description: data.description,
@@ -130,14 +130,11 @@ export class CreateVolunteerPostUsecase implements ICreateVolunteerPostUsecase {
      * Update guide stats and trigger badge evaluation
      */
     try {
-      await this._updateLocalGuideStatsUsecase.execute(
-        profile._id || "",
-        { trigger: "post_creation" }
-      );
+      await this._updateLocalGuideStatsUsecase.execute(profile._id || "", {
+        trigger: "post_creation",
+      });
     } catch (error) {
       console.error("Error updating guide stats for badge evaluation:", error);
     }
-    
   }
 }
-

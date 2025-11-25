@@ -83,7 +83,9 @@ export class CreateGuideChatRoomUsecase implements ICreateGuideChatRoomUsecase {
             enrichedParticipant.lastName = client.lastName;
             enrichedParticipant.profileImage = client.profileImage;
           }
-        } catch (error) {}
+        } catch (error) {
+          console.log(error);
+        }
 
         return enrichedParticipant;
       })

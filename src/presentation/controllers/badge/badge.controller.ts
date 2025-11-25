@@ -1,18 +1,16 @@
-import { plainToInstance } from "class-transformer";
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 
-import { CreateBadgeReqDTO, GetBadgesReqDTO, UpdateBadgeReqDTO } from "../../../application/dto/request/badge.dto";
 import { ICreateBadgeUsecase } from "../../../application/usecase/interfaces/badge/create-badge.interface";
 import { IDeleteBadgeUsecase } from "../../../application/usecase/interfaces/badge/delete-badge.interface";
 import { IEvaluateBadgesUsecase } from "../../../application/usecase/interfaces/badge/evaluate-badges.interface";
 import { IGetBadgesUsecase } from "../../../application/usecase/interfaces/badge/get-badges.interface";
 import { IUpdateBadgeUsecase } from "../../../application/usecase/interfaces/badge/update-badge.interface";
+import { IBadgeCriteria } from "../../../domain/entities/badge.entity";
 import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
 import { IBadgeController } from "../../interfaces/controllers/badge/badge.controller.interface";
 import { CustomRequest } from "../../middlewares/auth.middleware";
-import { IBadgeCriteria } from "../../../domain/entities/badge.entity";
 
 @injectable()
 export class BadgeController implements IBadgeController {
@@ -46,8 +44,9 @@ export class BadgeController implements IBadgeController {
   async getGuideBadges(req: Request, res: Response): Promise<void> {
     const { guideProfileId } = req.query;
 
-
-    const result = await this._getBadgesUsecase.getGuideBadges(String(guideProfileId));
+    const result = await this._getBadgesUsecase.getGuideBadges(
+      String(guideProfileId)
+    );
 
     ResponseHelper.success(
       res,
@@ -60,7 +59,6 @@ export class BadgeController implements IBadgeController {
 
   async evaluateBadges(req: Request, res: Response): Promise<void> {
     const { guideProfileId } = req.body;
-
 
     const result = await this._evaluateBadgesUsecase.execute(guideProfileId);
 
@@ -75,22 +73,22 @@ export class BadgeController implements IBadgeController {
 
   //------- Admin methods -------
   async createBadge(req: Request, res: Response): Promise<void> {
-    // 
+    //
     /**
-     *Clean up criteria - remove incomplete additionalCondition objects 
+     *Clean up criteria - remove incomplete additionalCondition objects
      */
     if (req.body.criteria && Array.isArray(req.body.criteria)) {
       req.body.criteria = req.body.criteria.map((criterion: IBadgeCriteria) => {
         if (criterion.additionalCondition) {
-          const hasValidType = 
+          const hasValidType =
             criterion.additionalCondition.type &&
             typeof criterion.additionalCondition.type === "string";
-          const hasValidValue = 
+          const hasValidValue =
             criterion.additionalCondition.value !== undefined &&
             criterion.additionalCondition.value !== null &&
             typeof criterion.additionalCondition.value === "number" &&
             criterion.additionalCondition.value > 0;
-          
+
           if (!hasValidType || !hasValidValue) {
             delete criterion.additionalCondition;
           }
@@ -101,8 +99,7 @@ export class BadgeController implements IBadgeController {
 
     const adminId = (req as CustomRequest).user.id;
     const data = req.body;
-
-    const badge = await this._createBadgeUsecase.execute(data, adminId);
+    await this._createBadgeUsecase.execute(data, adminId);
 
     ResponseHelper.success(
       res,
@@ -114,20 +111,20 @@ export class BadgeController implements IBadgeController {
   async updateBadge(req: Request, res: Response): Promise<void> {
     const { badgeId } = req.params;
     /**
-     *Clean up criteria - remove incomplete additionalCondition objects 
+     *Clean up criteria - remove incomplete additionalCondition objects
      */
     if (req.body.criteria && Array.isArray(req.body.criteria)) {
       req.body.criteria = req.body.criteria.map((criterion: IBadgeCriteria) => {
         if (criterion.additionalCondition) {
-          const hasValidType = 
+          const hasValidType =
             criterion.additionalCondition.type &&
             typeof criterion.additionalCondition.type === "string";
-          const hasValidValue = 
+          const hasValidValue =
             criterion.additionalCondition.value !== undefined &&
             criterion.additionalCondition.value !== null &&
             typeof criterion.additionalCondition.value === "number" &&
             criterion.additionalCondition.value > 0;
-          
+
           if (!hasValidType || !hasValidValue) {
             delete criterion.additionalCondition;
           }
@@ -135,12 +132,11 @@ export class BadgeController implements IBadgeController {
         return criterion;
       });
     }
-    
+
     const data = req.body;
     const adminId = (req as CustomRequest).user?.id;
 
-
-    const badge = await this._updateBadgeUsecase.execute(badgeId, data, adminId);
+    await this._updateBadgeUsecase.execute(badgeId, data, adminId);
 
     ResponseHelper.success(
       res,
@@ -163,7 +159,6 @@ export class BadgeController implements IBadgeController {
 
   async getBadgeById(req: Request, res: Response): Promise<void> {
     const { badgeId } = req.params;
-
 
     const badge = await this._getBadgesUsecase.getBadgeById(badgeId);
 

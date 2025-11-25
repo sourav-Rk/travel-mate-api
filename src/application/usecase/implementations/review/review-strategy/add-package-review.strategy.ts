@@ -28,7 +28,6 @@ export class AddPackageReviewStrategy implements IReviewStrategy {
     rating: number,
     comment: string,
     packageId?: string,
-    guideId?: string
   ): Promise<void> {
     const packageExisting = await this._packageRepository.findByPackageId(
       packageId!

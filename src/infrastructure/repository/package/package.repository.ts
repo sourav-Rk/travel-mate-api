@@ -12,11 +12,7 @@ import { PackageStatus, TRole } from "../../../shared/constants";
 import { IPackageModel, packageDB } from "../../database/models/package.model";
 import { BaseRepository } from "../baseRepository";
 
-interface ISortField {
-  price?: 1 | -1;
-  "duration.days"?: 1 | -1;
-  createdAt?: 1 | -1;
-}
+
 
 @injectable()
 export class PackageRepository

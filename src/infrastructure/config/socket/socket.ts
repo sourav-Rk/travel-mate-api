@@ -39,7 +39,7 @@ export function configureSocket(
     groupChatSocketHandler.register(io, socket);
 
     console.log("Registering notification socket handler...");
-    notificationSocketHandler.register(io, socket);
+   void notificationSocketHandler.register(io, socket);
 
     socket.on("disconnect", () => {
       console.log(

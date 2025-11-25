@@ -1,6 +1,5 @@
 import { IBadgeEntity } from "../../domain/entities/badge.entity";
 import { IBadgeModel } from "../../infrastructure/database/models/badge.model";
-import { BadgeDto } from "../dto/response/badge.dto";
 
 export class BadgeMapper {
   static toEntity(model: IBadgeModel): IBadgeEntity {

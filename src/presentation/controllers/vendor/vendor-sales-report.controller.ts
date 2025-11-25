@@ -17,7 +17,7 @@ export class VendorSalesReportController implements IVendorSalesReportController
 
   async getSalesReport(req: Request, res: Response): Promise<void> {
     const vendorId = (req as CustomRequest).user.id;
-    const { period, startDate, endDate, packageId, bookingStatus, paymentMode } = req.query as {
+    const { period, startDate, endDate, packageId, bookingStatus } = req.query as {
       period?: string;
       startDate?: string;
       endDate?: string;

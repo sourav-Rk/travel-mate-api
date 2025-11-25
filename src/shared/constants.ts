@@ -1,4 +1,3 @@
-import { LocalGuideBookingDto } from "../application/dto/response/local-guide-booking.dto";
 
 /**
  *GENDER constants
@@ -159,6 +158,9 @@ export const ERROR_MESSAGE = {
   GUIDE_NOT_FOUND: "Guide not found",
   GUIDE_AND_AGENCY_CONFLICT: "Guide and Package belong to different agencies",
   PACKAGE_ALREADY_COMPLETED: "Package is already completed",
+  PACKAGE_START_DATE_MISSING : "Package start date is missing",
+  PACKAGE_PRICE_MISSING : "Package price missing",
+  ADVANCE_PAYMENT_AMOUNT_MISSING :"Advance payment amount missing",
   PACKAGE_ID_MISSING_AFTER_SAVE: "Package id is missing after save",
   ONLY_ASSIGN_GUIDE_IF_PACKAGE_IS_CLOSED:
     "Guide can only be assigned after the applications are closed",

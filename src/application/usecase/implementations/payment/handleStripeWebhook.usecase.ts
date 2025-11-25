@@ -1,11 +1,16 @@
 import Stripe from "stripe";
 import { inject, injectable } from "tsyringe";
 
+import { ValidationError } from "../../../../domain/errors/validationError";
 import { IBookingRepository } from "../../../../domain/repositoryInterfaces/booking/booking-repository.interface";
 import { ILocalGuideBookingRepository } from "../../../../domain/repositoryInterfaces/local-guide-booking/local-guide-booking-repository.interface";
 import { IPackageRepository } from "../../../../domain/repositoryInterfaces/package/package-repository.interface";
 import { IPaymentService } from "../../../../domain/service-interfaces/payment-service.interface";
-import { BOOKINGSTATUS, LocalGuideBookingStatus } from "../../../../shared/constants";
+import {
+  BOOKINGSTATUS,
+  ERROR_MESSAGE,
+  LocalGuideBookingStatus,
+} from "../../../../shared/constants";
 import { IGroupChatService } from "../../../services/interfaces/group-chat-service.interface";
 import { ILocalGuidePaymentService } from "../../../services/interfaces/local-guide-payment-service.interface";
 import { IRevenueDistributionService } from "../../../services/interfaces/revenue-distribution-service.interface";
@@ -45,8 +50,6 @@ export class HandleStripeWebHookUsecase implements IHandleStripeWebHookUsecase {
     signature: string,
     endpointSecret: string
   ): Promise<void> {
-  
-
     const event = await this._paymentService.verifyWebhookSignature(
       payload,
       signature,
@@ -70,15 +73,27 @@ export class HandleStripeWebHookUsecase implements IHandleStripeWebHookUsecase {
             String(booking.packageId)
           );
 
+          if (!packageDetails?.startDate) {
+            throw new ValidationError(ERROR_MESSAGE.PACKAGE_START_DATE_MISSING);
+          }
+
+          if (!packageDetails?.price) {
+            throw new ValidationError(ERROR_MESSAGE.PACKAGE_PRICE_MISSING);
+          }
+
+          if (!booking.advancePayment?.amount) {
+            throw new ValidationError(ERROR_MESSAGE.ADVANCE_PAYMENT_AMOUNT_MISSING)
+          }
+
           //calculating deadline
-          const startDate = new Date(packageDetails?.startDate!);
+          const startDate = new Date(packageDetails?.startDate);
           const dueDate = new Date(startDate);
           const deadlineDays = packageDetails?.fullPaymentDeadlineDays ?? 7;
           dueDate.setDate(startDate.getDate() - deadlineDays);
 
           booking.fullPayment = {
             amount: Math.ceil(
-              packageDetails?.price! - booking.advancePayment?.amount!
+              packageDetails?.price - booking.advancePayment?.amount
             ),
             paid: false,
             dueDate,
@@ -86,7 +101,7 @@ export class HandleStripeWebHookUsecase implements IHandleStripeWebHookUsecase {
           };
 
           booking.advancePayment = {
-            ...booking.advancePayment!,
+            ...booking.advancePayment,
             paid: true,
             paidAt: new Date(),
           };
@@ -131,7 +146,11 @@ export class HandleStripeWebHookUsecase implements IHandleStripeWebHookUsecase {
           );
         } else if (bookingId && type === "local_guide_advance") {
           // Handle local guide advance payment
-          console.log("guide payment advance webhook triggered", bookingId, type);
+          console.log(
+            "guide payment advance webhook triggered",
+            bookingId,
+            type
+          );
           const localGuideBooking =
             await this._localGuideBookingRepository.findByBookingId(bookingId);
 
@@ -197,7 +216,10 @@ export class HandleStripeWebHookUsecase implements IHandleStripeWebHookUsecase {
             );
           } catch (error) {
             // Log error but don't fail the payment processing
-            console.error("Error updating guide stats for badge evaluation:", error);
+            console.error(
+              "Error updating guide stats for badge evaluation:",
+              error
+            );
           }
         }
         break;

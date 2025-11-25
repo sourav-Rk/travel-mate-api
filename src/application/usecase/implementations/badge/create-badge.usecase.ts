@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
 
-import { CreateBadgeReqDTO } from "../../../dto/request/badge.dto";
-import { BadgeDto } from "../../../dto/response/badge.dto";
 import { ValidationError } from "../../../../domain/errors/validationError";
 import { IBadgeRepository } from "../../../../domain/repositoryInterfaces/badge/badge-repository.interface";
 import { ERROR_MESSAGE } from "../../../../shared/constants";
+import { CreateBadgeReqDTO } from "../../../dto/request/badge.dto";
+import { BadgeDto } from "../../../dto/response/badge.dto";
 import { ICreateBadgeUsecase } from "../../interfaces/badge/create-badge.interface";
 
 @injectable()

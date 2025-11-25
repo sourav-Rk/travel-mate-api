@@ -11,7 +11,7 @@ export class NotificationSocketHandler implements INotificationSocketHandler {
       `Registering notification socket handlers for user: ${socket.data.userId}`
     );
 
-    socket.join(`user_${socket.data.userId}`);
+    void socket.join(`user_${socket.data.userId}`);
     console.log(
       `User ${socket.data.userId} joined notification room: user_${socket.data.userId}`
     );

@@ -1,4 +1,4 @@
-import { LocalGuideBookingDto, LocalGuideBookingListResult, LocalGuideBookingStatus } from "../../../dto/response/local-guide-booking.dto";
+import { LocalGuideBookingListResult, LocalGuideBookingStatus } from "../../../dto/response/local-guide-booking.dto";
 
 export type LocalGuideBookingCategory = "pending" | "completed";
 

@@ -9,6 +9,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+
 import { CoordinatesDto } from './coordinates.dto';
 
 export class LocationDto {

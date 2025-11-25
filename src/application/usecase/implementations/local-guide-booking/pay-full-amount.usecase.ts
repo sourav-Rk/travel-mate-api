@@ -124,8 +124,12 @@ export class PayLocalGuideFullAmountUsecase
         "Local Guide"
       : "Local Guide";
 
+    if(!guide?._id){
+      throw new ValidationError(ERROR_MESSAGE.ID_REQUIRED)
+    }
+
     const guideDetails = await this._localGuideProfileRepository.findByUserId(
-      guide?._id!
+      guide?._id
     );
     let guideProfileImage;
     if (guideDetails?.profileImage) {

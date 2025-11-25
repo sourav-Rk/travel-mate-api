@@ -72,7 +72,7 @@ export class GuideController implements IGuideController {
         if (languages.startsWith("[")) {
           try {
             languagesArray = JSON.parse(languages);
-          } catch (error) {
+          } catch  {
             languagesArray = languages.split(",");
           }
         } else {

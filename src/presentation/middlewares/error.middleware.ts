@@ -11,7 +11,7 @@ export class ErrorMiddleware implements IErrorMiddleware {
     err: Error,
     req: Request,
     res: Response,
-    next: NextFunction
+    _next: NextFunction
   ): void {
     let statusCode = HTTP_STATUS.INTERNAL_SERVER_ERROR;
     let message = ERROR_MESSAGE.SERVER_ERROR;

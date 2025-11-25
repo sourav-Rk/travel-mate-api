@@ -93,7 +93,7 @@ export class VendorApproveCancellationUsecase
       refundAmount: booking.refundAmount,
     };
 
-    const updatedBooking = await this._bookingRepository.updateBooking(
+     await this._bookingRepository.updateBooking(
       booking._id!,
       updateData
     );

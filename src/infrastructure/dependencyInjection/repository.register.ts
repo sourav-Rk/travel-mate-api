@@ -4,6 +4,7 @@ import { IAdminRepository } from "../../domain/repositoryInterfaces/admin/admin-
 import { IAddressRepository } from "../../domain/repositoryInterfaces/auth/address-repository.interface";
 import { IKYCRepository } from "../../domain/repositoryInterfaces/auth/kyc-repository.interface";
 import { IOTPRepository } from "../../domain/repositoryInterfaces/auth/otp-repository.interface";
+import { IBadgeRepository } from "../../domain/repositoryInterfaces/badge/badge-repository.interface";
 import { IBookingRepository } from "../../domain/repositoryInterfaces/booking/booking-repository.interface";
 import { IChatRoomRepository } from "../../domain/repositoryInterfaces/chatroom/chatroom-repository.interface";
 import { IClientRepository } from "../../domain/repositoryInterfaces/client/client.repository.interface";
@@ -15,7 +16,6 @@ import { IGuideChatRoomRepository } from "../../domain/repositoryInterfaces/guid
 import { IGuideMessageRepository } from "../../domain/repositoryInterfaces/guide-chat/guide-message-repository.interface";
 import { IGuideInstructionRepository } from "../../domain/repositoryInterfaces/guide-instruction/guide-instruction-repository.interface";
 import { ILocalGuideBookingRepository } from "../../domain/repositoryInterfaces/local-guide-booking/local-guide-booking-repository.interface";
-import { IBadgeRepository } from "../../domain/repositoryInterfaces/badge/badge-repository.interface";
 import { ILocalGuideProfileRepository } from "../../domain/repositoryInterfaces/local-guide-profile/local-guide-profile-repository.interface";
 import { IMessageRepository } from "../../domain/repositoryInterfaces/message/message-repository.interface";
 import { INotificationRepository } from "../../domain/repositoryInterfaces/notification/notification-repository.interface";
@@ -36,6 +36,7 @@ import { AdminRepository } from "../repository/admin/admin.repository";
 import { AddressRepository } from "../repository/auth/address.repository";
 import { KYCRepository } from "../repository/auth/kyc.repository";
 import { OTPRepository } from "../repository/auth/otp.repository";
+import { BadgeRepository } from "../repository/badge/badge.repository";
 import { BookingRepository } from "../repository/booking/booking.repository";
 import { ChatRoomRepository } from "../repository/chatroom/chatroom-repository";
 import { ClientRepository } from "../repository/client/client.repository";
@@ -47,7 +48,6 @@ import { GuideChatRoomRepository } from "../repository/guide-chat/guide-chat-roo
 import { GuideMessageRepository } from "../repository/guide-chat/guide-message.repository";
 import { GuideInstructionRepository } from "../repository/guide-instruction/guide-instruction.repository";
 import { LocalGuideBookingRepository } from "../repository/local-guide-booking/local-guide-booking.repository";
-import { BadgeRepository } from "../repository/badge/badge.repository";
 import { LocalGuideProfileRepository } from "../repository/local-guide-profile/local-guide-profile.repository";
 import { MessageRepository } from "../repository/message/message.repository";
 import { NotificationRepository } from "../repository/notification/notification.repository";

@@ -1,3 +1,4 @@
+import { Type } from "class-transformer";
 import {
   IsEmail,
   IsEnum,
@@ -17,8 +18,6 @@ interface IForgotPasswordReset {
   confirmPassword: string;
   token: string;
 }
-
-import { Type } from "class-transformer";
 
 export class LoginReqDTO {
   @IsEmail({}, { message: "Invalid email format" })
@@ -68,7 +67,7 @@ class PasswordsMatchConstraint implements ValidatorConstraintInterface {
     return password === confirmPassword;
   }
 
-  defaultMessage(args: ValidationArguments) {
+  defaultMessage(_args: ValidationArguments) {
     return "Passwords must match";
   }
 }

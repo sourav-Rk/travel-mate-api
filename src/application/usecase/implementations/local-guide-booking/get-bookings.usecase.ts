@@ -7,9 +7,9 @@ import {
   ERROR_MESSAGE,
   LocalGuideBookingListFilters,
 } from "../../../../shared/constants";
+import { LocalGuideBookingListResult } from "../../../dto/response/local-guide-booking.dto";
 import { LocalGuideBookingMapper } from "../../../mapper/localGuideBooking.mapper";
 import { IGetLocalGuideBookingsUsecase } from "../../interfaces/local-guide-booking/get-bookings.interface";
-import { LocalGuideBookingListResult } from "../../../dto/response/local-guide-booking.dto";
 
 @injectable()
 export class GetLocalGuideBookingsUsecase

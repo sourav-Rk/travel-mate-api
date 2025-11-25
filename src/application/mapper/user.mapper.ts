@@ -26,11 +26,11 @@ export class UserMapper {
     }
 
     if (doc.isLocalGuide) {
-      user.isLocalGuide;
+      user.isLocalGuide = doc.isLocalGuide;
     }
 
     if (doc.localGuideProfileId) {
-      user.localGuideProfileId;
+      user.localGuideProfileId = doc.localGuideProfileId;
     }
 
     if (doc.bio) {
