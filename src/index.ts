@@ -44,9 +44,16 @@ try {
 
   global.io = io;
 
-  configureSocket(io, chatSocketHandler, groupChatSocketHandler, notificationSocketHandler, tokenService, realTimeNotificationService);
+  configureSocket(
+    io,
+    chatSocketHandler,
+    groupChatSocketHandler,
+    notificationSocketHandler,
+    tokenService,
+    realTimeNotificationService
+  );
 
-  httpServer.listen(config.server.PORT, () =>
+  httpServer.listen(Number(config.server.PORT), "0.0.0.0", () =>
     console.log(`server running at port ${config.server.PORT} `)
   );
 } catch (error) {
