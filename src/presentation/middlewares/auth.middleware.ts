@@ -130,28 +130,33 @@ export const authorizeRole = (allowedRoles: string[]) => {
 
 //-----middleware to handle reset password
 export const verifyResetToken = async (req: Request, res: Response, next: NextFunction) => {
-  const { token } = req.body;
+  console.log("verify reset token triggered");
+  let token = req.body.token;
+  console.log(token, "-->in verify reset token");
 
   if (!token) throw new CustomError(HTTP_STATUS.BAD_REQUEST, "token is missing");
 
+  token = token.trim().replace(/;+$/, "");
+  req.body.token = token;
+
   if (await isBlackListed(token)) {
     console.log("token is black listed worked");
-     res
-      .status(HTTP_STATUS.FORBIDDEN)
-      .json({ success: false, message: "token is blacklisted" });
+    res.status(HTTP_STATUS.FORBIDDEN).json({ success: false, message: "token is blacklisted" });
+    return;
   }
 
   try {
     const user = tokenService.verifyResetToken(token);
+    console.log(user, "-->user in verify reset token");
     if (!user?.id) {
-       next(new CustomError(HTTP_STATUS.UNAUTHORIZED, "Invalid token"));
+      next(new CustomError(HTTP_STATUS.UNAUTHORIZED, "Invalid token"));
     }
     console.log(user, "reset");
     req.body.id = String(user?.id);
-    next();
+    return next();
   } catch (error) {
     console.log(error);
 
-     next(new CustomError(HTTP_STATUS.UNAUTHORIZED, "Token verification failed"));
+    return next(new CustomError(HTTP_STATUS.UNAUTHORIZED, "Token verification failed"));
   }
 };

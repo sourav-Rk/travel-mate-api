@@ -29,6 +29,7 @@ export class GuideController implements IGuideController {
 
   async resetPassword(req: Request, res: Response): Promise<void> {
     const { id, password, token } = req.body;
+    console.log(id,password,token,"-->in controller");
     await this._resetPasswordResetUsecase.execute(id, password, token);
     ResponseHelper.success(
       res,
