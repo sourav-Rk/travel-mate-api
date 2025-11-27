@@ -136,7 +136,7 @@ export const verifyResetToken = async (req: Request, res: Response, next: NextFu
 
   if (await isBlackListed(token)) {
     console.log("token is black listed worked");
-    return res
+     res
       .status(HTTP_STATUS.FORBIDDEN)
       .json({ success: false, message: "token is blacklisted" });
   }
@@ -144,7 +144,7 @@ export const verifyResetToken = async (req: Request, res: Response, next: NextFu
   try {
     const user = tokenService.verifyResetToken(token);
     if (!user?.id) {
-      return next(new CustomError(HTTP_STATUS.UNAUTHORIZED, "Invalid token"));
+       next(new CustomError(HTTP_STATUS.UNAUTHORIZED, "Invalid token"));
     }
     console.log(user, "reset");
     req.body.id = String(user?.id);
@@ -152,6 +152,6 @@ export const verifyResetToken = async (req: Request, res: Response, next: NextFu
   } catch (error) {
     console.log(error);
 
-    return next(new CustomError(HTTP_STATUS.UNAUTHORIZED, "Token verification failed"));
+     next(new CustomError(HTTP_STATUS.UNAUTHORIZED, "Token verification failed"));
   }
 };
