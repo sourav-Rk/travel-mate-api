@@ -146,7 +146,7 @@ export function mailContentProvider(purpose: string, data?: any): string {
   </div>
   `;
     case RESET_PASSWORD:
-      const resetLink = `http://localhost:5173/reset-password?token=${data}`;
+      const resetLink = `${config.client.uri}/reset-password?token=${data}`;
       return `
     <div style="max-width: 550px; margin: auto; font-family: 'Segoe UI', Tahoma, sans-serif; background: #ffffff; border-radius: 12px; overflow: hidden; border: 1px solid #e0e0e0; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);">
       <div style="background: linear-gradient(to right, #4f46e5, #06b6d4); padding: 24px; color: white; text-align: center;">

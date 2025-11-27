@@ -20,15 +20,16 @@ export class GetGuideDetailsForClientReqDTO {
 
 export class ResetPasswordGuideDTO {
   @IsString({ message: "Password must be a string" })
-  @Matches(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-    {
-      message:
-        "Password must be at least 8 characters long and include one uppercase letter, one lowercase letter, one number, and one special character",
-    }
-  )
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, {
+    message:
+      "Password must be at least 8 characters long and include one uppercase letter, one lowercase letter, one number, and one special character",
+  })
   @Type(() => String)
   password?: string;
+
+  @IsString()
+  @IsOptional()
+  id!: string;
 
   @IsString()
   @IsNotEmpty({ message: "Token is required" })
@@ -38,24 +39,18 @@ export class ResetPasswordGuideDTO {
 export class UpdatePasswordGuideReqDTO {
   @IsString()
   @IsNotEmpty({ message: "Password is required" })
-  @Matches(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-    {
-      message:
-        "Password must contain 8+ characters, uppercase, lowercase, number, and special character",
-    }
-  )
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, {
+    message:
+      "Password must contain 8+ characters, uppercase, lowercase, number, and special character",
+  })
   currentPassword!: string;
 
   @IsString()
   @IsNotEmpty({ message: "Password is required" })
-  @Matches(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-    {
-      message:
-        "New password must contain 8+ characters, uppercase, lowercase, number, and special character",
-    }
-  )
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, {
+    message:
+      "New password must contain 8+ characters, uppercase, lowercase, number, and special character",
+  })
   newPassword!: string;
 }
 
