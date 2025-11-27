@@ -31,10 +31,6 @@ export class ResetPasswordGuideDTO {
   password?: string;
 
   @IsString()
-  @IsNotEmpty({ message: "id is required" })
-  id!: string;
-
-  @IsString()
   @IsNotEmpty({ message: "Token is required" })
   token!: string;
 }
