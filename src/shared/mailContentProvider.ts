@@ -1,3 +1,4 @@
+import { config } from "./config";
 import { MAIL_CONTENT_PURPOSE } from "./constants";
 
 export function mailContentProvider(purpose: string, data?: any): string {
@@ -60,7 +61,7 @@ export function mailContentProvider(purpose: string, data?: any): string {
       `;
 
     case GUIDE_LOGIN:
-      const resetUrl = `http://localhost:5173/guide/reset-password?token=${data}`;
+      const resetUrl = `${config.client.uri}/guide/reset-password?token=${data};`
       return `
   <div style="max-width: 550px; margin: auto; font-family: 'Segoe UI', Tahoma, sans-serif; background: #ffffff; border-radius: 12px; overflow: hidden; border: 1px solid #e0e0e0; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);">
     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 24px; color: white; text-align: center;">
