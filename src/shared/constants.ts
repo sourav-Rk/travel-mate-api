@@ -65,6 +65,7 @@ export enum HTTP_STATUS {
  *ERROR MESSAGE CONSTANTS
  */
 export const ERROR_MESSAGE = {
+  USER_REGISTRATION_FAILED : "User registration failed",
   USER_ID_OR_EMAIL_OR_ROLE_MISSING: "User id, email or role is missing",
   USER_ID_NOT_FOUND: "User Id not found",
   INVALID_USER_TYPE: "invalid user type ! expect client or vendor",
