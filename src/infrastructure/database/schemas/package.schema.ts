@@ -1,7 +1,8 @@
-import mongoose from "mongoose";
+import mongoose, { UpdateQuery } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 
 import { IPackageModel } from "../models/package.model";
+import { IPackageEntity } from "../../../domain/entities/package.entity";
 
 const durationSchema = new mongoose.Schema({
   days: {
@@ -144,5 +145,23 @@ packageSchema.pre("save", function (next) {
     deadline.setDate(deadline.getDate() - 15);
     this.applicationDeadline = deadline;
   }
+  next();
+});
+
+packageSchema.pre("findOneAndUpdate", function (next) {
+  const update = this.getUpdate() as UpdateQuery<IPackageEntity> | undefined;
+
+  if (!update) return next();
+
+  const updateDoc = update.$set ? update.$set : update;
+  /**
+   *Update applicationDeadline only if startDate changes
+   */
+  if (updateDoc.startDate) {
+    const deadline = new Date(updateDoc.startDate);
+    deadline.setDate(deadline.getDate() - 15);
+    updateDoc.applicationDeadline = deadline;
+  }
+
   next();
 });
