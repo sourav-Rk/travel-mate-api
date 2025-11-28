@@ -4,3 +4,4 @@ export interface IUpdateGuideProfileUsecase {
   execute(guideId: string, data: UpdateGuideProfileDTO): Promise<void>;
 }
 
+

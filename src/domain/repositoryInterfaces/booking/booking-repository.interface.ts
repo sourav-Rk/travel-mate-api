@@ -51,7 +51,7 @@ export interface IBookingRepository extends IBaseRepository<IBookingEntity> {
   ): Promise<number>;
   getAllConfirmedBookingsByUserIdWithPackageDetails(
     userId: string,
-    status: BookingStatus
+    status: BOOKINGSTATUS[]
   ): Promise<IBookingWithPackage[] | []>;
 
   findByBookingIdWithUserDetails(

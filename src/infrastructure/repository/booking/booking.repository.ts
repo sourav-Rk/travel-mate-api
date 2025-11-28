@@ -77,10 +77,10 @@ export class BookingRepository
 
   async getAllConfirmedBookingsByUserIdWithPackageDetails(
     userId: string,
-    status: BookingStatus
+    status: BOOKINGSTATUS[]
   ): Promise<IBookingWithPackage[] | []> {
     return await bookingDB
-      .find({ userId, status })
+      .find({ userId, status:{$in : status} })
       .populate({
         path: "packageId",
         model: "packages",

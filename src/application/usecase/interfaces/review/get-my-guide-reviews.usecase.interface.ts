@@ -4,3 +4,4 @@ export interface IGetMyGuideReviewsUsecase {
   execute(guideId: string): Promise<GuideReviewAggregateResult>;
 }
 
+

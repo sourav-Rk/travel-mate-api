@@ -106,7 +106,7 @@ export class ApplyPackageUsecase implements IApplyPackageUsecase {
     const userActiveBookings =
       await this._bookingRepository.getAllConfirmedBookingsByUserIdWithPackageDetails(
         userId,
-        BOOKINGSTATUS.APPLIED
+           [BOOKINGSTATUS.APPLIED, BOOKINGSTATUS.ADVANCE_PENDING, BOOKINGSTATUS.CONFIRMED, BOOKINGSTATUS.FULLY_PAID]
       );
 
     if (userActiveBookings?.length > 0) {
