@@ -17,6 +17,8 @@ export enum USER_TYPES {
 export enum VENDOR_STATUS {
   PENDING = "pending",
   VERIFIED = "verified",
+  REVIEWING ="reviewing",
+  REJECTED ="rejected"
 }
 
 export enum DASHBOARD_PERIOD {
