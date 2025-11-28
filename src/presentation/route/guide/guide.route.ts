@@ -8,11 +8,11 @@ import {
   UpdateGuideProfileDTO,
   UpdatePasswordGuideReqDTO,
 } from "../../../application/dto/request/guide.dto";
+import { MarkReadNotificationReqDTO } from "../../../application/dto/request/notification.dto";
 import {
   GetAssignedPackagesReqDTO,
   UpdatePackageStatusReqDTO,
 } from "../../../application/dto/request/package.dto";
-import { MarkReadNotificationReqDTO } from "../../../application/dto/request/notification.dto";
 import {
   chatController,
   groupChatController,

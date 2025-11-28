@@ -1,12 +1,11 @@
 import { inject, injectable } from "tsyringe";
 
 import { UpdateGuideProfileDTO } from "../../../../application/dto/request/guide.dto";
+import { CustomError } from "../../../../domain/errors/customError";
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { ValidationError } from "../../../../domain/errors/validationError";
-import { CustomError } from "../../../../domain/errors/customError";
-import { HTTP_STATUS } from "../../../../shared/constants";
-import { ERROR_MESSAGE } from "../../../../shared/constants";
 import { IGuideRepository } from "../../../../domain/repositoryInterfaces/guide/guide-repository.interface";
+import { HTTP_STATUS,ERROR_MESSAGE } from "../../../../shared/constants";
 import { IPhoneExistenceService } from "../../../services/interfaces/phone-existence-service.interface";
 import { IUpdateGuideProfileUsecase } from "../../interfaces/guide/update-guide-profile-usecase.interface";
 

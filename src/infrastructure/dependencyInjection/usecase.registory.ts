@@ -80,8 +80,8 @@ import { SendGroupMessageUsecase } from "../../application/usecase/implementatio
 import { GetGuideDetailsClient } from "../../application/usecase/implementations/guide/get-guide-details-client.usecase";
 import { GetGuideProfileUsecase } from "../../application/usecase/implementations/guide/getGuideProfileUsecase";
 import { ResetPasswordUsecase } from "../../application/usecase/implementations/guide/reset-password.usecase";
-import { UpdateGuidePasswordUsecase } from "../../application/usecase/implementations/guide/updateGuidePasswordUsecase";
 import { UpdateGuideProfileUsecase } from "../../application/usecase/implementations/guide/update-guide-profile.usecase";
+import { UpdateGuidePasswordUsecase } from "../../application/usecase/implementations/guide/updateGuidePasswordUsecase";
 import { CreateGuideChatRoomUsecase } from "../../application/usecase/implementations/guide-chat/create-guide-chat-room.usecase";
 import { GetGuideChatRoomsUsecase } from "../../application/usecase/implementations/guide-chat/get-guide-chat-rooms.usecase";
 import { GetGuideMessagesUsecase } from "../../application/usecase/implementations/guide-chat/get-guide-messages.usecase";
@@ -238,8 +238,8 @@ import { ISendGroupMessageUsecase } from "../../application/usecase/interfaces/g
 import { IGetGuideDetailsClientUsecase } from "../../application/usecase/interfaces/guide/get-guide-details-client-usecase.interface";
 import { IGetGuideProfileUsecase } from "../../application/usecase/interfaces/guide/getGuideProfile-usecase.interface";
 import { IResetPasswordUsecase } from "../../application/usecase/interfaces/guide/reset-password-usecase.interface";
-import { IUpdateGuidePasswordUsecase } from "../../application/usecase/interfaces/guide/updateGuidePassword-usecase.interface";
 import { IUpdateGuideProfileUsecase } from "../../application/usecase/interfaces/guide/update-guide-profile-usecase.interface";
+import { IUpdateGuidePasswordUsecase } from "../../application/usecase/interfaces/guide/updateGuidePassword-usecase.interface";
 import { ICreateGuideChatRoomUsecase } from "../../application/usecase/interfaces/guide-chat/create-guide-chat-room.interface";
 import { IGetGuideChatRoomsUsecase } from "../../application/usecase/interfaces/guide-chat/get-guide-chat-rooms.interface";
 import { IGetGuideMessagesUsecase } from "../../application/usecase/interfaces/guide-chat/get-guide-messages.interface";

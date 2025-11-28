@@ -23,7 +23,7 @@ import { BookingMapper } from "../../../application/mapper/booking.mapper";
 import { IBookingEntity } from "../../../domain/entities/booking.entity";
 import { IPackageEntity } from "../../../domain/entities/package.entity";
 import { IBookingRepository } from "../../../domain/repositoryInterfaces/booking/booking-repository.interface";
-import { BOOKINGSTATUS, BookingStatus } from "../../../shared/constants";
+import { BOOKINGSTATUS } from "../../../shared/constants";
 import { bookingDB, IBookingModel } from "../../database/models/booking.model";
 import { BaseRepository } from "../baseRepository";
 

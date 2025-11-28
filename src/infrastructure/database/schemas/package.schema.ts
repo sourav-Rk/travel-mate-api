@@ -1,8 +1,8 @@
 import mongoose, { UpdateQuery } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 
-import { IPackageModel } from "../models/package.model";
 import { IPackageEntity } from "../../../domain/entities/package.entity";
+import { IPackageModel } from "../models/package.model";
 
 const durationSchema = new mongoose.Schema({
   days: {

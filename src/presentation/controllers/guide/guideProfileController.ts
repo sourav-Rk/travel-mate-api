@@ -3,8 +3,8 @@ import { inject, injectable } from "tsyringe";
 
 import { IGetGuideDetailsClientUsecase } from "../../../application/usecase/interfaces/guide/get-guide-details-client-usecase.interface";
 import { IGetGuideProfileUsecase } from "../../../application/usecase/interfaces/guide/getGuideProfile-usecase.interface";
-import { IUpdateGuidePasswordUsecase } from "../../../application/usecase/interfaces/guide/updateGuidePassword-usecase.interface";
 import { IUpdateGuideProfileUsecase } from "../../../application/usecase/interfaces/guide/update-guide-profile-usecase.interface";
+import { IUpdateGuidePasswordUsecase } from "../../../application/usecase/interfaces/guide/updateGuidePassword-usecase.interface";
 import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
 import { IGuideProfileController } from "../../interfaces/controllers/guide/guide-profile-controller.interface";

@@ -15,7 +15,7 @@ import {
   SalesReportSummaryDto,
 } from "../../../application/dto/response/salesReport.dto";
 import { IBookingModel } from "../../../infrastructure/database/models/booking.model";
-import { BOOKINGSTATUS, BookingStatus } from "../../../shared/constants";
+import { BOOKINGSTATUS } from "../../../shared/constants";
 import { IBookingEntity } from "../../entities/booking.entity";
 import { IBaseRepository } from "../baseRepository.interface";
 

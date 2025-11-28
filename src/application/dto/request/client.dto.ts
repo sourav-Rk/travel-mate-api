@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, Matches, IsEnum, IsUrl, Length } from "class-validator";
+import { IsEmail, IsNotEmpty, IsOptional, IsString, Matches, IsEnum, Length } from "class-validator";
 
 // Optional gender enum
 export enum GENDER {
@@ -38,7 +38,7 @@ export class UpdateClientProfileDTO {
   bio?: string;
 
   @IsOptional()
-  @IsUrl({}, { message: "Profile image must be a valid URL" })
+  @IsString()
   profileImage?: string;
 }
 

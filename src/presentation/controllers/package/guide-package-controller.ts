@@ -2,9 +2,9 @@ import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 
 import { IAssignedTripsUsecase } from "../../../application/usecase/interfaces/guideTrips/assignedTrips-usecase.interface";
-import { IGetMyGuideReviewsUsecase } from "../../../application/usecase/interfaces/review/get-my-guide-reviews.usecase.interface";
 import { IUpdatePackageStatusUsecaseGuide } from "../../../application/usecase/interfaces/guideTrips/update-package-status-usecase.interface";
 import { IViewPackageDetailsUsecase } from "../../../application/usecase/interfaces/guideTrips/viewPackageDetails-usecase.interface";
+import { IGetMyGuideReviewsUsecase } from "../../../application/usecase/interfaces/review/get-my-guide-reviews.usecase.interface";
 import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
 import { HTTP_STATUS, SUCCESS_MESSAGE } from "../../../shared/constants";
 import { IGuidePackageController } from "../../interfaces/controllers/package/guide-package-controller.interface";
