@@ -45,3 +45,27 @@ export interface PackageReviewListWithUserDetailsAndAverageRatingDto {
   averageRating: number;
   totalReviews: number;
 }
+
+export interface GuideReviewWithPackageDto {
+  _id: string;
+  rating: number;
+  comment: string;
+  createdAt: Date;
+  userDetails: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    profileImage?: string;
+  };
+  packageDetails: {
+    _id: string;
+    packageName: string;
+    packageId: string;
+  };
+}
+
+export interface GuideReviewAggregateResult {
+  reviews: GuideReviewWithPackageDto[];
+  averageRating: number;
+  totalReviews: number;
+}

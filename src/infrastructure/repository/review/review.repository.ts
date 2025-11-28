@@ -1,6 +1,7 @@
 import { injectable } from "tsyringe";
 
 import {
+  GuideReviewAggregateResult,
   ReviewAggregateResult,
 } from "../../../application/dto/response/reviewDto";
 import { ReviewMapper } from "../../../application/mapper/review.mapper";
@@ -175,5 +176,77 @@ export class ReviewRepository
       averageRating: Math.round((result.averageRating || 0) * 100) / 100,
       totalRatings: result.totalRatings || 0,
     };
+  }
+
+  async findByGuideId(
+    guideId: string
+  ): Promise<GuideReviewAggregateResult | null> {
+    const aggregation = await reviewDB.aggregate([
+      {
+        $match: {
+          guideId,
+          targetType: "guide",
+        },
+      },
+      {
+        $lookup: {
+          from: "clients",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userDetails",
+        },
+      },
+      { $unwind: "$userDetails" },
+      {
+        $lookup: {
+          from: "packages",
+          localField: "packageId",
+          foreignField: "packageId",
+          as: "packageDetails",
+        },
+      },
+      { $unwind: { path: "$packageDetails", preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          _id: { $toString: "$_id" },
+          rating: 1,
+          comment: 1,
+          createdAt: 1,
+          userDetails: {
+            _id: { $toString: "$userDetails._id" },
+            firstName: 1,
+            lastName: 1,
+            profileImage: 1,
+          },
+          packageDetails: {
+            _id: { $ifNull: [{ $toString: "$packageDetails._id" }, ""] },
+            packageName: { $ifNull: ["$packageDetails.packageName", ""] },
+            packageId: { $ifNull: ["$packageDetails.packageId", ""] },
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          reviews: { $push: "$$ROOT" },
+          averageRating: { $avg: "$rating" },
+          totalReviews: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          reviews: 1,
+          averageRating: { $ifNull: ["$averageRating", 0] },
+          totalReviews: 1,
+        },
+      },
+    ]);
+
+    if (aggregation.length === 0) {
+      return { reviews: [], averageRating: 0, totalReviews: 0 };
+    }
+
+    return aggregation[0];
   }
 }
