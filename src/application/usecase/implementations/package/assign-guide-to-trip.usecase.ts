@@ -10,6 +10,8 @@ import { ERROR_MESSAGE, HTTP_STATUS } from "../../../../shared/constants";
 import { USER_TYPES } from "../../../dto/request/admin.dto";
 import { GroupChatMember } from "../../../dto/response/groupChatDto";
 import { IAssignGuideToTripUsecase } from "../../interfaces/package/assign-guide-to-trip-usecase.interface";
+import { IRealTimeNotificationService } from "../../../../domain/service-interfaces/real-time-notification-service.interface";
+import { NotificationData } from "../../../../infrastructure/service/real-time-notification.service";
 
 @injectable()
 export class AssignGuideToTripUsecase implements IAssignGuideToTripUsecase {
@@ -21,7 +23,10 @@ export class AssignGuideToTripUsecase implements IAssignGuideToTripUsecase {
     private _packageRepository: IPackageRepository,
 
     @inject("IGroupChatRepository")
-    private _groupChatRepository: IGroupChatRepository
+    private _groupChatRepository: IGroupChatRepository,
+
+    @inject("IRealTimeNotificationService")
+    private _realtimeNotificationService: IRealTimeNotificationService,
   ) {}
 
   async execute(packageId: string, guideId: string): Promise<void> {
@@ -38,35 +43,22 @@ export class AssignGuideToTripUsecase implements IAssignGuideToTripUsecase {
 
     //check already assigned
     if (pkg.guideId) {
-      throw new CustomError(
-        HTTP_STATUS.CONFLICT,
-        ERROR_MESSAGE.GUIDE_ALREADY_ASSIGNED
-      );
+      throw new CustomError(HTTP_STATUS.CONFLICT, ERROR_MESSAGE.GUIDE_ALREADY_ASSIGNED);
     }
 
     //check guide belongs to the agency
     if (pkg.agencyId.toString() !== guide.agencyId.toString()) {
-      throw new CustomError(
-        HTTP_STATUS.CONFLICT,
-        ERROR_MESSAGE.GUIDE_AND_AGENCY_CONFLICT
-      );
+      throw new CustomError(HTTP_STATUS.CONFLICT, ERROR_MESSAGE.GUIDE_AND_AGENCY_CONFLICT);
     }
 
     //Check package is not blocked or closed
-    if (pkg.isBlocked)
-      throw new CustomError(
-        HTTP_STATUS.CONFLICT,
-        ERROR_MESSAGE.PACKAGE_BLOCKED
-      );
+    if (pkg.isBlocked) throw new CustomError(HTTP_STATUS.CONFLICT, ERROR_MESSAGE.PACKAGE_BLOCKED);
     if (pkg.status === "completed")
-      throw new CustomError(
-        HTTP_STATUS.CONFLICT,
-        ERROR_MESSAGE.PACKAGE_ALREADY_COMPLETED
-      );
+      throw new CustomError(HTTP_STATUS.CONFLICT, ERROR_MESSAGE.PACKAGE_ALREADY_COMPLETED);
     if (pkg.status !== "applications_closed")
       throw new CustomError(
         HTTP_STATUS.CONFLICT,
-        ERROR_MESSAGE.ONLY_ASSIGN_GUIDE_IF_PACKAGE_IS_CLOSED
+        ERROR_MESSAGE.ONLY_ASSIGN_GUIDE_IF_PACKAGE_IS_CLOSED,
       );
 
     //chekck for date conflicts
@@ -77,10 +69,7 @@ export class AssignGuideToTripUsecase implements IAssignGuideToTripUsecase {
     });
 
     if (isConflict) {
-      throw new CustomError(
-        HTTP_STATUS.CONFLICT,
-        ERROR_MESSAGE.GUIDE_ASSIGNED_FOR_ANOTHER_TRIP
-      );
+      throw new CustomError(HTTP_STATUS.CONFLICT, ERROR_MESSAGE.GUIDE_ASSIGNED_FOR_ANOTHER_TRIP);
     }
 
     //Asign guide
@@ -89,9 +78,15 @@ export class AssignGuideToTripUsecase implements IAssignGuideToTripUsecase {
     //add trips to assigned trips
     await this._guideRepository.pushAssignedTrip(guideId, pkg.packageId!);
 
-    const existingGroupChat = await this._groupChatRepository.findByPackage(
-      pkg.packageId!
-    );
+    const notificationData: NotificationData = {
+      title: "New Package Assigned",
+      message: `${pkg.packageName} has been assigned to you.The trip is on ${pkg.startDate}`,
+      type: "info",
+    };
+
+    await this._realtimeNotificationService.sendNotificationToUser(guideId, notificationData);
+
+    const existingGroupChat = await this._groupChatRepository.findByPackage(pkg.packageId!);
 
     if (existingGroupChat) {
       const member: GroupChatMember = {
