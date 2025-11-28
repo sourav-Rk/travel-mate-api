@@ -81,6 +81,7 @@ import { GetGuideDetailsClient } from "../../application/usecase/implementations
 import { GetGuideProfileUsecase } from "../../application/usecase/implementations/guide/getGuideProfileUsecase";
 import { ResetPasswordUsecase } from "../../application/usecase/implementations/guide/reset-password.usecase";
 import { UpdateGuidePasswordUsecase } from "../../application/usecase/implementations/guide/updateGuidePasswordUsecase";
+import { UpdateGuideProfileUsecase } from "../../application/usecase/implementations/guide/update-guide-profile.usecase";
 import { CreateGuideChatRoomUsecase } from "../../application/usecase/implementations/guide-chat/create-guide-chat-room.usecase";
 import { GetGuideChatRoomsUsecase } from "../../application/usecase/implementations/guide-chat/get-guide-chat-rooms.usecase";
 import { GetGuideMessagesUsecase } from "../../application/usecase/implementations/guide-chat/get-guide-messages.usecase";
@@ -136,6 +137,7 @@ import { PayAdvanceAmountUsecase } from "../../application/usecase/implementatio
 import { PayFullAmountUsecase } from "../../application/usecase/implementations/payment/pay-fullAmount.usecase";
 import { AddReviewUsecase } from "../../application/usecase/implementations/review/add-review.usecase";
 import { GetGuideReviewsUsecase } from "../../application/usecase/implementations/review/get-guide-review.usecase";
+import { GetMyGuideReviewsUsecase } from "../../application/usecase/implementations/review/get-my-guide-reviews.usecase";
 import { GetPackageReviewsUsecase } from "../../application/usecase/implementations/review/getPackageReviews.usecase";
 import { AddGuideReviewStrategy } from "../../application/usecase/implementations/review/review-strategy/add-guide-review.strategy";
 import { AddPackageReviewStrategy } from "../../application/usecase/implementations/review/review-strategy/add-package-review.strategy";
@@ -237,6 +239,7 @@ import { IGetGuideDetailsClientUsecase } from "../../application/usecase/interfa
 import { IGetGuideProfileUsecase } from "../../application/usecase/interfaces/guide/getGuideProfile-usecase.interface";
 import { IResetPasswordUsecase } from "../../application/usecase/interfaces/guide/reset-password-usecase.interface";
 import { IUpdateGuidePasswordUsecase } from "../../application/usecase/interfaces/guide/updateGuidePassword-usecase.interface";
+import { IUpdateGuideProfileUsecase } from "../../application/usecase/interfaces/guide/update-guide-profile-usecase.interface";
 import { ICreateGuideChatRoomUsecase } from "../../application/usecase/interfaces/guide-chat/create-guide-chat-room.interface";
 import { IGetGuideChatRoomsUsecase } from "../../application/usecase/interfaces/guide-chat/get-guide-chat-rooms.interface";
 import { IGetGuideMessagesUsecase } from "../../application/usecase/interfaces/guide-chat/get-guide-messages.interface";
@@ -292,6 +295,7 @@ import { IPayAdvanceAmountUsecase } from "../../application/usecase/interfaces/p
 import { IPayFullAmountUsecase } from "../../application/usecase/interfaces/payment/pay-fullAmount-usecase.interface";
 import { IAddReviewUsecase } from "../../application/usecase/interfaces/review/add-review-usecase.interface";
 import { IGetGuideReviewUsecase } from "../../application/usecase/interfaces/review/get-guide-reviews.usecase";
+import { IGetMyGuideReviewsUsecase } from "../../application/usecase/interfaces/review/get-my-guide-reviews.usecase.interface";
 import { IGetPackageReviewsUsecase } from "../../application/usecase/interfaces/review/getPackageReviews-usecase.interface";
 import { IAddGuideUsecase } from "../../application/usecase/interfaces/vendor/add-guide-usecase.interface";
 import { IGetGuideDetailsUsecase } from "../../application/usecase/interfaces/vendor/get-guide-details-usecase.interface";
@@ -568,6 +572,13 @@ export class UsecaseRegistory {
       }
     );
 
+    container.register<IUpdateGuideProfileUsecase>(
+      "IUpdateGuideProfileUsecase",
+      {
+        useClass: UpdateGuideProfileUsecase,
+      }
+    );
+
     container.register<IGetGuideDetailsClientUsecase>(
       "IGetGuideDetailsClientUsecase",
       {
@@ -798,6 +809,10 @@ export class UsecaseRegistory {
 
     container.register<IGetGuideReviewUsecase>("IGetGuideReviewUsecase", {
       useClass: GetGuideReviewsUsecase,
+    });
+
+    container.register<IGetMyGuideReviewsUsecase>("IGetMyGuideReviewsUsecase", {
+      useClass: GetMyGuideReviewsUsecase,
     });
 
     container.register<IGetNotificationsUsecase>("IGetNotificationsUsecase", {

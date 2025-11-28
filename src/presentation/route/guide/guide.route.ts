@@ -5,12 +5,14 @@ import { GetMessagesReqDto } from "../../../application/dto/request/chat.dto";
 import { CreateInstructionDto } from "../../../application/dto/request/guide-instruction.dto";
 import {
   ResetPasswordGuideDTO,
+  UpdateGuideProfileDTO,
   UpdatePasswordGuideReqDTO,
 } from "../../../application/dto/request/guide.dto";
 import {
   GetAssignedPackagesReqDTO,
   UpdatePackageStatusReqDTO,
 } from "../../../application/dto/request/package.dto";
+import { MarkReadNotificationReqDTO } from "../../../application/dto/request/notification.dto";
 import {
   chatController,
   groupChatController,
@@ -20,6 +22,7 @@ import {
   guideInstructionController,
   guidePackageController,
   guideProfileController,
+  notificationController,
 } from "../../../infrastructure/dependencyInjection/resolve";
 import { asyncHandler } from "../../../shared/async-handler";
 import {
@@ -65,6 +68,14 @@ export class GuideRoute extends BaseRoute {
       validationMiddleware(UpdatePasswordGuideReqDTO),
       asyncHandler(
         guideProfileController.updatePassword.bind(guideProfileController)
+      )
+    );
+
+    this.router.put(
+      "/profile",
+      validationMiddleware(UpdateGuideProfileDTO),
+      asyncHandler(
+        guideProfileController.updateProfile.bind(guideProfileController)
       )
     );
 
@@ -147,6 +158,46 @@ export class GuideRoute extends BaseRoute {
         )
       )
     );
+
+    // -------------------------
+    //  Review Routes
+    // -------------------------
+
+    this.router.get(
+      "/reviews",
+      asyncHandler(
+        guidePackageController.getMyReviews.bind(guidePackageController)
+      )
+    );
+
+    // -------------------------
+    //  Notification Routes
+    // -------------------------
+
+    // Mark a specific notification as read
+    this.router.patch(
+      "/notifications/:notificationId",
+      validationMiddleware(MarkReadNotificationReqDTO),
+      asyncHandler(
+        notificationController.markReadNotification.bind(notificationController)
+      )
+    );
+
+    // Get all notifications or mark all as read
+    this.router
+      .route("/notifications")
+      .get(
+        asyncHandler(
+          notificationController.getNotifications.bind(notificationController)
+        )
+      )
+      .patch(
+        asyncHandler(
+          notificationController.markAsReadAllNotification.bind(
+            notificationController
+          )
+        )
+      );
 
     // -------------------------
     //  Chat Routes

@@ -1,4 +1,4 @@
-import { ReviewAggregateResult } from "../../../application/dto/response/reviewDto";
+import { GuideReviewAggregateResult, ReviewAggregateResult } from "../../../application/dto/response/reviewDto";
 import { IReviewEntity } from "../../entities/review.entity";
 import { IBaseRepository } from "../baseRepository.interface";
 
@@ -25,5 +25,9 @@ export interface IReviewRepository extends IBaseRepository<IReviewEntity> {
     averageRating: number;
     totalRatings: number;
   }>;
+
+  findByGuideId(
+    guideId: string
+  ): Promise<GuideReviewAggregateResult | null>;
 
 }

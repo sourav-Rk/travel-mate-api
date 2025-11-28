@@ -28,6 +28,8 @@ export class GuideMapper {
       gender: doc.gender,
       profileImage: doc.profileImage,
       password: doc.password,
+      status: doc.status,
+      isBlocked: doc.isBlocked,
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
     };
@@ -79,10 +81,10 @@ export class GuideMapper {
       bio: doc.bio,
       dob: String(doc.dob),
       email: doc.email,
-      profileImage: doc.profileImage ?? "",
+      profileImage: doc.profileImage ?? "verified",
       languageSpoken: doc.languageSpoken,
       yearOfExperience: doc.yearOfExperience,
-      status: doc.status ?? "",
+      status: doc.status && doc.status.trim() !== "" ? doc.status : "pending",
       documents: doc.documents,
       gender: doc.gender ?? "",
     };

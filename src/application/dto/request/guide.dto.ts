@@ -112,3 +112,32 @@ export class AddGuideReqDTO {
   @ArrayNotEmpty({ message: "At least one document is required" })
   documents!: string[];
 }
+
+export class UpdateGuideProfileDTO {
+  @IsOptional()
+  @IsString({ message: "Profile image must be a string" })
+  profileImage?: string;
+
+  @IsOptional()
+  @IsString({ message: "Bio must be a string" })
+  @MaxLength(500, { message: "Bio must be less than 500 characters" })
+  bio?: string;
+
+  @IsOptional()
+  @IsArray({ message: "Languages spoken must be an array" })
+  @IsString({ each: true, message: "Each language must be a string" })
+  @ArrayNotEmpty({ message: "At least one language must be selected" })
+  languageSpoken?: string[];
+
+  @IsOptional()
+  @IsString({ message: "Phone must be a string" })
+  @Matches(/^[0-9]{10}$/, { message: "Phone number must be exactly 10 digits" })
+  phone?: string;
+
+  @IsOptional()
+  @IsString({ message: "Alternate phone must be a string" })
+  @Matches(/^[0-9]{10}$/, {
+    message: "Alternate phone must be exactly 10 digits",
+  })
+  alternatePhone?: string;
+}

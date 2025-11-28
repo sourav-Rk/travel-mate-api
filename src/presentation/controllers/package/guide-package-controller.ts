@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 
 import { IAssignedTripsUsecase } from "../../../application/usecase/interfaces/guideTrips/assignedTrips-usecase.interface";
+import { IGetMyGuideReviewsUsecase } from "../../../application/usecase/interfaces/review/get-my-guide-reviews.usecase.interface";
 import { IUpdatePackageStatusUsecaseGuide } from "../../../application/usecase/interfaces/guideTrips/update-package-status-usecase.interface";
 import { IViewPackageDetailsUsecase } from "../../../application/usecase/interfaces/guideTrips/viewPackageDetails-usecase.interface";
 import { ResponseHelper } from "../../../infrastructure/config/server/helpers/response.helper";
@@ -19,7 +20,10 @@ export class GuidePackageController implements IGuidePackageController {
     private _viewPackageDetails: IViewPackageDetailsUsecase,
 
     @inject("IUpdatePackageStatusUsecaseGuide")
-    private _updatePackageStatusUsecaseGuide: IUpdatePackageStatusUsecaseGuide
+    private _updatePackageStatusUsecaseGuide: IUpdatePackageStatusUsecaseGuide,
+
+    @inject("IGetMyGuideReviewsUsecase")
+    private _getMyGuideReviewsUsecase: IGetMyGuideReviewsUsecase
   ) {}
 
   async getAssignedPackages(req: Request, res: Response): Promise<void> {
@@ -72,6 +76,17 @@ export class GuidePackageController implements IGuidePackageController {
       res,
       HTTP_STATUS.OK,
       SUCCESS_MESSAGE.STATUS_UPDATED_SUCCESS
+    );
+  }
+
+  async getMyReviews(req: Request, res: Response): Promise<void> {
+    const guideId = (req as CustomRequest).user.id;
+    const responseData = await this._getMyGuideReviewsUsecase.execute(guideId);
+    ResponseHelper.success(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGE.DETAILS_FETCHED,
+      responseData
     );
   }
 }
